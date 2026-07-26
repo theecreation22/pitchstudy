@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Big_Shoulders, Public_Sans, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -36,6 +37,28 @@ export default function RootLayout({
       className={`${bigShoulders.variable} ${publicSans.variable} ${plexMono.variable} h-full`}
     >
       <body className="min-h-full flex flex-col bg-pitch-slate text-pitch-line antialiased">
+        <nav className="mx-auto flex w-full max-w-5xl items-center justify-between px-4 pt-6 sm:px-8 sm:pt-8">
+          <Link
+            href="/"
+            className="font-mono text-xs uppercase tracking-[0.2em] text-pitch-touchline transition-colors hover:text-pitch-marker"
+          >
+            PitchIQ
+          </Link>
+          <div className="flex items-center gap-6">
+            <Link
+              href="/managers"
+              className="font-mono text-xs uppercase tracking-[0.2em] text-pitch-touchline transition-colors hover:text-pitch-marker"
+            >
+              Managers
+            </Link>
+            <Link
+              href="/workouts"
+              className="font-mono text-xs uppercase tracking-[0.2em] text-pitch-touchline transition-colors hover:text-pitch-marker"
+            >
+              Workouts
+            </Link>
+          </div>
+        </nav>
         {children}
       </body>
     </html>

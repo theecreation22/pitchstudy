@@ -5,8 +5,10 @@ import { formations, getFormation } from "@/lib/formations";
 import { Pitch } from "./Pitch";
 import { FormationSelector } from "./FormationSelector";
 
-export function FormationExplorer() {
-  const [selectedSlug, setSelectedSlug] = useState(formations[0].slug);
+export function FormationExplorer({ initialSlug }: { initialSlug?: string }) {
+  const [selectedSlug, setSelectedSlug] = useState(
+    () => formations.find((formation) => formation.slug === initialSlug)?.slug ?? formations[0].slug,
+  );
   const formation = getFormation(selectedSlug) ?? formations[0];
 
   return (
