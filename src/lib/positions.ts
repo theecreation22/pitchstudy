@@ -23,6 +23,8 @@ export type PositionInfo = {
   commonMistakes: string[];
   zones: Zone[];
   related: RelatedPosition[];
+  /** Tactical variation on a base position (PRD 5.2) rather than a formation slot in its own right. */
+  isHybrid?: boolean;
 };
 
 export const positions: Record<PositionCode, PositionInfo> = {
@@ -53,7 +55,12 @@ export const positions: Record<PositionCode, PositionInfo> = {
       "Distributing to the nearest option under pressure instead of the best one",
     ],
     zones: [{ x: 30, y: 85, width: 40, height: 15 }],
-    related: [],
+    related: [
+      {
+        code: "SK",
+        note: "A modern variation that plays far off the line and functions as an auxiliary defender behind a high back line.",
+      },
+    ],
   },
   LB: {
     code: "LB",
@@ -86,6 +93,10 @@ export const positions: Record<PositionCode, PositionInfo> = {
       {
         code: "LWB",
         note: "In back-three systems the same player often becomes a left wing-back, covering more ground with less central cover.",
+      },
+      {
+        code: "IFB",
+        note: "A modern variation that steps into central midfield in possession instead of overlapping down the wing.",
       },
     ],
   },
@@ -120,6 +131,10 @@ export const positions: Record<PositionCode, PositionInfo> = {
       {
         code: "RWB",
         note: "In back-three systems the same player often becomes a right wing-back, covering more ground with less central cover.",
+      },
+      {
+        code: "IFB",
+        note: "A modern variation that steps into central midfield in possession instead of overlapping down the wing.",
       },
     ],
   },
@@ -269,6 +284,10 @@ export const positions: Record<PositionCode, PositionInfo> = {
         code: "CM",
         note: "Becomes the more advanced version of this role once another midfielder covers the defensive duties.",
       },
+      {
+        code: "DLP",
+        note: "A more progressive variation that drops deep to dictate attacks personally, rather than purely screening the defense.",
+      },
     ],
   },
   CM: {
@@ -307,6 +326,10 @@ export const positions: Record<PositionCode, PositionInfo> = {
         code: "CAM",
         note: "Pushes higher and prioritizes creativity when the team needs an extra attacking presence.",
       },
+      {
+        code: "B2B",
+        note: "The purest expression of this role — leaning further toward covering the full length of the pitch every match.",
+      },
     ],
   },
   CAM: {
@@ -342,8 +365,8 @@ export const positions: Record<PositionCode, PositionInfo> = {
         note: "Drops deeper to help retain possession when the team doesn't have the ball in the final third.",
       },
       {
-        code: "ST",
-        note: "Can operate as a deep-lying forward, occupying the pocket just off the front line.",
+        code: "F9",
+        note: "A striker dropping into this same pocket of space is exactly the false 9 idea, arriving there by movement rather than starting deep.",
       },
     ],
   },
@@ -528,12 +551,219 @@ export const positions: Record<PositionCode, PositionInfo> = {
     zones: [{ x: 20, y: 0, width: 60, height: 20 }],
     related: [
       {
-        code: "CAM",
-        note: "A deep-lying forward variant drops into the pocket usually occupied by an attacking midfielder.",
+        code: "F9",
+        note: "A deep-lying forward variant that drops into the pocket usually occupied by an attacking midfielder.",
       },
       {
         code: "LW",
         note: "Wide forwards often interchange positions with the striker to drag defenders out of shape.",
+      },
+    ],
+  },
+  IFB: {
+    code: "IFB",
+    name: "Inverted Full-Back",
+    isHybrid: true,
+    summary:
+      "A full-back who steps into central midfield in possession instead of overlapping down the wing — trading traditional width for an extra body in the middle of the pitch.",
+    inPossession:
+      "Moves inside into central midfield once the team has the ball, forming an extra central passing option and freeing a winger or wide forward to hold the width instead.",
+    outOfPossession:
+      "Reverts to a conventional full-back position, defending the wide channel one-on-one just like in a traditional back four.",
+    strongSuits: [
+      "Positional intelligence",
+      "Passing range",
+      "Comfort playing centrally",
+      "Recovery pace to reset wide",
+    ],
+    howToPlay: [
+      "Recognize exactly when possession is secure enough to tuck inside rather than hold the touchline",
+      "Occupy the central pocket the defensive midfielder vacates when they push forward, rather than duplicating their position",
+      "Reset back to a wide starting position immediately once possession is lost",
+      "Use the extra central passing lane to help the team play through a high press",
+    ],
+    commonMistakes: [
+      "Tucking inside too early, before the team has actually secured possession",
+      "Occupying the same space as the defensive midfielder instead of a genuinely different lane",
+      "Getting caught centrally when possession turns over, leaving the wide channel open",
+    ],
+    zones: [
+      { x: 0, y: 55, width: 30, height: 35 },
+      { x: 25, y: 40, width: 50, height: 20 },
+    ],
+    related: [
+      {
+        code: "LB",
+        note: "The traditional starting point for this role — the same player reverts to a standard left-back position the moment possession is lost.",
+      },
+      {
+        code: "RB",
+        note: "The mirror on the right flank — the same tactical idea applied to a right-back instead.",
+      },
+    ],
+  },
+  F9: {
+    code: "F9",
+    name: "False 9",
+    isHybrid: true,
+    summary:
+      "A striker who drops deep into midfield rather than staying on the last line, dragging opposition center-backs out of position and creating space in behind for others to run into.",
+    inPossession:
+      "Drops off the front line into the pocket between the opposition's defense and midfield, looking to combine before a teammate makes the run into the space just vacated.",
+    outOfPossession:
+      "Leads the press from the front just like a conventional striker, using the withdrawn starting position to also help screen passes into the opposition's deepest midfielder.",
+    strongSuits: [
+      "Vision and link-up play",
+      "Comfort receiving with back to goal",
+      "Passing under pressure",
+      "Intelligent decoy movement",
+    ],
+    howToPlay: [
+      "Drop into the pocket to draw a center-back out of position before releasing a teammate into the space created",
+      "Vary how deep you drop so the movement stays a genuine surprise rather than a predictable habit",
+      "Combine quickly rather than holding the ball, since the whole point is creating space for a teammate's run",
+      "Recognize when to stay high instead, so the movement doesn't become entirely predictable",
+    ],
+    commonMistakes: [
+      "Dropping so deep, so often, that the team has no one occupying the last line at all",
+      "Holding the ball too long after dropping, giving defenders time to recover their shape",
+      "Failing to combine with the runners the movement was designed to free up",
+    ],
+    zones: [
+      { x: 20, y: 0, width: 60, height: 12 },
+      { x: 25, y: 15, width: 50, height: 20 },
+    ],
+    related: [
+      {
+        code: "ST",
+        note: "The more traditional target-man or poacher version of the same central striker slot, staying high rather than dropping deep.",
+      },
+      {
+        code: "CAM",
+        note: "Occupies a very similar pocket of space, though the false 9 arrives there by dropping from the front line rather than starting deeper.",
+      },
+    ],
+  },
+  B2B: {
+    code: "B2B",
+    name: "Box-to-Box Midfielder",
+    isHybrid: true,
+    summary:
+      "A central midfielder who covers the full length of the pitch every match, contributing fully to both defensive duty and the attack rather than specializing in either.",
+    inPossession:
+      "Arrives late into the box to support attacks after first helping build play through midfield, covering ground few other positions are asked to cover in a single passage of play.",
+    outOfPossession:
+      "Gets fully behind the ball to help defensively, then immediately looks to break forward again the moment possession is regained.",
+    strongSuits: [
+      "Exceptional stamina",
+      "Work rate across 90 minutes",
+      "Timing of late runs into the box",
+      "Balance between defensive and attacking duty",
+    ],
+    howToPlay: [
+      "Judge each phase of play individually rather than defaulting to a fixed starting position",
+      "Time runs into the box so you arrive as the attack develops, not before it",
+      "Get fully back behind the ball on defensive transitions rather than half-committing",
+      "Manage energy across 90 minutes, since the role demands more total ground covered than almost any other",
+    ],
+    commonMistakes: [
+      "Committing fully to attack too often, leaving the team light in midfield on the counter",
+      "Arriving into the box too early and blocking a teammate's run instead of adding a genuine option",
+      "Running so much early that intensity drops in the final third of the match",
+    ],
+    zones: [{ x: 15, y: 12, width: 70, height: 76 }],
+    related: [
+      {
+        code: "CM",
+        note: "The base position this role is drawn from — every box-to-box midfielder is fundamentally a central midfielder leaning further toward covering the full pitch.",
+      },
+      {
+        code: "CDM",
+        note: "A more purely defensive version of central midfield, trading this role's attacking contribution for extra defensive discipline.",
+      },
+    ],
+  },
+  SK: {
+    code: "SK",
+    name: "Sweeper-Keeper",
+    isHybrid: true,
+    summary:
+      "A goalkeeper who plays far off their line, acting as an auxiliary defender behind a high back line in addition to the traditional shot-stopping and handling duties.",
+    inPossession:
+      "Comfortable receiving passes well outside the box and playing out under pressure, effectively functioning as an extra outfield passing option during build-up.",
+    outOfPossession:
+      "Positions far off the goal line to cover the space in behind a high defensive line, ready to sweep up through balls before an onrushing attacker can reach them.",
+    strongSuits: [
+      "Comfort and technique with the ball at their feet",
+      "Reading through-balls early",
+      "Composure under pressure outside the box",
+      "Speed off the line",
+    ],
+    howToPlay: [
+      "Set a starting position based on the height of your own defensive line, not a fixed spot near goal",
+      "Commit early and decisively when coming out to clear a through-ball — hesitation is what gets punished most",
+      "Treat distribution as a genuine first-phase passing option, not just a way to restart play",
+      "Communicate constantly with the back line so everyone moves up and drops as a unit",
+    ],
+    commonMistakes: [
+      "Playing high off the line without the reading-of-the-game needed to get to through-balls first",
+      "Taking an extra touch outside the box under pressure instead of playing simply",
+      "Losing track of exact positioning relative to the goal when play is far away",
+    ],
+    zones: [
+      { x: 20, y: 70, width: 60, height: 30 },
+      { x: 30, y: 55, width: 40, height: 20 },
+    ],
+    related: [
+      {
+        code: "GK",
+        note: "The traditional, line-hugging version of the same position, prioritizing shot-stopping positioning over sweeping up through-balls.",
+      },
+      {
+        code: "CB",
+        note: "Effectively becomes an auxiliary extra defender when play is in the opposition's half, much like a center-back stepping into midfield.",
+      },
+    ],
+  },
+  DLP: {
+    code: "DLP",
+    name: "Deep-Lying Playmaker",
+    isHybrid: true,
+    summary:
+      "A deep midfielder who drops between or beside the center-backs in possession to start attacks personally, rather than simply screening the defense.",
+    inPossession:
+      "Drops into the space between the center-backs to receive the ball from the goalkeeper and dictate the tempo of the team's entire build-up from deep.",
+    outOfPossession:
+      "Screens the back line like a conventional defensive midfielder, cutting passing lanes and positioning to win the ball back before it reaches a dangerous area.",
+    strongSuits: [
+      "Passing range and vision",
+      "Composure receiving under pressure",
+      "Game intelligence and tempo control",
+      "Positional discipline",
+    ],
+    howToPlay: [
+      "Drop between or beside the center-backs early, before the goalkeeper is forced into a rushed decision",
+      "Scan the pitch before receiving so the first touch can already break the opposition's first line",
+      "Dictate tempo deliberately — slow the game down or speed it up based on what the team needs",
+      "Recover into a screening position immediately once the ball moves beyond your control",
+    ],
+    commonMistakes: [
+      "Dropping so deep and so often that a genuine passing outlet becomes a standing target for the opposition's press",
+      "Prioritizing a spectacular long pass over the simple ball that actually keeps possession moving",
+      "Failing to recover into a defensive screening position once the team loses the ball",
+    ],
+    zones: [
+      { x: 20, y: 55, width: 60, height: 20 },
+      { x: 25, y: 70, width: 50, height: 15 },
+    ],
+    related: [
+      {
+        code: "CDM",
+        note: "The base position this role is drawn from — every deep-lying playmaker is fundamentally a defensive midfielder leaning further toward starting attacks personally.",
+      },
+      {
+        code: "CB",
+        note: "Occupies very similar space when dropping between the center-backs, effectively becoming an auxiliary extra defender in build-up.",
       },
     ],
   },

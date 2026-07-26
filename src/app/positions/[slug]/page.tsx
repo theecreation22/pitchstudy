@@ -47,7 +47,14 @@ export default async function PositionPage({
       </Link>
 
       <header className="flex flex-col gap-2">
-        <p className="font-mono text-sm text-pitch-marker">{position.code}</p>
+        <div className="flex items-center gap-3">
+          <p className="font-mono text-sm text-pitch-marker">{position.code}</p>
+          {position.isHybrid && (
+            <span className="rounded-full border border-pitch-touchline/40 px-2 py-0.5 font-mono text-[10px] uppercase tracking-widest text-pitch-touchline">
+              Hybrid role
+            </span>
+          )}
+        </div>
         <h1 className="font-display text-4xl font-black uppercase tracking-tight text-pitch-line sm:text-6xl">
           {position.name}
         </h1>

@@ -12,7 +12,15 @@ export type PositionCode =
   | "RM"
   | "LW"
   | "RW"
-  | "ST";
+  | "ST"
+  // Hybrid roles (PRD 5.2) — tactical variations on a base position.
+  // Never used as a marker code in `formations` below; only reachable
+  // via "related positions" links from the base role's page.
+  | "IFB"
+  | "F9"
+  | "B2B"
+  | "SK"
+  | "DLP";
 
 export type FormationPlayer = {
   id: string;

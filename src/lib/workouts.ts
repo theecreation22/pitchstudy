@@ -38,7 +38,7 @@ export const workoutPlans: WorkoutPlan[] = [
     group: "Goalkeepers",
     title: "Goalkeeper Foundations",
     tagline: "Reflexes, footwork, and shot-stopping fundamentals for a season-ready goalkeeper.",
-    positionCodes: ["GK"],
+    positionCodes: ["GK", "SK"],
     weeks: [
       {
         weekNumber: 1,
@@ -183,7 +183,7 @@ export const workoutPlans: WorkoutPlan[] = [
     group: "Defenders",
     title: "Defender Foundations",
     tagline: "Duels, aerial ability, and recovery pace for full-backs, wing-backs, and center-backs.",
-    positionCodes: ["CB", "LB", "RB", "LWB", "RWB"],
+    positionCodes: ["CB", "LB", "RB", "LWB", "RWB", "IFB"],
     weeks: [
       {
         weekNumber: 1,
@@ -328,7 +328,7 @@ export const workoutPlans: WorkoutPlan[] = [
     group: "Midfielders",
     title: "Midfielder Foundations",
     tagline: "Engine, range, and pressing triggers for holding, box-to-box, and attacking midfielders.",
-    positionCodes: ["CDM", "CM", "CAM", "LM", "RM"],
+    positionCodes: ["CDM", "CM", "CAM", "LM", "RM", "B2B", "DLP"],
     weeks: [
       {
         weekNumber: 1,
@@ -473,7 +473,7 @@ export const workoutPlans: WorkoutPlan[] = [
     group: "Attackers",
     title: "Attacker Foundations",
     tagline: "Explosiveness, finishing, and movement for wingers and strikers.",
-    positionCodes: ["LW", "RW", "ST"],
+    positionCodes: ["LW", "RW", "ST", "F9"],
     weeks: [
       {
         weekNumber: 1,
