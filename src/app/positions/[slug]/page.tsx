@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getPosition, positions } from "@/lib/positions";
+import { ZoneDiagram } from "@/components/pitch/ZoneDiagram";
 
 export function generateStaticParams() {
   return Object.keys(positions).map((code) => ({ slug: code.toLowerCase() }));
@@ -34,20 +35,134 @@ export default async function PositionPage({
   }
 
   return (
-    <div className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 px-4 py-16 sm:px-8">
+    <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-8 px-4 py-10 sm:px-8 sm:py-16">
       <Link
         href="/"
         className="font-mono text-xs uppercase tracking-widest text-pitch-touchline hover:text-pitch-marker"
       >
         ← Back to the pitch
       </Link>
-      <p className="font-mono text-sm text-pitch-marker">{position.code}</p>
-      <h1 className="font-display text-4xl font-black uppercase tracking-tight text-pitch-line sm:text-5xl">
-        {position.name}
-      </h1>
-      <p className="text-lg leading-relaxed text-pitch-line/90">{position.summary}</p>
-      <p className="text-sm text-pitch-touchline">
-        Full position guide — strong suits, how to play it, and zone diagrams — is coming soon.
+
+      <header className="flex flex-col gap-2">
+        <p className="font-mono text-sm text-pitch-marker">{position.code}</p>
+        <h1 className="font-display text-4xl font-black uppercase tracking-tight text-pitch-line sm:text-6xl">
+          {position.name}
+        </h1>
+        <p className="max-w-2xl text-lg leading-relaxed text-pitch-touchline">
+          {position.summary}
+        </p>
+      </header>
+
+      <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-10">
+        <div className="flex flex-col gap-8 lg:flex-1">
+          <section className="grid gap-6 sm:grid-cols-2">
+            <div>
+              <h2 className="text-xs font-semibold uppercase tracking-wide text-pitch-touchline">
+                In possession
+              </h2>
+              <p className="mt-2 text-sm leading-relaxed text-pitch-line/90">
+                {position.inPossession}
+              </p>
+            </div>
+            <div>
+              <h2 className="text-xs font-semibold uppercase tracking-wide text-pitch-touchline">
+                Out of possession
+              </h2>
+              <p className="mt-2 text-sm leading-relaxed text-pitch-line/90">
+                {position.outOfPossession}
+              </p>
+            </div>
+          </section>
+
+          <section>
+            <h2 className="font-display text-xl font-bold uppercase tracking-tight text-pitch-line">
+              How to play it
+            </h2>
+            <ul className="mt-3 space-y-2 text-sm leading-relaxed text-pitch-line/90">
+              {position.howToPlay.map((step) => (
+                <li key={step} className="flex gap-2">
+                  <span aria-hidden="true" className="text-pitch-marker">
+                    ›
+                  </span>
+                  {step}
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          <section>
+            <h2 className="font-display text-xl font-bold uppercase tracking-tight text-pitch-line">
+              Common mistakes
+            </h2>
+            <ul className="mt-3 space-y-2 text-sm leading-relaxed text-pitch-line/90">
+              {position.commonMistakes.map((mistake) => (
+                <li key={mistake} className="flex gap-2">
+                  <span aria-hidden="true" className="text-pitch-touchline">
+                    −
+                  </span>
+                  {mistake}
+                </li>
+              ))}
+            </ul>
+          </section>
+        </div>
+
+        <aside className="flex w-full flex-col gap-6 rounded-lg border border-pitch-touchline/30 bg-pitch-card p-6 lg:w-72">
+          <div>
+            <h2 className="text-xs font-semibold uppercase tracking-wide text-pitch-touchline">
+              Strong suits
+            </h2>
+            <ul className="mt-2 flex flex-wrap gap-2">
+              {position.strongSuits.map((suit) => (
+                <li
+                  key={suit}
+                  className="rounded-full border border-pitch-touchline/40 px-3 py-1 font-mono text-[11px] text-pitch-line"
+                >
+                  {suit}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h2 className="text-xs font-semibold uppercase tracking-wide text-pitch-touchline">
+              Typical zone
+            </h2>
+            <div className="mt-3">
+              <ZoneDiagram zones={position.zones} />
+            </div>
+          </div>
+
+          {position.related.length > 0 && (
+            <div>
+              <h2 className="text-xs font-semibold uppercase tracking-wide text-pitch-touchline">
+                Related positions
+              </h2>
+              <ul className="mt-2 flex flex-col gap-3">
+                {position.related.map((related) => {
+                  const relatedPosition = getPosition(related.code);
+                  return (
+                    <li key={related.code}>
+                      <Link
+                        href={`/positions/${related.code.toLowerCase()}`}
+                        className="font-mono text-xs text-pitch-marker hover:underline"
+                      >
+                        {relatedPosition?.name ?? related.code}
+                      </Link>
+                      <p className="mt-0.5 text-xs leading-relaxed text-pitch-touchline">
+                        {related.note}
+                      </p>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          )}
+        </aside>
+      </div>
+
+      <p className="text-xs text-pitch-touchline">
+        Coming soon: video drill demos and a training plan built specifically for this role.
       </p>
     </div>
   );

@@ -3,6 +3,8 @@ export type PositionCode =
   | "LB"
   | "RB"
   | "CB"
+  | "LWB"
+  | "RWB"
   | "CDM"
   | "CM"
   | "CAM"
@@ -124,6 +126,161 @@ export const formations: Formation[] = [
       { id: "cam", code: "CAM", x: 50, y: 28 },
       { id: "rw", code: "RW", x: 82, y: 32 },
       { id: "st", code: "ST", x: 50, y: 12 },
+    ],
+  },
+  {
+    slug: "3-5-2",
+    name: "3-5-2",
+    tagline: "A back three with wing-backs supplying all the width, two strikers up front.",
+    origin:
+      "Long a staple of Italian football, and revived by modern coaches who want an extra body in central midfield without giving up attacking threat up top.",
+    strengths: [
+      "Outnumbers a midfield three or four through the center of the pitch",
+      "Wing-backs provide out-and-out width without needing dedicated wide midfielders",
+      "Two strikers can combine and share the goalscoring load",
+    ],
+    weaknesses: [
+      "Wing-backs need elite stamina — they cover the entire touchline alone",
+      "Space in behind the wing-backs is exposed if they get caught upfield",
+    ],
+    bestSuited:
+      "Teams with tireless, athletic wing-backs and center-backs comfortable defending in wide areas without full-back cover.",
+    players: [
+      { id: "gk", code: "GK", x: 50, y: 95 },
+      { id: "cb1", code: "CB", x: 25, y: 80 },
+      { id: "cb2", code: "CB", x: 50, y: 82 },
+      { id: "cb3", code: "CB", x: 75, y: 80 },
+      { id: "lwb", code: "LWB", x: 8, y: 55 },
+      { id: "rwb", code: "RWB", x: 92, y: 55 },
+      { id: "cm1", code: "CM", x: 32, y: 48 },
+      { id: "cdm", code: "CDM", x: 50, y: 55 },
+      { id: "cm2", code: "CM", x: 68, y: 48 },
+      { id: "st1", code: "ST", x: 40, y: 18 },
+      { id: "st2", code: "ST", x: 60, y: 18 },
+    ],
+  },
+  {
+    slug: "3-4-3",
+    name: "3-4-3",
+    tagline: "Width from wing-backs, extra bodies in midfield, and a front three high up the pitch.",
+    origin:
+      "A variation on the back three that trades some defensive solidity for a stronger central presence and more attacking options in the final third.",
+    strengths: [
+      "Front three stretches the defense across the full width of the pitch",
+      "Central midfield pairing can dictate tempo with cover from the back three",
+      "Can drop into a back five out of possession for defensive stability",
+    ],
+    weaknesses: [
+      "Only two central midfielders can be overrun by a three-man midfield",
+      "Wing-backs are exposed defensively if the front three doesn't track back",
+    ],
+    bestSuited:
+      "Teams built to dominate the ball with pace up front, willing to accept some defensive risk in wide areas for attacking numbers.",
+    players: [
+      { id: "gk", code: "GK", x: 50, y: 95 },
+      { id: "cb1", code: "CB", x: 25, y: 80 },
+      { id: "cb2", code: "CB", x: 50, y: 82 },
+      { id: "cb3", code: "CB", x: 75, y: 80 },
+      { id: "lwb", code: "LWB", x: 8, y: 50 },
+      { id: "cm1", code: "CM", x: 38, y: 48 },
+      { id: "cm2", code: "CM", x: 62, y: 48 },
+      { id: "rwb", code: "RWB", x: 92, y: 50 },
+      { id: "lw", code: "LW", x: 18, y: 18 },
+      { id: "st", code: "ST", x: 50, y: 12 },
+      { id: "rw", code: "RW", x: 82, y: 18 },
+    ],
+  },
+  {
+    slug: "5-3-2",
+    name: "5-3-2",
+    tagline: "A back five built for defensive solidity, three in midfield, two out front.",
+    origin:
+      "The more conservative sibling of the 3-5-2 — wing-backs sit deeper as auxiliary defenders rather than attacking outlets.",
+    strengths: [
+      "Very hard to break down through wide areas with five defenders across the back",
+      "Central midfield three can control possession without worrying about defensive cover",
+      "Two strikers offer a quick counter-attacking outlet",
+    ],
+    weaknesses: [
+      "Can invite pressure by sitting deep and surrendering possession",
+      "Wing-backs contribute little going forward compared to a 3-5-2",
+    ],
+    bestSuited:
+      "Teams facing a stronger opponent who want to stay compact, absorb pressure, and hit on the counter.",
+    players: [
+      { id: "gk", code: "GK", x: 50, y: 95 },
+      { id: "lwb", code: "LWB", x: 12, y: 72 },
+      { id: "cb1", code: "CB", x: 32, y: 78 },
+      { id: "cb2", code: "CB", x: 50, y: 80 },
+      { id: "cb3", code: "CB", x: 68, y: 78 },
+      { id: "rwb", code: "RWB", x: 88, y: 72 },
+      { id: "cm1", code: "CM", x: 35, y: 50 },
+      { id: "cdm", code: "CDM", x: 50, y: 56 },
+      { id: "cm2", code: "CM", x: 65, y: 50 },
+      { id: "st1", code: "ST", x: 40, y: 18 },
+      { id: "st2", code: "ST", x: 60, y: 18 },
+    ],
+  },
+  {
+    slug: "4-1-4-1",
+    name: "4-1-4-1",
+    tagline: "A lone defensive midfielder shields the back four, four across midfield, one striker.",
+    origin:
+      "Built for teams that want defensive solidity in central midfield without giving up a settled four-man midfield line further forward.",
+    strengths: [
+      "The single pivot gives strong protection directly in front of the back four",
+      "Four-man midfield line controls width and central areas at the same time",
+      "Compresses easily into a defensive 4-5-1 when out of possession",
+    ],
+    weaknesses: [
+      "The lone striker is isolated and relies heavily on service from midfield",
+      "The single pivot can be bypassed if opponents overload central midfield",
+    ],
+    bestSuited:
+      "Teams that prioritize defensive balance and midfield control over out-and-out attacking numbers.",
+    players: [
+      { id: "gk", code: "GK", x: 50, y: 95 },
+      { id: "lb", code: "LB", x: 15, y: 75 },
+      { id: "cb1", code: "CB", x: 35, y: 78 },
+      { id: "cb2", code: "CB", x: 65, y: 78 },
+      { id: "rb", code: "RB", x: 85, y: 75 },
+      { id: "cdm", code: "CDM", x: 50, y: 62 },
+      { id: "lm", code: "LM", x: 15, y: 40 },
+      { id: "cm1", code: "CM", x: 38, y: 42 },
+      { id: "cm2", code: "CM", x: 62, y: 42 },
+      { id: "rm", code: "RM", x: 85, y: 40 },
+      { id: "st", code: "ST", x: 50, y: 15 },
+    ],
+  },
+  {
+    slug: "4-4-2-diamond",
+    name: "4-4-2 Diamond",
+    tagline: "A four-man midfield diamond adds central control to the classic two-striker setup.",
+    origin:
+      "A response to the flat 4-4-2's lack of central midfield presence — narrows the midfield into a diamond to win the battle in the middle of the pitch.",
+    strengths: [
+      "The extra central midfielder at the point of the diamond helps dominate central areas",
+      "The attacking midfielder at the top of the diamond supports the strikers directly",
+      "The defensive midfielder at the base protects the back four",
+    ],
+    weaknesses: [
+      "Lacks natural width — full-backs must provide almost all of it",
+      "Can be exploited by opponents playing with genuine wingers",
+    ],
+    bestSuited:
+      "Teams with dominant central midfielders and full-backs comfortable providing width on their own.",
+    players: [
+      { id: "gk", code: "GK", x: 50, y: 95 },
+      { id: "lb", code: "LB", x: 15, y: 75 },
+      { id: "cb1", code: "CB", x: 35, y: 78 },
+      { id: "cb2", code: "CB", x: 65, y: 78 },
+      { id: "rb", code: "RB", x: 85, y: 75 },
+      { id: "cdm", code: "CDM", x: 50, y: 62 },
+      { id: "cm1", code: "CM", x: 28, y: 48 },
+      { id: "cm2", code: "CM", x: 72, y: 48 },
+      { id: "cam", code: "CAM", x: 50, y: 32 },
+      { id: "st1", code: "ST", x: 40, y: 15 },
+      { id: "st2", code: "ST", x: 60, y: 15 },
     ],
   },
 ];
