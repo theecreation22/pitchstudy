@@ -57,6 +57,12 @@ export default function RootLayout({
             >
               Workouts
             </Link>
+            <Link
+              href="/quiz"
+              className="font-mono text-xs uppercase tracking-[0.2em] text-pitch-touchline transition-colors hover:text-pitch-marker"
+            >
+              Quiz
+            </Link>
           </div>
         </nav>
         {children}

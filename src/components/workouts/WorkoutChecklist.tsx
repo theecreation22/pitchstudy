@@ -1,12 +1,13 @@
 "use client";
 
-import { useCallback, useMemo, useState, useSyncExternalStore } from "react";
+import { useCallback, useMemo, useState } from "react";
 import {
   drillCategoryLabels,
   getAllDrills,
   type DrillCategory,
   type WorkoutPlan,
 } from "@/lib/workouts";
+import { useLocalStorageValue } from "@/lib/useLocalStorageValue";
 
 type CategoryFilter = DrillCategory | "all";
 
@@ -22,34 +23,9 @@ function storageKey(slug: string) {
   return `pitchiq:workout:${slug}`;
 }
 
-const CHANGE_EVENT = "pitchiq-workout-checklist-change";
-
-function subscribe(callback: () => void) {
-  window.addEventListener(CHANGE_EVENT, callback);
-  window.addEventListener("storage", callback);
-  return () => {
-    window.removeEventListener(CHANGE_EVENT, callback);
-    window.removeEventListener("storage", callback);
-  };
-}
-
-function getServerSnapshot() {
-  return "[]";
-}
-
 function useCompletedDrills(slug: string): [Set<string>, (id: string) => void] {
-  const key = storageKey(slug);
-
-  const getSnapshot = useCallback(() => {
-    try {
-      return window.localStorage.getItem(key) ?? "[]";
-    } catch {
-      return "[]";
-    }
-  }, [key]);
-
-  const raw = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
-  const completed = useMemo(() => new Set<string>(JSON.parse(raw) as string[]), [raw]);
+  const [raw, setRaw] = useLocalStorageValue(storageKey(slug));
+  const completed = useMemo(() => new Set<string>(raw ? (JSON.parse(raw) as string[]) : []), [raw]);
 
   const toggle = useCallback(
     (id: string) => {
@@ -59,14 +35,9 @@ function useCompletedDrills(slug: string): [Set<string>, (id: string) => void] {
       } else {
         next.add(id);
       }
-      try {
-        window.localStorage.setItem(key, JSON.stringify([...next]));
-      } catch {
-        // localStorage unavailable — checklist simply won't persist
-      }
-      window.dispatchEvent(new Event(CHANGE_EVENT));
+      setRaw(JSON.stringify([...next]));
     },
-    [completed, key],
+    [completed, setRaw],
   );
 
   return [completed, toggle];
