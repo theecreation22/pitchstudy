@@ -1,11 +1,11 @@
 @import "tailwindcss";
 
 :root {
-  --pitch-slate: #16261f;
-  --pitch-card: #1e332a;
-  --pitch-line: #e9e4d8;
-  --pitch-touchline: #7a8c7e;
-  --pitch-marker: #e8a33d;
+  --pitch-slate: #121a2b;
+  --pitch-card: #1b2740;
+  --pitch-line: #e7eaf2;
+  --pitch-touchline: #7c89a8;
+  --pitch-marker: #2fd1ce;
 }
 
 @theme inline {
