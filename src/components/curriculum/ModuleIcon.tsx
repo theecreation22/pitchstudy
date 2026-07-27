@@ -57,6 +57,34 @@ function ManagersMindsIcon({ color }: IconProps) {
   );
 }
 
+function TransitionsIcon({ color }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M4 8 H17 M17 8 L13 4 M17 8 L13 12" />
+      <path d="M20 16 H7 M7 16 L11 12 M7 16 L11 20" />
+    </svg>
+  );
+}
+
+function SetPiecesIcon({ color }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M7 3 V21" />
+      <path d="M7 4 H17 L13 8 L17 12 H7" />
+    </svg>
+  );
+}
+
+function GameManagementIcon({ color }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="13" r="8" />
+      <path d="M12 8 V13 L16 15" />
+      <path d="M9 2 H15" />
+    </svg>
+  );
+}
+
 const icons: Record<string, (props: IconProps) => React.JSX.Element> = {
   foundations: FoundationsIcon,
   defending: DefendingIcon,
@@ -64,6 +92,9 @@ const icons: Record<string, (props: IconProps) => React.JSX.Element> = {
   attacking: AttackingIcon,
   systems: SystemsIcon,
   "managers-minds": ManagersMindsIcon,
+  transitions: TransitionsIcon,
+  "set-pieces": SetPiecesIcon,
+  "game-management": GameManagementIcon,
 };
 
 export function ModuleIcon({ slug, color }: { slug: string; color: string }) {
