@@ -3,7 +3,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getManager, managers } from "@/lib/managers";
 import { getFormation } from "@/lib/formations";
-import { ManagerBadge } from "@/components/managers/ManagerBadge";
+import { MiniFormationDiagram } from "@/components/managers/MiniFormationDiagram";
+import { AnimatedSection } from "@/components/motion/AnimatedSection";
 
 export function generateStaticParams() {
   return managers.map((manager) => ({ slug: manager.slug }));
@@ -48,7 +49,7 @@ export default async function ManagerPage({
 
       <header className="flex flex-col gap-4">
         <div className="flex items-center gap-4">
-          <ManagerBadge name={manager.name} size="lg" />
+          <MiniFormationDiagram formationSlug={manager.signatureFormationSlug} size="lg" animateIn />
           <div className="flex flex-col gap-1">
             <p className="font-mono text-xs uppercase tracking-widest text-pitch-marker">
               {manager.years}
@@ -72,16 +73,16 @@ export default async function ManagerPage({
         )}
       </header>
 
-      <section>
+      <AnimatedSection>
         <h2 className="font-display text-xl font-bold uppercase tracking-tight text-pitch-line">
           Philosophy
         </h2>
         <p className="mt-3 max-w-2xl text-sm leading-relaxed text-pitch-line/90">
           {manager.philosophy}
         </p>
-      </section>
+      </AnimatedSection>
 
-      <section>
+      <AnimatedSection>
         <h2 className="font-display text-xl font-bold uppercase tracking-tight text-pitch-line">
           Why it worked
         </h2>
@@ -95,16 +96,16 @@ export default async function ManagerPage({
             </li>
           ))}
         </ul>
-      </section>
+      </AnimatedSection>
 
-      <section>
+      <AnimatedSection>
         <h2 className="font-display text-xl font-bold uppercase tracking-tight text-pitch-line">
           Legacy
         </h2>
         <p className="mt-3 max-w-2xl text-sm leading-relaxed text-pitch-line/90">{manager.legacy}</p>
-      </section>
+      </AnimatedSection>
 
-      <p className="text-xs text-pitch-touchline">
+      <p className="border-t border-pitch-touchline/20 pt-4 text-xs leading-relaxed text-pitch-touchline">
         Independent analysis based on publicly known coaching history. Not affiliated with or
         endorsed by {manager.name} or the clubs mentioned.
       </p>

@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useProgress } from "@/lib/progress";
 import type { Module } from "@/lib/curriculum";
+import { ScoreboardHeader } from "@/components/quiz/ScoreboardHeader";
 
 function scoreMessage(score: number, total: number): string {
   const ratio = score / total;
@@ -83,20 +84,12 @@ export function ModuleQuizRunner({ module }: { module: Module }) {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex flex-col gap-2">
-        <div className="flex items-center justify-between font-mono text-xs uppercase tracking-widest text-pitch-touchline">
-          <span>
-            Question {currentIndex + 1} of {module.quiz.length}
-          </span>
-          <span className="text-gold-flood">Score: {score}</span>
-        </div>
-        <div className="h-1.5 w-full overflow-hidden rounded-full bg-pitch-card">
-          <div
-            className="h-full rounded-full bg-gold-flood transition-[width] duration-300 ease-out"
-            style={{ width: `${((currentIndex + (hasAnswered ? 1 : 0)) / module.quiz.length) * 100}%` }}
-          />
-        </div>
-      </div>
+      <ScoreboardHeader
+        current={currentIndex + 1}
+        total={module.quiz.length}
+        score={score}
+        progress={((currentIndex + (hasAnswered ? 1 : 0)) / module.quiz.length) * 100}
+      />
 
       <p className="text-lg font-medium leading-relaxed text-pitch-line sm:text-xl">
         {question.question}

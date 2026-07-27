@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { badges, useProgress } from "@/lib/progress";
 import { moduleAccentColor, totalLessonCount, type Module } from "@/lib/curriculum";
+import { ModuleIcon } from "./ModuleIcon";
+import { ProgressRing } from "./ProgressRing";
 
 export function AcademyDashboard({ modules }: { modules: Module[] }) {
   const { state, moduleProgress } = useProgress();
@@ -58,37 +60,64 @@ export function AcademyDashboard({ modules }: { modules: Module[] }) {
         {modules.map((module) => {
           const { done, total } = moduleProgress(module.slug);
           const hasContent = total > 0;
+          const isComplete = hasContent && done === total;
           const accentColor = moduleAccentColor[module.accent];
 
           const card = (
             <div
-              className="flex h-full flex-col gap-3 rounded-lg border border-pitch-touchline/30 border-t-[3px] bg-pitch-card p-6"
-              style={{ borderTopColor: accentColor }}
+              className={`relative flex h-full flex-col gap-3 rounded-lg border bg-pitch-card p-6 ${
+                isComplete ? "border-attack shadow-[0_0_24px_-6px_var(--attack)]" : "border-pitch-touchline/30"
+              }`}
             >
-              <p className="font-mono text-xs uppercase tracking-widest" style={{ color: accentColor }}>
-                Module {module.order}
-              </p>
-              <h2 className="font-display text-2xl font-bold uppercase tracking-tight text-pitch-line">
-                {module.title}
-              </h2>
-              <p className="text-sm leading-relaxed text-pitch-touchline">{module.description}</p>
-              {hasContent ? (
-                <div className="mt-auto pt-2">
-                  <div className="h-1.5 w-full overflow-hidden rounded-full bg-pitch-slate">
-                    <div
-                      className="h-full rounded-full transition-[width] duration-500 ease-out"
-                      style={{ width: `${(done / total) * 100}%`, background: accentColor }}
-                    />
-                  </div>
-                  <p className="mt-1 font-mono text-xs text-pitch-touchline">
-                    {done} / {total} lessons
-                  </p>
-                </div>
-              ) : (
-                <p className="mt-auto pt-2 font-mono text-xs uppercase tracking-widest text-pitch-touchline">
-                  Coming soon
-                </p>
+              {!hasContent && (
+                <span
+                  title={`Content coming soon for ${module.title}`}
+                  className="absolute top-4 right-4 flex h-6 w-6 items-center justify-center rounded-full border border-pitch-touchline/40 text-xs text-pitch-touchline"
+                  aria-label={`Locked — content coming soon for ${module.title}`}
+                >
+                  🔒
+                </span>
               )}
+
+              <div className="flex items-center gap-3">
+                <ProgressRing value={hasContent ? done / total : 0} color={accentColor} label={module.order} />
+                <div className="flex flex-col gap-1">
+                  <span className="flex items-center gap-1.5" style={{ color: accentColor }}>
+                    <ModuleIcon slug={module.slug} color={accentColor} />
+                    <span className="font-mono text-xs uppercase tracking-widest">Module {module.order}</span>
+                  </span>
+                  <h2 className="font-display text-xl font-bold uppercase tracking-tight text-pitch-line">
+                    {module.title}
+                  </h2>
+                </div>
+              </div>
+
+              <p className="text-sm leading-relaxed text-pitch-touchline">{module.description}</p>
+
+              <div className="mt-auto flex items-center gap-3 pt-2">
+                {hasContent ? (
+                  <>
+                    <div className="flex gap-1">
+                      {Array.from({ length: total }, (_, index) => (
+                        <span
+                          key={index}
+                          className="h-2 w-2 rounded-full"
+                          style={{
+                            background: index < done ? accentColor : "var(--night-800)",
+                          }}
+                        />
+                      ))}
+                    </div>
+                    <p className="font-mono text-xs text-pitch-touchline">
+                      {done} / {total} lessons
+                    </p>
+                  </>
+                ) : (
+                  <p className="font-mono text-xs uppercase tracking-widest text-pitch-touchline">
+                    Coming soon
+                  </p>
+                )}
+              </div>
             </div>
           );
 

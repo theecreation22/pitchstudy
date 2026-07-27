@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { managers } from "@/lib/managers";
-import { ManagerBadge } from "@/components/managers/ManagerBadge";
+import { MiniFormationDiagram } from "@/components/managers/MiniFormationDiagram";
+import { ManagerEraTimeline } from "@/components/managers/ManagerEraTimeline";
 
 export const metadata: Metadata = {
   title: "Managers & Tactics — PitchIQ",
@@ -22,10 +23,12 @@ export default function ManagersPage() {
         </p>
       </header>
 
-      <div className="rounded-lg border border-pitch-touchline/30 bg-pitch-card p-4 text-sm leading-relaxed text-pitch-touchline">
+      <ManagerEraTimeline />
+
+      <p className="border-t border-pitch-touchline/20 pt-4 text-xs leading-relaxed text-pitch-touchline">
         Independent tactical analysis based on publicly known coaching history. Not affiliated
         with or endorsed by the coaches or clubs described.
-      </div>
+      </p>
 
       <div className="grid gap-4 sm:grid-cols-2">
         {managers.map((manager) => (
@@ -35,7 +38,7 @@ export default function ManagersPage() {
             className="group flex flex-col gap-4 rounded-lg border border-pitch-touchline/30 bg-pitch-card p-6 transition-colors hover:border-pitch-marker focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
           >
             <div className="flex items-center gap-4">
-              <ManagerBadge name={manager.name} />
+              <MiniFormationDiagram formationSlug={manager.signatureFormationSlug} />
               <div>
                 <h2 className="font-display text-xl font-bold uppercase tracking-tight text-pitch-line group-hover:text-pitch-marker">
                   {manager.name}
