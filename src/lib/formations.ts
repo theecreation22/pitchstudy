@@ -17,6 +17,7 @@ export type PositionCode =
   // Never used as a marker code in `formations` below; only reachable
   // via "related positions" links from the base role's page.
   | "IFB"
+  | "IW"
   | "F9"
   | "B2B"
   | "SK"

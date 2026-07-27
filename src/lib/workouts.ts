@@ -473,7 +473,7 @@ export const workoutPlans: WorkoutPlan[] = [
     group: "Attackers",
     title: "Attacker Foundations",
     tagline: "Explosiveness, finishing, and movement for wingers and strikers.",
-    positionCodes: ["LW", "RW", "ST", "F9"],
+    positionCodes: ["LW", "RW", "ST", "F9", "IW"],
     weeks: [
       {
         weekNumber: 1,

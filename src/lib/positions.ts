@@ -234,6 +234,10 @@ export const positions: Record<PositionCode, PositionInfo> = {
         code: "LM",
         note: "Provides similar width to a left midfielder, but starts from a deeper position.",
       },
+      {
+        code: "IFB",
+        note: "Tucks inside into central midfield in possession instead of providing width, trading the wing-back's usual job for an extra central passing option.",
+      },
     ],
   },
   RWB: {
@@ -271,6 +275,10 @@ export const positions: Record<PositionCode, PositionInfo> = {
       {
         code: "RM",
         note: "Provides similar width to a right midfielder, but starts from a deeper position.",
+      },
+      {
+        code: "IFB",
+        note: "Tucks inside into central midfield in possession instead of providing width, trading the wing-back's usual job for an extra central passing option.",
       },
     ],
   },
@@ -508,6 +516,10 @@ export const positions: Record<PositionCode, PositionInfo> = {
         code: "ST",
         note: "Can tuck inside to play as an auxiliary striker in narrower attacking systems.",
       },
+      {
+        code: "IW",
+        note: "A right-footed player stationed here plays as an inverted winger, cutting inside onto the stronger foot instead of going outside.",
+      },
     ],
   },
   RW: {
@@ -545,6 +557,10 @@ export const positions: Record<PositionCode, PositionInfo> = {
       {
         code: "ST",
         note: "Can tuck inside to play as an auxiliary striker in narrower attacking systems.",
+      },
+      {
+        code: "IW",
+        note: "A left-footed player stationed here plays as an inverted winger, cutting inside onto the stronger foot instead of going outside.",
       },
     ],
   },
@@ -625,6 +641,56 @@ export const positions: Record<PositionCode, PositionInfo> = {
       {
         code: "RB",
         note: "The mirror on the right flank — the same tactical idea applied to a right-back instead.",
+      },
+      {
+        code: "LWB",
+        note: "The same inverted idea applied to a back-three system — tucks inside from wing-back instead of full-back.",
+      },
+      {
+        code: "RWB",
+        note: "The mirror on the right flank of the wing-back version of this role.",
+      },
+    ],
+  },
+  IW: {
+    code: "IW",
+    name: "Inverted Winger",
+    isHybrid: true,
+    summary:
+      "A winger stationed on the opposite flank to their stronger foot, so cutting inside onto that foot is the first instinct rather than a fallback option.",
+    inPossession:
+      "Holds the touchline just long enough to pin the full-back wide, then drives inside onto the stronger foot to shoot, thread a pass, or combine centrally — the cut inside is the main threat, not a plan B.",
+    outOfPossession:
+      "Tracks back down the same flank as a conventional winger, though recovering from central attacking positions back to a wide starting point takes extra running.",
+    strongSuits: [
+      "Shooting and passing off the stronger foot",
+      "Close control cutting inside under pressure",
+      "End product from the half-space",
+      "Timing late runs into the box as an auxiliary striker",
+    ],
+    howToPlay: [
+      "Hug the touchline just long enough to pin the opposition full-back wide before cutting inside",
+      "Look up before the cut — the inside lane can be a shot, a pass, or a dribble depending on what the defense gives away",
+      "Combine with an overlapping full-back who supplies the width just vacated",
+      "Track back down the same flank defensively, even though the attacking threat comes from inside",
+    ],
+    commonMistakes: [
+      "Cutting inside on the same predictable rhythm, letting defenders jump the run",
+      "Drifting inside so early that the team loses width before the full-back can overlap",
+      "Neglecting the outside foot entirely, becoming one-footed and easy to show onto the weaker side",
+    ],
+    zones: [
+      { x: 68, y: 8, width: 28, height: 25 },
+      { x: 30, y: 5, width: 40, height: 28 },
+    ],
+    related: [
+      {
+        code: "LW",
+        note: "The traditional version of this role — stays on the stronger-foot side and looks to beat defenders on the outside rather than cut inside.",
+      },
+      {
+        code: "RW",
+        note: "The mirror on the other flank — the traditional version of this role, favoring the outside route rather than cutting inside.",
       },
     ],
   },
