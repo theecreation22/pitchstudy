@@ -122,13 +122,8 @@ export function FormationExplorer({ initialSlug }: { initialSlug?: string }) {
     formations.find((candidate) => candidate.slug !== selectedSlug) ??
     formations[0];
   const opponentPhase: Phase = phase === "in-possession" ? "out-of-possession" : "in-possession";
-  const opponentPlayersForFormation = showOpponent
+  const opponentPlayers = showOpponent
     ? mirrorFormationPlayers(getFormationPlayers(opponentFormation, opponentPhase))
-    : undefined;
-  // Sandbox has no possession phase, so its opponent overlay just mirrors
-  // the base in-possession shape rather than inverting a phase that doesn't exist there.
-  const opponentPlayersForSandbox = showOpponent
-    ? mirrorFormationPlayers(opponentFormation.players)
     : undefined;
 
   const selectedPlayer = showOpponent
@@ -136,9 +131,7 @@ export function FormationExplorer({ initialSlug }: { initialSlug?: string }) {
     : undefined;
   const selectedPosition = selectedPlayer ? getPosition(selectedPlayer.code) : undefined;
   const matchups =
-    selectedPlayer && opponentPlayersForFormation
-      ? findMatchups(selectedPlayer, opponentPlayersForFormation)
-      : [];
+    selectedPlayer && opponentPlayers ? findMatchups(selectedPlayer, opponentPlayers) : [];
   const matchupText =
     selectedPlayer && matchups.length > 0
       ? describeMatchup({
@@ -226,14 +219,15 @@ export function FormationExplorer({ initialSlug }: { initialSlug?: string }) {
               onSelect={selectOpponentFormation}
             />
           )}
-          {viewMode === "formation" && <PhaseToggle phase={phase} onChange={setPhase} />}
+          <PhaseToggle phase={phase} onChange={setPhase} />
         </div>
       )}
 
       {viewMode === "sandbox" && (
         <SandboxPitch
           formation={formation}
-          opponentPlayers={opponentPlayersForSandbox}
+          phase={phase}
+          opponentPlayers={opponentPlayers}
           opponentFormationName={opponentFormation.name}
         />
       )}
@@ -268,7 +262,7 @@ export function FormationExplorer({ initialSlug }: { initialSlug?: string }) {
               players={displayedPlayers}
               formationName={formation.name}
               phase={phase}
-              opponentPlayers={opponentPlayersForFormation}
+              opponentPlayers={opponentPlayers}
               selectedPlayerId={selectedPlayerId}
               onSelectPlayer={setSelectedPlayerId}
             />
