@@ -31,10 +31,18 @@ export function SandboxPitch({ formation, phase, opponentPlayers, opponentFormat
   const reduceMotion = useReducedMotion();
   const containerRef = useRef<HTMLDivElement>(null);
   const markerMotion = useMarkerMotionValues(formation.players.length);
+  const opponentMarkerMotion = useMarkerMotionValues(11);
   const basePlayers = getFormationPlayers(formation, phase);
   const [livePositions, setLivePositions] = useState<{ x: number; y: number }[]>(() =>
     basePlayers.map((player) => ({ x: player.x, y: player.y })),
   );
+  // Keyed by index rather than pre-sized to the opponent count — dots that
+  // haven't been dragged yet simply have no entry and fall back to their
+  // base (mirrored) position, so there's nothing to keep in sync when the
+  // opponent overlay toggles on/off.
+  const [opponentLivePositions, setOpponentLivePositions] = useState<
+    Record<number, { x: number; y: number }>
+  >({});
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
   const hasOpponent = Boolean(opponentPlayers && opponentPlayers.length > 0);
@@ -45,18 +53,25 @@ export function SandboxPitch({ formation, phase, opponentPlayers, opponentFormat
       animate(y, 0, { type: "spring", stiffness: 140, damping: 18 });
     });
     setLivePositions(basePlayers.map((player) => ({ x: player.x, y: player.y })));
+
+    opponentMarkerMotion.forEach(({ x, y }) => {
+      animate(x, 0, { type: "spring", stiffness: 140, damping: 18 });
+      animate(y, 0, { type: "spring", stiffness: 140, damping: 18 });
+    });
+    setOpponentLivePositions({});
   }
 
   // Snap any dragged players back home when the underlying formation or
   // possession phase changes (e.g. switching formations, or toggling phase,
   // while sandbox mode stays open) — a drag offset computed against the old
-  // base position isn't meaningful against the new one.
+  // base position isn't meaningful against the new one. Also resets when the
+  // opponent's own formation changes, for the same reason.
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- resetting drag state to match a newly-selected formation/phase, not derivable during render
     resetToFormation();
     setSelectedIndex(null);
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- resetToFormation is stable across renders (markerMotion never changes)
-  }, [formation.slug, phase]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- resetToFormation is stable across renders (markerMotion/opponentMarkerMotion never change)
+  }, [formation.slug, phase, opponentFormationName]);
 
   // Commits a dragged marker's pixel offset into pitch-percent coordinates on
   // release (not every drag frame — that would re-render on every animation
@@ -77,14 +92,31 @@ export function SandboxPitch({ formation, phase, opponentPlayers, opponentFormat
     });
   }
 
+  function commitOpponentDragPosition(index: number) {
+    const rect = containerRef.current?.getBoundingClientRect();
+    const base = opponentPlayers?.[index];
+    if (!rect || !base) return;
+    const offsetXPercent = (opponentMarkerMotion[index].x.get() / rect.width) * 100;
+    const offsetYPercent = (opponentMarkerMotion[index].y.get() / rect.height) * 100;
+    setOpponentLivePositions((prev) => ({
+      ...prev,
+      [index]: {
+        x: clampPercent(base.x + offsetXPercent),
+        y: clampPercent(base.y + offsetYPercent),
+      },
+    }));
+  }
+
   const opponentPhase: Phase = phase === "in-possession" ? "out-of-possession" : "in-possession";
   const selectedBase = selectedIndex !== null ? basePlayers[selectedIndex] : undefined;
   const selectedPlayer: FormationPlayer | undefined =
     hasOpponent && selectedBase && selectedIndex !== null
       ? { ...selectedBase, ...livePositions[selectedIndex] }
       : undefined;
-  const matchups =
-    selectedPlayer && opponentPlayers ? findMatchups(selectedPlayer, opponentPlayers) : [];
+  const liveOpponents = opponentPlayers?.map((opponent, index) =>
+    opponentLivePositions[index] ? { ...opponent, ...opponentLivePositions[index] } : opponent,
+  );
+  const matchups = selectedPlayer && liveOpponents ? findMatchups(selectedPlayer, liveOpponents) : [];
   const matchupIds = new Set(matchups.map((opponent) => opponent.id));
   const matchupText =
     selectedPlayer && matchups.length > 0 && opponentFormationName
@@ -122,14 +154,25 @@ export function SandboxPitch({ formation, phase, opponentPlayers, opponentFormat
         <PitchMarkings />
 
         {hasOpponent && (
-          <div className="absolute inset-0" aria-hidden="true">
-            {opponentPlayers!.map((opponent) => {
+          <div className="absolute inset-0">
+            {opponentPlayers!.map((opponent, index) => {
               const isMatched = matchupIds.has(opponent.id);
               return (
-                <div
+                <motion.div
                   key={`opponent-${opponent.id}`}
-                  className="absolute -translate-x-1/2 -translate-y-1/2"
-                  style={{ left: `${opponent.x}%`, top: `${opponent.y}%` }}
+                  drag={!reduceMotion}
+                  dragConstraints={containerRef}
+                  dragElastic={0.05}
+                  dragMomentum={false}
+                  whileDrag={{ scale: 1.15, zIndex: 30 }}
+                  onDragEnd={() => commitOpponentDragPosition(index)}
+                  style={{
+                    left: `${opponent.x}%`,
+                    top: `${opponent.y}%`,
+                    x: opponentMarkerMotion[index].x,
+                    y: opponentMarkerMotion[index].y,
+                  }}
+                  className="absolute -translate-x-1/2 -translate-y-1/2 cursor-grab touch-none active:cursor-grabbing"
                 >
                   <div
                     className={`flex h-11 w-11 items-center justify-center rounded-full border-2 border-dashed font-mono text-xs font-semibold ${
@@ -140,7 +183,7 @@ export function SandboxPitch({ formation, phase, opponentPlayers, opponentFormat
                   >
                     {opponent.code}
                   </div>
-                </div>
+                </motion.div>
               );
             })}
           </div>
@@ -223,7 +266,9 @@ export function SandboxPitch({ formation, phase, opponentPlayers, opponentFormat
           </div>
         ) : (
           <p className="text-xs leading-relaxed text-pitch-touchline">
-            Drag any player to test your own shape. Nothing here is saved.
+            {hasOpponent
+              ? "Drag any player — yours or the opponent's — to test different shapes. Nothing here is saved."
+              : "Drag any player to test your own shape. Nothing here is saved."}
           </p>
         )}
         <button
