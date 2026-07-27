@@ -4,10 +4,6 @@ export type Manager = {
   years: string;
   notableTeams: string[];
   signatureFormationSlug: string;
-  /** A secondary formation this manager was also well known for, shown alongside the primary one. */
-  secondaryFormationSlug?: string;
-  /** Short context for when/why the secondary formation appeared, e.g. "in the biggest away European nights". */
-  secondaryFormationContext?: string;
   tagline: string;
   philosophy: string;
   whyItWorked: string[];
@@ -38,8 +34,6 @@ export const managers: Manager[] = [
     years: "Club management 2008–present",
     notableTeams: ["Barcelona", "Bayern Munich", "Manchester City"],
     signatureFormationSlug: "4-3-3",
-    secondaryFormationSlug: "3-4-3",
-    secondaryFormationContext: "at Bayern Munich and Manchester City, where a full-back tucked inside to form a back three in possession",
     tagline: "Turned possession itself into the primary attacking weapon.",
     philosophy:
       "Builds teams around dominating possession and manipulating space — using precise positioning to consistently create passing lanes and outnumber the opposition around the ball.",
@@ -57,8 +51,6 @@ export const managers: Manager[] = [
     years: "Club management 2001–2024",
     notableTeams: ["Borussia Dortmund", "Liverpool"],
     signatureFormationSlug: "4-3-3",
-    secondaryFormationSlug: "4-2-3-1",
-    secondaryFormationContext: "at Borussia Dortmund's Bundesliga title-winning sides",
     tagline: "Made losing the ball the trigger for the fastest attack.",
     philosophy:
       "Known for an intense, coordinated press that aims to win the ball back within seconds of losing it, turning defensive transitions into the fastest route to a scoring chance.",
@@ -76,8 +68,6 @@ export const managers: Manager[] = [
     years: "Club management 2000–present",
     notableTeams: ["Porto", "Chelsea", "Inter Milan", "Real Madrid"],
     signatureFormationSlug: "4-2-3-1",
-    secondaryFormationSlug: "3-5-2",
-    secondaryFormationContext: "in Inter Milan's defensively disciplined run to the 2010 Champions League title, including a back three away at Barcelona",
     tagline: "Built winning teams around defensive control, not possession.",
     philosophy:
       "Prioritizes defensive organization and game management above all else, setting teams up to stay compact and disciplined before striking on the counter-attack.",
@@ -95,8 +85,6 @@ export const managers: Manager[] = [
     years: "Club management 2006–present",
     notableTeams: ["Juventus", "Chelsea", "Inter Milan", "Tottenham Hotspur"],
     signatureFormationSlug: "3-4-3",
-    secondaryFormationSlug: "3-5-2",
-    secondaryFormationContext: "at Juventus, where he first revived the back three domestically",
     tagline: "Revived the back three as an attacking platform, not just a defensive one.",
     philosophy:
       "Builds teams around a back three that provides defensive security while wing-backs supply the width, allowing the front three to focus purely on attacking play.",
@@ -114,8 +102,6 @@ export const managers: Manager[] = [
     years: "Club management 1990–present",
     notableTeams: ["Athletic Bilbao", "Olympique de Marseille", "Leeds United"],
     signatureFormationSlug: "4-1-4-1",
-    secondaryFormationSlug: "3-4-3",
-    secondaryFormationContext: "at Athletic Bilbao and with the Chile national team, his back-three system",
     tagline: "Pressed every blade of grass, man for man, for the full ninety minutes.",
     philosophy:
       "Commits to man-oriented pressing across the entire pitch, asking his team to follow their designated opponent rather than simply defending a zone.",
@@ -150,8 +136,6 @@ export const managers: Manager[] = [
     years: "Club and international management 2019–present",
     notableTeams: ["Bayern Munich", "Germany national team", "Barcelona"],
     signatureFormationSlug: "4-2-3-1",
-    secondaryFormationSlug: "4-3-3",
-    secondaryFormationContext: "later at Barcelona, building a possession-heavy front three",
     tagline: "Turned a mid-season managerial change into an all-conquering attacking machine.",
     philosophy:
       "Combines an aggressive high defensive line with quick, direct transitions — using intense pressing to win the ball back high up the pitch and attack before the opponent can organize.",
@@ -203,8 +187,6 @@ export const managers: Manager[] = [
     years: "Club management 1985–1996",
     notableTeams: ["Ajax", "Barcelona"],
     signatureFormationSlug: "3-4-3",
-    secondaryFormationSlug: "4-3-3",
-    secondaryFormationContext: "earlier at Ajax, before building Barcelona's back-three side",
     tagline: "Turned the Total Football principles he played under into a coaching blueprint that shaped Barcelona for decades.",
     philosophy:
       "Insisted on close control, quick combination passing, and a goalkeeper comfortable as an auxiliary outfield player, building his Barcelona side around a possession-focused back three that could patiently circulate the ball before releasing wide attackers into space.",
@@ -222,8 +204,6 @@ export const managers: Manager[] = [
     years: "Club management 1974–2013",
     notableTeams: ["Aberdeen", "Manchester United"],
     signatureFormationSlug: "4-4-2",
-    secondaryFormationSlug: "4-3-3",
-    secondaryFormationContext: "in his later Champions League-winning seasons with a fluid front three of Ronaldo, Rooney, and Tevez",
     tagline: "Built and rebuilt title-winning teams across nearly four decades without ever settling into one fixed generation of players.",
     philosophy:
       "Combined a direct, high-tempo attacking approach with a relentless focus on squad renewal, treating the willingness to rebuild a winning team as more important than loyalty to any single group of players.",
@@ -241,8 +221,6 @@ export const managers: Manager[] = [
     years: "Club management 1995–present",
     notableTeams: ["AC Milan", "Chelsea", "Paris Saint-Germain", "Bayern Munich", "Real Madrid"],
     signatureFormationSlug: "4-4-2-diamond",
-    secondaryFormationSlug: "4-3-3",
-    secondaryFormationContext: "at Real Madrid, where a front three built around Cristiano Ronaldo won multiple Champions League titles",
     tagline: "Wins with whatever system best fits the squad already in the building, not a fixed personal blueprint.",
     philosophy:
       "Prioritizes player relationships and squad harmony as much as tactical instruction, adapting formation and style to the specific players available rather than imposing one system everywhere he goes.",
@@ -260,8 +238,6 @@ export const managers: Manager[] = [
     years: "Club management 2006–present",
     notableTeams: ["Atlético Madrid"],
     signatureFormationSlug: "4-4-2",
-    secondaryFormationSlug: "5-3-2",
-    secondaryFormationContext: "in the biggest away European fixtures, dropping an extra man into defense to protect a lead",
     tagline: "Built a compact, defiant identity that let Atlético Madrid compete with far wealthier rivals year after year.",
     philosophy:
       "Organizes the team around an extremely compact, disciplined defensive block that surrenders as little space as possible, trusting moments of individual quality to convert the limited chances that approach creates.",
@@ -279,8 +255,6 @@ export const managers: Manager[] = [
     years: "Club management 2016–present",
     notableTeams: ["Real Madrid"],
     signatureFormationSlug: "4-3-3",
-    secondaryFormationSlug: "4-4-2-diamond",
-    secondaryFormationContext: "in several of Real Madrid's biggest Champions League knockout nights",
     tagline: "Prioritized squad harmony and big-game composure over a fixed tactical identity.",
     philosophy:
       "Manages primarily through man-management and rotation, trusting a squad of experienced, technically excellent players to solve tactical problems on the pitch rather than dictating detailed instructions from the touchline.",
@@ -298,8 +272,6 @@ export const managers: Manager[] = [
     years: "Club and international management 1999–2016",
     notableTeams: ["Real Madrid", "Spain national team"],
     signatureFormationSlug: "4-2-3-1",
-    secondaryFormationSlug: "4-4-2",
-    secondaryFormationContext: "earlier at Real Madrid, leading the Galácticos era featuring Zidane, Figo, and Ronaldo",
     tagline: "Guided Spain's golden generation to hold the World Cup and two European Championships at once.",
     philosophy:
       "Built the national team's approach around patient possession and positional discipline, trusting technically gifted midfielders to control matches through passing rather than direct attacking play.",
@@ -317,8 +289,6 @@ export const managers: Manager[] = [
     years: "Club and international management 1991–2017",
     notableTeams: ["Ajax", "Barcelona", "Bayern Munich", "Manchester United", "Netherlands national team"],
     signatureFormationSlug: "3-5-2",
-    secondaryFormationSlug: "4-3-3",
-    secondaryFormationContext: "at Ajax, where his back-four Total Football side won the 1995 Champions League",
     tagline: "Revived the back three at the 2014 World Cup by building a system specifically around the defenders he had available.",
     philosophy:
       "Builds tactical systems from clearly defined positional roles and detailed rules for each one, favoring a well-drilled structure that every player understands over individual improvisation.",
@@ -370,8 +340,6 @@ export const managers: Manager[] = [
     years: "Club and international management 1968–2004",
     notableTeams: ["Ipswich Town", "England national team", "Barcelona", "Newcastle United"],
     signatureFormationSlug: "3-5-2",
-    secondaryFormationSlug: "4-4-2",
-    secondaryFormationContext: "across most of his club career at Ipswich Town and Barcelona, before England's tournament-specific switch to a back three",
     tagline: "Reshaped England's system mid-tournament at the 1990 World Cup, switching to a back three that carried the team to the semifinals.",
     philosophy:
       "Balanced traditional English directness with a willingness to adapt tactically when a specific tournament or opponent called for it, rather than committing rigidly to one system regardless of circumstances.",
@@ -389,8 +357,6 @@ export const managers: Manager[] = [
     years: "Club management 1984–2019",
     notableTeams: ["Monaco", "Nagoya Grampus Eight", "Arsenal"],
     signatureFormationSlug: "4-2-3-1",
-    secondaryFormationSlug: "4-4-2",
-    secondaryFormationContext: "in the 2003–04 \"Invincibles\" season, when Arsenal went the entire league campaign unbeaten",
     tagline: "Reshaped English football's approach to fitness, diet, and technical recruitment as much as its tactics.",
     philosophy:
       "Built teams around quick, technical passing combinations and pace in behind the defense, while introducing sports-science-based fitness and nutrition standards that were unusual in English football at the time.",
@@ -425,8 +391,6 @@ export const managers: Manager[] = [
     years: "Club and international management 2009–present",
     notableTeams: ["Mainz 05", "Borussia Dortmund", "Paris Saint-Germain", "Chelsea", "Bayern Munich", "England national team"],
     signatureFormationSlug: "3-4-3",
-    secondaryFormationSlug: "4-3-3",
-    secondaryFormationContext: "at Paris Saint-Germain, where a front three built around Neymar and Mbappé reached the 2020 Champions League final",
     tagline: "Took over an unsettled Chelsea mid-season and won the Champions League within months using a back three.",
     philosophy:
       "Builds defensive solidity around a back three with wing-backs providing width, favoring compact organization and quick transitions over sustained, patient possession.",
@@ -444,8 +408,6 @@ export const managers: Manager[] = [
     years: "Club and international management 2016–present",
     notableTeams: ["Hoffenheim", "RB Leipzig", "Bayern Munich", "Germany national team"],
     signatureFormationSlug: "4-1-4-1",
-    secondaryFormationSlug: "3-4-3",
-    secondaryFormationContext: "at RB Leipzig, frequently switching to a back three built for rapid transitions",
     tagline: "Became one of the youngest top-flight managers in German football history while building flexible, hybrid tactical systems.",
     philosophy:
       "Designs systems that can shift fluidly between defensive shapes, often switching between back three and back four within the same match depending on whether the team has the ball.",
