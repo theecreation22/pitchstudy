@@ -1,5 +1,6 @@
-import Link from "next/link";
 import { HeroPitch } from "@/components/home/HeroPitch";
+import { MagneticButton } from "@/components/motion/MagneticButton";
+import { TiltCard } from "@/components/motion/TiltCard";
 
 const sections = [
   {
@@ -33,10 +34,10 @@ export default function Home() {
     <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-16 px-4 py-10 sm:px-8 sm:py-16">
       <section className="flex flex-col gap-8 lg:flex-row lg:items-center lg:gap-12">
         <div className="flex flex-col gap-4 lg:flex-1">
-          <p className="font-display text-sm font-semibold uppercase tracking-[0.15em] text-pitch-marker">
+          <p className="font-display text-sm font-semibold uppercase tracking-[0.15em] text-gold-flood">
             Interactive football education
           </p>
-          <h1 className="font-display text-4xl font-black uppercase leading-none tracking-tight text-pitch-line sm:text-6xl">
+          <h1 className="text-grad-kickoff font-display text-4xl font-black uppercase leading-none tracking-tight sm:text-6xl">
             Know the shape.
             <br />
             Know your role.
@@ -45,12 +46,12 @@ export default function Home() {
             Explore live formations, learn what every position does, train for your role, and
             study the managers who shaped how the game is played.
           </p>
-          <Link
+          <MagneticButton
             href="/explore"
-            className="mt-2 inline-flex min-h-11 w-fit items-center justify-center rounded-md bg-pitch-marker px-6 font-display text-lg font-bold text-pitch-deep transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-line"
+            className="mt-2 inline-flex min-h-11 w-fit items-center justify-center rounded-md bg-gold-flood px-6 font-display text-lg font-bold text-night-950 transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-line"
           >
             Explore the pitch →
-          </Link>
+          </MagneticButton>
         </div>
 
         <div className="mx-auto w-full max-w-xs sm:max-w-sm lg:mx-0 lg:max-w-sm">
@@ -60,19 +61,19 @@ export default function Home() {
 
       <section className="grid gap-4 sm:grid-cols-2">
         {sections.map((section) => (
-          <Link
+          <TiltCard
             key={section.href}
             href={section.href}
-            className="group flex flex-col gap-3 rounded-lg border border-pitch-touchline/30 bg-pitch-card p-6 transition-colors hover:border-pitch-marker focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
+            className="flex flex-col gap-3 rounded-lg border border-pitch-touchline/30 bg-pitch-card p-6 transition-colors hover:border-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
           >
-            <p className="font-display text-xs font-semibold uppercase tracking-[0.12em] text-pitch-marker">
+            <p className="font-display text-xs font-semibold uppercase tracking-[0.12em] text-gold-flood">
               {section.eyebrow}
             </p>
-            <h2 className="font-display text-2xl font-bold uppercase tracking-tight text-pitch-line group-hover:text-pitch-marker">
+            <h2 className="font-display text-2xl font-bold uppercase tracking-tight text-pitch-line group-hover:text-gold-flood">
               {section.title}
             </h2>
             <p className="text-sm leading-relaxed text-pitch-touchline">{section.copy}</p>
-          </Link>
+          </TiltCard>
         ))}
       </section>
     </div>

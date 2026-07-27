@@ -1,16 +1,39 @@
 @import "tailwindcss";
 
 :root {
-  /* "Floodlit sky" palette — the violet-charcoal cast night-match photography
-     actually has under floodlights, not grass green or navy-SaaS-black.
-     Names kept as pitch-* for backward compat with existing utility classes;
-     think of them as dusk / dusk-deep / board / chalk / haze / floodlight. */
-  --pitch-slate: #1b1626; /* dusk — page background */
-  --pitch-deep: #120e19; /* dusk-deep — recessed/bezel surfaces (pitch board backing) */
-  --pitch-card: #251e30; /* board — panel/card surface */
-  --pitch-line: #edead8; /* chalk — primary text, warm off-white */
-  --pitch-touchline: #9c93a8; /* haze — secondary text, violet-grey */
-  --pitch-marker: #f2a63d; /* floodlight — the one hot accent, warm amber against the violet sky */
+  /* "Cup Final Under the Lights" — v2 palette. Night charcoal base with three
+     floodlight colors (red / blue / gold) as light sources on top, not a
+     flat rainbow wash. pitch-* names kept as aliases for backward compat
+     with existing utility classes. */
+  --night-950: #0c0e12;
+  --night-900: #14161c;
+  --night-800: #1d2029;
+  --chalk: #e9edf2;
+  --touchline-muted: #8b93a3; /* neutral secondary text — deliberately not one of the 3 brand hues */
+
+  --red-flare: #ff3b47;
+  --red-deep: #c1121f;
+  --blue-volt: #2e7cf6;
+  --blue-deep: #1437a8;
+  --gold-flood: #ffc53d;
+  --gold-deep: #e8960c;
+
+  --grad-kickoff: linear-gradient(120deg, var(--red-flare) 0%, var(--gold-flood) 55%, var(--blue-volt) 100%);
+  --grad-attack: linear-gradient(120deg, var(--red-deep) 0%, var(--red-flare) 45%, var(--gold-flood) 100%);
+  --grad-control: linear-gradient(
+    120deg,
+    var(--blue-deep) 0%,
+    var(--blue-volt) 75%,
+    color-mix(in srgb, var(--blue-volt) 60%, var(--red-flare) 40%) 100%
+  );
+
+  /* aliases — see note above */
+  --pitch-slate: var(--night-950);
+  --pitch-deep: var(--night-950);
+  --pitch-card: var(--night-900);
+  --pitch-line: var(--chalk);
+  --pitch-touchline: var(--touchline-muted);
+  --pitch-marker: var(--gold-flood);
 }
 
 @theme inline {
@@ -20,6 +43,14 @@
   --color-pitch-line: var(--pitch-line);
   --color-pitch-touchline: var(--pitch-touchline);
   --color-pitch-marker: var(--pitch-marker);
+
+  --color-night-800: var(--night-800);
+  --color-red-flare: var(--red-flare);
+  --color-red-deep: var(--red-deep);
+  --color-blue-volt: var(--blue-volt);
+  --color-blue-deep: var(--blue-deep);
+  --color-gold-flood: var(--gold-flood);
+  --color-gold-deep: var(--gold-deep);
 
   --color-background: var(--pitch-slate);
   --color-foreground: var(--pitch-line);
@@ -31,20 +62,48 @@
 
 body {
   background-color: var(--pitch-slate);
-  background-image:
-    radial-gradient(
-      ellipse 1400px 700px at 20% -10%,
-      color-mix(in srgb, var(--pitch-marker) 7%, var(--pitch-slate)) 0%,
-      transparent 60%
-    ),
-    radial-gradient(
-      ellipse 1200px 800px at 100% 0%,
-      color-mix(in srgb, var(--pitch-line) 5%, var(--pitch-slate)) 0%,
-      transparent 55%
-    );
-  background-attachment: fixed;
   color: var(--pitch-line);
   font-family: var(--font-sans);
+}
+
+.text-grad-kickoff {
+  background: var(--grad-kickoff);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.text-grad-attack {
+  background: var(--grad-attack);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.text-grad-control {
+  background: var(--grad-control);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.border-grad-kickoff {
+  position: relative;
+}
+
+.border-grad-kickoff::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 2px;
+  background: var(--grad-kickoff);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
 }
 
 .pitch-draw {

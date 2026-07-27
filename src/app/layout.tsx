@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Big_Shoulders, Public_Sans, IBM_Plex_Mono } from "next/font/google";
+import { FloodlightAmbient } from "@/components/effects/FloodlightAmbient";
 import "./globals.css";
 
 const bigShoulders = Big_Shoulders({
@@ -37,6 +38,7 @@ export default function RootLayout({
       className={`${bigShoulders.variable} ${publicSans.variable} ${plexMono.variable} h-full`}
     >
       <body className="min-h-full flex flex-col bg-pitch-slate text-pitch-line antialiased">
+        <FloodlightAmbient />
         <nav className="mx-auto flex w-full max-w-5xl items-center justify-between px-4 pt-6 sm:px-8 sm:pt-8">
           <Link
             href="/"
