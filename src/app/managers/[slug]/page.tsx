@@ -38,6 +38,9 @@ export default async function ManagerPage({
   }
 
   const formation = getFormation(manager.signatureFormationSlug);
+  const secondaryFormation = manager.secondaryFormationSlug
+    ? getFormation(manager.secondaryFormationSlug)
+    : undefined;
 
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-8 px-4 py-10 sm:px-8 sm:py-16">
@@ -71,6 +74,18 @@ export default async function ManagerPage({
           >
             View the {formation.name} on the pitch →
           </Link>
+        )}
+        {secondaryFormation && (
+          <p className="text-xs leading-relaxed text-pitch-touchline">
+            Also used{" "}
+            <Link
+              href={`/explore?formation=${secondaryFormation.slug}`}
+              className="text-pitch-marker underline-offset-2 hover:underline"
+            >
+              {secondaryFormation.name}
+            </Link>
+            {manager.secondaryFormationContext ? `, ${manager.secondaryFormationContext}` : null}.
+          </p>
         )}
       </header>
 

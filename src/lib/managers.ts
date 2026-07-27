@@ -4,6 +4,10 @@ export type Manager = {
   years: string;
   notableTeams: string[];
   signatureFormationSlug: string;
+  /** A secondary formation this manager was also well known for, shown alongside the primary one. */
+  secondaryFormationSlug?: string;
+  /** Short context for when/why the secondary formation appeared, e.g. "in the biggest away European nights". */
+  secondaryFormationContext?: string;
   tagline: string;
   philosophy: string;
   whyItWorked: string[];
@@ -237,12 +241,14 @@ export const managers: Manager[] = [
     name: "Diego Simeone",
     years: "Club management 2006–present",
     notableTeams: ["Atlético Madrid"],
-    signatureFormationSlug: "5-3-2",
-    tagline: "Built a compact, five-at-the-back identity that let Atlético Madrid compete with far wealthier rivals year after year.",
+    signatureFormationSlug: "4-4-2",
+    secondaryFormationSlug: "5-3-2",
+    secondaryFormationContext: "in the biggest away European fixtures, dropping an extra man into defense to protect a lead",
+    tagline: "Built a compact, defiant identity that let Atlético Madrid compete with far wealthier rivals year after year.",
     philosophy:
       "Organizes the team around an extremely compact, disciplined defensive block that surrenders as little space as possible, trusting moments of individual quality to convert the limited chances that approach creates.",
     whyItWorked: [
-      "Drops into a disciplined back five for the biggest away fixtures, denying space in behind while still supporting quick transitions",
+      "Keeps the distance between the defensive and attacking lines deliberately short, denying opponents space to play through the middle",
       "Demands total defensive commitment from attacking players as well as defenders, with no player exempt from tracking back",
       "Builds intense collective identity and work rate as a competitive advantage against squads with greater individual talent",
     ],
@@ -254,13 +260,15 @@ export const managers: Manager[] = [
     name: "Zinedine Zidane",
     years: "Club management 2016–present",
     notableTeams: ["Real Madrid"],
-    signatureFormationSlug: "4-4-2-diamond",
+    signatureFormationSlug: "4-3-3",
+    secondaryFormationSlug: "4-4-2-diamond",
+    secondaryFormationContext: "in several of Real Madrid's biggest Champions League knockout nights",
     tagline: "Prioritized squad harmony and big-game composure over a fixed tactical identity.",
     philosophy:
       "Manages primarily through man-management and rotation, trusting a squad of experienced, technically excellent players to solve tactical problems on the pitch rather than dictating detailed instructions from the touchline.",
     whyItWorked: [
       "Rotated the squad heavily across midweek and weekend fixtures to keep key players fresh for the most important moments",
-      "Packed a compact central diamond in several of Real Madrid's biggest Champions League nights, prioritizing control of the middle over out-and-out width",
+      "Packed a compact central diamond at times to prioritize control of the middle over out-and-out width",
       "Kept the dressing room settled by managing playing time carefully across a squad full of established stars",
     ],
     legacy:
