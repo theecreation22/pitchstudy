@@ -32,6 +32,8 @@ export type Manager = {
   signatureMechanics?: SignatureMechanic[];
   /** Non-spatial supporting points (fitness, mentality, squad management) that don't reduce to a pitch diagram. */
   whyItWorked: string[];
+  /** Factual, pattern-level tactical trade-offs of the system itself — not personal criticism of the manager. */
+  vulnerabilities: string[];
   legacy: string;
   /** Managers who directly shaped this one's approach — kept to genuinely documented connections (played under, assisted, or succeeded), not every stylistic echo. Deliberately sparse; not every manager has one. */
   influencedBy?: LineageLink[];
@@ -80,6 +82,10 @@ export const managers: Manager[] = [
     whyItWorked: [
       "Treated organization and rehearsed patterns of play as more valuable than individual improvisation",
     ],
+    vulnerabilities: [
+      "A high pressing line leaves space in behind for opponents who can play an early, direct ball over the top before the press engages",
+      "Zonal discipline can be pulled apart by a team willing to overload a single zone with more runners than the shape is set up to cover",
+    ],
     legacy:
       "Widely credited with popularizing zonal-marking, high-pressing football in Italy at a time when man-marking sweeper systems were the norm, influencing a generation of European coaches who came after him.",
   },
@@ -127,6 +133,10 @@ export const managers: Manager[] = [
     whyItWorked: [
       "Emphasizes exact positional discipline so teammates are always reachable by a pass, even under pressure",
     ],
+    vulnerabilities: [
+      "Committing a full-back inside to build possession leaves less cover behind him, which fast, direct counter-attacks are built to exploit",
+      "Against a team willing to sit deep and concede the ball entirely, patient possession alone doesn't guarantee enough clear chances to break the game open",
+    ],
     legacy:
       "His teams' approach to possession and positional play became one of the most widely studied and imitated tactical templates in modern football.",
   },
@@ -169,6 +179,10 @@ export const managers: Manager[] = [
     whyItWorked: [
       "Demands extremely high work rate and fitness, treating pressing intensity as a team-wide responsibility",
     ],
+    vulnerabilities: [
+      "Sustaining full-pitch pressing intensity for ninety minutes is physically demanding, and a team that can patiently retain the ball can tire the press out",
+      "Playing long and direct bypasses the midfield press altogether, denying the trigger the whole system is built around",
+    ],
     legacy:
       "His pressing approach, often described using the German term \"gegenpressing,\" brought a specific defensive-to-attacking transition style into the mainstream tactical vocabulary.",
   },
@@ -208,6 +222,9 @@ export const managers: Manager[] = [
       "Adjusts his approach match by match based on the specific threat the opponent poses, rather than a fixed style",
       "Treats winning key moments and matches as the priority over any particular attacking philosophy",
     ],
+    vulnerabilities: [
+      "Sitting deep and compact cedes territory and the ball, so against an opponent who can break down a low block with sustained positional play rather than needing transitions to punish, his teams can be pinned back for long spells",
+    ],
     legacy:
       "His pragmatic, results-first approach won domestic titles and continental trophies across four different countries, making him one of the most decorated coaches of his generation.",
   },
@@ -244,6 +261,9 @@ export const managers: Manager[] = [
     whyItWorked: [
       "Demands extremely high fitness levels so wing-backs can cover the full length of the touchline repeatedly",
     ],
+    vulnerabilities: [
+      "Wing-backs are asked to cover the full length of the touchline in both directions, and a team that attacks quickly the moment one is caught upfield can isolate the back three in behind",
+    ],
     legacy:
       "His use of a back three helped revive the system's popularity in leagues where a flat back four had become the default, most notably during a title-winning season in England.",
   },
@@ -269,6 +289,9 @@ export const managers: Manager[] = [
     whyItWorked: [
       "Demands relentless physical intensity, since man-marking across the full pitch requires constant running",
       "Prepares teams through extremely detailed opposition analysis so each player knows their specific defensive assignment",
+    ],
+    vulnerabilities: [
+      "Following an assigned opponent anywhere on the pitch means a defender can be dragged completely out of position, and intelligent opposition movement can use that same discipline to open space for a different runner",
     ],
     legacy:
       "His uncompromising, high-intensity style earned him a reputation as one of the most influential coaches among his peers, with several World Cup-winning managers citing him as a direct influence.",
@@ -322,6 +345,9 @@ export const managers: Manager[] = [
       },
     ],
     whyItWorked: [],
+    vulnerabilities: [
+      "Building attacks through an inverted full-back in central midfield requires that player to be comfortable there under pressure — an opponent that presses the first central pass aggressively can stall the whole buildup",
+    ],
     legacy:
       "Turned a period of relative absence from title contention into sustained top-of-the-table competitiveness, with his emphasis on defensive rest-defense and set-piece preparation widely discussed as a template by other coaches.",
   },
@@ -357,6 +383,9 @@ export const managers: Manager[] = [
     ],
     whyItWorked: [
       "Encourages fast combination play through the middle rather than slow, patient buildup",
+    ],
+    vulnerabilities: [
+      "Pushing the back line high up the pitch leaves space in behind for pace, and a forward who times a run before the line steps up can create a clean run at goal",
     ],
     legacy:
       "His Bayern Munich side won every available trophy in a single season, including the Champions League, and his methods were widely credited with reviving the club's attacking identity almost overnight.",
@@ -400,6 +429,9 @@ export const managers: Manager[] = [
     whyItWorked: [
       "Balances attacking freedom with a disciplined, compact shape when out of possession",
     ],
+    vulnerabilities: [
+      "Relying on individual quality in transition rather than a scripted build-up can go quiet against a team that defends deep and patiently, denying the transitions the approach depends on",
+    ],
     legacy:
       "His Barcelona side won a continental treble built around one of the most prolific forward lines in the sport's history, and his direct, transition-heavy approach has continued to shape his later work with club and international sides.",
   },
@@ -435,6 +467,9 @@ export const managers: Manager[] = [
     ],
     whyItWorked: [
       "Prioritized pressing high to win the ball back quickly, treating defense as the first phase of attack rather than a separate task",
+    ],
+    vulnerabilities: [
+      "Total Football's constant positional rotation depends on every outfield player being comfortable operating in multiple roles — if key rotators are missing or fatigue breaks the interchange down, gaps open that a disciplined zonal defense can exploit",
     ],
     legacy:
       "The fluid, interchangeable style built at Ajax and the Netherlands national team became known as Total Football, and its influence on positional play is still traceable through generations of coaches who studied under him or his successors.",
@@ -478,6 +513,9 @@ export const managers: Manager[] = [
     whyItWorked: [
       "Treated youth development and first-team tactics as a single continuous idea, so young players arrived already trained in the same principles",
     ],
+    vulnerabilities: [
+      "A high line built around a single deep sweeper is vulnerable to quick, direct balls in behind, particularly against forwards quick enough to beat the offside trap",
+    ],
     legacy:
       "The Barcelona side he built in the late 1980s and early 1990s, and the academy principles he embedded at the club, directly shaped the possession-based identity later carried forward by Pep Guardiola and others.",
   },
@@ -506,6 +544,9 @@ export const managers: Manager[] = [
     whyItWorked: [
       "Refreshed the squad continuously rather than waiting for decline to set in, extending a winning cycle across multiple distinct teams",
       "Set exceptionally high standards for competitiveness and mental resilience, particularly in matches decided late",
+    ],
+    vulnerabilities: [
+      "Committing both wide midfielders high and wide can be exploited by a compact, disciplined side that sits narrow centrally and counters immediately into the space vacated in the middle",
     ],
     legacy:
       "Managed Manchester United for over 26 years and won domestic titles across five different decades of squad, a longevity almost unmatched anywhere in the sport.",
@@ -538,6 +579,9 @@ export const managers: Manager[] = [
     whyItWorked: [
       "Manages star personalities by giving experienced players clear roles and a degree of tactical freedom within the team structure",
       "Adjusts tactical setup club to club rather than forcing the same system onto squads with very different strengths",
+    ],
+    vulnerabilities: [
+      "A midfield diamond concentrates numbers centrally but sacrifices natural width, leaving it exposed to a team that attacks hard down both flanks at once",
     ],
     legacy:
       "Has won the Champions League a record number of times as a manager across different clubs and footballing cultures, a body of work built on adaptability rather than a single tactical identity.",
@@ -575,6 +619,9 @@ export const managers: Manager[] = [
     whyItWorked: [
       "Builds intense collective identity and work rate as a competitive advantage against squads with greater individual talent",
     ],
+    vulnerabilities: [
+      "A deep, narrow block invites sustained possession, and a patient side willing to shift the ball from side to side repeatedly can eventually open a gap the compact shape can't cover in time",
+    ],
     legacy:
       "Turned Atlético Madrid into consistent title contenders and Champions League finalists against far wealthier rivals, with the team's relentless defensive identity becoming closely associated with his name.",
   },
@@ -609,6 +656,9 @@ export const managers: Manager[] = [
     whyItWorked: [
       "Rotated the squad heavily across midweek and weekend fixtures to keep key players fresh for the most important moments",
       "Kept the dressing room settled by managing playing time carefully across a squad full of established stars",
+    ],
+    vulnerabilities: [
+      "Narrowing the midfield into a diamond for control sacrifices width, and a team that stretches play immediately to both touchlines can isolate the full-backs in wide areas",
     ],
     legacy:
       "Won three consecutive Champions League titles as a first-time manager, a feat no one had previously achieved, built on squad management as much as tactical detail.",
@@ -645,6 +695,9 @@ export const managers: Manager[] = [
       "Prioritized composure in possession, often accepting long spells without a clear final pass rather than forcing risk",
       "Managed a squad drawn heavily from rival domestic clubs without letting club rivalries disrupt national team unity",
     ],
+    vulnerabilities: [
+      "An approach built on patient central possession can be neutralized by an opponent willing to sit deep and compact through the middle, daring the team to find a final pass rather than pressing to win the ball back",
+    ],
     legacy:
       "Led Spain to the 2010 World Cup and consecutive European Championships either side of it, a run of international dominance built on patient possession football.",
   },
@@ -676,6 +729,9 @@ export const managers: Manager[] = [
     whyItWorked: [
       "Switched the Netherlands to a back three specifically to suit the center-backs available for that tournament, prioritizing fit over convention",
       "Demanded strict adherence to positional discipline, reducing individual decision-making in favor of a rehearsed structure",
+    ],
+    vulnerabilities: [
+      "With wing-backs providing the team's only width, pinning them back defensively removes its main attacking outlet down the flanks and can leave the team narrow and predictable in possession",
     ],
     legacy:
       "His back-three system at the 2014 World Cup, built to suit a specific squad rather than personal preference, helped renew wider interest in three-at-the-back systems across European football.",
@@ -710,6 +766,9 @@ export const managers: Manager[] = [
     whyItWorked: [
       "Kept the team extremely compact and disciplined out of possession, denying space before an attack could even develop",
     ],
+    vulnerabilities: [
+      "A deep, defensive-first setup surrenders territory and the ball, leaving it vulnerable to being pinned in its own half for long periods by a technically superior side patient enough to keep probing rather than forcing transitions",
+    ],
     legacy:
       "His Inter Milan side won consecutive European Cups in the mid-1960s, and the defensively disciplined system he refined became one of the most influential — and most debated — tactical approaches in the sport's history.",
   },
@@ -739,6 +798,9 @@ export const managers: Manager[] = [
       "Used early sports-science methods to track player fitness and structure training loads long before this was common practice",
       "Emphasized total team pressing intensity as a measurable, trainable quality rather than an abstract idea",
     ],
+    vulnerabilities: [
+      "Universal rotation depends on extremely high fitness and tactical discipline across the whole team — an opponent who can disrupt that rhythm through physical, direct play can break the interchange down",
+    ],
     legacy:
       "His Dynamo Kyiv sides dominated Soviet and European football across multiple decades, and his systematic, data-informed approach to training is widely cited as ahead of its time.",
   },
@@ -765,6 +827,9 @@ export const managers: Manager[] = [
       "Built teams around clear individual responsibilities, keeping tactical instructions simple and easy to execute under pressure",
       "Later spells across European clubs added a more possession-aware influence to an already direct approach",
     ],
+    vulnerabilities: [
+      "A back three assembled to suit the personnel available rather than built up over time can lack early cohesion, giving a well-drilled possession side space to exploit before the shape beds in",
+    ],
     legacy:
       "Guided England to the semifinals of the 1990 World Cup with a tactical switch to a back three still remembered as one of the tournament's defining moments, and remained a widely respected figure across English and European football.",
   },
@@ -790,6 +855,9 @@ export const managers: Manager[] = [
     whyItWorked: [
       "Recruited technically gifted players from across Europe and South America into a league that had previously prioritized physicality",
       "Introduced modern fitness testing, injury prevention, and dietary standards well ahead of most domestic rivals",
+    ],
+    vulnerabilities: [
+      "Prioritizing intricate, technical combination play in tight areas can be nullified by extremely physical, direct opposition that closes down space and speeds the game up before a passing combination can develop",
     ],
     legacy:
       "Managed Arsenal's only unbeaten league-winning season in the modern era and is widely credited with transforming standards of fitness, diet, and technical recruitment across English football.",
@@ -825,6 +893,9 @@ export const managers: Manager[] = [
     whyItWorked: [
       "Studies each opponent in detail and adjusts defensive setup and pressing triggers specifically to counter their strengths",
       "Rotates personnel and structure between matches more than many peers, prioritizing tactical fit over a settled lineup",
+    ],
+    vulnerabilities: [
+      "Building every game plan around a specific opponent can leave a team short of one settled identity to fall back on when the plan doesn't work early or against an unfamiliar opponent",
     ],
     legacy:
       "Won the Europa League a record number of times across different clubs, a body of work built on detailed, opponent-specific preparation rather than one repeated system.",
@@ -865,6 +936,9 @@ export const managers: Manager[] = [
     whyItWorked: [
       "Organized defensive shape and pressing triggers meticulously, often making significant tactical changes between matches",
     ],
+    vulnerabilities: [
+      "With wing-backs as the only source of width, an opponent that presses and cuts off the pass out to them can force the back three into longer balls with far less width to aim for",
+    ],
     legacy:
       "Won the Champions League with Chelsea within months of taking charge mid-season, a rapid tactical turnaround built on defensive reorganization around a back three.",
   },
@@ -899,6 +973,9 @@ export const managers: Manager[] = [
     whyItWorked: [
       "Uses detailed video analysis and data to prepare specific tactical plans for individual opponents",
       "Prioritizes intense, coordinated pressing high up the pitch, in the same pressing lineage he emerged from as a young coach",
+    ],
+    vulnerabilities: [
+      "Shifting shape mid-match requires split-second recognition from every player, and a fast transition the instant the ball is lost can catch the team still reshaping, out of position for either structure",
     ],
     legacy:
       "Became the youngest manager in Bundesliga history at 28 years old and has continued to be closely associated with flexible, data-informed tactical systems at every subsequent club.",

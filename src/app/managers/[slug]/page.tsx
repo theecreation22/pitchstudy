@@ -140,6 +140,24 @@ export default async function ManagerPage({
         </>
       )}
 
+      <AnimatedSection>
+        <h2 className="font-display text-xl font-bold uppercase tracking-tight text-pitch-line">
+          Where it&apos;s vulnerable
+        </h2>
+        <ul className="mt-3 max-w-2xl space-y-2 text-sm leading-relaxed text-pitch-line/90">
+          {manager.vulnerabilities.map((point) => (
+            <li key={point} className="flex gap-2">
+              <span aria-hidden="true" className="text-defend-bright">
+                ›
+              </span>
+              {point}
+            </li>
+          ))}
+        </ul>
+      </AnimatedSection>
+
+      <ChalkDivider />
+
       {hasLineage && (
         <>
           <AnimatedSection>
