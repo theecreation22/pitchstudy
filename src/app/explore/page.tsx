@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { FormationExplorer } from "@/components/pitch/FormationExplorer";
 import { FormationExplorerFromSearchParams } from "@/components/pitch/FormationExplorerFromSearchParams";
+import { ChalkDivider } from "@/components/effects/ChalkDivider";
 
 export const metadata: Metadata = {
   title: "Explore Formations — PitchIQ",
@@ -21,6 +22,8 @@ export default function ExplorePage() {
           what it actually does out there.
         </p>
       </header>
+
+      <ChalkDivider />
 
       <Suspense fallback={<FormationExplorer />}>
         <FormationExplorerFromSearchParams />

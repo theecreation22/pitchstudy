@@ -3,6 +3,7 @@ import Link from "next/link";
 import { modules } from "@/lib/curriculum";
 import { AcademyDashboard } from "@/components/curriculum/AcademyDashboard";
 import { AcademyChalkLoop } from "@/components/curriculum/AcademyChalkLoop";
+import { ChalkDivider } from "@/components/effects/ChalkDivider";
 
 export const metadata: Metadata = {
   title: "Academy — PitchIQ",
@@ -30,6 +31,8 @@ export default function AcademyPage() {
           <AcademyChalkLoop />
         </div>
       </section>
+
+      <ChalkDivider />
 
       <AcademyDashboard modules={modules} />
 

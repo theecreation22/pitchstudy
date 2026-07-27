@@ -5,6 +5,7 @@ import { getManager, managers } from "@/lib/managers";
 import { getFormation } from "@/lib/formations";
 import { MiniFormationDiagram } from "@/components/managers/MiniFormationDiagram";
 import { AnimatedSection } from "@/components/motion/AnimatedSection";
+import { ChalkDivider } from "@/components/effects/ChalkDivider";
 
 export function generateStaticParams() {
   return managers.map((manager) => ({ slug: manager.slug }));
@@ -73,6 +74,8 @@ export default async function ManagerPage({
         )}
       </header>
 
+      <ChalkDivider />
+
       <AnimatedSection>
         <h2 className="font-display text-xl font-bold uppercase tracking-tight text-pitch-line">
           Philosophy
@@ -81,6 +84,8 @@ export default async function ManagerPage({
           {manager.philosophy}
         </p>
       </AnimatedSection>
+
+      <ChalkDivider />
 
       <AnimatedSection>
         <h2 className="font-display text-xl font-bold uppercase tracking-tight text-pitch-line">
@@ -97,6 +102,8 @@ export default async function ManagerPage({
           ))}
         </ul>
       </AnimatedSection>
+
+      <ChalkDivider />
 
       <AnimatedSection>
         <h2 className="font-display text-xl font-bold uppercase tracking-tight text-pitch-line">

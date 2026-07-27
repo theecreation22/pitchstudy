@@ -5,6 +5,7 @@ import { getLesson, getModule, modules } from "@/lib/curriculum";
 import { ConceptBlockView } from "@/components/curriculum/ConceptBlockView";
 import { InlineCheckView } from "@/components/curriculum/InlineCheckView";
 import { LessonCompletion } from "@/components/curriculum/LessonCompletion";
+import { ChalkDivider } from "@/components/effects/ChalkDivider";
 
 export function generateStaticParams() {
   return modules.flatMap((module) =>
@@ -61,9 +62,10 @@ export default async function LessonPage({
         <p className="max-w-2xl text-lg leading-relaxed text-pitch-touchline">{lesson.hook}</p>
       </header>
 
-      <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-6">
         {lesson.blocks.map((block) => (
-          <div key={block.id} className="border-t border-pitch-touchline/20 pt-6">
+          <div key={block.id}>
+            <ChalkDivider className="mb-6" />
             <ConceptBlockView block={block} />
           </div>
         ))}

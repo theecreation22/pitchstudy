@@ -3,6 +3,7 @@ import Link from "next/link";
 import { managers } from "@/lib/managers";
 import { MiniFormationDiagram } from "@/components/managers/MiniFormationDiagram";
 import { ManagerEraTimeline } from "@/components/managers/ManagerEraTimeline";
+import { ChalkDivider } from "@/components/effects/ChalkDivider";
 
 export const metadata: Metadata = {
   title: "Managers & Tactics — PitchIQ",
@@ -29,6 +30,8 @@ export default function ManagersPage() {
         Independent tactical analysis based on publicly known coaching history. Not affiliated
         with or endorsed by the coaches or clubs described.
       </p>
+
+      <ChalkDivider />
 
       <div className="grid gap-4 sm:grid-cols-2">
         {managers.map((manager) => (

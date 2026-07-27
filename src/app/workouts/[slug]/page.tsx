@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getWorkoutPlan, workoutPlans } from "@/lib/workouts";
 import { WorkoutChecklist } from "@/components/workouts/WorkoutChecklist";
+import { ChalkDivider } from "@/components/effects/ChalkDivider";
 
 export function generateStaticParams() {
   return workoutPlans.map((plan) => ({ slug: plan.slug }));
@@ -55,6 +56,8 @@ export default async function WorkoutPlanPage({
         This plan is general fitness guidance, not medical advice. Check with a coach or medical
         professional before starting a new training program.
       </div>
+
+      <ChalkDivider />
 
       <WorkoutChecklist plan={plan} />
     </div>

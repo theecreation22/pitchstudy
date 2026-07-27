@@ -1,6 +1,7 @@
 import { HeroPitch } from "@/components/home/HeroPitch";
 import { MagneticButton } from "@/components/motion/MagneticButton";
 import { TiltCard } from "@/components/motion/TiltCard";
+import { ChalkDivider } from "@/components/effects/ChalkDivider";
 
 const sections = [
   {
@@ -58,6 +59,8 @@ export default function Home() {
           <HeroPitch />
         </div>
       </section>
+
+      <ChalkDivider />
 
       <section className="grid gap-4 sm:grid-cols-2">
         {sections.map((section) => (

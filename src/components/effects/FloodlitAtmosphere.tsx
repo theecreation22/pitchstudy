@@ -30,8 +30,22 @@ export function FloodlitAtmosphere() {
       />
 
       <div
-        className="absolute top-1/2 left-1/2 h-[140vh] w-[140vh] -translate-x-1/2 -translate-y-1/2 opacity-[0.05]"
+        className="absolute top-1/2 left-1/2 h-[150vh] w-[150vh] opacity-[0.09]"
         style={{ transform: "translate(-50%, -50%) rotate(-9deg)" }}
+      >
+        <PitchMarkings />
+      </div>
+
+      <div
+        className="absolute top-[15%] -left-1/3 h-[85vh] w-[85vh] opacity-[0.05]"
+        style={{ transform: "rotate(14deg)" }}
+      >
+        <PitchMarkings />
+      </div>
+
+      <div
+        className="absolute -right-1/4 bottom-[5%] h-[70vh] w-[70vh] opacity-[0.045]"
+        style={{ transform: "rotate(-22deg)" }}
       >
         <PitchMarkings />
       </div>
