@@ -28,7 +28,7 @@ export function OpponentToggle({
         style={{ background: show ? "var(--defend-deep)" : "transparent" }}
       >
         <motion.span
-          className="absolute top-1 left-1 h-5 w-5 rounded-full bg-pitch-line shadow-[0_2px_4px_rgba(0,0,0,0.5)]"
+          className="absolute top-0.5 left-1 h-5 w-5 rounded-full bg-pitch-line shadow-[0_2px_4px_rgba(0,0,0,0.5)]"
           animate={{ x: show ? 24 : 0 }}
           transition={reduceMotion ? { duration: 0 } : { duration: 0.2, ease: "easeOut" }}
         />
