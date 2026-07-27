@@ -296,3 +296,52 @@ export const formations: Formation[] = [
 export function getFormation(slug: string): Formation | undefined {
   return formations.find((formation) => formation.slug === slug);
 }
+
+export type Phase = "in-possession" | "out-of-possession";
+
+/**
+ * Derives a compact, deeper "out of possession" shape from a formation's
+ * base (in-possession) coordinates, rather than hand-authoring a second
+ * position set per formation. Forward players drop back the most, the
+ * back line barely moves, and the whole team pulls in toward the center.
+ */
+function toOutOfPossession(player: FormationPlayer): FormationPlayer {
+  if (player.code === "GK") {
+    return { ...player, y: Math.min(96, player.y + 1) };
+  }
+  const dropback = Math.max(0, (55 - player.y) * 0.4);
+  const y = Math.min(92, player.y + dropback);
+  const x = 50 + (player.x - 50) * 0.72;
+  return { ...player, x, y };
+}
+
+export function getFormationPlayers(formation: Formation, phase: Phase): FormationPlayer[] {
+  if (phase === "in-possession") return formation.players;
+  return formation.players.map(toOutOfPossession);
+}
+
+export type PlayerPair = { from: FormationPlayer; to: FormationPlayer };
+
+/**
+ * Greedy nearest-neighbor pairing between two formations' 11 players, used
+ * to draw "ghost overlay" connecting lines in compare mode. There's no
+ * canonical role mapping between e.g. a 4-4-2 and a 3-4-3, so this just
+ * pairs whichever players are spatially closest — in practice that reliably
+ * matches defenders to defenders and attackers to attackers.
+ */
+export function matchFormationPlayers(from: FormationPlayer[], to: FormationPlayer[]): PlayerPair[] {
+  const remaining = [...to];
+  return from.map((fromPlayer) => {
+    let bestIndex = 0;
+    let bestDistance = Infinity;
+    remaining.forEach((candidate, index) => {
+      const distance = Math.hypot(fromPlayer.x - candidate.x, fromPlayer.y - candidate.y);
+      if (distance < bestDistance) {
+        bestDistance = distance;
+        bestIndex = index;
+      }
+    });
+    const [toPlayer] = remaining.splice(bestIndex, 1);
+    return { from: fromPlayer, to: toPlayer };
+  });
+}

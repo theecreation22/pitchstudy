@@ -1,8 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { formations, getFormation, type Formation } from "@/lib/formations";
+import {
+  formations,
+  getFormation,
+  getFormationPlayers,
+  type Formation,
+  type Phase,
+} from "@/lib/formations";
 import { Pitch } from "./Pitch";
+import { SandboxPitch } from "./SandboxPitch";
 import { FormationSelector } from "./FormationSelector";
 
 function FormationNotes({
@@ -71,22 +78,33 @@ function FormationNotes({
   );
 }
 
+type ViewMode = "formation" | "compare" | "sandbox";
+
+const viewModes: { mode: ViewMode; label: string }[] = [
+  { mode: "formation", label: "Formations" },
+  { mode: "compare", label: "Compare" },
+  { mode: "sandbox", label: "Sandbox" },
+];
+
 export function FormationExplorer({ initialSlug }: { initialSlug?: string }) {
   const [selectedSlug, setSelectedSlug] = useState(
     () => formations.find((formation) => formation.slug === initialSlug)?.slug ?? formations[0].slug,
   );
   const [compareSlug, setCompareSlug] = useState<string | null>(null);
+  const [viewMode, setViewMode] = useState<ViewMode>("formation");
+  const [phase, setPhase] = useState<Phase>("in-possession");
+  const [showGhost, setShowGhost] = useState(true);
 
   const formation = getFormation(selectedSlug) ?? formations[0];
   const compareFormation = compareSlug ? getFormation(compareSlug) : null;
+  const displayedPlayers = getFormationPlayers(formation, phase);
 
-  function toggleCompare() {
-    if (compareSlug) {
-      setCompareSlug(null);
-      return;
+  function selectMode(mode: ViewMode) {
+    setViewMode(mode);
+    if (mode === "compare" && !compareSlug) {
+      const alternative = formations.find((candidate) => candidate.slug !== selectedSlug);
+      setCompareSlug(alternative?.slug ?? null);
     }
-    const alternative = formations.find((candidate) => candidate.slug !== selectedSlug);
-    setCompareSlug(alternative?.slug ?? null);
   }
 
   return (
@@ -97,33 +115,98 @@ export function FormationExplorer({ initialSlug }: { initialSlug?: string }) {
           selectedSlug={selectedSlug}
           onSelect={setSelectedSlug}
         />
-        <button
-          type="button"
-          onClick={toggleCompare}
-          className="inline-flex min-h-11 items-center justify-center rounded-full border border-pitch-touchline/60 px-4 font-mono text-xs uppercase tracking-widest text-pitch-touchline transition-colors hover:border-pitch-marker hover:text-pitch-marker focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
-        >
-          {compareFormation ? "Exit compare" : "Compare formations"}
-        </button>
+        <div role="group" aria-label="View mode" className="flex gap-2">
+          {viewModes.map(({ mode, label }) => {
+            const isActive = viewMode === mode;
+            return (
+              <button
+                key={mode}
+                type="button"
+                aria-pressed={isActive}
+                onClick={() => selectMode(mode)}
+                className={`inline-flex min-h-11 items-center justify-center rounded-md border-2 px-4 font-mono text-xs uppercase tracking-widest transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker ${
+                  isActive
+                    ? "border-gold-flood text-gold-flood"
+                    : "border-pitch-touchline/50 text-pitch-touchline hover:border-pitch-touchline hover:text-pitch-line"
+                }`}
+              >
+                {label}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
-      {compareFormation && (
-        <div className="flex flex-col gap-2">
-          <p className="font-mono text-xs uppercase tracking-widest text-pitch-touchline">
-            Compare with
-          </p>
-          <FormationSelector
-            formations={formations}
-            selectedSlug={compareSlug ?? ""}
-            onSelect={setCompareSlug}
-          />
+      {viewMode === "formation" && (
+        <div role="group" aria-label="Possession phase" className="flex gap-2">
+          {(
+            [
+              { phase: "in-possession" as Phase, label: "In possession", color: "gold" },
+              { phase: "out-of-possession" as Phase, label: "Out of possession", color: "blue" },
+            ] as const
+          ).map((option) => {
+            const isActive = phase === option.phase;
+            const activeClasses =
+              option.color === "gold"
+                ? "border-gold-flood bg-gold-flood/10 text-gold-flood"
+                : "border-blue-volt bg-blue-volt/10 text-blue-volt";
+            return (
+              <button
+                key={option.phase}
+                type="button"
+                aria-pressed={isActive}
+                onClick={() => setPhase(option.phase)}
+                className={`inline-flex min-h-11 items-center justify-center rounded-md border-2 px-4 font-mono text-xs uppercase tracking-widest transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker ${
+                  isActive
+                    ? activeClasses
+                    : "border-pitch-touchline/50 text-pitch-touchline hover:border-pitch-touchline hover:text-pitch-line"
+                }`}
+              >
+                {option.label}
+              </button>
+            );
+          })}
         </div>
       )}
 
-      {compareFormation ? (
+      {viewMode === "compare" && compareFormation && (
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-2">
+            <p className="font-mono text-xs uppercase tracking-widest text-pitch-touchline">
+              Compare with
+            </p>
+            <FormationSelector
+              formations={formations}
+              selectedSlug={compareSlug ?? ""}
+              onSelect={setCompareSlug}
+            />
+          </div>
+          <button
+            type="button"
+            aria-pressed={showGhost}
+            onClick={() => setShowGhost((value) => !value)}
+            className={`inline-flex min-h-11 w-fit items-center justify-center rounded-md border-2 px-4 font-mono text-xs uppercase tracking-widest transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker ${
+              showGhost
+                ? "border-blue-volt bg-blue-volt/10 text-blue-volt"
+                : "border-pitch-touchline/50 text-pitch-touchline hover:border-pitch-touchline hover:text-pitch-line"
+            }`}
+          >
+            {showGhost ? "Hide" : "Show"} ghost overlay
+          </button>
+        </div>
+      )}
+
+      {viewMode === "sandbox" && <SandboxPitch formation={formation} />}
+
+      {viewMode === "compare" && compareFormation ? (
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
           <div className="flex flex-col gap-4">
             <div className="mx-auto w-full max-w-sm">
-              <Pitch players={formation.players} formationName={formation.name} />
+              <Pitch
+                players={formation.players}
+                formationName={formation.name}
+                ghostPlayers={showGhost ? compareFormation.players : undefined}
+              />
             </div>
             <div className="rounded-lg border border-pitch-touchline/30 bg-pitch-card p-6">
               <FormationNotes formation={formation} variant="condensed" />
@@ -138,10 +221,10 @@ export function FormationExplorer({ initialSlug }: { initialSlug?: string }) {
             </div>
           </div>
         </div>
-      ) : (
+      ) : viewMode === "formation" ? (
         <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-10">
           <div className="mx-auto w-full max-w-sm lg:mx-0 lg:max-w-md lg:flex-1">
-            <Pitch players={formation.players} formationName={formation.name} />
+            <Pitch players={displayedPlayers} formationName={formation.name} />
           </div>
           <aside
             className="w-full rounded-lg border border-pitch-touchline/30 bg-pitch-card p-6 lg:w-80"
@@ -150,7 +233,7 @@ export function FormationExplorer({ initialSlug }: { initialSlug?: string }) {
             <FormationNotes formation={formation} variant="full" />
           </aside>
         </div>
-      )}
+      ) : null}
     </div>
   );
 }
