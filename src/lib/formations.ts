@@ -345,6 +345,35 @@ export function mirrorFormationPlayers(players: FormationPlayer[]): FormationPla
   return players.map((player) => ({ ...player, y: 100 - player.y }));
 }
 
+/**
+ * Keeps an attacking lineup from visually standing offside against the
+ * defending lineup's last outfield defender (goalkeeper excluded) — the
+ * deepest non-GK defender sets the line, and no attacker is allowed to sit
+ * further forward than it. `attackTowardZero` should be true for the user's
+ * own (unmirrored) team, which attacks toward y=0, and false for a mirrored
+ * opponent, which attacks toward y=100.
+ */
+export function keepOnside(
+  attackers: FormationPlayer[],
+  defenders: FormationPlayer[],
+  attackTowardZero: boolean,
+): FormationPlayer[] {
+  const outfieldDefenders = defenders.filter((player) => player.code !== "GK");
+  if (outfieldDefenders.length === 0) return attackers;
+
+  const lastDefenderY = attackTowardZero
+    ? Math.min(...outfieldDefenders.map((player) => player.y))
+    : Math.max(...outfieldDefenders.map((player) => player.y));
+
+  return attackers.map((player) => {
+    if (player.code === "GK") return player;
+    const y = attackTowardZero
+      ? Math.max(player.y, lastDefenderY)
+      : Math.min(player.y, lastDefenderY);
+    return y === player.y ? player : { ...player, y };
+  });
+}
+
 export type PlayerPair = { from: FormationPlayer; to: FormationPlayer };
 
 /**

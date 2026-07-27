@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { animate, motion, motionValue, useReducedMotion, type MotionValue } from "framer-motion";
 import {
   getFormationPlayers,
+  keepOnside,
   type DefensiveStyle,
   type Formation,
   type FormationPlayer,
@@ -46,7 +47,15 @@ export function SandboxPitch({
   const containerRef = useRef<HTMLDivElement>(null);
   const markerMotion = useMarkerMotionValues(formation.players.length);
   const opponentMarkerMotion = useMarkerMotionValues(11);
-  const basePlayers = getFormationPlayers(formation, phase, defensiveStyle);
+  const rawBasePlayers = getFormationPlayers(formation, phase, defensiveStyle);
+  // Keeps the user's own attackers from starting out visually offside
+  // against the opponent's last defender — doesn't fight manual dragging
+  // afterward, since this only recomputes when the underlying base
+  // positions actually change, not on every drag frame.
+  const basePlayers =
+    opponentPlayers && phase === "in-possession"
+      ? keepOnside(rawBasePlayers, opponentPlayers, true)
+      : rawBasePlayers;
   const [livePositions, setLivePositions] = useState<{ x: number; y: number }[]>(() =>
     basePlayers.map((player) => ({ x: player.x, y: player.y })),
   );

@@ -5,6 +5,7 @@ import {
   formations,
   getFormation,
   getFormationPlayers,
+  keepOnside,
   mirrorFormationPlayers,
   type DefensiveStyle,
   type Formation,
@@ -115,7 +116,7 @@ export function FormationExplorer({ initialSlug }: { initialSlug?: string }) {
 
   const formation = getFormation(selectedSlug) ?? formations[0];
   const compareFormation = compareSlug ? getFormation(compareSlug) : null;
-  const displayedPlayers = getFormationPlayers(formation, phase, defensiveStyle);
+  const baseDisplayedPlayers = getFormationPlayers(formation, phase, defensiveStyle);
 
   const storedOpponentSlug =
     opponentSlugRaw && formations.some((candidate) => candidate.slug === opponentSlugRaw)
@@ -126,9 +127,20 @@ export function FormationExplorer({ initialSlug }: { initialSlug?: string }) {
     formations.find((candidate) => candidate.slug !== selectedSlug) ??
     formations[0];
   const opponentPhase: Phase = phase === "in-possession" ? "out-of-possession" : "in-possession";
-  const opponentPlayers = showOpponent
+  const baseOpponentPlayers = showOpponent
     ? mirrorFormationPlayers(getFormationPlayers(opponentFormation, opponentPhase, defensiveStyle))
     : undefined;
+
+  // Keeps whichever side is currently attacking from visually standing
+  // offside against the other side's last defender.
+  const displayedPlayers =
+    baseOpponentPlayers && phase === "in-possession"
+      ? keepOnside(baseDisplayedPlayers, baseOpponentPlayers, true)
+      : baseDisplayedPlayers;
+  const opponentPlayers =
+    baseOpponentPlayers && opponentPhase === "in-possession"
+      ? keepOnside(baseOpponentPlayers, baseDisplayedPlayers, false)
+      : baseOpponentPlayers;
 
   const selectedPlayer = showOpponent
     ? displayedPlayers.find((player) => player.id === selectedPlayerId)
