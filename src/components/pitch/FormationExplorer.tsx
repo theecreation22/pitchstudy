@@ -5,13 +5,20 @@ import {
   formations,
   getFormation,
   getFormationPlayers,
+  mirrorFormationPlayers,
   type Formation,
   type Phase,
 } from "@/lib/formations";
+import { describeMatchup, findMatchups } from "@/lib/matchups";
+import { getPosition } from "@/lib/positions";
+import { useLocalStorageValue } from "@/lib/useLocalStorageValue";
 import { Pitch } from "./Pitch";
 import { SandboxPitch } from "./SandboxPitch";
 import { FormationSelector } from "./FormationSelector";
 import { PhaseToggle } from "./PhaseToggle";
+import { OpponentToggle } from "./OpponentToggle";
+import { OpponentFormationSelect } from "./OpponentFormationSelect";
+import { PositionBreakdownPanel } from "./PositionBreakdownPanel";
 import { SegmentedTabs } from "@/components/ui/SegmentedTabs";
 
 function FormationNotes({
@@ -96,10 +103,45 @@ export function FormationExplorer({ initialSlug }: { initialSlug?: string }) {
   const [viewMode, setViewMode] = useState<ViewMode>("formation");
   const [phase, setPhase] = useState<Phase>("in-possession");
   const [showGhost, setShowGhost] = useState(true);
+  const [selectedPlayerId, setSelectedPlayerId] = useState<string | null>(null);
+
+  const [showOpponentRaw, setShowOpponentRaw] = useLocalStorageValue("pitchiq:show-opponent");
+  const showOpponent = showOpponentRaw === "true";
+  const [opponentSlugRaw, setOpponentSlugRaw] = useLocalStorageValue("pitchiq:opponent-formation");
 
   const formation = getFormation(selectedSlug) ?? formations[0];
   const compareFormation = compareSlug ? getFormation(compareSlug) : null;
   const displayedPlayers = getFormationPlayers(formation, phase);
+
+  const storedOpponentSlug =
+    opponentSlugRaw && formations.some((candidate) => candidate.slug === opponentSlugRaw)
+      ? opponentSlugRaw
+      : null;
+  const opponentFormation =
+    getFormation(storedOpponentSlug ?? "") ??
+    formations.find((candidate) => candidate.slug !== selectedSlug) ??
+    formations[0];
+  const opponentPhase: Phase = phase === "in-possession" ? "out-of-possession" : "in-possession";
+  const opponentPlayers = showOpponent
+    ? mirrorFormationPlayers(getFormationPlayers(opponentFormation, opponentPhase))
+    : undefined;
+
+  const selectedPlayer = showOpponent
+    ? displayedPlayers.find((player) => player.id === selectedPlayerId)
+    : undefined;
+  const selectedPosition = selectedPlayer ? getPosition(selectedPlayer.code) : undefined;
+  const matchups =
+    selectedPlayer && opponentPlayers ? findMatchups(selectedPlayer, opponentPlayers) : [];
+  const matchupText =
+    selectedPlayer && matchups.length > 0
+      ? describeMatchup({
+          formationName: formation.name,
+          opponentFormationName: opponentFormation.name,
+          playerCode: selectedPlayer.code,
+          opponents: matchups,
+          opponentPhase,
+        })
+      : null;
 
   function selectMode(mode: ViewMode) {
     setViewMode(mode);
@@ -107,6 +149,21 @@ export function FormationExplorer({ initialSlug }: { initialSlug?: string }) {
       const alternative = formations.find((candidate) => candidate.slug !== selectedSlug);
       setCompareSlug(alternative?.slug ?? null);
     }
+  }
+
+  function selectFormation(slug: string) {
+    setSelectedSlug(slug);
+    setSelectedPlayerId(null);
+  }
+
+  function selectOpponentFormation(slug: string) {
+    setOpponentSlugRaw(slug);
+    setSelectedPlayerId(null);
+  }
+
+  function toggleOpponent(next: boolean) {
+    setShowOpponentRaw(next ? "true" : "false");
+    setSelectedPlayerId(null);
   }
 
   return (
@@ -122,7 +179,7 @@ export function FormationExplorer({ initialSlug }: { initialSlug?: string }) {
       <FormationSelector
         formations={formations}
         selectedSlug={selectedSlug}
-        onSelect={setSelectedSlug}
+        onSelect={selectFormation}
       />
 
       {viewMode === "compare" && compareFormation && (
@@ -180,16 +237,40 @@ export function FormationExplorer({ initialSlug }: { initialSlug?: string }) {
       ) : viewMode === "formation" ? (
         <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-10">
           <div className="mx-auto flex w-full max-w-sm flex-col gap-3 lg:mx-0 lg:max-w-md lg:flex-1">
-            <div className="flex justify-end">
+            <div className="flex flex-wrap items-center justify-end gap-3">
+              <OpponentToggle show={showOpponent} onChange={toggleOpponent} />
+              {showOpponent && (
+                <OpponentFormationSelect
+                  formations={formations}
+                  selectedSlug={opponentFormation.slug}
+                  onSelect={selectOpponentFormation}
+                />
+              )}
               <PhaseToggle phase={phase} onChange={setPhase} />
             </div>
-            <Pitch players={displayedPlayers} formationName={formation.name} phase={phase} />
+            <Pitch
+              players={displayedPlayers}
+              formationName={formation.name}
+              phase={phase}
+              opponentPlayers={opponentPlayers}
+              selectedPlayerId={selectedPlayerId}
+              onSelectPlayer={setSelectedPlayerId}
+            />
           </div>
           <aside
             className="w-full rounded-lg border border-pitch-touchline/30 bg-pitch-card p-6 lg:w-80"
             aria-live="polite"
           >
-            <FormationNotes formation={formation} variant="full" />
+            {showOpponent && selectedPlayer && selectedPosition && matchupText ? (
+              <PositionBreakdownPanel
+                position={selectedPosition}
+                phase={phase}
+                matchupText={matchupText}
+                onClear={() => setSelectedPlayerId(null)}
+              />
+            ) : (
+              <FormationNotes formation={formation} variant="full" />
+            )}
           </aside>
         </div>
       ) : null}

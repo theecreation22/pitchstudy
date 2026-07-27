@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { matchFormationPlayers, type FormationPlayer, type Phase } from "@/lib/formations";
+import { findMatchups } from "@/lib/matchups";
 import { getPosition } from "@/lib/positions";
 import { PitchMarkings } from "./PitchMarkings";
 
@@ -14,14 +15,38 @@ type Props = {
   ghostPlayers?: FormationPlayer[];
   /** When set, the board glows amber (in possession) or blue (out of possession), cross-fading between the two. */
   phase?: Phase;
+  /** A second lineup mirrored to attack the opposite way — Explore's opponent overlay. */
+  opponentPlayers?: FormationPlayer[];
+  /** The user-team player currently selected, when the opponent overlay is active. */
+  selectedPlayerId?: string | null;
+  /** Called with a user-team player's id (or null to deselect) when the opponent overlay is active; markers navigate to the position guide instead when it isn't. */
+  onSelectPlayer?: (id: string | null) => void;
 };
 
-export function Pitch({ players, formationName, ghostPlayers, phase }: Props) {
+export function Pitch({
+  players,
+  formationName,
+  ghostPlayers,
+  phase,
+  opponentPlayers,
+  selectedPlayerId,
+  onSelectPlayer,
+}: Props) {
   const reduceMotion = useReducedMotion();
   const ghostPairs = useMemo(
     () => (ghostPlayers ? matchFormationPlayers(players, ghostPlayers) : []),
     [players, ghostPlayers],
   );
+
+  const hasOpponent = Boolean(opponentPlayers && opponentPlayers.length > 0);
+  const selectedPlayer = hasOpponent
+    ? players.find((player) => player.id === selectedPlayerId)
+    : undefined;
+  const matchups = useMemo(
+    () => (selectedPlayer && opponentPlayers ? findMatchups(selectedPlayer, opponentPlayers) : []),
+    [selectedPlayer, opponentPlayers],
+  );
+  const matchupIds = useMemo(() => new Set(matchups.map((opponent) => opponent.id)), [matchups]);
 
   return (
     <div className="relative rounded-xl border-2 border-pitch-touchline/25 bg-pitch-deep p-2 shadow-[0_12px_32px_-12px_rgba(0,0,0,0.7)] sm:p-3">
@@ -81,6 +106,60 @@ export function Pitch({ players, formationName, ghostPlayers, phase }: Props) {
           </div>
         ))}
 
+        {hasOpponent && (
+          <div className="absolute inset-0" aria-hidden="true">
+            {opponentPlayers!.map((opponent) => {
+              const isMatched = matchupIds.has(opponent.id);
+              return (
+                <motion.div
+                  key={`opponent-${opponent.id}`}
+                  layout
+                  className="absolute -translate-x-1/2 -translate-y-1/2"
+                  style={{ left: `${opponent.x}%`, top: `${opponent.y}%` }}
+                  transition={
+                    reduceMotion
+                      ? { duration: 0 }
+                      : { type: "spring", stiffness: 120, damping: 16, mass: 0.7 }
+                  }
+                >
+                  <div
+                    className={`flex h-11 w-11 items-center justify-center rounded-full border-2 border-dashed font-mono text-xs font-semibold transition-colors ${
+                      isMatched
+                        ? "border-press bg-press/10 text-press"
+                        : "border-defend/70 bg-defend/10 text-defend-bright"
+                    }`}
+                  >
+                    {opponent.code}
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+        )}
+
+        {selectedPlayer && matchups.length > 0 && (
+          <svg
+            viewBox="0 0 100 100"
+            preserveAspectRatio="none"
+            className="pointer-events-none absolute inset-0 h-full w-full"
+            aria-hidden="true"
+          >
+            <g stroke="var(--press)" strokeWidth="0.6" strokeOpacity="0.85" strokeDasharray="2.2 1.6">
+              {matchups.map((opponent) => (
+                <line
+                  key={`matchup-${opponent.id}`}
+                  className={reduceMotion ? undefined : "pitch-draw"}
+                  x1={selectedPlayer.x}
+                  y1={selectedPlayer.y}
+                  x2={opponent.x}
+                  y2={opponent.y}
+                  pathLength={1}
+                />
+              ))}
+            </g>
+          </svg>
+        )}
+
         <ul
           className="absolute inset-0"
           role="list"
@@ -88,6 +167,16 @@ export function Pitch({ players, formationName, ghostPlayers, phase }: Props) {
         >
           {players.map((player, index) => {
             const position = getPosition(player.code);
+            const isSelected = hasOpponent && selectedPlayerId === player.id;
+            const markerClassName = `group flex h-11 w-11 items-center justify-center rounded-full border-2 bg-pitch-card font-mono text-xs font-semibold text-pitch-line shadow-[0_2px_6px_rgba(0,0,0,0.5)] transition-colors hover:border-pitch-marker hover:bg-pitch-marker hover:text-pitch-deep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker ${
+              isSelected
+                ? "border-press ring-2 ring-press ring-offset-2 ring-offset-pitch-deep"
+                : phase === "in-possession"
+                  ? "border-attack/40"
+                  : phase === "out-of-possession"
+                    ? "border-defend/40"
+                    : "border-pitch-line/20"
+            }`;
             return (
               <motion.li
                 key={player.id}
@@ -113,19 +202,25 @@ export function Pitch({ players, formationName, ghostPlayers, phase }: Props) {
                         }
                   }
                 >
-                  <Link
-                    href={`/positions/${player.code.toLowerCase()}`}
-                    aria-label={`${position?.name ?? player.code} — view position guide`}
-                    className={`group flex h-11 w-11 items-center justify-center rounded-full border-2 bg-pitch-card font-mono text-xs font-semibold text-pitch-line shadow-[0_2px_6px_rgba(0,0,0,0.5)] transition-colors hover:border-pitch-marker hover:bg-pitch-marker hover:text-pitch-deep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker ${
-                      phase === "in-possession"
-                        ? "border-attack/40"
-                        : phase === "out-of-possession"
-                          ? "border-defend/40"
-                          : "border-pitch-line/20"
-                    }`}
-                  >
-                    {player.code}
-                  </Link>
+                  {hasOpponent ? (
+                    <button
+                      type="button"
+                      aria-pressed={isSelected}
+                      aria-label={`${position?.name ?? player.code} — ${isSelected ? "hide" : "show"} their opponent matchup`}
+                      onClick={() => onSelectPlayer?.(isSelected ? null : player.id)}
+                      className={markerClassName}
+                    >
+                      {player.code}
+                    </button>
+                  ) : (
+                    <Link
+                      href={`/positions/${player.code.toLowerCase()}`}
+                      aria-label={`${position?.name ?? player.code} — view position guide`}
+                      className={markerClassName}
+                    >
+                      {player.code}
+                    </Link>
+                  )}
                 </motion.div>
               </motion.li>
             );

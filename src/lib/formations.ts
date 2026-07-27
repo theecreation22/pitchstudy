@@ -321,6 +321,16 @@ export function getFormationPlayers(formation: Formation, phase: Phase): Formati
   return formation.players.map(toOutOfPossession);
 }
 
+/**
+ * Flips a lineup's y-axis so it attacks the opposite way — used to render an
+ * opponent formation sharing the same pitch as the user's own. Apply this
+ * after `getFormationPlayers`, not before: the out-of-possession dropback
+ * math above assumes the original (non-mirrored) orientation.
+ */
+export function mirrorFormationPlayers(players: FormationPlayer[]): FormationPlayer[] {
+  return players.map((player) => ({ ...player, y: 100 - player.y }));
+}
+
 export type PlayerPair = { from: FormationPlayer; to: FormationPlayer };
 
 /**
