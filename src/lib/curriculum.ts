@@ -413,9 +413,352 @@ export const modules: Module[] = [
     order: 2,
     title: "The Art of Defending",
     accent: "blue",
-    description: "Defensive lines, marking systems, and the modern sweeper-keeper — coming soon.",
-    lessons: [],
-    quiz: [],
+    description: "Marking systems, defensive lines, tackling, and set pieces.",
+    lessons: [
+      {
+        slug: "zonal-vs-man-marking",
+        title: "Zonal Marking vs. Man-Marking",
+        estimatedMinutes: 4,
+        hook: "Every defense has to answer one question before a ball is even kicked: mark the space, or mark the man?",
+        blocks: [
+          {
+            kind: "text",
+            id: "two-philosophies",
+            heading: "Two Philosophies",
+            body: "Zonal marking assigns each defender a patch of the pitch to control, regardless of who runs into it. Man-marking assigns each defender a specific opponent to follow, regardless of where they go. Almost no team uses either in its pure form — most blend the two depending on the situation.",
+          },
+          {
+            kind: "zone",
+            id: "zonal-patch",
+            heading: "A Zonal Defender's Patch",
+            body: "In a zonal system, a defender's job is to control this area and challenge whoever enters it — not to chase a single opponent across the pitch.",
+            zones: [{ x: 10, y: 65, width: 35, height: 25 }],
+          },
+          {
+            kind: "toggle",
+            id: "zonal-vs-man-coverage",
+            heading: "Zonal vs. Man-Marking Coverage",
+            body: "Compare how the two systems cover the same moment. Zonal marking keeps the defensive shape intact even if the ball moves; man-marking can pull defenders completely out of position chasing their assigned opponent.",
+            optionA: { label: "Zonal shape", zones: [{ x: 5, y: 60, width: 90, height: 30 }] },
+            optionB: {
+              label: "Man-marking chase",
+              zones: [
+                { x: 10, y: 70, width: 20, height: 20 },
+                { x: 60, y: 25, width: 20, height: 20 },
+              ],
+            },
+          },
+        ],
+        tryIt:
+          "Watch the next match you see and pick one defender — try to tell whether they're tracking a specific opponent or holding a patch of grass regardless of who's on it.",
+        inlineCheck: {
+          question: "What is the main risk of a purely man-marking defensive system?",
+          options: [
+            "Defenders can be dragged completely out of position by an opponent's movement",
+            "It requires no communication between defenders",
+            "It only works against teams with two strikers",
+            "It cannot be used at set pieces",
+          ],
+          correctIndex: 0,
+        },
+        takeaways: [
+          "Zonal marking assigns space; man-marking assigns an opponent.",
+          "Zonal systems keep defensive shape intact but can leave gaps between zones.",
+          "Most real defenses blend both approaches depending on the moment in the game.",
+        ],
+      },
+      {
+        slug: "setting-the-defensive-line",
+        title: "Setting the Defensive Line",
+        estimatedMinutes: 4,
+        hook: "A back line's height decides almost everything about how a team defends — and how much risk it's willing to take.",
+        blocks: [
+          {
+            kind: "toggle",
+            id: "high-line-vs-deep-block",
+            heading: "High Line vs. Deep Block",
+            body: "A high line squeezes the pitch and traps opponents offside, but leaves space in behind for a fast attacker to exploit. A deep block protects that space but concedes territory and invites pressure.",
+            optionA: { label: "High line", zones: [{ x: 5, y: 35, width: 90, height: 15 }] },
+            optionB: { label: "Deep block", zones: [{ x: 5, y: 78, width: 90, height: 18 }] },
+          },
+          {
+            kind: "zone",
+            id: "space-behind-high-line",
+            heading: "The Space Behind a High Line",
+            body: "This is exactly the space a high defensive line is gambling with — empty until an attacker's run threatens to reach it before a defender can recover.",
+            zones: [{ x: 10, y: 15, width: 80, height: 20 }],
+          },
+          {
+            kind: "text",
+            id: "offside-trap",
+            heading: "The Offside Trap",
+            body: "Pushing up together at the right moment can catch an attacker offside before the pass even arrives. It only works if every defender in the line moves as one — a single defender stepping late undoes it for everyone.",
+          },
+        ],
+        tryIt:
+          "Next time you watch a match with a high defensive line, look for the moment the back four steps up together — that's the offside trap being set.",
+        inlineCheck: {
+          question: "What can break an offside trap even if the timing is otherwise perfect?",
+          options: [
+            "A single defender in the line stepping up late",
+            "The goalkeeper coming off their line",
+            "A corner kick",
+            "The referee's assistant standing on the wrong side",
+          ],
+          correctIndex: 0,
+        },
+        takeaways: [
+          "A high defensive line compresses the pitch but risks space in behind.",
+          "A deep block protects that space at the cost of surrendering territory.",
+          "The offside trap only works if the whole back line moves together.",
+        ],
+      },
+      {
+        slug: "jockeying-and-tackling",
+        title: "Jockeying, Delaying, and the Art of the Tackle",
+        estimatedMinutes: 4,
+        hook: "The best defenders make their most important decision before they ever touch the ball: when not to tackle.",
+        blocks: [
+          {
+            kind: "zone",
+            id: "showing-an-attacker",
+            heading: "Where a Defender Shows an Attacker",
+            body: "Jockeying means staying on your feet, delaying the attacker, and showing them toward a specific area — usually away from goal and onto their weaker foot — rather than diving into a tackle.",
+            zones: [{ x: 30, y: 55, width: 40, height: 30 }],
+          },
+          {
+            kind: "toggle",
+            id: "jockey-vs-dive-in",
+            heading: "Jockeying vs. Diving In",
+            body: "Compare the two approaches to the same one-on-one. Staying on your feet keeps you in the duel even if the first move fails; diving in commits everything to a single moment.",
+            optionA: { label: "Jockey and delay", zones: [{ x: 25, y: 50, width: 50, height: 35 }] },
+            optionB: { label: "Dive into the tackle", zones: [{ x: 40, y: 60, width: 20, height: 15 }] },
+          },
+          {
+            kind: "text",
+            id: "when-to-tackle",
+            heading: "When the Tackle Is Actually On",
+            body: "A committed tackle only makes sense when the attacker's touch drifts far enough from their feet to win the ball cleanly, or when cover is arriving to deal with the consequences of missing. Outside of those moments, delay is almost always the better option.",
+          },
+        ],
+        tryIt:
+          "Watch a one-on-one defensive duel and count how many touches the defender waits through before committing to anything.",
+        inlineCheck: {
+          question: "Why do good defenders usually delay rather than tackle immediately?",
+          options: [
+            "Diving in commits everything to one moment and can be beaten completely",
+            "Tackling is against the rules until the ball reaches the box",
+            "Delaying tires out the attacker faster",
+            "Referees prefer defenders who wait",
+          ],
+          correctIndex: 0,
+        },
+        takeaways: [
+          "Jockeying means staying on your feet and delaying rather than committing early.",
+          "A good defender shows the attacker toward their weaker foot or away from goal.",
+          "A tackle is worth the risk only when the ball is genuinely winnable or cover has arrived.",
+        ],
+      },
+      {
+        slug: "defending-crosses-and-set-pieces",
+        title: "Defending Crosses and Set Pieces",
+        estimatedMinutes: 4,
+        hook: "Set pieces are the one part of the game where defending is almost entirely about preparation, not reaction.",
+        blocks: [
+          {
+            kind: "zone",
+            id: "six-yard-box",
+            heading: "The Six-Yard Box on a Corner",
+            body: "The most dangerous area on any corner — the zone a defense organizes around first, whether they mark zonally, man-to-man, or with a mix of both.",
+            zones: [{ x: 24, y: 1, width: 20, height: 14 }],
+          },
+          {
+            kind: "toggle",
+            id: "zonal-vs-man-corners",
+            heading: "Zonal vs. Man-Marking at Corners",
+            body: "The same zonal-versus-man question from open play applies at set pieces too, just under more pressure and with less time to react. Compare the two setups defending the same corner.",
+            optionA: {
+              label: "Zonal corner defending",
+              zones: [
+                { x: 10, y: 1, width: 16, height: 16 },
+                { x: 26, y: 1, width: 16, height: 16 },
+                { x: 42, y: 1, width: 16, height: 16 },
+              ],
+            },
+            optionB: {
+              label: "Man-marking at the corner",
+              zones: [
+                { x: 15, y: 3, width: 8, height: 10 },
+                { x: 35, y: 5, width: 8, height: 10 },
+                { x: 50, y: 8, width: 8, height: 10 },
+              ],
+            },
+          },
+          {
+            kind: "text",
+            id: "clearing-your-lines",
+            heading: "Clearing Your Lines",
+            body: "When a cross does arrive, the first priority is height, distance, and width — heading the ball up, away, and wide of the danger area, not just anywhere. A weak, central clearance is often more dangerous than not clearing it at all.",
+          },
+        ],
+        tryIt:
+          "Watch a corner kick and see whether the defending team looks zonal, man-marking, or a mix — the near-post runners are usually the easiest to spot.",
+        inlineCheck: {
+          question: "When clearing a dangerous cross, what should a defender prioritize?",
+          options: [
+            "Height, distance, and width away from goal",
+            "Passing short to a teammate under pressure",
+            "Heading it straight back to the goalkeeper",
+            "Kicking it out for a corner deliberately",
+          ],
+          correctIndex: 0,
+        },
+        takeaways: [
+          "Set-piece defending is built on preparation and organization more than reaction.",
+          "Teams can defend corners zonally, man-to-man, or with a blend of both.",
+          "A rushed, central clearance can be more dangerous than a well-directed one.",
+        ],
+      },
+      {
+        slug: "building-a-defense-as-a-unit",
+        title: "Building a Defense as a Unit",
+        estimatedMinutes: 3,
+        hook: "None of this works in isolation — a real defense is a marking system, a defensive line, individual duels, and set-piece organization all moving together.",
+        blocks: [
+          {
+            kind: "formation",
+            id: "settled-defensive-shape",
+            heading: "A Settled Defensive Shape",
+            body: "Every idea from this module shows up at once here: a defensive line held together, zones covered, and individual duels ready to be won if the ball arrives.",
+            formationSlug: "4-4-2",
+            phase: "out-of-possession",
+          },
+          {
+            kind: "zone",
+            id: "goalkeeper-in-the-picture",
+            heading: "Where the Goalkeeper Fits into the Picture",
+            body: "A modern defense doesn't stop at the back four — a goalkeeper comfortable sweeping up behind a high line extends the defensive unit further up the pitch.",
+            zones: [
+              { x: 20, y: 70, width: 60, height: 30 },
+              { x: 30, y: 50, width: 40, height: 22 },
+            ],
+          },
+          {
+            kind: "text",
+            id: "recap",
+            heading: "Recap",
+            body: "Zonal or man-marking, high line or deep block, jockey or tackle, zonal or man at corners — none of these are permanently right or wrong answers. They're decisions a defense makes based on their personnel, their opponent, and the moment in the match.",
+          },
+        ],
+        tryIt:
+          "Go back to the Explore pitch and toggle \"Out of possession\" on any formation — you'll now recognize exactly what you're looking at.",
+        inlineCheck: {
+          question: "What's the main idea tying this whole module together?",
+          options: [
+            "Defending is a set of situational decisions, not one fixed correct method",
+            "Every team should always defend with a high line",
+            "Man-marking is always better than zonal marking",
+            "Set pieces don't matter as much as open play defending",
+          ],
+          correctIndex: 0,
+        },
+        takeaways: [
+          "Defensive marking, line height, individual duels, and set pieces all work together, not separately.",
+          "None of the choices in this module are universally correct — they depend on personnel and situation.",
+          "You've now covered the core language of defending — next is seeing it inside real formations and managers' systems.",
+        ],
+      },
+    ],
+    quiz: [
+      {
+        question: "What is the main risk of a purely man-marking defensive system?",
+        options: [
+          "Defenders can be dragged out of position chasing their opponent",
+          "It cannot be organized before kickoff",
+          "It only works with a back three",
+          "It requires the goalkeeper to mark an opponent too",
+        ],
+        correctIndex: 0,
+        explanation: "Following an opponent wherever they go can pull a defender completely out of the team's shape.",
+      },
+      {
+        question: "A high defensive line squeezes the pitch but risks what?",
+        options: [
+          "Space in behind for a fast attacker to run into",
+          "Running out of substitutions",
+          "Losing possession in the attacking third",
+          "The goalkeeper being sent off",
+        ],
+        correctIndex: 0,
+        explanation: "Pushing the back line up compresses the pitch, but leaves the space behind it for a well-timed run.",
+      },
+      {
+        question: "What must happen for an offside trap to work?",
+        options: [
+          "The whole back line has to move up together",
+          "The goalkeeper has to come off their line",
+          "The referee has to signal it in advance",
+          "It only works in the final ten minutes of a match",
+        ],
+        correctIndex: 0,
+        explanation: "A single defender stepping up late undoes the trap for the entire line.",
+      },
+      {
+        question: "What does \"jockeying\" mean in defending?",
+        options: [
+          "Staying on your feet and delaying rather than diving into a tackle",
+          "Swapping positions with a teammate mid-match",
+          "Sprinting past the attacker to double back",
+          "Standing directly behind the attacker",
+        ],
+        correctIndex: 0,
+        explanation: "Jockeying keeps a defender in the duel and buys time for cover to arrive, rather than committing everything to one tackle.",
+      },
+      {
+        question: "When is a committed tackle actually worth the risk?",
+        options: [
+          "When the ball is genuinely winnable or cover has arrived",
+          "Whenever the attacker touches the ball",
+          "Only inside the penalty area",
+          "Only when a teammate calls for it out loud",
+        ],
+        correctIndex: 0,
+        explanation: "Outside of those two situations, delaying and showing the attacker away from danger is usually the safer option.",
+      },
+      {
+        question: "What should a defender prioritize when clearing a dangerous cross?",
+        options: [
+          "Height, distance, and width away from goal",
+          "A short pass to the nearest teammate",
+          "Heading it straight down the middle",
+          "Waiting for the goalkeeper to catch it instead",
+        ],
+        correctIndex: 0,
+        explanation: "A weak, central clearance can be more dangerous than not clearing the ball at all.",
+      },
+      {
+        question: "Which of these are valid ways to defend a corner kick?",
+        options: [
+          "Zonal marking, man-marking, or a blend of both",
+          "Only zonal marking is allowed by the rules",
+          "Only the goalkeeper is allowed to defend a corner",
+          "Corners cannot be defended, only cleared afterward",
+        ],
+        correctIndex: 0,
+        explanation: "The same zonal-versus-man question from open play applies at set pieces too.",
+      },
+      {
+        question: "What's the central idea connecting this whole module?",
+        options: [
+          "Defending is a set of situational decisions depending on personnel and moment",
+          "A high line is always the correct choice",
+          "Man-marking should always be used at set pieces",
+          "Tackling early is always better than delaying",
+        ],
+        correctIndex: 0,
+        explanation: "None of the choices covered in this module are universally right — they depend on the team and the situation.",
+      },
+    ],
   },
   {
     slug: "midfield",
