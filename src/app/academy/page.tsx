@@ -6,7 +6,7 @@ import { AcademyChalkLoop } from "@/components/curriculum/AcademyChalkLoop";
 import { ChalkDivider } from "@/components/effects/ChalkDivider";
 
 export const metadata: Metadata = {
-  title: "Academy — PitchIQ",
+  title: "Academy · PitchIQ",
   description: "Structured football lessons with knowledge checks, module quizzes, XP, and badges.",
 };
 
@@ -23,7 +23,7 @@ export default function AcademyPage() {
           </h1>
           <p className="max-w-2xl text-base leading-relaxed text-pitch-touchline sm:text-lg">
             Short, interactive lessons with a knowledge check built in, followed by a module quiz
-            once you&apos;re ready. Progress saves on this device only — no account needed.
+            once you&apos;re ready. Progress saves on this device only, no account needed.
           </p>
         </header>
 

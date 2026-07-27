@@ -18,7 +18,7 @@ export async function generateMetadata({
   const plan = getWorkoutPlan(slug);
 
   return {
-    title: plan ? `${plan.title} — PitchIQ` : "Workout plan — PitchIQ",
+    title: plan ? `${plan.title} · PitchIQ` : "Workout plan · PitchIQ",
     description: plan?.tagline,
   };
 }

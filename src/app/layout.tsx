@@ -22,7 +22,7 @@ const plexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "PitchIQ — Learn football tactics, interactively",
+  title: "PitchIQ: Learn football tactics, interactively",
   description:
     "Explore formations on an interactive pitch, learn what every position does, and train for the role you want to play.",
 };

@@ -32,7 +32,7 @@ export function LessonCompletion({ module, lesson, nextLesson }: Props) {
             exit={{ opacity: 0 }}
             className="font-display text-sm font-bold uppercase tracking-wide text-gold-flood"
           >
-            +50 XP — Full Time!
+            +50 XP: Full Time!
           </motion.p>
         )}
       </AnimatePresence>
@@ -43,7 +43,7 @@ export function LessonCompletion({ module, lesson, nextLesson }: Props) {
           onClick={handleComplete}
           className="inline-flex min-h-11 items-center justify-center rounded-md bg-gold-flood px-6 font-display text-base font-bold text-night-950 transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-line"
         >
-          Full Time — mark complete
+          Full Time: mark complete
         </button>
       ) : (
         <div className="flex flex-wrap items-center gap-3">

@@ -53,7 +53,7 @@ export const workoutPlans: WorkoutPlan[] = [
           },
           {
             id: "gk-w1-agility",
-            name: "Ladder footwork — lateral shuffle",
+            name: "Ladder footwork: lateral shuffle",
             category: "speed-agility",
             description: "Quick lateral steps through an agility ladder to sharpen footwork before setting for a save.",
             dosage: "4 x 20s",
@@ -96,7 +96,7 @@ export const workoutPlans: WorkoutPlan[] = [
             id: "gk-w2-endurance",
             name: "Repeated dive-and-recover circuit",
             category: "endurance",
-            description: "Low dive, get back to your feet, reset, repeat — building recovery speed after going to ground.",
+            description: "Low dive, get back to your feet, reset, repeat. Building recovery speed after going to ground.",
             dosage: "4 x 8",
           },
           {

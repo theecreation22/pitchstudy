@@ -17,7 +17,7 @@ export async function generateMetadata({
   const mod = getModule(moduleSlug);
 
   return {
-    title: mod ? `${mod.title} — PitchIQ Academy` : "Module — PitchIQ",
+    title: mod ? `${mod.title} · PitchIQ Academy` : "Module · PitchIQ",
     description: mod?.description,
   };
 }

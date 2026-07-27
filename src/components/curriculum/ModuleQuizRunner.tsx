@@ -8,9 +8,9 @@ import { ScoreboardHeader } from "@/components/quiz/ScoreboardHeader";
 
 function scoreMessage(score: number, total: number): string {
   const ratio = score / total;
-  if (ratio === 1) return "Golden Boot — perfect score.";
-  if (ratio >= 0.7) return "Starting XI — solid grasp of the module.";
-  return "Back to Training — worth another pass through the lessons.";
+  if (ratio === 1) return "Golden Boot: perfect score.";
+  if (ratio >= 0.7) return "Starting XI: solid grasp of the module.";
+  return "Back to Training: worth another pass through the lessons.";
 }
 
 export function ModuleQuizRunner({ module }: { module: Module }) {

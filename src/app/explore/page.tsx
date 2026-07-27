@@ -5,7 +5,7 @@ import { FormationExplorerFromSearchParams } from "@/components/pitch/FormationE
 import { ChalkDivider } from "@/components/effects/ChalkDivider";
 
 export const metadata: Metadata = {
-  title: "Explore Formations — PitchIQ",
+  title: "Explore Formations · PitchIQ",
   description:
     "Switch between 8 formations on an interactive pitch, compare two side by side, and click any player to learn what their position does.",
 };

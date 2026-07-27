@@ -4,7 +4,7 @@ import { quizzes } from "@/lib/quizzes";
 import { QuizBestScore } from "@/components/quiz/QuizBestScore";
 
 export const metadata: Metadata = {
-  title: "Quizzes — PitchIQ",
+  title: "Quizzes · PitchIQ",
   description: "Short quizzes on formations, positions, and managers with instant feedback.",
 };
 
@@ -16,7 +16,7 @@ export default function QuizIndexPage() {
           Test yourself.
         </h1>
         <p className="max-w-2xl text-base leading-relaxed text-pitch-touchline sm:text-lg">
-          Short quizzes with instant feedback — no accounts, no pressure, just a quick check on
+          Short quizzes with instant feedback: no accounts, no pressure, just a quick check on
           what stuck.
         </p>
       </header>

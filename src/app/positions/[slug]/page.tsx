@@ -18,7 +18,7 @@ export async function generateMetadata({
   const position = getPosition(slug.toUpperCase());
 
   return {
-    title: position ? `${position.name} (${position.code}) — PitchIQ` : "Position — PitchIQ",
+    title: position ? `${position.name} (${position.code}) · PitchIQ` : "Position · PitchIQ",
     description: position?.summary,
   };
 }

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { ChallengeMode } from "@/components/curriculum/ChallengeMode";
 
 export const metadata: Metadata = {
-  title: "Challenge — PitchIQ",
+  title: "Challenge · PitchIQ",
   description: "Random questions drawn from the Academy modules you've completed, with a best-streak score.",
 };
 
@@ -16,7 +16,7 @@ export default function ChallengePage() {
         </h1>
         <p className="max-w-2xl text-lg leading-relaxed text-pitch-touchline">
           Random questions from every Academy module you&apos;ve completed. One wrong answer
-          resets the streak — how far can you go?
+          resets the streak. How far can you go?
         </p>
       </header>
 

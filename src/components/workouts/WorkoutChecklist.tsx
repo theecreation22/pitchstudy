@@ -120,7 +120,7 @@ export function WorkoutChecklist({ plan }: { plan: WorkoutPlan }) {
           return (
             <section key={week.weekNumber}>
               <h2 className="font-display text-2xl font-bold uppercase tracking-tight text-pitch-line">
-                Week {week.weekNumber} — {week.focus}
+                Week {week.weekNumber}: {week.focus}
               </h2>
               <ul className="mt-4 flex flex-col gap-3">
                 {drills.map((drill) => {

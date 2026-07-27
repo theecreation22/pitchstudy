@@ -3,7 +3,7 @@ import Link from "next/link";
 import { getAllDrills, workoutPlans } from "@/lib/workouts";
 
 export const metadata: Metadata = {
-  title: "Workouts — PitchIQ",
+  title: "Workouts · PitchIQ",
   description:
     "Position-specific training plans for goalkeepers, defenders, midfielders, and attackers.",
 };
@@ -16,7 +16,7 @@ export default function WorkoutsPage() {
           Train for your role.
         </h1>
         <p className="max-w-2xl text-base leading-relaxed text-pitch-touchline sm:text-lg">
-          Four-week foundations plans, one per position group — strength, speed and agility,
+          Four-week foundations plans, one per position group: strength, speed and agility,
           endurance, and drills built for the specific demands of the role.
         </p>
       </header>

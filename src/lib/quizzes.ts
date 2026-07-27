@@ -26,7 +26,7 @@ export const quizzes: Quiz[] = [
         options: ["4-4-2", "4-4-2 Diamond", "4-3-3", "3-4-3"],
         correctIndex: 1,
         explanation:
-          "The 4-4-2 Diamond adds an extra central midfielder by narrowing into a diamond — but that means full-backs have to provide almost all of the team's width.",
+          "The 4-4-2 Diamond adds an extra central midfielder by narrowing into a diamond, but that means full-backs have to provide almost all of the team's width.",
       },
       {
         id: "formations-2",
@@ -35,7 +35,7 @@ export const quizzes: Quiz[] = [
         options: ["4-4-2", "3-5-2", "4-3-3", "4-2-3-1"],
         correctIndex: 1,
         explanation:
-          "In a 3-5-2, there are no natural wide midfielders or wingers — wing-backs alone cover the width in both directions.",
+          "In a 3-5-2, there are no natural wide midfielders or wingers: wing-backs alone cover the width in both directions.",
       },
       {
         id: "formations-3",
@@ -43,7 +43,7 @@ export const quizzes: Quiz[] = [
         options: ["1", "2", "3", "4"],
         correctIndex: 2,
         explanation:
-          "A 4-3-3's midfield three is often set up as a triangle — typically one deeper player and two further forward, or vice versa.",
+          "A 4-3-3's midfield three is often set up as a triangle: typically one deeper player and two further forward, or vice versa.",
       },
       {
         id: "formations-4",
@@ -83,7 +83,7 @@ export const quizzes: Quiz[] = [
         options: ["3-5-2", "5-3-2", "3-4-3", "4-4-2 Diamond"],
         correctIndex: 1,
         explanation:
-          "5-3-2 is the more conservative sibling of the 3-5-2 — the wing-backs sit deeper, prioritizing defensive solidity over attacking width.",
+          "5-3-2 is the more conservative sibling of the 3-5-2: the wing-backs sit deeper, prioritizing defensive solidity over attacking width.",
       },
       {
         id: "formations-8",
@@ -92,7 +92,7 @@ export const quizzes: Quiz[] = [
         options: ["4-3-3", "4-4-2", "4-2-3-1", "3-4-3"],
         correctIndex: 1,
         explanation:
-          "The classic 4-4-2 pairs two strikers together with two flat lines of four — simple to organize and even across the width of the pitch.",
+          "The classic 4-4-2 pairs two strikers together with two flat lines of four, simple to organize and even across the width of the pitch.",
       },
     ],
   },
@@ -171,7 +171,7 @@ export const quizzes: Quiz[] = [
         options: ["Defensive Midfielder", "Attacking Midfielder", "Box-to-Box Midfielder", "Winger"],
         correctIndex: 2,
         explanation:
-          "A box-to-box midfielder is asked to do a bit of everything — defending in their own box one moment, arriving in the opposition's the next.",
+          "A box-to-box midfielder is asked to do a bit of everything: defending in their own box one moment, arriving in the opposition's the next.",
       },
     ],
   },

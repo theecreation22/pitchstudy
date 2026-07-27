@@ -6,7 +6,7 @@ import { ManagerEraTimeline } from "@/components/managers/ManagerEraTimeline";
 import { ChalkDivider } from "@/components/effects/ChalkDivider";
 
 export const metadata: Metadata = {
-  title: "Managers & Tactics — PitchIQ",
+  title: "Managers & Tactics · PitchIQ",
   description:
     "Factual profiles of influential football managers and the tactical systems they became known for.",
 };
@@ -19,7 +19,7 @@ export default function ManagersPage() {
           Tactics through history.
         </h1>
         <p className="max-w-2xl text-base leading-relaxed text-pitch-touchline sm:text-lg">
-          How {managers.length} influential managers shaped the way their teams set up — and the
+          How {managers.length} influential managers shaped the way their teams set up, and the
           formation each is best known for.
         </p>
       </header>

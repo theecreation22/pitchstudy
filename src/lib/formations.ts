@@ -49,11 +49,11 @@ export const formations: Formation[] = [
     name: "4-4-2",
     tagline: "Two flat banks of four, two strikers up top.",
     origin:
-      "The default shape of English football for decades — built around two flat lines of four that stay compact and hard to break down.",
+      "The default shape of English football for decades, built around two flat lines of four that stay compact and hard to break down.",
     strengths: [
       "Even coverage across the width of the pitch",
       "Two strikers give a direct outlet and support each other up top",
-      "Simple to organize defensively — everyone knows their line",
+      "Simple to organize defensively: everyone knows their line",
     ],
     weaknesses: [
       "Can be outnumbered in central midfield against a three-man midfield",
@@ -84,7 +84,7 @@ export const formations: Formation[] = [
     strengths: [
       "Extra central midfielder helps control tempo and win the ball back quickly",
       "Wide forwards stretch the back line and can cut inside onto their stronger foot",
-      "Flexible — the front three can rotate positions to confuse markers",
+      "Flexible: the front three can rotate positions to confuse markers",
     ],
     weaknesses: [
       "Full-backs must cover huge space in behind advanced wingers",
@@ -115,7 +115,7 @@ export const formations: Formation[] = [
     strengths: [
       "Two holding midfielders offer strong defensive cover in front of the back four",
       "Three attacking midfielders create numbers-up situations in the final third",
-      "Very adaptable out of possession — can compress into a 4-4-1-1 when defending",
+      "Very adaptable out of possession: can compress into a 4-4-1-1 when defending",
     ],
     weaknesses: [
       "The lone striker can be starved of service if the attacking midfielders drift too wide",
@@ -149,7 +149,7 @@ export const formations: Formation[] = [
       "Two strikers can combine and share the goalscoring load",
     ],
     weaknesses: [
-      "Wing-backs need elite stamina — they cover the entire touchline alone",
+      "Wing-backs need elite stamina. They cover the entire touchline alone",
       "Space in behind the wing-backs is exposed if they get caught upfield",
     ],
     bestSuited:
@@ -204,7 +204,7 @@ export const formations: Formation[] = [
     name: "5-3-2",
     tagline: "A back five built for defensive solidity, three in midfield, two out front.",
     origin:
-      "The more conservative sibling of the 3-5-2 — wing-backs sit deeper as auxiliary defenders rather than attacking outlets.",
+      "The more conservative sibling of the 3-5-2: wing-backs sit deeper as auxiliary defenders rather than attacking outlets.",
     strengths: [
       "Very hard to break down through wide areas with five defenders across the back",
       "Central midfield three can control possession without worrying about defensive cover",
@@ -266,14 +266,14 @@ export const formations: Formation[] = [
     name: "4-4-2 Diamond",
     tagline: "A four-man midfield diamond adds central control to the classic two-striker setup.",
     origin:
-      "A response to the flat 4-4-2's lack of central midfield presence — narrows the midfield into a diamond to win the battle in the middle of the pitch.",
+      "A response to the flat 4-4-2's lack of central midfield presence, narrowing the midfield into a diamond to win the battle in the middle of the pitch.",
     strengths: [
       "The extra central midfielder at the point of the diamond helps dominate central areas",
       "The attacking midfielder at the top of the diamond supports the strikers directly",
       "The defensive midfielder at the base protects the back four",
     ],
     weaknesses: [
-      "Lacks natural width — full-backs must provide almost all of it",
+      "Lacks natural width: full-backs must provide almost all of it",
       "Can be exploited by opponents playing with genuine wingers",
     ],
     bestSuited:

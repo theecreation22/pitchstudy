@@ -163,7 +163,7 @@ export function Pitch({
         <ul
           className="absolute inset-0"
           role="list"
-          aria-label={`${formationName} formation — click a position to learn about it`}
+          aria-label={`${formationName} formation: click a position to learn about it`}
         >
           {players.map((player, index) => {
             const position = getPosition(player.code);
@@ -212,7 +212,7 @@ export function Pitch({
                     <button
                       type="button"
                       aria-pressed={isSelected}
-                      aria-label={`${position?.name ?? player.code} — ${isSelected ? "hide" : "show"} their opponent matchup`}
+                      aria-label={`${position?.name ?? player.code}: ${isSelected ? "hide" : "show"} their opponent matchup`}
                       onClick={() => onSelectPlayer?.(isSelected ? null : player.id)}
                       className={markerClassName}
                     >
@@ -221,7 +221,7 @@ export function Pitch({
                   ) : (
                     <Link
                       href={`/positions/${player.code.toLowerCase()}`}
-                      aria-label={`${position?.name ?? player.code} — view position guide`}
+                      aria-label={`${position?.name ?? player.code}: view position guide`}
                       className={markerClassName}
                     >
                       {player.code}

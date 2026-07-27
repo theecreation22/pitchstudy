@@ -298,7 +298,7 @@ export function SandboxPitch({
         ) : (
           <p className="text-xs leading-relaxed text-pitch-touchline">
             {hasOpponent
-              ? "Drag any player — yours or the opponent's — to test different shapes. Nothing here is saved."
+              ? "Drag any player, yours or the opponent's, to test different shapes. Nothing here is saved."
               : "Drag any player to test your own shape. Nothing here is saved."}
           </p>
         )}

@@ -100,7 +100,7 @@ export const modules: Module[] = [
         slug: "reading-the-pitch-in-thirds",
         title: "Reading the Pitch in Thirds",
         estimatedMinutes: 4,
-        hook: "Every pitch splits into three thirds — and where the ball is tells you what a team should be doing.",
+        hook: "Every pitch splits into three thirds, and where the ball is tells you what a team should be doing.",
         blocks: [
           {
             kind: "zone",
@@ -120,14 +120,14 @@ export const modules: Module[] = [
             kind: "zone",
             id: "attacking-third",
             heading: "The Attacking Third",
-            body: "Closest to the opponent's goal. Risk becomes worth taking here — a lost ball is far less dangerous than a lost ball in your own third, so players commit to final passes and shots.",
+            body: "Closest to the opponent's goal. Risk becomes worth taking here: a lost ball is far less dangerous than a lost ball in your own third, so players commit to final passes and shots.",
             zones: [{ x: 0, y: 0, width: 100, height: 33 }],
           },
           {
             kind: "toggle",
             id: "compact-vs-stretched",
             heading: "Compact vs. Stretched",
-            body: "A team's overall shape isn't fixed — it stretches or compresses depending on where the ball is and whether they have it. Compare a deep, compact low block against a high, aggressive press.",
+            body: "A team's overall shape isn't fixed. It stretches or compresses depending on where the ball is and whether they have it. Compare a deep, compact low block against a high, aggressive press.",
             optionA: { label: "Low block", zones: [{ x: 10, y: 60, width: 80, height: 35 }] },
             optionB: { label: "High press", zones: [{ x: 10, y: 0, width: 80, height: 40 }] },
           },
@@ -155,19 +155,19 @@ export const modules: Module[] = [
             kind: "text",
             id: "reading-left-to-right",
             heading: "Reading Left to Right",
-            body: "Formation numbers read from defense to attack: defenders first, then midfielders, then forwards. The goalkeeper is never included — every formation already assumes one. \"4-3-3\" means four defenders, three midfielders, three forwards, plus a goalkeeper.",
+            body: "Formation numbers read from defense to attack: defenders first, then midfielders, then forwards. The goalkeeper is never included. Every formation already assumes one. \"4-3-3\" means four defenders, three midfielders, three forwards, plus a goalkeeper.",
           },
           {
             kind: "formation",
             id: "4-4-2-shape",
-            heading: "4-4-2 — Two Equal Lines",
+            heading: "4-4-2: Two Equal Lines",
             body: "Two flat banks of four in defense and midfield, with two strikers up top. Even coverage across the width of the pitch, but a flat midfield line can be outnumbered by a three-man midfield.",
             formationSlug: "4-4-2",
           },
           {
             kind: "formation",
             id: "4-3-3-shape",
-            heading: "4-3-3 — An Extra Midfielder",
+            heading: "4-3-3: An Extra Midfielder",
             body: "Trading a striker for a third midfielder buys control of the middle of the pitch, with two wide forwards providing width higher up instead of a flat midfield line.",
             formationSlug: "4-3-3",
           },
@@ -181,10 +181,10 @@ export const modules: Module[] = [
           },
         ],
         tryIt:
-          "Open the pitch explorer in a separate tab and switch between 4-4-2 and 4-3-3 — count how many players occupy the middle third in each shape.",
+          "Open the pitch explorer in a separate tab and switch between 4-4-2 and 4-3-3, then count how many players occupy the middle third in each shape.",
         inlineCheck: {
           question: "Which number in \"4-3-3\" refers to the goalkeeper?",
-          options: ["The first number", "The second number", "The third number", "None of them — the goalkeeper isn't counted"],
+          options: ["The first number", "The second number", "The third number", "None of them: the goalkeeper isn't counted"],
           correctIndex: 3,
         },
         takeaways: [
@@ -220,7 +220,7 @@ export const modules: Module[] = [
             kind: "toggle",
             id: "line-hugger-vs-sweeper",
             heading: "Line-Hugger vs. Sweeper-Keeper",
-            body: "Compare the two starting positions directly. Neither is objectively correct — the right choice depends on how high the team's own back line plays.",
+            body: "Compare the two starting positions directly. Neither is objectively correct. The right choice depends on how high the team's own back line plays.",
             optionA: { label: "Traditional", zones: [{ x: 20, y: 85, width: 60, height: 15 }] },
             optionB: { label: "Sweeper-keeper", zones: [{ x: 20, y: 55, width: 60, height: 45 }] },
           },
@@ -247,20 +247,20 @@ export const modules: Module[] = [
         slug: "why-center-backs-come-in-pairs",
         title: "Why Center-Backs Come in Pairs",
         estimatedMinutes: 4,
-        hook: "Center-backs almost never defend alone — the partnership matters as much as either individual.",
+        hook: "Center-backs almost never defend alone. The partnership matters as much as either individual.",
         blocks: [
           {
             kind: "formation",
             id: "cb-pairing",
             heading: "Two Center-Backs, One Line",
-            body: "Look at the two CB markers in this shape — they hold the line together, not as two separate individuals defending their own patch of grass.",
+            body: "Look at the two CB markers in this shape: they hold the line together, not as two separate individuals defending their own patch of grass.",
             formationSlug: "4-4-2",
           },
           {
             kind: "zone",
             id: "covering-each-other",
             heading: "Covering Each Other",
-            body: "Each center-back's zone overlaps with their partner's. That overlap is deliberate — it's what allows one to step out without leaving a gap unattended.",
+            body: "Each center-back's zone overlaps with their partner's. That overlap is deliberate: it's what allows one to step out without leaving a gap unattended.",
             zones: [
               { x: 10, y: 65, width: 35, height: 28 },
               { x: 55, y: 65, width: 35, height: 28 },
@@ -270,7 +270,7 @@ export const modules: Module[] = [
             kind: "toggle",
             id: "stepping-out-vs-holding",
             heading: "Stepping Out vs. Holding the Line",
-            body: "Compare a settled back line against the moment one center-back steps out to press an attacker — notice how much space opens up if the partner doesn't shift across to cover it.",
+            body: "Compare a settled back line against the moment one center-back steps out to press an attacker, then notice how much space opens up if the partner doesn't shift across to cover it.",
             optionA: { label: "Holding the line", zones: [{ x: 10, y: 70, width: 80, height: 15 }] },
             optionB: {
               label: "One steps out",
@@ -303,20 +303,20 @@ export const modules: Module[] = [
         slug: "putting-it-together",
         title: "Putting the Thirds and the Shape Together",
         estimatedMinutes: 3,
-        hook: "Now put it together: a formation isn't fixed — it's a shape that moves with the ball across the thirds of the pitch.",
+        hook: "Now put it together: a formation isn't fixed. It's a shape that moves with the ball across the thirds of the pitch.",
         blocks: [
           {
             kind: "formation",
             id: "in-possession-recap",
             heading: "In Possession, Building Out",
-            body: "Width, distance between lines, and players in advanced positions — this is a team looking to create in the attacking third.",
+            body: "Width, distance between lines, and players in advanced positions: this is a team looking to create in the attacking third.",
             formationSlug: "4-3-3",
           },
           {
             kind: "formation",
             id: "out-of-possession-recap",
             heading: "Out of Possession, Compact",
-            body: "Same eleven players, same formation label — but narrower and deeper, protecting the middle third and defensive third instead.",
+            body: "Same eleven players, same formation label, but narrower and deeper, protecting the middle third and defensive third instead.",
             formationSlug: "4-3-3",
             phase: "out-of-possession",
           },
@@ -324,7 +324,7 @@ export const modules: Module[] = [
             kind: "zone",
             id: "where-goals-come-from",
             heading: "Where Most Chances Are Actually Created",
-            body: "The heart of the attacking third and the edges of the box — the zone every attacking shape is ultimately trying to reach with numbers and time on the ball.",
+            body: "The heart of the attacking third and the edges of the box: the zone every attacking shape is ultimately trying to reach with numbers and time on the ball.",
             zones: [{ x: 15, y: 8, width: 70, height: 25 }],
           },
         ],
@@ -343,7 +343,7 @@ export const modules: Module[] = [
         takeaways: [
           "A formation describes a starting shape, not a fixed set of positions.",
           "Teams get narrower and deeper out of possession, wider and higher in possession.",
-          "You've now covered pitch thirds, formation numbers, the goalkeeper's dual role, and center-back partnerships — the foundation for everything else in the academy.",
+          "You've now covered pitch thirds, formation numbers, the goalkeeper's dual role, and center-back partnerships: the foundation for everything else in the academy.",
         ],
       },
     ],
@@ -352,7 +352,7 @@ export const modules: Module[] = [
         question: "How many main thirds does a football pitch split into for tactical purposes?",
         options: ["Two", "Three", "Four", "Five"],
         correctIndex: 1,
-        explanation: "Defensive, middle, and attacking thirds — each with a different priority for the team in possession.",
+        explanation: "Defensive, middle, and attacking thirds, each with a different priority for the team in possession.",
       },
       {
         question: "Which position is omitted entirely from formation numbers like 4-3-3?",
@@ -393,7 +393,7 @@ export const modules: Module[] = [
         question: "Which third of the pitch is most associated with directly creating scoring chances?",
         options: ["Defensive third", "Middle third", "Attacking third", "None of them"],
         correctIndex: 2,
-        explanation: "It's where risk becomes worth taking — final passes and shots happen here.",
+        explanation: "It's where risk becomes worth taking: final passes and shots happen here.",
       },
       {
         question: "Which best describes what a formation represents?",
@@ -404,7 +404,7 @@ export const modules: Module[] = [
           "A rule enforced by the referee",
         ],
         correctIndex: 1,
-        explanation: "A formation is a starting reference point — the actual shape moves constantly with the ball.",
+        explanation: "A formation is a starting reference point: the actual shape moves constantly with the ball.",
       },
     ],
   },
@@ -425,13 +425,13 @@ export const modules: Module[] = [
             kind: "text",
             id: "two-philosophies",
             heading: "Two Philosophies",
-            body: "Zonal marking assigns each defender a patch of the pitch to control, regardless of who runs into it. Man-marking assigns each defender a specific opponent to follow, regardless of where they go. Almost no team uses either in its pure form — most blend the two depending on the situation.",
+            body: "Zonal marking assigns each defender a patch of the pitch to control, regardless of who runs into it. Man-marking assigns each defender a specific opponent to follow, regardless of where they go. Almost no team uses either in its pure form. Most blend the two depending on the situation.",
           },
           {
             kind: "zone",
             id: "zonal-patch",
             heading: "A Zonal Defender's Patch",
-            body: "In a zonal system, a defender's job is to control this area and challenge whoever enters it — not to chase a single opponent across the pitch.",
+            body: "In a zonal system, a defender's job is to control this area and challenge whoever enters it, not to chase a single opponent across the pitch.",
             zones: [{ x: 10, y: 65, width: 35, height: 25 }],
           },
           {
@@ -450,7 +450,7 @@ export const modules: Module[] = [
           },
         ],
         tryIt:
-          "Watch the next match you see and pick one defender — try to tell whether they're tracking a specific opponent or holding a patch of grass regardless of who's on it.",
+          "Watch the next match you see and pick one defender, then try to tell whether they're tracking a specific opponent or holding a patch of grass regardless of who's on it.",
         inlineCheck: {
           question: "What is the main risk of a purely man-marking defensive system?",
           options: [
@@ -471,7 +471,7 @@ export const modules: Module[] = [
         slug: "setting-the-defensive-line",
         title: "Setting the Defensive Line",
         estimatedMinutes: 4,
-        hook: "A back line's height decides almost everything about how a team defends — and how much risk it's willing to take.",
+        hook: "A back line's height decides almost everything about how a team defends, and how much risk it's willing to take.",
         blocks: [
           {
             kind: "toggle",
@@ -485,18 +485,18 @@ export const modules: Module[] = [
             kind: "zone",
             id: "space-behind-high-line",
             heading: "The Space Behind a High Line",
-            body: "This is exactly the space a high defensive line is gambling with — empty until an attacker's run threatens to reach it before a defender can recover.",
+            body: "This is exactly the space a high defensive line is gambling with: empty until an attacker's run threatens to reach it before a defender can recover.",
             zones: [{ x: 10, y: 15, width: 80, height: 20 }],
           },
           {
             kind: "text",
             id: "offside-trap",
             heading: "The Offside Trap",
-            body: "Pushing up together at the right moment can catch an attacker offside before the pass even arrives. It only works if every defender in the line moves as one — a single defender stepping late undoes it for everyone.",
+            body: "Pushing up together at the right moment can catch an attacker offside before the pass even arrives. It only works if every defender in the line moves as one. A single defender stepping late undoes it for everyone.",
           },
         ],
         tryIt:
-          "Next time you watch a match with a high defensive line, look for the moment the back four steps up together — that's the offside trap being set.",
+          "Next time you watch a match with a high defensive line, look for the moment the back four steps up together. That's the offside trap being set.",
         inlineCheck: {
           question: "What can break an offside trap even if the timing is otherwise perfect?",
           options: [
@@ -523,7 +523,7 @@ export const modules: Module[] = [
             kind: "zone",
             id: "showing-an-attacker",
             heading: "Where a Defender Shows an Attacker",
-            body: "Jockeying means staying on your feet, delaying the attacker, and showing them toward a specific area — usually away from goal and onto their weaker foot — rather than diving into a tackle.",
+            body: "Jockeying means staying on your feet, delaying the attacker, and showing them toward a specific area, usually away from goal and onto their weaker foot, rather than diving into a tackle.",
             zones: [{ x: 30, y: 55, width: 40, height: 30 }],
           },
           {
@@ -569,7 +569,7 @@ export const modules: Module[] = [
             kind: "zone",
             id: "six-yard-box",
             heading: "The Six-Yard Box on a Corner",
-            body: "The most dangerous area on any corner — the zone a defense organizes around first, whether they mark zonally, man-to-man, or with a mix of both.",
+            body: "The most dangerous area on any corner: the zone a defense organizes around first, whether they mark zonally, man-to-man, or with a mix of both.",
             zones: [{ x: 24, y: 1, width: 20, height: 14 }],
           },
           {
@@ -598,11 +598,11 @@ export const modules: Module[] = [
             kind: "text",
             id: "clearing-your-lines",
             heading: "Clearing Your Lines",
-            body: "When a cross does arrive, the first priority is height, distance, and width — heading the ball up, away, and wide of the danger area, not just anywhere. A weak, central clearance is often more dangerous than not clearing it at all.",
+            body: "When a cross does arrive, the first priority is height, distance, and width: heading the ball up, away, and wide of the danger area, not just anywhere. A weak, central clearance is often more dangerous than not clearing it at all.",
           },
         ],
         tryIt:
-          "Watch a corner kick and see whether the defending team looks zonal, man-marking, or a mix — the near-post runners are usually the easiest to spot.",
+          "Watch a corner kick and see whether the defending team looks zonal, man-marking, or a mix. The near-post runners are usually the easiest to spot.",
         inlineCheck: {
           question: "When clearing a dangerous cross, what should a defender prioritize?",
           options: [
@@ -623,7 +623,7 @@ export const modules: Module[] = [
         slug: "building-a-defense-as-a-unit",
         title: "Building a Defense as a Unit",
         estimatedMinutes: 3,
-        hook: "None of this works in isolation — a real defense is a marking system, a defensive line, individual duels, and set-piece organization all moving together.",
+        hook: "None of this works in isolation. A real defense is a marking system, a defensive line, individual duels, and set-piece organization all moving together.",
         blocks: [
           {
             kind: "formation",
@@ -637,7 +637,7 @@ export const modules: Module[] = [
             kind: "zone",
             id: "goalkeeper-in-the-picture",
             heading: "Where the Goalkeeper Fits into the Picture",
-            body: "A modern defense doesn't stop at the back four — a goalkeeper comfortable sweeping up behind a high line extends the defensive unit further up the pitch.",
+            body: "A modern defense doesn't stop at the back four. A goalkeeper comfortable sweeping up behind a high line extends the defensive unit further up the pitch.",
             zones: [
               { x: 20, y: 70, width: 60, height: 30 },
               { x: 30, y: 50, width: 40, height: 22 },
@@ -647,11 +647,11 @@ export const modules: Module[] = [
             kind: "text",
             id: "recap",
             heading: "Recap",
-            body: "Zonal or man-marking, high line or deep block, jockey or tackle, zonal or man at corners — none of these are permanently right or wrong answers. They're decisions a defense makes based on their personnel, their opponent, and the moment in the match.",
+            body: "Zonal or man-marking, high line or deep block, jockey or tackle, zonal or man at corners: none of these are permanently right or wrong answers. They're decisions a defense makes based on their personnel, their opponent, and the moment in the match.",
           },
         ],
         tryIt:
-          "Go back to the Explore pitch and toggle \"Out of possession\" on any formation — you'll now recognize exactly what you're looking at.",
+          "Go back to the Explore pitch and toggle \"Out of possession\" on any formation. You'll now recognize exactly what you're looking at.",
         inlineCheck: {
           question: "What's the main idea tying this whole module together?",
           options: [
@@ -664,8 +664,8 @@ export const modules: Module[] = [
         },
         takeaways: [
           "Defensive marking, line height, individual duels, and set pieces all work together, not separately.",
-          "None of the choices in this module are universally correct — they depend on personnel and situation.",
-          "You've now covered the core language of defending — next is seeing it inside real formations and managers' systems.",
+          "None of the choices in this module are universally correct. They depend on personnel and situation.",
+          "You've now covered the core language of defending. Next is seeing it inside real formations and managers' systems.",
         ],
       },
     ],
@@ -756,7 +756,7 @@ export const modules: Module[] = [
           "Tackling early is always better than delaying",
         ],
         correctIndex: 0,
-        explanation: "None of the choices covered in this module are universally right — they depend on the team and the situation.",
+        explanation: "None of the choices covered in this module are universally right. They depend on the team and the situation.",
       },
     ],
   },
@@ -784,7 +784,7 @@ export const modules: Module[] = [
             kind: "zone",
             id: "shared-territory",
             heading: "Shared Defensive Territory",
-            body: "The double pivot's zones overlap deliberately — if one midfielder steps out to press, the other slides across to cover exactly this kind of shared space.",
+            body: "The double pivot's zones overlap deliberately: if one midfielder steps out to press, the other slides across to cover exactly this kind of shared space.",
             zones: [
               { x: 15, y: 48, width: 35, height: 20 },
               { x: 50, y: 48, width: 35, height: 20 },
@@ -794,7 +794,7 @@ export const modules: Module[] = [
             kind: "toggle",
             id: "one-holds-one-steps",
             heading: "One Holds, One Steps",
-            body: "Compare a settled double pivot against the moment one midfielder steps forward to press — notice how much depends on the other holding position rather than following.",
+            body: "Compare a settled double pivot against the moment one midfielder steps forward to press, then notice how much depends on the other holding position rather than following.",
             optionA: { label: "Both hold", zones: [{ x: 15, y: 50, width: 70, height: 18 }] },
             optionB: {
               label: "One steps to press",
@@ -806,7 +806,7 @@ export const modules: Module[] = [
           },
         ],
         tryIt:
-          "On the pitch explorer, select 4-2-3-1 and click both CDM markers — compare how their role descriptions talk about covering for each other.",
+          "On the pitch explorer, select 4-2-3-1 and click both CDM markers, then compare how their role descriptions talk about covering for each other.",
         inlineCheck: {
           question: "What is the main advantage of a double pivot over a single holding midfielder?",
           options: [
@@ -827,20 +827,20 @@ export const modules: Module[] = [
         slug: "box-to-box-the-complete-midfielder",
         title: "Box-to-Box: The Complete Midfielder",
         estimatedMinutes: 4,
-        hook: "Some midfielders don't specialize in attack or defense — their entire value is doing both, all match.",
+        hook: "Some midfielders don't specialize in attack or defense. Their entire value is doing both, all match.",
         blocks: [
           {
             kind: "zone",
             id: "box-to-box-corridor",
             heading: "A Box-to-Box Corridor",
-            body: "This role's zone spans nearly the full length of the pitch centrally — a corridor few other positions are asked to cover in a single passage of play.",
+            body: "This role's zone spans nearly the full length of the pitch centrally: a corridor few other positions are asked to cover in a single passage of play.",
             zones: [{ x: 15, y: 12, width: 70, height: 76 }],
           },
           {
             kind: "formation",
             id: "b2b-in-433",
             heading: "Box-to-Box in a 4-3-3",
-            body: "Inside a midfield three, one central midfielder is often asked to be exactly this — contributing to build-up, covering defensively, and arriving late into the box in attack.",
+            body: "Inside a midfield three, one central midfielder is often asked to be exactly this: contributing to build-up, covering defensively, and arriving late into the box in attack.",
             formationSlug: "4-3-3",
           },
           {
@@ -872,19 +872,19 @@ export const modules: Module[] = [
         slug: "pressing-triggers",
         title: "Pressing Triggers: When to Spring the Trap",
         estimatedMinutes: 4,
-        hook: "A press isn't just running at the ball — it's waiting for the exact moment the opponent gives you a reason to.",
+        hook: "A press isn't just running at the ball. It's waiting for the exact moment the opponent gives you a reason to.",
         blocks: [
           {
             kind: "text",
             id: "what-is-a-trigger",
             heading: "What Is a Pressing Trigger?",
-            body: "A pressing trigger is a specific cue — a heavy first touch, a pass played backward, a receiver with their back to goal — that tells a team the moment has arrived to press as a unit rather than chase the ball individually.",
+            body: "A pressing trigger is a specific cue, such as a heavy first touch, a pass played backward, or a receiver with their back to goal, that tells a team the moment has arrived to press as a unit rather than chase the ball individually.",
           },
           {
             kind: "zone",
             id: "where-traps-are-set",
             heading: "Where Pressing Traps Are Set",
-            body: "Wide areas near the touchline are common places to spring a press — the touchline itself acts like an extra defender, cutting off half of the attacker's options before the press even arrives.",
+            body: "Wide areas near the touchline are common places to spring a press: the touchline itself acts like an extra defender, cutting off half of the attacker's options before the press even arrives.",
             zones: [{ x: 0, y: 20, width: 35, height: 30 }],
           },
           {
@@ -897,7 +897,7 @@ export const modules: Module[] = [
           },
         ],
         tryIt:
-          "Watch for the moment a team's front players suddenly all sprint at once — that's usually a trigger being read, not a coincidence.",
+          "Watch for the moment a team's front players suddenly all sprint at once. That's usually a trigger being read, not a coincidence.",
         inlineCheck: {
           question: "What is a \"pressing trigger\"?",
           options: [
@@ -924,25 +924,25 @@ export const modules: Module[] = [
             kind: "formation",
             id: "extra-midfielder-433",
             heading: "An Extra Midfielder in a 4-3-3",
-            body: "Three central midfielders against an opponent's flat two creates a spare man in the middle of the pitch — an overload that helps control tempo and win the ball back quickly.",
+            body: "Three central midfielders against an opponent's flat two creates a spare man in the middle of the pitch: an overload that helps control tempo and win the ball back quickly.",
             formationSlug: "4-3-3",
           },
           {
             kind: "zone",
             id: "the-overloaded-zone",
             heading: "The Overloaded Zone",
-            body: "This is the kind of area a central overload is fought over — whoever has the extra player here usually dictates the tempo of the whole game.",
+            body: "This is the kind of area a central overload is fought over. Whoever has the extra player here usually dictates the tempo of the whole game.",
             zones: [{ x: 20, y: 35, width: 60, height: 25 }],
           },
           {
             kind: "text",
             id: "third-man-run",
             heading: "The Third-Man Run",
-            body: "A well-timed overload isn't just about numbers standing still — it's exploited when a third player arrives late into space nobody accounted for, having gone unmarked while the defense focused on the first two passing options.",
+            body: "A well-timed overload isn't just about numbers standing still. It's exploited when a third player arrives late into space nobody accounted for, having gone unmarked while the defense focused on the first two passing options.",
           },
         ],
         tryIt:
-          "Compare a 4-3-3 and a 4-4-2 on the pitch explorer — count central midfielders in each to see which side wins a central overload.",
+          "Compare a 4-3-3 and a 4-4-2 on the pitch explorer, then count central midfielders in each to see which side wins a central overload.",
         inlineCheck: {
           question: "What does it mean to \"overload\" central midfield?",
           options: [
@@ -976,7 +976,7 @@ export const modules: Module[] = [
             kind: "formation",
             id: "4231-out-of-possession",
             heading: "4-2-3-1, Out of Possession",
-            body: "The same shape compresses defensively — the double pivot's cover, pressing triggers, and central discipline all activate at once without the ball.",
+            body: "The same shape compresses defensively: the double pivot's cover, pressing triggers, and central discipline all activate at once without the ball.",
             formationSlug: "4-2-3-1",
             phase: "out-of-possession",
           },
@@ -984,7 +984,7 @@ export const modules: Module[] = [
             kind: "text",
             id: "recap",
             heading: "Recap",
-            body: "A double pivot that covers for itself, a box-to-box runner who links both boxes, pressing triggers read as a unit, and a central overload exploited by a well-timed run — these four ideas are what winning the midfield battle actually looks like in practice.",
+            body: "A double pivot that covers for itself, a box-to-box runner who links both boxes, pressing triggers read as a unit, and a central overload exploited by a well-timed run: these four ideas are what winning the midfield battle actually looks like in practice.",
           },
         ],
         tryIt:
@@ -1002,7 +1002,7 @@ export const modules: Module[] = [
         takeaways: [
           "A double pivot, a box-to-box runner, pressing triggers, and central overloads all shape the midfield battle together.",
           "Winning central midfield numerically and positionally tends to control the rest of the match.",
-          "You've now covered defending and midfield control — next is what happens further forward.",
+          "You've now covered defending and midfield control. Next is what happens further forward.",
         ],
       },
     ],
@@ -1121,14 +1121,14 @@ export const modules: Module[] = [
             kind: "zone",
             id: "space-width-creates",
             heading: "Where Width Creates Space",
-            body: "Pulling defenders toward the touchline opens exactly this kind of central space — the pocket a false 9 or an attacking midfielder is looking to exploit.",
+            body: "Pulling defenders toward the touchline opens exactly this kind of central space: the pocket a false 9 or an attacking midfielder is looking to exploit.",
             zones: [{ x: 30, y: 15, width: 40, height: 25 }],
           },
           {
             kind: "toggle",
             id: "narrow-vs-wide",
             heading: "Narrow vs. Wide Attack",
-            body: "Compare an attack that stays compact and central against one that stretches to both touchlines. Neither is automatically better — it depends on where the defense is weakest.",
+            body: "Compare an attack that stays compact and central against one that stretches to both touchlines. Neither is automatically better. It depends on where the defense is weakest.",
             optionA: { label: "Narrow attack", zones: [{ x: 30, y: 5, width: 40, height: 30 }] },
             optionB: {
               label: "Wide attack",
@@ -1140,7 +1140,7 @@ export const modules: Module[] = [
           },
         ],
         tryIt:
-          "On the pitch explorer, compare 4-3-3 and 4-4-2 Diamond — the Diamond trades width for central numbers, so look at how much touchline space is left uncovered.",
+          "On the pitch explorer, compare 4-3-3 and 4-4-2 Diamond. The Diamond trades width for central numbers, so look at how much touchline space is left uncovered.",
         inlineCheck: {
           question: "What is the main benefit of holding width in attack?",
           options: [
@@ -1174,7 +1174,7 @@ export const modules: Module[] = [
             kind: "toggle",
             id: "overlap-vs-underlap",
             heading: "Overlap vs. Underlap",
-            body: "An overlap runs outside; an underlap runs inside. Compare the two paths past the same defender — each threatens a completely different part of the pitch.",
+            body: "An overlap runs outside; an underlap runs inside. Compare the two paths past the same defender: each threatens a completely different part of the pitch.",
             optionA: { label: "Overlap (outside)", zones: [{ x: 0, y: 15, width: 20, height: 45 }] },
             optionB: { label: "Underlap (inside)", zones: [{ x: 20, y: 15, width: 20, height: 45 }] },
           },
@@ -1186,7 +1186,7 @@ export const modules: Module[] = [
           },
         ],
         tryIt:
-          "Watch a winger and full-back on the same flank — see if you can predict whether the supporting run goes outside (overlap) or inside (underlap) before it happens.",
+          "Watch a winger and full-back on the same flank, then see if you can predict whether the supporting run goes outside (overlap) or inside (underlap) before it happens.",
         inlineCheck: {
           question: "What makes an underlapping run effective even though it goes against the expected pattern?",
           options: [
@@ -1213,7 +1213,7 @@ export const modules: Module[] = [
             kind: "zone",
             id: "false-9-two-positions",
             heading: "Two Positions, One Player",
-            body: "A false 9 starts on the front line like a conventional striker, but regularly drops into the deeper pocket instead — occupying both of these zones across a single match.",
+            body: "A false 9 starts on the front line like a conventional striker, but regularly drops into the deeper pocket instead, occupying both of these zones across a single match.",
             zones: [
               { x: 20, y: 0, width: 60, height: 12 },
               { x: 25, y: 15, width: 50, height: 20 },
@@ -1229,7 +1229,7 @@ export const modules: Module[] = [
             kind: "text",
             id: "who-runs-into-it",
             heading: "Who Runs Into It",
-            body: "The empty space up front doesn't stay empty for long — a winger cutting inside or an attacking midfielder arriving late is usually the one running into exactly the space the false 9 just vacated.",
+            body: "The empty space up front doesn't stay empty for long. A winger cutting inside or an attacking midfielder arriving late is usually the one running into exactly the space the false 9 just vacated.",
           },
         ],
         tryIt:
@@ -1254,7 +1254,7 @@ export const modules: Module[] = [
         slug: "movement-in-the-box",
         title: "Movement in the Box: Near Post, Far Post, Cutback",
         estimatedMinutes: 4,
-        hook: "A cross is only as good as the run meeting it — and there are only so many places to make that run.",
+        hook: "A cross is only as good as the run meeting it, and there are only so many places to make that run.",
         blocks: [
           {
             kind: "toggle",
@@ -1268,14 +1268,14 @@ export const modules: Module[] = [
             kind: "zone",
             id: "cutback-zone",
             heading: "The Cutback Zone",
-            body: "Rather than crossing early, a player reaching the byline can pull the ball back into this zone — square across the edge of the six-yard box, right into the path of an arriving midfielder.",
+            body: "Rather than crossing early, a player reaching the byline can pull the ball back into this zone: square across the edge of the six-yard box, right into the path of an arriving midfielder.",
             zones: [{ x: 20, y: 12, width: 60, height: 10 }],
           },
           {
             kind: "text",
             id: "why-cutbacks-work",
             heading: "Why Cutbacks Work",
-            body: "Defenders facing their own goal find a cutback far harder to deal with than a cross — they have to turn to track a runner arriving from behind them, often too late to intervene before the shot.",
+            body: "Defenders facing their own goal find a cutback far harder to deal with than a cross. They have to turn to track a runner arriving from behind them, often too late to intervene before the shot.",
           },
         ],
         tryIt:
@@ -1300,13 +1300,13 @@ export const modules: Module[] = [
         slug: "putting-attacks-together",
         title: "Putting Attacks Together",
         estimatedMinutes: 3,
-        hook: "Width, combination play, false 9 movement, and box runs aren't separate tools — a good attack uses all of them in the same passage of play.",
+        hook: "Width, combination play, false 9 movement, and box runs aren't separate tools. A good attack uses all of them in the same passage of play.",
         blocks: [
           {
             kind: "formation",
             id: "433-in-possession-recap",
             heading: "4-3-3 in Full Flow",
-            body: "Wide forwards holding width, an overlapping or underlapping full-back, and a central presence ready to arrive late — all of this module's ideas are visible in a single settled attacking shape.",
+            body: "Wide forwards holding width, an overlapping or underlapping full-back, and a central presence ready to arrive late: all of this module's ideas are visible in a single settled attacking shape.",
             formationSlug: "4-3-3",
           },
           {
@@ -1331,7 +1331,7 @@ export const modules: Module[] = [
         takeaways: [
           "Width, combination play, false 9 movement, and box runs reinforce each other rather than working alone.",
           "A single attacking move often uses two or three of these ideas at once.",
-          "You've now covered defending, midfield control, and attacking — the pieces are ready to combine into full systems.",
+          "You've now covered defending, midfield control, and attacking. The pieces are ready to combine into full systems.",
         ],
       },
     ],
@@ -1353,7 +1353,7 @@ export const modules: Module[] = [
           "An overlap runs outside a teammate; an underlap runs inside",
           "An overlap is only legal in the final third",
           "An underlap can only be made by a goalkeeper",
-          "There is no difference — they're the same run",
+          "There is no difference. They're the same run",
         ],
         correctIndex: 0,
         explanation: "The two runs threaten completely different spaces around the same defender.",
@@ -1450,7 +1450,7 @@ export const modules: Module[] = [
             kind: "formation",
             id: "a-back-three",
             heading: "A Back Three",
-            body: "Three center-backs cover the middle of the pitch, freeing wing-backs to provide the width alone — one player doing a job two normally share.",
+            body: "Three center-backs cover the middle of the pitch, freeing wing-backs to provide the width alone, one player doing a job two normally share.",
             formationSlug: "3-5-2",
           },
           {
@@ -1475,14 +1475,14 @@ export const modules: Module[] = [
         takeaways: [
           "A back four splits defensive and attacking width duty between two full-backs.",
           "A back three adds central defensive numbers but asks wing-backs to cover the width alone.",
-          "Neither choice is universally correct — it depends on the players and the opponent.",
+          "Neither choice is universally correct. It depends on the players and the opponent.",
         ],
       },
       {
         slug: "diamond-vs-flat-four",
         title: "The Diamond and the Flat Four: Two Ways to Set Up a 4-4-2",
         estimatedMinutes: 4,
-        hook: "4-4-2 isn't one formation — it's at least two, depending on how the midfield four is shaped.",
+        hook: "4-4-2 isn't one formation. It's at least two, depending on how the midfield four is shaped.",
         blocks: [
           {
             kind: "formation",
@@ -1495,7 +1495,7 @@ export const modules: Module[] = [
             kind: "formation",
             id: "diamond-442",
             heading: "4-4-2 Diamond",
-            body: "The same eleven players, reshaped into a diamond — extra central midfield control at the cost of natural width, which now has to come from the full-backs alone.",
+            body: "The same eleven players, reshaped into a diamond: extra central midfield control at the cost of natural width, which now has to come from the full-backs alone.",
             formationSlug: "4-4-2-diamond",
           },
           {
@@ -1506,7 +1506,7 @@ export const modules: Module[] = [
           },
         ],
         tryIt:
-          "Compare the 4-4-2 and 4-4-2 Diamond cards on the pitch explorer — read each one's strengths and weaknesses side by side using compare mode.",
+          "Compare the 4-4-2 and 4-4-2 Diamond cards on the pitch explorer, then read each one's strengths and weaknesses side by side using compare mode.",
         inlineCheck: {
           question: "What does the 4-4-2 Diamond trade away compared to the flat 4-4-2?",
           options: [
@@ -1533,21 +1533,21 @@ export const modules: Module[] = [
             kind: "formation",
             id: "343-wing-backs",
             heading: "Wing-Backs in a 3-4-3",
-            body: "With three center-backs holding the middle, the wing-backs become the team's only source of width — pushing on like wingers in possession, then dropping into a back five without the ball.",
+            body: "With three center-backs holding the middle, the wing-backs become the team's only source of width, pushing on like wingers in possession, then dropping into a back five without the ball.",
             formationSlug: "3-4-3",
           },
           {
             kind: "zone",
             id: "wing-back-full-corridor",
             heading: "A Wing-Back's Full Corridor",
-            body: "This zone spans almost the entire length of one touchline — the ground a wing-back is expected to cover alone, in both directions, for the full match.",
+            body: "This zone spans almost the entire length of one touchline: the ground a wing-back is expected to cover alone, in both directions, for the full match.",
             zones: [{ x: 0, y: 8, width: 25, height: 84 }],
           },
           {
             kind: "text",
             id: "the-stamina-demand",
             heading: "The Stamina Demand",
-            body: "This is the same idea behind the Inverted Full-Back and Inverted Wing-Back hybrid roles covered earlier in the Academy — full width duty concentrated in one player instead of shared, which is exactly why wing-back systems live or die on fitness.",
+            body: "This is the same idea behind the Inverted Full-Back and Inverted Wing-Back hybrid roles covered earlier in the Academy: full width duty concentrated in one player instead of shared, which is exactly why wing-back systems live or die on fitness.",
           },
         ],
         tryIt:
@@ -1584,7 +1584,7 @@ export const modules: Module[] = [
             kind: "formation",
             id: "example-fit",
             heading: "A Formation That Fits Its Personnel",
-            body: "This shape works specifically because it's built around players suited to its specific demands — a lone striker comfortable holding the ball alone, and attacking midfielders who thrive finding pockets of space, not because the formation itself is inherently superior.",
+            body: "This shape works specifically because it's built around players suited to its specific demands: a lone striker comfortable holding the ball alone, and attacking midfielders who thrive finding pockets of space, not because the formation itself is inherently superior.",
             formationSlug: "4-2-3-1",
           },
           {
@@ -1595,7 +1595,7 @@ export const modules: Module[] = [
           },
         ],
         tryIt:
-          "Pick any formation on the pitch explorer and read its \"Best suited to\" note in the coach's notes panel — that's exactly this idea in practice.",
+          "Pick any formation on the pitch explorer and read its \"Best suited to\" note in the coach's notes panel. That's exactly this idea in practice.",
         inlineCheck: {
           question: "What should determine which formation a team plays?",
           options: [
@@ -1616,24 +1616,24 @@ export const modules: Module[] = [
         slug: "formations-are-tools",
         title: "Formations Are Tools, Not Identities",
         estimatedMinutes: 3,
-        hook: "A formation number is a starting shape — everything this Academy has covered is what actually happens inside it.",
+        hook: "A formation number is a starting shape. Everything this Academy has covered is what actually happens inside it.",
         blocks: [
           {
             kind: "formation",
             id: "recap-formation",
             heading: "One Shape, Every Idea",
-            body: "Pitch thirds, marking systems, a double pivot, width and combination play — every idea from this Academy is visible somewhere inside a single settled formation like this one.",
+            body: "Pitch thirds, marking systems, a double pivot, width and combination play: every idea from this Academy is visible somewhere inside a single settled formation like this one.",
             formationSlug: "4-3-3",
           },
           {
             kind: "text",
             id: "recap",
             heading: "Recap",
-            body: "A back four or a back three, a flat four or a diamond, full-backs or wing-backs — these are all just starting templates. What separates a good team from a great one is everything layered on top: marking systems, pressing triggers, combination play, and personnel suited to the system chosen.",
+            body: "A back four or a back three, a flat four or a diamond, full-backs or wing-backs: these are all just starting templates. What separates a good team from a great one is everything layered on top: marking systems, pressing triggers, combination play, and personnel suited to the system chosen.",
           },
         ],
         tryIt:
-          "Open compare mode on the Explore pitch and put any two formations side by side — you should now be able to explain the trade-off between them in your own words.",
+          "Open compare mode on the Explore pitch and put any two formations side by side. You should now be able to explain the trade-off between them in your own words.",
         inlineCheck: {
           question: "What is the main lesson of this module?",
           options: [
@@ -1647,7 +1647,7 @@ export const modules: Module[] = [
         takeaways: [
           "Formations are starting templates, not fixed identities.",
           "The same formation number can be set up in genuinely different ways.",
-          "You've now covered every major building block of tactics — the last step is seeing how real managers apply them.",
+          "You've now covered every major building block of tactics. The last step is seeing how real managers apply them.",
         ],
       },
     ],
@@ -1705,7 +1705,7 @@ export const modules: Module[] = [
       {
         question: "What is the same 4-4-2 label capable of describing?",
         options: [
-          "Two genuinely different midfield shapes — flat or diamond",
+          "Two genuinely different midfield shapes: flat or diamond",
           "Only one possible system with no variation",
           "A formation exclusive to teams with two goalkeepers",
           "A system that cannot be compared to any other",
@@ -1748,13 +1748,13 @@ export const modules: Module[] = [
         slug: "pressing-philosophies",
         title: "Pressing Philosophies: From Sacchi to Klopp",
         estimatedMinutes: 4,
-        hook: "Pressing didn't start with any one manager — tracing its lineage shows how one idea evolved across decades.",
+        hook: "Pressing didn't start with any one manager. Tracing its lineage shows how one idea evolved across decades.",
         blocks: [
           {
             kind: "formation",
             id: "sacchi-442",
             heading: "Sacchi's Pressing 4-4-2",
-            body: "At AC Milan in the late 1980s, Arrigo Sacchi built his team around a compact, zonal defensive block that pressed high up the pitch as a single coordinated unit — a genuine break from the man-marking sweeper systems common at the time.",
+            body: "At AC Milan in the late 1980s, Arrigo Sacchi built his team around a compact, zonal defensive block that pressed high up the pitch as a single coordinated unit, a genuine break from the man-marking sweeper systems common at the time.",
             formationSlug: "4-4-2",
           },
           {
@@ -1792,7 +1792,7 @@ export const modules: Module[] = [
         slug: "possession-as-a-weapon",
         title: "Possession as a Weapon: The Guardiola Blueprint",
         estimatedMinutes: 4,
-        hook: "For some managers, having the ball isn't just a means to attack — it's the primary defensive strategy too.",
+        hook: "For some managers, having the ball isn't just a means to attack. It's the primary defensive strategy too.",
         blocks: [
           {
             kind: "formation",
@@ -1805,13 +1805,13 @@ export const modules: Module[] = [
             kind: "text",
             id: "cant-concede-without-the-ball",
             heading: "You Can't Concede Without the Ball",
-            body: "If the team keeps possession, the opponent never gets the chance to attack at all — a simple idea that shapes almost every decision in a Guardiola team's build-up play.",
+            body: "If the team keeps possession, the opponent never gets the chance to attack at all: a simple idea that shapes almost every decision in a Guardiola team's build-up play.",
           },
           {
             kind: "text",
             id: "the-inverted-fullback-connection",
             heading: "The Inverted Full-Back Connection",
-            body: "This possession-first approach is closely associated with the Inverted Full-Back hybrid role covered earlier in the Academy — full-backs tucking into central midfield to add an extra passing option and help control the game through sheer numbers in possession.",
+            body: "This possession-first approach is closely associated with the Inverted Full-Back hybrid role covered earlier in the Academy: full-backs tucking into central midfield to add an extra passing option and help control the game through sheer numbers in possession.",
           },
         ],
         tryIt: "Visit the Inverted Full-Back position page, then the Pep Guardiola manager page, and see how directly the two connect.",
@@ -1835,7 +1835,7 @@ export const modules: Module[] = [
         slug: "pragmatism-and-game-management",
         title: "Pragmatism and Game Management: The Mourinho Approach",
         estimatedMinutes: 4,
-        hook: "Not every successful manager builds their identity around an attacking philosophy — some build it around control.",
+        hook: "Not every successful manager builds their identity around an attacking philosophy. Some build it around control.",
         blocks: [
           {
             kind: "formation",
@@ -1848,7 +1848,7 @@ export const modules: Module[] = [
             kind: "text",
             id: "reading-the-opponent",
             heading: "Reading the Opponent, Not a Fixed Script",
-            body: "Rather than imposing the same approach on every match, this philosophy adjusts specifically to the threat the opposition poses — sometimes inviting pressure to counter into space, sometimes controlling the ball, depending on what wins that particular match.",
+            body: "Rather than imposing the same approach on every match, this philosophy adjusts specifically to the threat the opposition poses, sometimes inviting pressure to counter into space, sometimes controlling the ball, depending on what wins that particular match.",
           },
           {
             kind: "text",
@@ -1857,7 +1857,7 @@ export const modules: Module[] = [
             body: "This is the double pivot idea from Controlling the Midfield applied with a specific priority: defensive security first, attacking risk only once that security is established.",
           },
         ],
-        tryIt: "Visit the José Mourinho manager page and compare his \"Philosophy\" note to Guardiola's — notice how differently each defines what winning football looks like.",
+        tryIt: "Visit the José Mourinho manager page and compare his \"Philosophy\" note to Guardiola's, then notice how differently each defines what winning football looks like.",
         inlineCheck: {
           question: "What defines a pragmatic, results-first approach to management?",
           options: [
@@ -1871,7 +1871,7 @@ export const modules: Module[] = [
         takeaways: [
           "A double pivot provides the defensive foundation this approach is built on.",
           "Pragmatic management adjusts match-by-match rather than following one fixed attacking script.",
-          "Defensive organization coming first doesn't mean attacking risk never happens — it happens once security is established.",
+          "Defensive organization coming first doesn't mean attacking risk never happens. It happens once security is established.",
         ],
       },
       {
@@ -1891,7 +1891,7 @@ export const modules: Module[] = [
             kind: "zone",
             id: "wing-back-dual-role",
             heading: "A Wing-Back's Dual Role",
-            body: "This is the exact wing-back demand covered in Formations & Systems — functioning as an auxiliary winger in possession and an auxiliary full-back out of it, all in the same 90 minutes.",
+            body: "This is the exact wing-back demand covered in Formations & Systems: functioning as an auxiliary winger in possession and an auxiliary full-back out of it, all in the same 90 minutes.",
             zones: [{ x: 0, y: 8, width: 25, height: 84 }],
           },
           {
@@ -1928,18 +1928,18 @@ export const modules: Module[] = [
             kind: "text",
             id: "everything-connects",
             heading: "Everything Connects",
-            body: "Pitch thirds, marking systems, a double pivot, width and combination play, back four versus back three — every idea from this Academy shows up somewhere in how a real manager sets up their team. A manager's tactical identity is just these choices, made consistently.",
+            body: "Pitch thirds, marking systems, a double pivot, width and combination play, back four versus back three: every idea from this Academy shows up somewhere in how a real manager sets up their team. A manager's tactical identity is just these choices, made consistently.",
           },
           {
             kind: "formation",
             id: "one-more-example",
             heading: "One More Example",
-            body: "Marcelo Bielsa's teams commit to man-oriented pressing across the entire pitch — a different answer to the zonal-versus-man question from Defending, applied with total intensity rather than a partial blend.",
+            body: "Marcelo Bielsa's teams commit to man-oriented pressing across the entire pitch, a different answer to the zonal-versus-man question from Defending, applied with total intensity rather than a partial blend.",
             formationSlug: "4-1-4-1",
           },
         ],
         tryIt:
-          "Visit the Managers section and pick a profile not covered directly in this module — see how many ideas from the Academy you can now recognize in their tactical philosophy.",
+          "Visit the Managers section and pick a profile not covered directly in this module, then see how many ideas from the Academy you can now recognize in their tactical philosophy.",
         inlineCheck: {
           question: "What does this module ultimately ask you to do?",
           options: [
@@ -1952,8 +1952,8 @@ export const modules: Module[] = [
         },
         takeaways: [
           "A manager's tactical identity is built from the same building blocks covered across this whole Academy.",
-          "Different managers answer the same tactical questions — pressing, possession, marking, formation shape — in different ways.",
-          "You've now completed the full Academy — the Managers section is ready to be read with a tactician's eye.",
+          "Different managers answer the same tactical questions, such as pressing, possession, marking, and formation shape, in different ways.",
+          "You've now completed the full Academy. The Managers section is ready to be read with a tactician's eye.",
         ],
       },
     ],
@@ -2049,19 +2049,19 @@ export const modules: Module[] = [
     title: "Transitions",
     accent: "kickoff",
     description:
-      "The seconds right after winning or losing the ball — counter-pressing, counter-attacking, and the recovery runs that decide matches most fans never notice.",
+      "The seconds right after winning or losing the ball: counter-pressing, counter-attacking, and the recovery runs that decide matches most fans never notice.",
     lessons: [
       {
         slug: "the-five-second-rule",
         title: "The Five-Second Rule",
         estimatedMinutes: 4,
-        hook: "The instant a team loses the ball is the instant they're most disorganized to defend — and the best moment to try to win it straight back.",
+        hook: "The instant a team loses the ball is the instant they're most disorganized to defend, and the best moment to try to win it straight back.",
         blocks: [
           {
             kind: "text",
             id: "why-the-moment-matters",
             heading: "Why the First Few Seconds Matter",
-            body: "The team that just won the ball hasn't set its attacking shape yet — players are still scattered from defending. A team that presses immediately, rather than retreating to reorganize, is attacking that brief window of chaos instead of giving the opponent time to use it.",
+            body: "The team that just won the ball hasn't set its attacking shape yet. Players are still scattered from defending. A team that presses immediately, rather than retreating to reorganize, is attacking that brief window of chaos instead of giving the opponent time to use it.",
           },
           {
             kind: "toggle",
@@ -2075,19 +2075,19 @@ export const modules: Module[] = [
             kind: "zone",
             id: "where-it-pays-off-most",
             heading: "Where Winning It Back Pays Off Most",
-            body: "Losing the ball in your own defensive third is dangerous to counter-press near your own goal — the risk of being caught out is too high. Losing it in the opponent's half is exactly where a five-second press is most rewarding: winning it back there means attacking a defense that hasn't reset at all.",
+            body: "Losing the ball in your own defensive third is dangerous to counter-press near your own goal: the risk of being caught out is too high. Losing it in the opponent's half is exactly where a five-second press is most rewarding: winning it back there means attacking a defense that hasn't reset at all.",
             zones: [{ x: 0, y: 0, width: 100, height: 40 }],
           },
         ],
         tryIt:
-          "Toggle a formation to \"Out of possession\" on the pitch explorer and picture the exact moment before that shot — how scattered would the same team look one second after losing the ball, before they'd had time to organize it?",
+          "Toggle a formation to \"Out of possession\" on the pitch explorer and picture the exact moment before that shot. How scattered would the same team look one second after losing the ball, before they'd had time to organize it?",
         inlineCheck: {
           question: "Why is the moment right after losing the ball considered valuable for the team that lost it?",
           options: [
             "Because the opponent is most disorganized right then and hasn't set their attacking shape",
             "Because the referee always stops play",
             "Because substitutions are allowed at that moment",
-            "It isn't valuable — retreating is always better",
+            "It isn't valuable. Retreating is always better",
           ],
           correctIndex: 0,
         },
@@ -2101,7 +2101,7 @@ export const modules: Module[] = [
         slug: "breaking-at-speed",
         title: "Breaking at Speed",
         estimatedMinutes: 5,
-        hook: "A counter-attack isn't just running fast — it's exploiting the few seconds before a defense reorganizes into its settled shape.",
+        hook: "A counter-attack isn't just running fast. It's exploiting the few seconds before a defense reorganizes into its settled shape.",
         blocks: [
           {
             kind: "text",
@@ -2121,19 +2121,19 @@ export const modules: Module[] = [
             kind: "zone",
             id: "space-behind-a-high-line",
             heading: "The Space Behind a High Defensive Line",
-            body: "A team defending with a high line leaves exactly this zone open in behind — the reward a fast counter-attack is chasing. A team that presses aggressively when in possession is often the most vulnerable to being broken on the counter, because that same high line leaves the most space behind it.",
+            body: "A team defending with a high line leaves exactly this zone open in behind: the reward a fast counter-attack is chasing. A team that presses aggressively when in possession is often the most vulnerable to being broken on the counter, because that same high line leaves the most space behind it.",
             zones: [{ x: 10, y: 55, width: 80, height: 25 }],
           },
         ],
         tryIt:
-          "Toggle \"High press\" on in the pitch explorer's opponent overlay and look at how much open grass sits behind the back line — that's the space a well-timed counter-attack is aiming for.",
+          "Toggle \"High press\" on in the pitch explorer's opponent overlay and look at how much open grass sits behind the back line. That's the space a well-timed counter-attack is aiming for.",
         inlineCheck: {
           question: "Why are counter-attacks with multiple players usually more dangerous than a single fast sprint?",
           options: [
             "They force a defender to choose who to stop, leaving someone else unmarked",
             "More players always run faster than one",
             "The referee only allows attacks with several players",
-            "It has nothing to do with numbers — only pace matters",
+            "It has nothing to do with numbers. Only pace matters",
           ],
           correctIndex: 0,
         },
@@ -2147,13 +2147,13 @@ export const modules: Module[] = [
         slug: "the-recovery-run",
         title: "The Recovery Run",
         estimatedMinutes: 4,
-        hook: "The unglamorous sprint back into position after losing the ball is one of the most important — and least noticed — actions in football.",
+        hook: "The unglamorous sprint back into position after losing the ball is one of the most important, and least noticed, actions in football.",
         blocks: [
           {
             kind: "text",
             id: "what-a-recovery-run-is",
             heading: "Getting Goal-Side, Fast",
-            body: "A recovery run means sprinting back to get between the ball and your own goal the instant possession is lost — not jogging back, not arguing a decision, but immediately closing the gap that just opened. Full-backs and wide midfielders cover the most ground here, since they're furthest forward when possession turns over.",
+            body: "A recovery run means sprinting back to get between the ball and your own goal the instant possession is lost: not jogging back, not arguing a decision, but immediately closing the gap that just opened. Full-backs and wide midfielders cover the most ground here, since they're furthest forward when possession turns over.",
           },
           {
             kind: "toggle",
@@ -2167,7 +2167,7 @@ export const modules: Module[] = [
             kind: "zone",
             id: "delaying-not-tackling",
             heading: "Delay First, Tackle Second",
-            body: "A defender who hasn't fully recovered yet shouldn't dive into a tackle — a mistimed challenge with no cover behind it is worse than conceding a few yards. Jockeying and delaying buys time for teammates still sprinting back to arrive.",
+            body: "A defender who hasn't fully recovered yet shouldn't dive into a tackle. A mistimed challenge with no cover behind it is worse than conceding a few yards. Jockeying and delaying buys time for teammates still sprinting back to arrive.",
             zones: [{ x: 25, y: 40, width: 50, height: 30 }],
           },
         ],
@@ -2193,19 +2193,19 @@ export const modules: Module[] = [
         slug: "transition-triggers",
         title: "Transition Triggers",
         estimatedMinutes: 4,
-        hook: "Good pressing after losing the ball isn't random — it's set off by specific, coachable cues everyone on the team recognizes together.",
+        hook: "Good pressing after losing the ball isn't random. It's set off by specific, coachable cues everyone on the team recognizes together.",
         blocks: [
           {
             kind: "text",
             id: "what-triggers-a-press",
             heading: "Reading the Trigger, Not Just Reacting",
-            body: "A heavy touch, a pass played backward or sideways, an opponent receiving with their back to goal, or an isolated player with no passing options nearby — these are all common triggers a team drills specifically to recognize together, so the press starts as one coordinated unit rather than a single player chasing alone.",
+            body: "A heavy touch, a pass played backward or sideways, an opponent receiving with their back to goal, or an isolated player with no passing options nearby: these are all common triggers a team drills specifically to recognize together, so the press starts as one coordinated unit rather than a single player chasing alone.",
           },
           {
             kind: "zone",
             id: "isolated-in-the-corner",
             heading: "The Isolated Wide Player",
-            body: "An opponent forced wide with the touchline as a second defender and no easy pass back has very few options — exactly the kind of moment a team trains itself to recognize and swarm together.",
+            body: "An opponent forced wide with the touchline as a second defender and no easy pass back has very few options: exactly the kind of moment a team trains itself to recognize and swarm together.",
             zones: [{ x: 0, y: 20, width: 25, height: 40 }],
           },
           {
@@ -2239,13 +2239,13 @@ export const modules: Module[] = [
         slug: "putting-transitions-together",
         title: "Putting Transitions Together",
         estimatedMinutes: 3,
-        hook: "Attack, defense, and the two transitions in between — winning the ball and losing it — are really four separate phases every team has to manage.",
+        hook: "Attack, defense, and the two transitions in between, winning the ball and losing it, are really four separate phases every team has to manage.",
         blocks: [
           {
             kind: "formation",
             id: "high-press-recap",
             heading: "Set Up to Win It Back Fast",
-            body: "A high-press defensive shape is built around exactly the ideas from this module — compressing space to counter-press the instant the ball is lost, high enough up the pitch that winning it back immediately threatens the opponent's goal.",
+            body: "A high-press defensive shape is built around exactly the ideas from this module: compressing space to counter-press the instant the ball is lost, high enough up the pitch that winning it back immediately threatens the opponent's goal.",
             formationSlug: "4-3-3",
             phase: "out-of-possession",
           },
@@ -2253,11 +2253,11 @@ export const modules: Module[] = [
             kind: "text",
             id: "the-tradeoff",
             heading: "The Trade-Off Behind Every Choice",
-            body: "A team committed to counter-pressing accepts the risk of space in behind if the press is broken. A team that retreats and resets accepts giving the opponent time on the ball instead. Neither choice is free — every transition strategy is really a bet about which risk a team would rather live with.",
+            body: "A team committed to counter-pressing accepts the risk of space in behind if the press is broken. A team that retreats and resets accepts giving the opponent time on the ball instead. Neither choice is free. Every transition strategy is really a bet about which risk a team would rather live with.",
           },
         ],
         tryIt:
-          "Open the pitch explorer, turn on the opponent overlay, and switch the High Press / Low Block toggle back and forth — notice how much more room the same opponent formation is given to counter into when the shape sits deep instead of pressing high.",
+          "Open the pitch explorer, turn on the opponent overlay, and switch the High Press / Low Block toggle back and forth, then notice how much more room the same opponent formation is given to counter into when the shape sits deep instead of pressing high.",
         inlineCheck: {
           question: "What is the main trade-off a team accepts by committing to an aggressive counter-press?",
           options: [
@@ -2270,7 +2270,7 @@ export const modules: Module[] = [
         },
         takeaways: [
           "Football has four phases: in possession, out of possession, and the transition into each.",
-          "The instants right after winning or losing the ball are often more chaotic — and more decisive — than the settled phases either side of them.",
+          "The instants right after winning or losing the ball are often more chaotic, and more decisive, than the settled phases either side of them.",
           "Every transition strategy trades one risk for another; there's no version that avoids risk entirely, only which risk a team prefers.",
         ],
       },
@@ -2282,7 +2282,7 @@ export const modules: Module[] = [
           "The opponent hasn't organized their attacking shape yet",
           "The ball automatically resets to the goalkeeper",
           "Fouls are not allowed during this moment",
-          "It isn't valuable — retreating is always the better choice",
+          "It isn't valuable. Retreating is always the better choice",
         ],
         correctIndex: 0,
         explanation: "Whoever just won the ball is still scattered from defending, making it the best window to win it straight back.",
@@ -2372,30 +2372,30 @@ export const modules: Module[] = [
     title: "Set Pieces",
     accent: "attack",
     description:
-      "Corners, free-kicks, and throw-ins — the practiced, low-chaos moments that decide a disproportionate share of goals.",
+      "Corners, free-kicks, and throw-ins: the practiced, low-chaos moments that decide a disproportionate share of goals.",
     lessons: [
       {
         slug: "why-set-pieces-matter",
         title: "Why Set Pieces Matter",
         estimatedMinutes: 3,
-        hook: "A huge share of goals scored in professional football come from dead-ball situations, not open play — and unlike open play, set pieces can be rehearsed exactly.",
+        hook: "A huge share of goals scored in professional football come from dead-ball situations, not open play, and unlike open play, set pieces can be rehearsed exactly.",
         blocks: [
           {
             kind: "text",
             id: "the-rehearsal-advantage",
             heading: "The One Moment You Can Actually Rehearse",
-            body: "Open play is chaotic and never repeats exactly the same way twice, which makes it hard to drill precise patterns for. A set piece starts from a dead ball with every player free to be positioned exactly where a coach wants — the closest football gets to a rehearsed play, and teams that take that rehearsal seriously convert it into a disproportionate share of their goals.",
+            body: "Open play is chaotic and never repeats exactly the same way twice, which makes it hard to drill precise patterns for. A set piece starts from a dead ball with every player free to be positioned exactly where a coach wants: the closest football gets to a rehearsed play, and teams that take that rehearsal seriously convert it into a disproportionate share of their goals.",
           },
           {
             kind: "zone",
             id: "where-set-pieces-are-won",
             heading: "The Six-Yard Box and the Near-Post Zone",
-            body: "Most set-piece goals are scored from remarkably close to goal — contested, crowded areas where timing a run and winning a first contact matters more than raw technique.",
+            body: "Most set-piece goals are scored from remarkably close to goal: contested, crowded areas where timing a run and winning a first contact matters more than raw technique.",
             zones: [{ x: 20, y: 82, width: 60, height: 18 }],
           },
         ],
         tryIt:
-          "Think back to the last few goals you can remember watching — how many came from a corner, free-kick, or throw-in rather than a passing move from open play?",
+          "Think back to the last few goals you can remember watching. How many came from a corner, free-kick, or throw-in rather than a passing move from open play?",
         inlineCheck: {
           question: "What makes set pieces uniquely valuable to rehearse compared to open play?",
           options: [
@@ -2416,7 +2416,7 @@ export const modules: Module[] = [
         slug: "attacking-corners",
         title: "Attacking Corners: Near Post, Far Post, Zonal",
         estimatedMinutes: 5,
-        hook: "A corner kick isn't one routine — it's a menu of delivery zones and blocking runs designed to win a fraction of a second of space in a crowded box.",
+        hook: "A corner kick isn't one routine. It's a menu of delivery zones and blocking runs designed to win a fraction of a second of space in a crowded box.",
         blocks: [
           {
             kind: "toggle",
@@ -2430,18 +2430,18 @@ export const modules: Module[] = [
             kind: "zone",
             id: "the-penalty-spot-cluster",
             heading: "Attacking the Penalty Spot",
-            body: "Many modern corner routines target this central area directly — the point where a flicked-on header or a direct delivery is most likely to arrive with real power behind it.",
+            body: "Many modern corner routines target this central area directly: the point where a flicked-on header or a direct delivery is most likely to arrive with real power behind it.",
             zones: [{ x: 35, y: 78, width: 30, height: 15 }],
           },
           {
             kind: "text",
             id: "blocking-runs",
             heading: "Blocking Runs and Decoy Movement",
-            body: "Not every attacker in the box is trying to score directly — some runs are designed purely to occupy a marker or block a defender's path, clearing a lane for a teammate to attack the delivery unmarked. A well-drilled corner routine is really several coordinated decisions happening at once, not just one player against the ball.",
+            body: "Not every attacker in the box is trying to score directly. Some runs are designed purely to occupy a marker or block a defender's path, clearing a lane for a teammate to attack the delivery unmarked. A well-drilled corner routine is really several coordinated decisions happening at once, not just one player against the ball.",
           },
         ],
         tryIt:
-          "Visit the Center-Back position guide and read how defending set pieces is treated as a distinct skill from open-play marking — attacking corners are designed specifically to stress that skill.",
+          "Visit the Center-Back position guide and read how defending set pieces is treated as a distinct skill from open-play marking. Attacking corners are designed specifically to stress that skill.",
         inlineCheck: {
           question: "What is the main purpose of a decoy or blocking run at a corner?",
           options: [
@@ -2462,26 +2462,26 @@ export const modules: Module[] = [
         slug: "free-kick-routines",
         title: "Free-Kick Routines",
         estimatedMinutes: 4,
-        hook: "A free-kick is really two separate decisions — go direct at goal, or use the disguise of a dead ball to create a different chance entirely.",
+        hook: "A free-kick is really two separate decisions: go direct at goal, or use the disguise of a dead ball to create a different chance entirely.",
         blocks: [
           {
             kind: "text",
             id: "direct-vs-indirect",
             heading: "Direct vs. Indirect",
-            body: "A direct free-kick in range of goal is a shot on its own terms — curled or driven over or around a defensive wall. Further out, or at an angle, an indirect routine treats the free-kick more like a corner: a delivery into the box aimed at a specific runner rather than a shot at all.",
+            body: "A direct free-kick in range of goal is a shot on its own terms: curled or driven over or around a defensive wall. Further out, or at an angle, an indirect routine treats the free-kick more like a corner: a delivery into the box aimed at a specific runner rather than a shot at all.",
           },
           {
             kind: "zone",
             id: "the-wall-and-the-keeper",
             heading: "The Wall's Job",
-            body: "A defensive wall exists to cover one specific portion of the goal so the goalkeeper only has to account for the rest — not to block the whole goal by itself. Where the wall stands changes exactly which angle a direct free-taker is being invited to attempt.",
+            body: "A defensive wall exists to cover one specific portion of the goal so the goalkeeper only has to account for the rest, not to block the whole goal by itself. Where the wall stands changes exactly which angle a direct free-taker is being invited to attempt.",
             zones: [{ x: 40, y: 75, width: 20, height: 20 }],
           },
           {
             kind: "toggle",
             id: "disguised-run-vs-direct-shot",
             heading: "Disguised Run vs. Direct Shot",
-            body: "Some routines send a decoy player over the ball as if preparing to shoot, then release a real run into the box behind that disguise instead — trading a low-probability direct effort for a higher-probability chance created by surprise.",
+            body: "Some routines send a decoy player over the ball as if preparing to shoot, then release a real run into the box behind that disguise instead, trading a low-probability direct effort for a higher-probability chance created by surprise.",
             optionA: { label: "Direct shot", zones: [{ x: 42, y: 60, width: 16, height: 15 }] },
             optionB: { label: "Disguised run into the box", zones: [{ x: 20, y: 78, width: 60, height: 18 }] },
           },
@@ -2514,7 +2514,7 @@ export const modules: Module[] = [
             kind: "text",
             id: "the-most-common-restart",
             heading: "The Most Overlooked Restart",
-            body: "A team can take dozens of throw-ins across a single match — far more often than corners or free-kicks combined. Coaching staffs increasingly treat them as a genuine attacking opportunity rather than a formality, with rehearsed patterns for exactly who runs where the instant the ball leaves the thrower's hands.",
+            body: "A team can take dozens of throw-ins across a single match, far more often than corners or free-kicks combined. Coaching staffs increasingly treat them as a genuine attacking opportunity rather than a formality, with rehearsed patterns for exactly who runs where the instant the ball leaves the thrower's hands.",
           },
           {
             kind: "zone",
@@ -2558,16 +2558,16 @@ export const modules: Module[] = [
             kind: "zone",
             id: "the-six-yard-battleground",
             heading: "The Shared Battleground",
-            body: "This tightly contested zone is where nearly every set-piece routine in this module — attacking or defending — is ultimately decided, no matter which specific pattern a team runs to get there.",
+            body: "This tightly contested zone is where nearly every set-piece routine in this module, attacking or defending, is ultimately decided, no matter which specific pattern a team runs to get there.",
             zones: [{ x: 20, y: 82, width: 60, height: 18 }],
           },
         ],
         tryIt:
-          "Revisit the defending set pieces lesson in the Art of Defending module and notice how many of the same zones and concepts — near post, far post, blocking runs — appear from the opposite point of view.",
+          "Revisit the defending set pieces lesson in the Art of Defending module and notice how many of the same zones and concepts, such as near post, far post, and blocking runs, appear from the opposite point of view.",
         inlineCheck: {
           question: "What is the relationship between attacking and defending set-piece routines, according to this lesson?",
           options: [
-            "They mirror each other — an attacking run is exactly what a defensive zone exists to cover",
+            "They mirror each other: an attacking run is exactly what a defensive zone exists to cover",
             "They share no meaningful connection",
             "Only attacking routines can be rehearsed",
             "Defending set pieces makes attacking ones illegal",
@@ -2613,7 +2613,7 @@ export const modules: Module[] = [
           "It serves no tactical purpose",
         ],
         correctIndex: 0,
-        explanation: "Not every runner is trying to score — some exist purely to clear space for someone who is.",
+        explanation: "Not every runner is trying to score. Some exist purely to clear space for someone who is.",
       },
       {
         question: "What is the main job of a defensive wall at a free-kick?",
@@ -2632,7 +2632,7 @@ export const modules: Module[] = [
           "A low-probability direct shot, for a higher-probability chance created by surprise",
           "A guaranteed goal, for nothing at all",
           "Possession, for an automatic corner",
-          "Nothing — disguised routines carry no trade-off",
+          "Nothing. Disguised routines carry no trade-off",
         ],
         correctIndex: 0,
         explanation: "Decoy runners and fake shots exist to create a better chance than a direct effort would offer.",
@@ -2662,7 +2662,7 @@ export const modules: Module[] = [
       {
         question: "What is the relationship between attacking and defending set pieces, according to this module?",
         options: [
-          "They mirror each other — an attacking run is exactly what a defensive zone exists to cover",
+          "They mirror each other: an attacking run is exactly what a defensive zone exists to cover",
           "They are entirely unrelated skills",
           "Only defending set pieces can be coached",
           "Attacking set pieces make defending ones unnecessary",
@@ -2684,19 +2684,19 @@ export const modules: Module[] = [
         slug: "reading-the-game-state",
         title: "Reading the Game State",
         estimatedMinutes: 4,
-        hook: "The exact same formation should behave differently depending on the scoreline — leading, level, and chasing all call for different priorities.",
+        hook: "The exact same formation should behave differently depending on the scoreline: leading, level, and chasing all call for different priorities.",
         blocks: [
           {
             kind: "text",
             id: "three-states",
             heading: "Leading, Level, and Chasing",
-            body: "A team protecting a lead can afford to give up some possession in exchange for defensive solidity. A level game usually keeps a team's original game plan intact. A team chasing a result has to accept more defensive risk to create the numbers needed going forward — the same eleven players, but a different set of priorities depending on the scoreboard.",
+            body: "A team protecting a lead can afford to give up some possession in exchange for defensive solidity. A level game usually keeps a team's original game plan intact. A team chasing a result has to accept more defensive risk to create the numbers needed going forward: the same eleven players, but a different set of priorities depending on the scoreboard.",
           },
           {
             kind: "formation",
             id: "protecting-a-lead-shape",
             heading: "A Compact Shape to Protect a Lead",
-            body: "Narrow, deep, and disciplined — prioritizing not conceding over creating further chances. A team ahead late in a match often deliberately looks like this, even if it played very differently a half hour earlier.",
+            body: "Narrow, deep, and disciplined: prioritizing not conceding over creating further chances. A team ahead late in a match often deliberately looks like this, even if it played very differently a half hour earlier.",
             formationSlug: "4-1-4-1",
             phase: "out-of-possession",
           },
@@ -2737,13 +2737,13 @@ export const modules: Module[] = [
             kind: "text",
             id: "like-for-like-vs-tactical",
             heading: "Like-for-Like vs. Tactical Change",
-            body: "A like-for-like substitution keeps the system exactly the same and simply refreshes energy in a specific role — a tiring winger replaced by a fresher one running the same position. A tactical substitution changes the plan itself: switching formation shape entirely, adding an extra attacker, or shutting the game down with a defensive body.",
+            body: "A like-for-like substitution keeps the system exactly the same and simply refreshes energy in a specific role: a tiring winger replaced by a fresher one running the same position. A tactical substitution changes the plan itself: switching formation shape entirely, adding an extra attacker, or shutting the game down with a defensive body.",
           },
           {
             kind: "toggle",
             id: "fresh-legs-vs-shape-change",
             heading: "Fresh Legs vs. Shape Change",
-            body: "The same substitution window can be used two very different ways — simply refreshing energy in an unchanged shape, or using the stoppage to reset the team into a meaningfully different one.",
+            body: "The same substitution window can be used two very different ways: simply refreshing energy in an unchanged shape, or using the stoppage to reset the team into a meaningfully different one.",
             optionA: { label: "Same shape, fresh legs", zones: [{ x: 0, y: 0, width: 100, height: 100 }] },
             optionB: { label: "Reshaped entirely", zones: [{ x: 15, y: 10, width: 70, height: 80 }] },
           },
@@ -2751,7 +2751,7 @@ export const modules: Module[] = [
             kind: "text",
             id: "timing-matters",
             heading: "Timing Is Part of the Decision",
-            body: "The same substitution made ten minutes earlier or later can have a completely different effect — too early risks needing a further change later with no substitutions left, too late risks running out of time for a fresh player to actually influence the match.",
+            body: "The same substitution made ten minutes earlier or later can have a completely different effect: too early risks needing a further change later with no substitutions left, too late risks running out of time for a fresh player to actually influence the match.",
           },
         ],
         tryIt:
@@ -2776,19 +2776,19 @@ export const modules: Module[] = [
         slug: "controlling-tempo-and-territory",
         title: "Controlling Tempo and Territory",
         estimatedMinutes: 4,
-        hook: "Not every team wants to play at the same speed — controlling how fast or slow a match moves is its own tactical skill.",
+        hook: "Not every team wants to play at the same speed. Controlling how fast or slow a match moves is its own tactical skill.",
         blocks: [
           {
             kind: "text",
             id: "why-tempo-is-a-choice",
             heading: "Tempo as a Deliberate Choice",
-            body: "A team comfortable on the ball might deliberately slow a match down with patient, secure passing, denying the opponent the ball entirely rather than trying to score again. A team behind on the scoreboard usually wants the opposite — a faster, more direct tempo that creates more moments where the result could change.",
+            body: "A team comfortable on the ball might deliberately slow a match down with patient, secure passing, denying the opponent the ball entirely rather than trying to score again. A team behind on the scoreboard usually wants the opposite: a faster, more direct tempo that creates more moments where the result could change.",
           },
           {
             kind: "zone",
             id: "keeping-the-ball-in-the-corner",
             heading: "Using the Corner and the Touchline",
-            body: "Advanced wide areas near the corner flag let a team in control of a match run the clock down while still, technically, in possession under real pressure to win the ball back — one reason winning the ball in these areas late in a game is so difficult for the chasing side.",
+            body: "Advanced wide areas near the corner flag let a team in control of a match run the clock down while still, technically, in possession under real pressure to win the ball back. That's one reason winning the ball in these areas late in a game is so difficult for the chasing side.",
             zones: [{ x: 0, y: 0, width: 25, height: 25 }],
           },
           {
@@ -2822,19 +2822,19 @@ export const modules: Module[] = [
         slug: "playing-with-ten-men",
         title: "Playing With Ten Men",
         estimatedMinutes: 4,
-        hook: "A red card doesn't just remove a player — it forces an entire team to solve a new tactical problem in seconds, mid-match.",
+        hook: "A red card doesn't just remove a player. It forces an entire team to solve a new tactical problem in seconds, mid-match.",
         blocks: [
           {
             kind: "text",
             id: "immediate-reshape",
             heading: "An Immediate, Forced Reshape",
-            body: "Losing a player to a red card almost always means sacrificing an attacker to keep defensive shape intact, since defensive numbers matter more once a team is down a body. The specific reshape depends on who was sent off — losing a forward changes very little structurally, while losing a defender usually forces a much bigger rethink.",
+            body: "Losing a player to a red card almost always means sacrificing an attacker to keep defensive shape intact, since defensive numbers matter more once a team is down a body. The specific reshape depends on who was sent off: losing a forward changes very little structurally, while losing a defender usually forces a much bigger rethink.",
           },
           {
             kind: "formation",
             id: "compact-ten-man-shape",
             heading: "A Compact Shape With Ten Players",
-            body: "Extremely narrow and deep, conceding territory everywhere except the space directly in front of goal — the default a manager reaches for immediately after a red card, at least until the shock of the moment settles.",
+            body: "Extremely narrow and deep, conceding territory everywhere except the space directly in front of goal: the default a manager reaches for immediately after a red card, at least until the shock of the moment settles.",
             formationSlug: "4-1-4-1",
             phase: "out-of-possession",
           },
@@ -2842,7 +2842,7 @@ export const modules: Module[] = [
             kind: "text",
             id: "the-other-teams-choice",
             heading: "The Opponent's Decision Too",
-            body: "A numerical advantage doesn't automatically win a match by itself — a team ahead in numbers still has to decide whether to commit even more players forward to press the advantage, or stay patient and let the extra body wear the opponent down gradually instead.",
+            body: "A numerical advantage doesn't automatically win a match by itself. A team ahead in numbers still has to decide whether to commit even more players forward to press the advantage, or stay patient and let the extra body wear the opponent down gradually instead.",
           },
         ],
         tryIt:
@@ -2860,7 +2860,7 @@ export const modules: Module[] = [
         takeaways: [
           "A red card forces an immediate, often improvised tactical reshape.",
           "Teams typically sacrifice an attacker first to preserve defensive numbers.",
-          "A numerical advantage still requires its own tactical decision — press it immediately, or let it wear the opponent down.",
+          "A numerical advantage still requires its own tactical decision: press it immediately, or let it wear the opponent down.",
         ],
       },
       {
@@ -2873,13 +2873,13 @@ export const modules: Module[] = [
             kind: "text",
             id: "the-through-line",
             heading: "One Idea, Several Situations",
-            body: "Reading the scoreline, timing a substitution, controlling tempo, and reshaping after a red card are all versions of the same underlying skill — recognizing the specific situation a team is actually in, rather than following one fixed plan regardless of circumstances.",
+            body: "Reading the scoreline, timing a substitution, controlling tempo, and reshaping after a red card are all versions of the same underlying skill: recognizing the specific situation a team is actually in, rather than following one fixed plan regardless of circumstances.",
           },
           {
             kind: "formation",
             id: "same-formation-different-context",
             heading: "The Same Formation, Read Differently",
-            body: "This exact shape might be a considered, compact defensive setup protecting a one-goal lead, or the same team's plan after being reduced to ten players — the formation number alone can't tell you which situation produced it.",
+            body: "This exact shape might be a considered, compact defensive setup protecting a one-goal lead, or the same team's plan after being reduced to ten players. The formation number alone can't tell you which situation produced it.",
             formationSlug: "4-1-4-1",
             phase: "out-of-possession",
           },
@@ -2899,7 +2899,7 @@ export const modules: Module[] = [
         takeaways: [
           "Game management is fundamentally about reading the specific situation, not following a fixed script.",
           "The same formation or personnel can represent very different tactical decisions depending on context.",
-          "You've now covered reading game states, substitutions, tempo control, and playing with ten men — the situational skills that sit alongside every system covered elsewhere in the Academy.",
+          "You've now covered reading game states, substitutions, tempo control, and playing with ten men: the situational skills that sit alongside every system covered elsewhere in the Academy.",
         ],
       },
     ],
@@ -2973,7 +2973,7 @@ export const modules: Module[] = [
       {
         question: "Does gaining a numerical advantage from an opponent's red card win a match automatically?",
         options: [
-          "No — the team in credit still has to decide how to use the advantage",
+          "No. The team in credit still has to decide how to use the advantage",
           "Yes, automatically, under the laws of the game",
           "Only if the advantage occurs in the first half",
           "It guarantees a final score change immediately",

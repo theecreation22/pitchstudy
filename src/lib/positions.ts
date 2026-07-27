@@ -60,7 +60,7 @@ export const positions: Record<PositionCode, PositionInfo> = {
     summary:
       "The last line of defense and, increasingly, the first line of attack. Commands the box on crosses, organizes the back line, and starts moves with distribution under pressure.",
     inPossession:
-      "Starts attacks with quick, accurate distribution — a short pass to a center-back or a longer ball to bypass the first press, chosen based on how the opposition is set up.",
+      "Starts attacks with quick, accurate distribution: a short pass to a center-back or a longer ball to bypass the first press, chosen based on how the opposition is set up.",
     outOfPossession:
       "Organizes the last line, commands the box on crosses and set pieces, and covers the space in behind a high defensive line by sweeping up through balls.",
     strongSuits: [
@@ -72,7 +72,7 @@ export const positions: Record<PositionCode, PositionInfo> = {
     howToPlay: [
       "Set your starting position based on the ball's angle, not just the center of the goal",
       "Communicate defensive assignments early, before a cross or shot is even likely",
-      "Commit fully to any decision to come off your line — hesitation is what gets punished",
+      "Commit fully to any decision to come off your line. Hesitation is what gets punished",
       "Vary distribution length and speed based on how aggressively the opposition presses",
     ],
     commonMistakes: [
@@ -130,7 +130,7 @@ export const positions: Record<PositionCode, PositionInfo> = {
     code: "RB",
     name: "Right-Back",
     summary:
-      "The mirror of the left-back on the right flank — tracks opposing wingers, tucks in centrally when the ball is far away, and supports attacks by overlapping or underlapping.",
+      "The mirror of the left-back on the right flank: tracks opposing wingers, tucks in centrally when the ball is far away, and supports attacks by overlapping or underlapping.",
     inPossession:
       "Provides width down the right, overlapping or underlapping the winger ahead of them to create passing lanes and crossing opportunities.",
     outOfPossession:
@@ -180,7 +180,7 @@ export const positions: Record<PositionCode, PositionInfo> = {
       "Recovery speed against pace",
     ],
     howToPlay: [
-      "Hold the defensive line together — dropping off alone invites forwards to play in behind",
+      "Hold the defensive line together. Dropping off alone invites forwards to play in behind",
       "Step out to press only when a teammate is covering the space vacated",
       "Scan before receiving the ball so the first touch can go forward, not just sideways",
       "Communicate with the goalkeeper and full-backs to shift the line as a unit",
@@ -202,7 +202,7 @@ export const positions: Record<PositionCode, PositionInfo> = {
     code: "LWB",
     name: "Left Wing-Back",
     summary:
-      "Combines a full-back's defensive duty with a winger's attacking range — provides the width alone down the left in systems without a winger, covering the entire touchline in both directions.",
+      "Combines a full-back's defensive duty with a winger's attacking range, providing the width alone down the left in systems without a winger and covering the entire touchline in both directions.",
     inPossession:
       "Provides the entire width of the pitch alone, pushing on almost like a winger while the back three holds its shape centrally.",
     outOfPossession:
@@ -244,7 +244,7 @@ export const positions: Record<PositionCode, PositionInfo> = {
     code: "RWB",
     name: "Right Wing-Back",
     summary:
-      "The mirror of the left wing-back on the right flank — the sole provider of width down that side, expected to defend the channel and support the attack in equal measure.",
+      "The mirror of the left wing-back on the right flank: the sole provider of width down that side, expected to defend the channel and support the attack in equal measure.",
     inPossession:
       "Provides the entire width of the pitch alone, pushing on almost like a winger while the back three holds its shape centrally.",
     outOfPossession:
@@ -300,7 +300,7 @@ export const positions: Record<PositionCode, PositionInfo> = {
     howToPlay: [
       "Stay goal-side of the opponent you're screening rather than chasing the ball",
       "Break up attacks before they reach the back four, not after",
-      "Keep passes simple under pressure — the priority is retaining the ball, not creating",
+      "Keep passes simple under pressure. The priority is retaining the ball, not creating",
       "Scan constantly to spot the next passing lane the opposition wants to use",
     ],
     commonMistakes: [
@@ -328,7 +328,7 @@ export const positions: Record<PositionCode, PositionInfo> = {
     code: "CM",
     name: "Central Midfielder",
     summary:
-      "The engine of the team — covers box to box, links defense to attack, and balances contributing to both phases of play depending on the moment in the game.",
+      "The engine of the team: covers box to box, links defense to attack, and balances contributing to both phases of play depending on the moment in the game.",
     inPossession:
       "Links defense to attack, moving the ball forward through midfield and supporting both the build-up and the final pass.",
     outOfPossession:
@@ -340,7 +340,7 @@ export const positions: Record<PositionCode, PositionInfo> = {
       "Balance between defense and attack",
     ],
     howToPlay: [
-      "Judge each moment on its merits — know when to join the attack and when to hold your position",
+      "Judge each moment on its merits: know when to join the attack and when to hold your position",
       "Support the player on the ball with a passing option, not just physical proximity",
       "Arrive late into the box on occasion rather than always staying deep",
       "Track back immediately the moment possession is lost",
@@ -362,7 +362,7 @@ export const positions: Record<PositionCode, PositionInfo> = {
       },
       {
         code: "B2B",
-        note: "The purest expression of this role — leaning further toward covering the full length of the pitch every match.",
+        note: "The purest expression of this role, leaning further toward covering the full length of the pitch every match.",
       },
     ],
   },
@@ -446,7 +446,7 @@ export const positions: Record<PositionCode, PositionInfo> = {
     code: "RM",
     name: "Right Midfielder",
     summary:
-      "The mirror of the left midfielder — holds the right side of a flat midfield four, balancing defensive tracking with attacking width.",
+      "The mirror of the left midfielder: holds the right side of a flat midfield four, balancing defensive tracking with attacking width.",
     inPossession:
       "Holds the width of a flat midfield four, combining with the right-back to overload the flank or cutting inside to join central play.",
     outOfPossession:
@@ -526,7 +526,7 @@ export const positions: Record<PositionCode, PositionInfo> = {
     code: "RW",
     name: "Right Winger",
     summary:
-      "The mirror of the left winger on the right flank — stretches play wide, then attacks the box or cuts inside depending on which foot leads their game.",
+      "The mirror of the left winger on the right flank: stretches play wide, then attacks the box or cuts inside depending on which foot leads their game.",
     inPossession:
       "Stays high and wide before cutting inside or driving at the full-back, stretching the defense and creating or finishing chances.",
     outOfPossession:
@@ -568,7 +568,7 @@ export const positions: Record<PositionCode, PositionInfo> = {
     code: "ST",
     name: "Striker",
     summary:
-      "The team's most direct route to goal — holds up play, makes runs in behind, and is judged above all on the ability to finish chances.",
+      "The team's most direct route to goal: holds up play, makes runs in behind, and is judged above all on the ability to finish chances.",
     inPossession:
       "Holds up play with their back to goal, makes runs in behind, and is judged above all on finishing when the chance arrives.",
     outOfPossession:
@@ -607,7 +607,7 @@ export const positions: Record<PositionCode, PositionInfo> = {
     name: "Inverted Full-Back",
     isHybrid: true,
     summary:
-      "A full-back who steps into central midfield in possession instead of overlapping down the wing — trading traditional width for an extra body in the middle of the pitch.",
+      "A full-back who steps into central midfield in possession instead of overlapping down the wing, trading traditional width for an extra body in the middle of the pitch.",
     inPossession:
       "Moves inside into central midfield once the team has the ball, forming an extra central passing option and freeing a winger or wide forward to hold the width instead.",
     outOfPossession:
@@ -636,15 +636,15 @@ export const positions: Record<PositionCode, PositionInfo> = {
     related: [
       {
         code: "LB",
-        note: "The traditional starting point for this role — the same player reverts to a standard left-back position the moment possession is lost.",
+        note: "The traditional starting point for this role: the same player reverts to a standard left-back position the moment possession is lost.",
       },
       {
         code: "RB",
-        note: "The mirror on the right flank — the same tactical idea applied to a right-back instead.",
+        note: "The mirror on the right flank: the same tactical idea applied to a right-back instead.",
       },
       {
         code: "LWB",
-        note: "The same inverted idea applied to a back-three system — tucks inside from wing-back instead of full-back.",
+        note: "The same inverted idea applied to a back-three system, tucking inside from wing-back instead of full-back.",
       },
       {
         code: "RWB",
@@ -659,7 +659,7 @@ export const positions: Record<PositionCode, PositionInfo> = {
     summary:
       "A winger stationed on the opposite flank to their stronger foot, so cutting inside onto that foot is the first instinct rather than a fallback option.",
     inPossession:
-      "Holds the touchline just long enough to pin the full-back wide, then drives inside onto the stronger foot to shoot, thread a pass, or combine centrally — the cut inside is the main threat, not a plan B.",
+      "Holds the touchline just long enough to pin the full-back wide, then drives inside onto the stronger foot to shoot, thread a pass, or combine centrally. The cut inside is the main threat, not a plan B.",
     outOfPossession:
       "Tracks back down the same flank as a conventional winger, though recovering from central attacking positions back to a wide starting point takes extra running.",
     strongSuits: [
@@ -670,7 +670,7 @@ export const positions: Record<PositionCode, PositionInfo> = {
     ],
     howToPlay: [
       "Hug the touchline just long enough to pin the opposition full-back wide before cutting inside",
-      "Look up before the cut — the inside lane can be a shot, a pass, or a dribble depending on what the defense gives away",
+      "Look up before the cut: the inside lane can be a shot, a pass, or a dribble depending on what the defense gives away",
       "Combine with an overlapping full-back who supplies the width just vacated",
       "Track back down the same flank defensively, even though the attacking threat comes from inside",
     ],
@@ -686,11 +686,11 @@ export const positions: Record<PositionCode, PositionInfo> = {
     related: [
       {
         code: "LW",
-        note: "The traditional version of this role — stays on the stronger-foot side and looks to beat defenders on the outside rather than cut inside.",
+        note: "The traditional version of this role: stays on the stronger-foot side and looks to beat defenders on the outside rather than cut inside.",
       },
       {
         code: "RW",
-        note: "The mirror on the other flank — the traditional version of this role, favoring the outside route rather than cutting inside.",
+        note: "The mirror on the other flank: the traditional version of this role, favoring the outside route rather than cutting inside.",
       },
     ],
   },
@@ -767,7 +767,7 @@ export const positions: Record<PositionCode, PositionInfo> = {
     related: [
       {
         code: "CM",
-        note: "The base position this role is drawn from — every box-to-box midfielder is fundamentally a central midfielder leaning further toward covering the full pitch.",
+        note: "The base position this role is drawn from: every box-to-box midfielder is fundamentally a central midfielder leaning further toward covering the full pitch.",
       },
       {
         code: "CDM",
@@ -793,7 +793,7 @@ export const positions: Record<PositionCode, PositionInfo> = {
     ],
     howToPlay: [
       "Set a starting position based on the height of your own defensive line, not a fixed spot near goal",
-      "Commit early and decisively when coming out to clear a through-ball — hesitation is what gets punished most",
+      "Commit early and decisively when coming out to clear a through-ball. Hesitation is what gets punished most",
       "Treat distribution as a genuine first-phase passing option, not just a way to restart play",
       "Communicate constantly with the back line so everyone moves up and drops as a unit",
     ],
@@ -836,7 +836,7 @@ export const positions: Record<PositionCode, PositionInfo> = {
     howToPlay: [
       "Drop between or beside the center-backs early, before the goalkeeper is forced into a rushed decision",
       "Scan the pitch before receiving so the first touch can already break the opposition's first line",
-      "Dictate tempo deliberately — slow the game down or speed it up based on what the team needs",
+      "Dictate tempo deliberately: slow the game down or speed it up based on what the team needs",
       "Recover into a screening position immediately once the ball moves beyond your control",
     ],
     commonMistakes: [
@@ -851,7 +851,7 @@ export const positions: Record<PositionCode, PositionInfo> = {
     related: [
       {
         code: "CDM",
-        note: "The base position this role is drawn from — every deep-lying playmaker is fundamentally a defensive midfielder leaning further toward starting attacks personally.",
+        note: "The base position this role is drawn from: every deep-lying playmaker is fundamentally a defensive midfielder leaning further toward starting attacks personally.",
       },
       {
         code: "CB",

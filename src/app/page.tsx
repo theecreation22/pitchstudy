@@ -13,7 +13,7 @@ const sections = [
   {
     eyebrow: "Training",
     title: "Workouts",
-    copy: "Four-week plans for every position group — strength, speed, endurance, and position-specific drills.",
+    copy: "Four-week plans for every position group: strength, speed, endurance, and position-specific drills.",
     href: "/workouts",
   },
   {
@@ -25,7 +25,7 @@ const sections = [
   {
     eyebrow: "Test yourself",
     title: "Quiz",
-    copy: "Short quizzes on formations, positions, and managers with instant feedback — no accounts needed.",
+    copy: "Short quizzes on formations, positions, and managers with instant feedback, no accounts needed.",
     href: "/quiz",
   },
 ];

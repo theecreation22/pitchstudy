@@ -53,8 +53,8 @@ export function ModuleLessonList({ module }: { module: Module }) {
           </span>
           <span className="block font-mono text-xs text-pitch-touchline">
             {allDone
-              ? "Unlocked — take it anytime"
-              : `${done} of ${total} lessons done — take it anyway, or finish the module first`}
+              ? "Unlocked: take it anytime"
+              : `${done} of ${total} lessons done. Take it anyway, or finish the module first`}
           </span>
         </span>
       </Link>

@@ -63,13 +63,13 @@ export const managers: Manager[] = [
     signatureFormationSlug: "4-4-2",
     tagline: "Proved a pressing, zonal team could beat individual brilliance.",
     philosophy:
-      "Built his teams around a compact, zonal defensive block that moved as a single unit — pressing high up the pitch to win the ball back within seconds rather than retreating to defend a lead.",
+      "Built his teams around a compact, zonal defensive block that moved as a single unit, pressing high up the pitch to win the ball back within seconds rather than retreating to defend a lead.",
     signatureMechanics: [
       {
         id: "shifting-as-a-unit",
         name: "Shifting as a Unit",
         description:
-          "When the ball goes to one flank, the whole team shifts across together — the near-side full-back presses up while the far-side full-back tucks narrower, so the block's compactness never breaks.",
+          "When the ball goes to one flank, the whole team shifts across together: the near-side full-back presses up while the far-side full-back tucks narrower, so the block's compactness never breaks.",
         formationSlug: "4-4-2",
         moving: [
           { playerId: "lb", from: { x: 15, y: 75 }, to: { x: 10, y: 55 } },
@@ -125,7 +125,7 @@ export const managers: Manager[] = [
     signatureFormationSlug: "4-3-3",
     tagline: "Turned possession itself into the primary attacking weapon.",
     philosophy:
-      "Builds teams around dominating possession and manipulating space — using precise positioning to consistently create passing lanes and outnumber the opposition around the ball.",
+      "Builds teams around dominating possession and manipulating space, using precise positioning to consistently create passing lanes and outnumber the opposition around the ball.",
     signatureMechanics: [
       {
         id: "fullback-overload",
@@ -195,7 +195,7 @@ export const managers: Manager[] = [
         id: "angled-pressing-triggers",
         name: "Angled Pressing Triggers",
         description:
-          "The front line presses along coordinated angles that cut off a pass back or across, rather than chasing the ball straight on — herding the opponent into a predictable, more easily won pass.",
+          "The front line presses along coordinated angles that cut off a pass back or across, rather than chasing the ball straight on, herding the opponent into a predictable, more easily won pass.",
         formationSlug: "4-3-3",
         moving: [
           { playerId: "lw", from: { x: 18, y: 18 }, to: { x: 35, y: 30 } },
@@ -206,7 +206,7 @@ export const managers: Manager[] = [
         id: "gegenpressing-to-counter",
         name: "Gegenpressing Into a Counter",
         description:
-          "The instant the ball is regained, the nearest midfielder bursts vertically forward rather than resetting possession — the whole point of winning it back high is using the space before the opponent can organize.",
+          "The instant the ball is regained, the nearest midfielder bursts vertically forward rather than resetting possession. The whole point of winning it back high is using the space before the opponent can organize.",
         formationSlug: "4-3-3",
         moving: [{ playerId: "cm2", from: { x: 68, y: 42 }, to: { x: 75, y: 15 } }],
       },
@@ -309,7 +309,7 @@ export const managers: Manager[] = [
         id: "wing-back-pendulum",
         name: "The Wing-Back Pendulum",
         description:
-          "The same player swings between two completely different jobs depending on possession — an auxiliary winger providing width high up the pitch in attack, and an auxiliary full-back tucking in behind the ball out of it.",
+          "The same player swings between two completely different jobs depending on possession: an auxiliary winger providing width high up the pitch in attack, and an auxiliary full-back tucking in behind the ball out of it.",
         formationSlug: "3-4-3",
         moving: [{ playerId: "lwb", from: { x: 8, y: 50 }, to: { x: 8, y: 25 } }],
       },
@@ -361,7 +361,7 @@ export const managers: Manager[] = [
         id: "man-oriented-marking",
         name: "Man-Marking Anywhere on the Pitch",
         description:
-          "A defender follows their assigned opponent wherever they go, even if that means abandoning a normal defensive zone entirely — an attacking, high-risk commitment to winning individual duels over holding shape.",
+          "A defender follows their assigned opponent wherever they go, even if that means abandoning a normal defensive zone entirely. It's an attacking, high-risk commitment to winning individual duels over holding shape.",
         formationSlug: "4-1-4-1",
         moving: [{ playerId: "rb", from: { x: 85, y: 75 }, to: { x: 85, y: 25 } }],
       },
@@ -397,13 +397,13 @@ export const managers: Manager[] = [
     signatureFormationSlug: "4-3-3",
     tagline: "Built a team's identity around defensive structure married to patient possession.",
     philosophy:
-      "Combines a possession-based approach with a strong emphasis on defensive rest-defense — organizing the team so that losing the ball in one area is never a direct route to goal for the opponent.",
+      "Combines a possession-based approach with a strong emphasis on defensive rest-defense, organizing the team so that losing the ball in one area is never a direct route to goal for the opponent.",
     signatureMechanics: [
       {
         id: "inverted-full-back",
         name: "The Inverted Full-Back",
         description:
-          "In possession, the left-back steps inside into central midfield instead of overlapping down the touchline — adding an extra central passing option and forming a back three with the two center-backs the moment possession is lost.",
+          "In possession, the left-back steps inside into central midfield instead of overlapping down the touchline, adding an extra central passing option and forming a back three with the two center-backs the moment possession is lost.",
         formationSlug: "4-3-3",
         moving: [{ playerId: "lb", from: { x: 15, y: 75 }, to: { x: 38, y: 60 } }],
       },
@@ -411,7 +411,7 @@ export const managers: Manager[] = [
         id: "rest-defense",
         name: "Rest-Defense",
         description:
-          "While the wide forwards push on to occupy the opposition's back line, the holding midfielder drops to shield a back three behind the ball — so losing possession high up the pitch is never a clean run at an empty defense.",
+          "While the wide forwards push on to occupy the opposition's back line, the holding midfielder drops to shield a back three behind the ball, so losing possession high up the pitch is never a clean run at an empty defense.",
         formationSlug: "4-3-3",
         moving: [
           { playerId: "cdm", from: { x: 50, y: 58 }, to: { x: 50, y: 66 } },
@@ -439,7 +439,7 @@ export const managers: Manager[] = [
     ],
     whyItWorked: [],
     vulnerabilities: [
-      "Building attacks through an inverted full-back in central midfield requires that player to be comfortable there under pressure — an opponent that presses the first central pass aggressively can stall the whole buildup",
+      "Building attacks through an inverted full-back in central midfield requires that player to be comfortable there under pressure. An opponent that presses the first central pass aggressively can stall the whole buildup",
     ],
     legacy:
       "Turned a period of relative absence from title contention into sustained top-of-the-table competitiveness, with his emphasis on defensive rest-defense and set-piece preparation widely discussed as a template by other coaches.",
@@ -460,7 +460,7 @@ export const managers: Manager[] = [
     signatureFormationSlug: "4-2-3-1",
     tagline: "Turned a mid-season managerial change into an all-conquering attacking machine.",
     philosophy:
-      "Combines an aggressive high defensive line with quick, direct transitions — using intense pressing to win the ball back high up the pitch and attack before the opponent can organize.",
+      "Combines an aggressive high defensive line with quick, direct transitions, using intense pressing to win the ball back high up the pitch and attack before the opponent can organize.",
     signatureMechanics: [
       {
         id: "high-defensive-line",
@@ -526,7 +526,7 @@ export const managers: Manager[] = [
         id: "front-three-interchange",
         name: "Front-Three Interchange",
         description:
-          "The front three constantly swap positions rather than sticking to a fixed left/right/center — a striker can drift wide and a winger can attack the middle in the same passage of play, improvising rather than following a script.",
+          "The front three constantly swap positions rather than sticking to a fixed left/right/center: a striker can drift wide and a winger can attack the middle in the same passage of play, improvising rather than following a script.",
         formationSlug: "4-3-3",
         moving: [
           { playerId: "st", from: { x: 50, y: 12 }, to: { x: 18, y: 18 } },
@@ -576,7 +576,7 @@ export const managers: Manager[] = [
         id: "total-football-rotation",
         name: "Total Football Rotation",
         description:
-          "A center-back can step forward into midfield, trusting a midfielder to drop back and cover the space just vacated — the shape holds together through constant, trained rotation rather than everyone staying in a fixed slot.",
+          "A center-back can step forward into midfield, trusting a midfielder to drop back and cover the space just vacated. The shape holds together through constant, trained rotation rather than everyone staying in a fixed slot.",
         formationSlug: "4-3-3",
         moving: [
           { playerId: "cb1", from: { x: 35, y: 78 }, to: { x: 32, y: 55 } },
@@ -596,7 +596,7 @@ export const managers: Manager[] = [
       "Prioritized pressing high to win the ball back quickly, treating defense as the first phase of attack rather than a separate task",
     ],
     vulnerabilities: [
-      "Total Football's constant positional rotation depends on every outfield player being comfortable operating in multiple roles — if key rotators are missing or fatigue breaks the interchange down, gaps open that a disciplined zonal defense can exploit",
+      "Total Football's constant positional rotation depends on every outfield player being comfortable operating in multiple roles. If key rotators are missing or fatigue breaks the interchange down, gaps open that a disciplined zonal defense can exploit",
     ],
     legacy:
       "The fluid, interchangeable style built at Ajax and the Netherlands national team became known as Total Football, and its influence on positional play is still traceable through generations of coaches who studied under him or his successors.",
@@ -790,7 +790,7 @@ export const managers: Manager[] = [
         id: "no-one-exempt-from-tracking-back",
         name: "No One Exempt From Tracking Back",
         description:
-          "A wide midfielder tracks a marauding opponent full-back all the way into their own defensive third — total defensive commitment applies to attacking players just as much as it does to defenders.",
+          "A wide midfielder tracks a marauding opponent full-back all the way into their own defensive third. Total defensive commitment applies to attacking players just as much as it does to defenders.",
         formationSlug: "4-4-2",
         moving: [{ playerId: "lm", from: { x: 15, y: 45 }, to: { x: 15, y: 72 } }],
       },
@@ -1000,7 +1000,7 @@ export const managers: Manager[] = [
       "A deep, defensive-first setup surrenders territory and the ball, leaving it vulnerable to being pinned in its own half for long periods by a technically superior side patient enough to keep probing rather than forcing transitions",
     ],
     legacy:
-      "His Inter Milan side won consecutive European Cups in the mid-1960s, and the defensively disciplined system he refined became one of the most influential — and most debated — tactical approaches in the sport's history.",
+      "His Inter Milan side won consecutive European Cups in the mid-1960s, and the defensively disciplined system he refined became one of the most influential, and most debated, tactical approaches in the sport's history.",
     academyLink: { moduleSlug: "transitions", lessonSlug: "the-five-second-rule" },
     challengeQuestion: {
       question: "What does the libero (extra deep defender) do in Herrera's system?",
@@ -1028,7 +1028,7 @@ export const managers: Manager[] = [
         id: "universal-rotation",
         name: "Universal Rotation",
         description:
-          "A wide midfielder and a central midfielder swap zones entirely mid-move, trusting that either player is trained to comfortably do the other's job — the whole system presses and rotates as one interchangeable unit.",
+          "A wide midfielder and a central midfielder swap zones entirely mid-move, trusting that either player is trained to comfortably do the other's job. The whole system presses and rotates as one interchangeable unit.",
         formationSlug: "4-4-2",
         moving: [
           { playerId: "lm", from: { x: 15, y: 45 }, to: { x: 38, y: 50 } },
@@ -1041,7 +1041,7 @@ export const managers: Manager[] = [
       "Emphasized total team pressing intensity as a measurable, trainable quality rather than an abstract idea",
     ],
     vulnerabilities: [
-      "Universal rotation depends on extremely high fitness and tactical discipline across the whole team — an opponent who can disrupt that rhythm through physical, direct play can break the interchange down",
+      "Universal rotation depends on extremely high fitness and tactical discipline across the whole team. An opponent who can disrupt that rhythm through physical, direct play can break the interchange down",
     ],
     legacy:
       "His Dynamo Kyiv sides dominated Soviet and European football across multiple decades, and his systematic, data-informed approach to training is widely cited as ahead of its time.",
@@ -1157,7 +1157,7 @@ export const managers: Manager[] = [
         id: "structured-pressing-triggers",
         name: "Structured Pressing Triggers",
         description:
-          "The double pivot presses forward together as a pair on a specific, rehearsed trigger rather than individually — the coordinated foundation every match-specific game plan gets built on top of.",
+          "The double pivot presses forward together as a pair on a specific, rehearsed trigger rather than individually. That trigger is the coordinated foundation every match-specific game plan gets built on top of.",
         formationSlug: "4-2-3-1",
         moving: [
           { playerId: "cdm1", from: { x: 38, y: 58 }, to: { x: 38, y: 45 } },
@@ -1258,7 +1258,7 @@ export const managers: Manager[] = [
         id: "back-four-to-back-three",
         name: "Back Four to Back Three, Mid-Match",
         description:
-          "A full-back tucks inside to form a back three alongside the center-backs, while the opposite full-back pushes on to become the team's width — the same eleven players reshaping depending on whether they have the ball.",
+          "A full-back tucks inside to form a back three alongside the center-backs, while the opposite full-back pushes on to become the team's width. The same eleven players reshape depending on whether they have the ball.",
         formationSlug: "4-1-4-1",
         moving: [
           { playerId: "rb", from: { x: 85, y: 75 }, to: { x: 70, y: 80 } },

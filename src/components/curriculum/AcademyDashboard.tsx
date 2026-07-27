@@ -73,7 +73,7 @@ export function AcademyDashboard({ modules }: { modules: Module[] }) {
                 <span
                   title={`Content coming soon for ${module.title}`}
                   className="absolute top-4 right-4 flex h-6 w-6 items-center justify-center rounded-full border border-pitch-touchline/40 text-xs text-pitch-touchline"
-                  aria-label={`Locked — content coming soon for ${module.title}`}
+                  aria-label={`Locked: content coming soon for ${module.title}`}
                 >
                   🔒
                 </span>

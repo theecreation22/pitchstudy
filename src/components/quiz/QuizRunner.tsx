@@ -8,7 +8,7 @@ import { ScoreboardHeader } from "./ScoreboardHeader";
 
 function scoreMessage(score: number, total: number): string {
   const ratio = score / total;
-  if (ratio === 1) return "Perfect score — you could be reading the tactics board yourself.";
+  if (ratio === 1) return "Perfect score: you could be reading the tactics board yourself.";
   if (ratio >= 0.75) return "Strong grasp of the shape.";
   if (ratio >= 0.5) return "Solid start, with a few gaps left to close.";
   return "Worth another lap of the pitch explorer first.";
@@ -74,7 +74,7 @@ export function QuizRunner({ quiz }: { quiz: Quiz }) {
         {bestScore !== null && (
           <p className="font-mono text-xs text-pitch-touchline">
             Best: {bestScore} / {quiz.questions.length}
-            {isNewBest ? " — new best!" : ""}
+            {isNewBest ? ", new best!" : ""}
           </p>
         )}
         <div className="flex flex-wrap gap-3">
