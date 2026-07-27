@@ -765,9 +765,337 @@ export const modules: Module[] = [
     order: 3,
     title: "Controlling the Midfield",
     accent: "kickoff",
-    description: "Pivots, 8s and 10s, and pressing triggers — coming soon.",
-    lessons: [],
-    quiz: [],
+    description: "Double pivots, box-to-box coverage, pressing triggers, and central overloads.",
+    lessons: [
+      {
+        slug: "the-double-pivot",
+        title: "The Double Pivot",
+        estimatedMinutes: 4,
+        hook: "Two holding midfielders can do something one alone cannot: cover for each other.",
+        blocks: [
+          {
+            kind: "formation",
+            id: "4231-pivot",
+            heading: "4-2-3-1's Double Pivot",
+            body: "Two holding midfielders sit just in front of the back four, splitting defensive responsibility instead of asking one player to cover the entire zone alone.",
+            formationSlug: "4-2-3-1",
+          },
+          {
+            kind: "zone",
+            id: "shared-territory",
+            heading: "Shared Defensive Territory",
+            body: "The double pivot's zones overlap deliberately — if one midfielder steps out to press, the other slides across to cover exactly this kind of shared space.",
+            zones: [
+              { x: 15, y: 48, width: 35, height: 20 },
+              { x: 50, y: 48, width: 35, height: 20 },
+            ],
+          },
+          {
+            kind: "toggle",
+            id: "one-holds-one-steps",
+            heading: "One Holds, One Steps",
+            body: "Compare a settled double pivot against the moment one midfielder steps forward to press — notice how much depends on the other holding position rather than following.",
+            optionA: { label: "Both hold", zones: [{ x: 15, y: 50, width: 70, height: 18 }] },
+            optionB: {
+              label: "One steps to press",
+              zones: [
+                { x: 15, y: 50, width: 30, height: 18 },
+                { x: 50, y: 30, width: 20, height: 20 },
+              ],
+            },
+          },
+        ],
+        tryIt:
+          "On the pitch explorer, select 4-2-3-1 and click both CDM markers — compare how their role descriptions talk about covering for each other.",
+        inlineCheck: {
+          question: "What is the main advantage of a double pivot over a single holding midfielder?",
+          options: [
+            "The two midfielders can cover for each other when one steps out",
+            "It requires fewer defenders",
+            "It automatically wins more corners",
+            "It removes the need for a goalkeeper to distribute",
+          ],
+          correctIndex: 0,
+        },
+        takeaways: [
+          "A double pivot splits defensive midfield responsibility between two players instead of one.",
+          "The pair's zones deliberately overlap so one can cover when the other steps out.",
+          "This is the foundation that lets the players ahead of the pivot take more attacking risk.",
+        ],
+      },
+      {
+        slug: "box-to-box-the-complete-midfielder",
+        title: "Box-to-Box: The Complete Midfielder",
+        estimatedMinutes: 4,
+        hook: "Some midfielders don't specialize in attack or defense — their entire value is doing both, all match.",
+        blocks: [
+          {
+            kind: "zone",
+            id: "box-to-box-corridor",
+            heading: "A Box-to-Box Corridor",
+            body: "This role's zone spans nearly the full length of the pitch centrally — a corridor few other positions are asked to cover in a single passage of play.",
+            zones: [{ x: 15, y: 12, width: 70, height: 76 }],
+          },
+          {
+            kind: "formation",
+            id: "b2b-in-433",
+            heading: "Box-to-Box in a 4-3-3",
+            body: "Inside a midfield three, one central midfielder is often asked to be exactly this — contributing to build-up, covering defensively, and arriving late into the box in attack.",
+            formationSlug: "4-3-3",
+          },
+          {
+            kind: "text",
+            id: "cost-of-covering-everything",
+            heading: "The Cost of Covering Everything",
+            body: "Covering this much ground repeatedly across 90 minutes is as much about managing energy as it is about raw running ability. A box-to-box midfielder who sprints everywhere early often has nothing left for the moments that matter late in a match.",
+          },
+        ],
+        tryIt:
+          "Visit the Box-to-Box Midfielder position page and compare its zone diagram to a standard CDM or CAM's much smaller zone.",
+        inlineCheck: {
+          question: "What is the defining trait of a box-to-box midfielder?",
+          options: [
+            "Covering ground from the defensive box to the attacking box every match",
+            "Never leaving the center circle",
+            "Only playing in a back three",
+            "Exclusively taking free kicks",
+          ],
+          correctIndex: 0,
+        },
+        takeaways: [
+          "Box-to-box midfielders are defined by total ground covered, not one specialty.",
+          "This role trades defensive or attacking specialization for two-way coverage.",
+          "Managing energy across 90 minutes is as much a skill as the running itself.",
+        ],
+      },
+      {
+        slug: "pressing-triggers",
+        title: "Pressing Triggers: When to Spring the Trap",
+        estimatedMinutes: 4,
+        hook: "A press isn't just running at the ball — it's waiting for the exact moment the opponent gives you a reason to.",
+        blocks: [
+          {
+            kind: "text",
+            id: "what-is-a-trigger",
+            heading: "What Is a Pressing Trigger?",
+            body: "A pressing trigger is a specific cue — a heavy first touch, a pass played backward, a receiver with their back to goal — that tells a team the moment has arrived to press as a unit rather than chase the ball individually.",
+          },
+          {
+            kind: "zone",
+            id: "where-traps-are-set",
+            heading: "Where Pressing Traps Are Set",
+            body: "Wide areas near the touchline are common places to spring a press — the touchline itself acts like an extra defender, cutting off half of the attacker's options before the press even arrives.",
+            zones: [{ x: 0, y: 20, width: 35, height: 30 }],
+          },
+          {
+            kind: "toggle",
+            id: "passive-vs-triggered",
+            heading: "Passive Waiting vs. Triggered Press",
+            body: "Compare a team holding its defensive shape against the moment a trigger is read and the whole front line presses together.",
+            optionA: { label: "Holding shape", zones: [{ x: 10, y: 40, width: 80, height: 25 }] },
+            optionB: { label: "Triggered press", zones: [{ x: 20, y: 10, width: 60, height: 25 }] },
+          },
+        ],
+        tryIt:
+          "Watch for the moment a team's front players suddenly all sprint at once — that's usually a trigger being read, not a coincidence.",
+        inlineCheck: {
+          question: "What is a \"pressing trigger\"?",
+          options: [
+            "A specific cue that tells a team the moment to press as a unit has arrived",
+            "A type of throw-in",
+            "A rule that forces a team to press after 10 seconds",
+            "A substitution reserved for pressing specialists",
+          ],
+          correctIndex: 0,
+        },
+        takeaways: [
+          "Effective pressing is triggered by specific cues, not constant individual chasing.",
+          "Wide areas near the touchline are common places to spring a press since there's less space to escape into.",
+          "Reading the same trigger together is what turns individual effort into a coordinated press.",
+        ],
+      },
+      {
+        slug: "overloading-the-middle",
+        title: "Overloading the Middle: Winning the Numbers Game",
+        estimatedMinutes: 4,
+        hook: "Control the center of the pitch with more players than the opponent, and the rest of the game gets easier.",
+        blocks: [
+          {
+            kind: "formation",
+            id: "extra-midfielder-433",
+            heading: "An Extra Midfielder in a 4-3-3",
+            body: "Three central midfielders against an opponent's flat two creates a spare man in the middle of the pitch — an overload that helps control tempo and win the ball back quickly.",
+            formationSlug: "4-3-3",
+          },
+          {
+            kind: "zone",
+            id: "the-overloaded-zone",
+            heading: "The Overloaded Zone",
+            body: "This is the kind of area a central overload is fought over — whoever has the extra player here usually dictates the tempo of the whole game.",
+            zones: [{ x: 20, y: 35, width: 60, height: 25 }],
+          },
+          {
+            kind: "text",
+            id: "third-man-run",
+            heading: "The Third-Man Run",
+            body: "A well-timed overload isn't just about numbers standing still — it's exploited when a third player arrives late into space nobody accounted for, having gone unmarked while the defense focused on the first two passing options.",
+          },
+        ],
+        tryIt:
+          "Compare a 4-3-3 and a 4-4-2 on the pitch explorer — count central midfielders in each to see which side wins a central overload.",
+        inlineCheck: {
+          question: "What does it mean to \"overload\" central midfield?",
+          options: [
+            "Positioning more players there than the opponent can mark",
+            "Playing every pass through the goalkeeper",
+            "Only using wingers to attack",
+            "Keeping all 11 players behind the ball",
+          ],
+          correctIndex: 0,
+        },
+        takeaways: [
+          "An overload means outnumbering the opponent in a specific area, usually the center.",
+          "Formations with three central midfielders often win this battle against a flat two.",
+          "A well-timed third-man run exploits the overload by arriving unmarked.",
+        ],
+      },
+      {
+        slug: "the-midfield-battle",
+        title: "The Midfield Battle",
+        estimatedMinutes: 3,
+        hook: "Whoever wins the midfield battle usually dictates everything else about the match.",
+        blocks: [
+          {
+            kind: "formation",
+            id: "4231-in-possession",
+            heading: "4-2-3-1, In Possession",
+            body: "The double pivot holds its shape while the three attacking midfielders look to exploit the space and numbers created ahead of them.",
+            formationSlug: "4-2-3-1",
+          },
+          {
+            kind: "formation",
+            id: "4231-out-of-possession",
+            heading: "4-2-3-1, Out of Possession",
+            body: "The same shape compresses defensively — the double pivot's cover, pressing triggers, and central discipline all activate at once without the ball.",
+            formationSlug: "4-2-3-1",
+            phase: "out-of-possession",
+          },
+          {
+            kind: "text",
+            id: "recap",
+            heading: "Recap",
+            body: "A double pivot that covers for itself, a box-to-box runner who links both boxes, pressing triggers read as a unit, and a central overload exploited by a well-timed run — these four ideas are what winning the midfield battle actually looks like in practice.",
+          },
+        ],
+        tryIt:
+          "Go back to the Explore pitch, pick 4-3-3, and count how the midfield three's roles differ using what you've learned about pivots and box-to-box coverage.",
+        inlineCheck: {
+          question: "Which idea from this module explains why an extra central midfielder can control a match?",
+          options: [
+            "Overloading the middle with more players than the opponent can mark",
+            "Always playing with a back three",
+            "Never crossing the halfway line",
+            "Substituting the goalkeeper at halftime",
+          ],
+          correctIndex: 0,
+        },
+        takeaways: [
+          "A double pivot, a box-to-box runner, pressing triggers, and central overloads all shape the midfield battle together.",
+          "Winning central midfield numerically and positionally tends to control the rest of the match.",
+          "You've now covered defending and midfield control — next is what happens further forward.",
+        ],
+      },
+    ],
+    quiz: [
+      {
+        question: "What is the main advantage of a double pivot?",
+        options: [
+          "The two holding midfielders can cover for each other",
+          "It requires only one central midfielder total",
+          "It guarantees more possession automatically",
+          "It removes the need for full-backs",
+        ],
+        correctIndex: 0,
+        explanation: "Splitting defensive midfield responsibility between two players means one can cover when the other steps out.",
+      },
+      {
+        question: "What defines a box-to-box midfielder?",
+        options: [
+          "Covering ground from the defensive box to the attacking box",
+          "Staying permanently inside the center circle",
+          "Only playing set pieces",
+          "Never tracking back defensively",
+        ],
+        correctIndex: 0,
+        explanation: "The role is defined by total two-way ground covered, not a single specialization.",
+      },
+      {
+        question: "What is a pressing trigger?",
+        options: [
+          "A specific cue that signals the moment to press as a unit",
+          "A card shown by the referee",
+          "A fixed time in the match when pressing is required",
+          "A formation used only for corners",
+        ],
+        correctIndex: 0,
+        explanation: "Triggers like a heavy touch or a backward pass tell the team when to press together rather than individually.",
+      },
+      {
+        question: "Where are pressing traps commonly set?",
+        options: [
+          "Wide areas near the touchline, where space is limited",
+          "Directly in front of the opposition's goal",
+          "Only inside the center circle",
+          "Anywhere the ball happens to be",
+        ],
+        correctIndex: 0,
+        explanation: "The touchline itself cuts off options, making wide areas a common place to spring a coordinated press.",
+      },
+      {
+        question: "What does \"overloading\" midfield mean?",
+        options: [
+          "Positioning more players there than the opponent can mark",
+          "Playing with no midfielders at all",
+          "Substituting all midfielders at halftime",
+          "Only defending set pieces zonally",
+        ],
+        correctIndex: 0,
+        explanation: "An overload creates a numerical advantage in a specific area, usually the center of the pitch.",
+      },
+      {
+        question: "Which formation naturally wins a central overload against a flat two-man midfield?",
+        options: [
+          "One with three central midfielders, like a 4-3-3",
+          "A 4-4-2 with two flat banks of four",
+          "Any formation with a back three",
+          "A formation with two strikers",
+        ],
+        correctIndex: 0,
+        explanation: "Three central midfielders against an opponent's two creates a spare man in the middle of the pitch.",
+      },
+      {
+        question: "What is a \"third-man run\"?",
+        options: [
+          "A midfielder arriving late into space as an unmarked passing option",
+          "A substitution made in the third minute of stoppage time",
+          "The third defender to challenge for a header",
+          "A run only strikers are allowed to make",
+        ],
+        correctIndex: 0,
+        explanation: "It exploits an overload by having a third player arrive unmarked while the defense focuses on the first two options.",
+      },
+      {
+        question: "What ties this whole module together?",
+        options: [
+          "A double pivot, box-to-box coverage, pressing triggers, and overloads all shape the midfield battle",
+          "Only central midfielders matter in football",
+          "Formations without a double pivot cannot defend",
+          "Pressing triggers only apply in the attacking third",
+        ],
+        correctIndex: 0,
+        explanation: "Winning the midfield battle in practice means combining all four ideas from this module, not just one.",
+      },
+    ],
   },
   {
     slug: "attacking",
