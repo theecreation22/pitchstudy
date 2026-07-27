@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getManager, managers } from "@/lib/managers";
+import { getInfluenced, getManager, managers } from "@/lib/managers";
 import { getFormation } from "@/lib/formations";
 import { MiniFormationDiagram } from "@/components/managers/MiniFormationDiagram";
 import { MechanicDiagram } from "@/components/managers/MechanicDiagram";
+import { CoachingTree } from "@/components/managers/CoachingTree";
 import { AnimatedSection } from "@/components/motion/AnimatedSection";
 import { ChalkDivider } from "@/components/effects/ChalkDivider";
 
@@ -39,6 +40,7 @@ export default async function ManagerPage({
   }
 
   const formation = getFormation(manager.signatureFormationSlug);
+  const hasLineage = (manager.influencedBy?.length ?? 0) > 0 || getInfluenced(manager.slug).length > 0;
 
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-8 px-4 py-10 sm:px-8 sm:py-16">
@@ -132,6 +134,21 @@ export default async function ManagerPage({
                 </li>
               ))}
             </ul>
+          </AnimatedSection>
+
+          <ChalkDivider />
+        </>
+      )}
+
+      {hasLineage && (
+        <>
+          <AnimatedSection>
+            <h2 className="font-display text-xl font-bold uppercase tracking-tight text-pitch-line">
+              Influences &amp; Influenced
+            </h2>
+            <div className="mt-3">
+              <CoachingTree slug={manager.slug} />
+            </div>
           </AnimatedSection>
 
           <ChalkDivider />

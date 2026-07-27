@@ -17,6 +17,9 @@ export type SignatureMechanic = {
   moving: { playerId: string; from: MechanicPoint; to: MechanicPoint }[];
 };
 
+/** One factual, documented connection in a manager's tactical lineage (played under, assisted, or directly succeeded). The same note is shown on both ends of the connection, so it's written to read naturally either way. */
+export type LineageLink = { slug: string; note: string };
+
 export type Manager = {
   slug: string;
   name: string;
@@ -30,6 +33,8 @@ export type Manager = {
   /** Non-spatial supporting points (fitness, mentality, squad management) that don't reduce to a pitch diagram. */
   whyItWorked: string[];
   legacy: string;
+  /** Managers who directly shaped this one's approach — kept to genuinely documented connections (played under, assisted, or succeeded), not every stylistic echo. Deliberately sparse; not every manager has one. */
+  influencedBy?: LineageLink[];
 };
 
 export const managers: Manager[] = [
@@ -64,6 +69,12 @@ export const managers: Manager[] = [
           { playerId: "st1", from: { x: 38, y: 18 }, to: { x: 50, y: 32 } },
           { playerId: "cm1", from: { x: 38, y: 50 }, to: { x: 46, y: 38 } },
         ],
+      },
+    ],
+    influencedBy: [
+      {
+        slug: "helenio-herrera",
+        note: "Built his pressing, zonal defense explicitly as a reaction against the deep, disciplined catenaccio system Herrera had refined a generation earlier.",
       },
     ],
     whyItWorked: [
@@ -103,6 +114,16 @@ export const managers: Manager[] = [
         ],
       },
     ],
+    influencedBy: [
+      {
+        slug: "johan-cruyff",
+        note: "Played under Cruyff in Barcelona's \"Dream Team\" of the early 1990s and has repeatedly credited Cruyff's positional principles as the foundation of his own coaching philosophy.",
+      },
+      {
+        slug: "marcelo-bielsa",
+        note: "Sought out Bielsa for an extended conversation about tactics before taking his first senior job, an exchange he has publicly credited as influential.",
+      },
+    ],
     whyItWorked: [
       "Emphasizes exact positional discipline so teammates are always reachable by a pass, even under pressure",
     ],
@@ -139,6 +160,12 @@ export const managers: Manager[] = [
         moving: [{ playerId: "cm2", from: { x: 68, y: 42 }, to: { x: 75, y: 15 } }],
       },
     ],
+    influencedBy: [
+      {
+        slug: "arrigo-sacchi",
+        note: "Built his gegenpressing on the pressing revolution Sacchi is widely credited with starting in the late 1980s.",
+      },
+    ],
     whyItWorked: [
       "Demands extremely high work rate and fitness, treating pressing intensity as a team-wide responsibility",
     ],
@@ -165,6 +192,16 @@ export const managers: Manager[] = [
           { playerId: "cam", from: { x: 50, y: 28 }, to: { x: 50, y: 12 } },
           { playerId: "lw", from: { x: 18, y: 32 }, to: { x: 12, y: 15 } },
         ],
+      },
+    ],
+    influencedBy: [
+      {
+        slug: "bobby-robson",
+        note: "Worked as Robson's assistant and translator at Sporting CP, Porto, and Barcelona through the 1990s, his first steps into top-level coaching.",
+      },
+      {
+        slug: "louis-van-gaal",
+        note: "Stayed on as an assistant coach under Van Gaal at Barcelona after Robson departed, continuing his coaching apprenticeship there.",
       },
     ],
     whyItWorked: [
@@ -278,6 +315,12 @@ export const managers: Manager[] = [
         ],
       },
     ],
+    influencedBy: [
+      {
+        slug: "pep-guardiola",
+        note: "Served as Guardiola's assistant coach at Manchester City from 2016 to 2019 before taking his first head coaching role.",
+      },
+    ],
     whyItWorked: [],
     legacy:
       "Turned a period of relative absence from title contention into sustained top-of-the-table competitiveness, with his emphasis on defensive rest-defense and set-piece preparation widely discussed as a template by other coaches.",
@@ -346,6 +389,12 @@ export const managers: Manager[] = [
           { playerId: "st", from: { x: 50, y: 12 }, to: { x: 18, y: 18 } },
           { playerId: "lw", from: { x: 18, y: 18 }, to: { x: 50, y: 12 } },
         ],
+      },
+    ],
+    influencedBy: [
+      {
+        slug: "johan-cruyff",
+        note: "Played under Cruyff at Barcelona in the early 1990s before later managing the same club using many of the same possession principles.",
       },
     ],
     whyItWorked: [
@@ -420,6 +469,12 @@ export const managers: Manager[] = [
         ],
       },
     ],
+    influencedBy: [
+      {
+        slug: "rinus-michels",
+        note: "Played under Michels at Ajax and the Netherlands in the early 1970s, then carried the same Total Football principles into his own coaching career.",
+      },
+    ],
     whyItWorked: [
       "Treated youth development and first-team tactics as a single continuous idea, so young players arrived already trained in the same principles",
     ],
@@ -472,6 +527,12 @@ export const managers: Manager[] = [
           "The base of the midfield diamond drops between the two center-backs to collect the ball under pressure, turning a back four into a back three for a moment and guaranteeing an easy central outlet to start every attack.",
         formationSlug: "4-4-2-diamond",
         moving: [{ playerId: "cdm", from: { x: 50, y: 62 }, to: { x: 50, y: 78 } }],
+      },
+    ],
+    influencedBy: [
+      {
+        slug: "arrigo-sacchi",
+        note: "Played as a midfielder in Sacchi's Milan side of the late 1980s, absorbing the pressing principles he later carried into his own coaching career.",
       },
     ],
     whyItWorked: [
@@ -539,6 +600,12 @@ export const managers: Manager[] = [
         ],
       },
     ],
+    influencedBy: [
+      {
+        slug: "carlo-ancelotti",
+        note: "Managed Real Madrid's reserve side while Ancelotti led the first team, and was promoted to the top job in 2016 after Ancelotti's departure.",
+      },
+    ],
     whyItWorked: [
       "Rotated the squad heavily across midweek and weekend fixtures to keep key players fresh for the most important moments",
       "Kept the dressing room settled by managing playing time carefully across a squad full of established stars",
@@ -568,6 +635,12 @@ export const managers: Manager[] = [
         ],
       },
     ],
+    influencedBy: [
+      {
+        slug: "pep-guardiola",
+        note: "Inherited a Spain national team built largely around the Barcelona core Guardiola had shaped as a club coach.",
+      },
+    ],
     whyItWorked: [
       "Prioritized composure in possession, often accepting long spells without a clear final pass rather than forcing risk",
       "Managed a squad drawn heavily from rival domestic clubs without letting club rivalries disrupt national team unity",
@@ -592,6 +665,12 @@ export const managers: Manager[] = [
           "With three center-backs occupying the width a back four would normally split across, a wing-back pushes all the way forward to become the team's entire source of width down that flank.",
         formationSlug: "3-5-2",
         moving: [{ playerId: "lwb", from: { x: 8, y: 55 }, to: { x: 5, y: 20 } }],
+      },
+    ],
+    influencedBy: [
+      {
+        slug: "rinus-michels",
+        note: "Built his coaching career at Ajax on the same Total Football foundations Michels had established there two decades earlier.",
       },
     ],
     whyItWorked: [
@@ -737,6 +816,12 @@ export const managers: Manager[] = [
         ],
       },
     ],
+    influencedBy: [
+      {
+        slug: "arsene-wenger",
+        note: "Took over at Arsenal directly after Wenger's 22-year tenure ended in 2018.",
+      },
+    ],
     whyItWorked: [
       "Studies each opponent in detail and adjusts defensive setup and pressing triggers specifically to counter their strengths",
       "Rotates personnel and structure between matches more than many peers, prioritizing tactical fit over a settled lineup",
@@ -771,6 +856,12 @@ export const managers: Manager[] = [
         moving: [{ playerId: "cm1", from: { x: 38, y: 48 }, to: { x: 38, y: 15 } }],
       },
     ],
+    influencedBy: [
+      {
+        slug: "jurgen-klopp",
+        note: "Took over at Borussia Dortmund directly after Klopp's departure in 2015, inheriting a squad still built around Klopp's pressing principles.",
+      },
+    ],
     whyItWorked: [
       "Organized defensive shape and pressing triggers meticulously, often making significant tactical changes between matches",
     ],
@@ -799,6 +890,12 @@ export const managers: Manager[] = [
         ],
       },
     ],
+    influencedBy: [
+      {
+        slug: "hansi-flick",
+        note: "Succeeded Flick as Bayern Munich's manager in 2021, inheriting the treble-winning squad Flick had built.",
+      },
+    ],
     whyItWorked: [
       "Uses detailed video analysis and data to prepare specific tactical plans for individual opponents",
       "Prioritizes intense, coordinated pressing high up the pitch, in the same pressing lineage he emerged from as a young coach",
@@ -810,4 +907,12 @@ export const managers: Manager[] = [
 
 export function getManager(slug: string): Manager | undefined {
   return managers.find((manager) => manager.slug === slug);
+}
+
+/** The reverse of `influencedBy`: every manager who lists `slug` as an influence, derived rather than hand-authored on both ends so a new link only ever needs to be written once. */
+export function getInfluenced(slug: string): LineageLink[] {
+  return managers.flatMap((manager) => {
+    const link = manager.influencedBy?.find((entry) => entry.slug === slug);
+    return link ? [{ slug: manager.slug, note: link.note }] : [];
+  });
 }
