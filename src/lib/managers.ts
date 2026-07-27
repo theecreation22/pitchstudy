@@ -20,6 +20,17 @@ export type SignatureMechanic = {
 /** One factual, documented connection in a manager's tactical lineage (played under, assisted, or directly succeeded). The same note is shown on both ends of the connection, so it's written to read naturally either way. */
 export type LineageLink = { slug: string; note: string };
 
+/** Points at the single Academy lesson that most directly teaches this manager's signature idea. Resolved against curriculum.ts at render time rather than storing a title/module number here, so it can't drift if a lesson is renamed or reordered. */
+export type AcademyLink = { moduleSlug: string; lessonSlug: string };
+
+/** A single self-contained quiz question answerable purely from this manager's own profile — a reading-comprehension check, not a trivia fact requiring outside knowledge. */
+export type ChallengeQuestion = {
+  question: string;
+  options: string[];
+  correctIndex: number;
+  explanation: string;
+};
+
 export type Manager = {
   slug: string;
   name: string;
@@ -37,6 +48,10 @@ export type Manager = {
   legacy: string;
   /** Managers who directly shaped this one's approach — kept to genuinely documented connections (played under, assisted, or succeeded), not every stylistic echo. Deliberately sparse; not every manager has one. */
   influencedBy?: LineageLink[];
+  /** The Academy lesson most closely related to this manager's signature idea. */
+  academyLink: AcademyLink;
+  /** One quiz question testing content already on this manager's own page. */
+  challengeQuestion: ChallengeQuestion;
 };
 
 export const managers: Manager[] = [
@@ -88,6 +103,19 @@ export const managers: Manager[] = [
     ],
     legacy:
       "Widely credited with popularizing zonal-marking, high-pressing football in Italy at a time when man-marking sweeper systems were the norm, influencing a generation of European coaches who came after him.",
+    academyLink: { moduleSlug: "managers-minds", lessonSlug: "pressing-philosophies" },
+    challengeQuestion: {
+      question: "What did Sacchi prioritize over individual improvisation?",
+      options: [
+        "Rehearsed patterns of play and organization",
+        "Long-ball direct football",
+        "Man-marking every opponent",
+        "Rotating the squad every match",
+      ],
+      correctIndex: 0,
+      explanation:
+        "Sacchi valued organization and rehearsed patterns of play over individual improvisation, treating the collective structure as more valuable than any one player's creativity.",
+    },
   },
   {
     slug: "pep-guardiola",
@@ -139,6 +167,19 @@ export const managers: Manager[] = [
     ],
     legacy:
       "His teams' approach to possession and positional play became one of the most widely studied and imitated tactical templates in modern football.",
+    academyLink: { moduleSlug: "managers-minds", lessonSlug: "possession-as-a-weapon" },
+    challengeQuestion: {
+      question: "In Guardiola's build-up, what does the goalkeeper do when the center-backs split wide?",
+      options: [
+        "Stays deep in the six-yard box",
+        "Steps into the line between them",
+        "Joins the front three",
+        "Passes long every time",
+      ],
+      correctIndex: 1,
+      explanation:
+        "The goalkeeper stepping into the back line forms an auxiliary back three, giving every short pass a safe outlet instead of clearing long under pressure.",
+    },
   },
   {
     slug: "jurgen-klopp",
@@ -185,6 +226,19 @@ export const managers: Manager[] = [
     ],
     legacy:
       "His pressing approach, often described using the German term \"gegenpressing,\" brought a specific defensive-to-attacking transition style into the mainstream tactical vocabulary.",
+    academyLink: { moduleSlug: "managers-minds", lessonSlug: "pressing-philosophies" },
+    challengeQuestion: {
+      question: "What is \"gegenpressing\" built around?",
+      options: [
+        "Sitting in a deep, defensive block",
+        "Playing exclusively long balls",
+        "Winning the ball back within seconds of losing it",
+        "Man-marking every opponent",
+      ],
+      correctIndex: 2,
+      explanation:
+        "Gegenpressing is about regaining the ball within seconds of losing it, turning a defensive moment into the fastest route to a scoring chance.",
+    },
   },
   {
     slug: "jose-mourinho",
@@ -227,6 +281,19 @@ export const managers: Manager[] = [
     ],
     legacy:
       "His pragmatic, results-first approach won domestic titles and continental trophies across four different countries, making him one of the most decorated coaches of his generation.",
+    academyLink: { moduleSlug: "managers-minds", lessonSlug: "pragmatism-and-game-management" },
+    challengeQuestion: {
+      question: "What does Mourinho's double pivot shield allow the attacking players to do?",
+      options: [
+        "Play only long balls",
+        "Avoid ever pressing high",
+        "Rotate positions constantly",
+        "Commit forward without leaving the defense exposed",
+      ],
+      correctIndex: 3,
+      explanation:
+        "The double pivot stays anchored in front of the back four, which is exactly what frees the players ahead of them to commit forward.",
+    },
   },
   {
     slug: "antonio-conte",
@@ -266,6 +333,19 @@ export const managers: Manager[] = [
     ],
     legacy:
       "His use of a back three helped revive the system's popularity in leagues where a flat back four had become the default, most notably during a title-winning season in England.",
+    academyLink: { moduleSlug: "managers-minds", lessonSlug: "back-to-three-conte" },
+    challengeQuestion: {
+      question: "In Conte's 3-4-3, what dual role does the wing-back play?",
+      options: [
+        "Winger in attack, full-back out of possession",
+        "Striker in attack, center-back in defense",
+        "Goalkeeper cover",
+        "Central midfielder always",
+      ],
+      correctIndex: 0,
+      explanation:
+        "The same wing-back provides width in attack and tucks in as auxiliary defensive cover once possession is lost.",
+    },
   },
   {
     slug: "marcelo-bielsa",
@@ -295,6 +375,19 @@ export const managers: Manager[] = [
     ],
     legacy:
       "His uncompromising, high-intensity style earned him a reputation as one of the most influential coaches among his peers, with several World Cup-winning managers citing him as a direct influence.",
+    academyLink: { moduleSlug: "defending", lessonSlug: "zonal-vs-man-marking" },
+    challengeQuestion: {
+      question: "What does Bielsa's man-marking system ask defenders to do?",
+      options: [
+        "Hold a fixed defensive zone only",
+        "Follow their assigned opponent anywhere on the pitch",
+        "Never leave their own half",
+        "Mark only inside the penalty box",
+      ],
+      correctIndex: 1,
+      explanation:
+        "Bielsa's man-marking system asks a defender to follow their assigned opponent anywhere on the pitch, even out of their normal zone.",
+    },
   },
   {
     slug: "mikel-arteta",
@@ -350,6 +443,14 @@ export const managers: Manager[] = [
     ],
     legacy:
       "Turned a period of relative absence from title contention into sustained top-of-the-table competitiveness, with his emphasis on defensive rest-defense and set-piece preparation widely discussed as a template by other coaches.",
+    academyLink: { moduleSlug: "set-pieces", lessonSlug: "attacking-corners" },
+    challengeQuestion: {
+      question: "What formation does Arteta's rest-defense create when possession is lost?",
+      options: ["A back five", "A flat back four", "A back three", "A diamond midfield"],
+      correctIndex: 2,
+      explanation:
+        "The holding midfielder drops to shield a back three the instant possession is lost, part of Arteta's rest-defense structure.",
+    },
   },
   {
     slug: "hansi-flick",
@@ -389,6 +490,19 @@ export const managers: Manager[] = [
     ],
     legacy:
       "His Bayern Munich side won every available trophy in a single season, including the Champions League, and his methods were widely credited with reviving the club's attacking identity almost overnight.",
+    academyLink: { moduleSlug: "defending", lessonSlug: "setting-the-defensive-line" },
+    challengeQuestion: {
+      question: "What is the main risk of Flick's high defensive line?",
+      options: [
+        "Too much possession",
+        "Poor set-piece delivery",
+        "Weak midfield pressing",
+        "Space in behind for a fast forward to exploit",
+      ],
+      correctIndex: 3,
+      explanation:
+        "Pushing the back line up compresses the pitch but concedes space in behind for a forward who times a run well.",
+    },
   },
   {
     slug: "luis-enrique",
@@ -434,6 +548,19 @@ export const managers: Manager[] = [
     ],
     legacy:
       "His Barcelona side won a continental treble built around one of the most prolific forward lines in the sport's history, and his direct, transition-heavy approach has continued to shape his later work with club and international sides.",
+    academyLink: { moduleSlug: "transitions", lessonSlug: "breaking-at-speed" },
+    challengeQuestion: {
+      question: "What does Luis Enrique's front three do constantly during play?",
+      options: [
+        "Swap positions rather than sticking to fixed sides",
+        "Stay in strict lanes",
+        "Track back exclusively",
+        "Take every set piece",
+      ],
+      correctIndex: 0,
+      explanation:
+        "The front three constantly swap positions rather than sticking to fixed sides, trusting individual quality to improvise in open space.",
+    },
   },
   {
     slug: "rinus-michels",
@@ -473,6 +600,19 @@ export const managers: Manager[] = [
     ],
     legacy:
       "The fluid, interchangeable style built at Ajax and the Netherlands national team became known as Total Football, and its influence on positional play is still traceable through generations of coaches who studied under him or his successors.",
+    academyLink: { moduleSlug: "systems", lessonSlug: "formations-are-tools" },
+    challengeQuestion: {
+      question: "What is the defining idea behind Michels' Total Football?",
+      options: [
+        "A fixed back four that never changes",
+        "Any outfield player can comfortably operate in almost any position",
+        "Long balls to a target striker",
+        "Zonal marking only at set pieces",
+      ],
+      correctIndex: 1,
+      explanation:
+        "Total Football's defining idea is that any outfield player can comfortably operate in almost any position as the team rotates.",
+    },
   },
   {
     slug: "johan-cruyff",
@@ -518,6 +658,19 @@ export const managers: Manager[] = [
     ],
     legacy:
       "The Barcelona side he built in the late 1980s and early 1990s, and the academy principles he embedded at the club, directly shaped the possession-based identity later carried forward by Pep Guardiola and others.",
+    academyLink: { moduleSlug: "defending", lessonSlug: "setting-the-defensive-line" },
+    challengeQuestion: {
+      question: "What role does the middle center-back play in Cruyff's build-up?",
+      options: [
+        "Stays permanently on the goal line",
+        "Marks the opposition striker man for man",
+        "Steps out as a sweeper to start attacks",
+        "Takes every goal kick",
+      ],
+      correctIndex: 2,
+      explanation:
+        "The middle center-back stepping out as a sweeper turns a defender into an extra passing outlet to start attacks.",
+    },
   },
   {
     slug: "alex-ferguson",
@@ -550,6 +703,19 @@ export const managers: Manager[] = [
     ],
     legacy:
       "Managed Manchester United for over 26 years and won domestic titles across five different decades of squad, a longevity almost unmatched anywhere in the sport.",
+    academyLink: { moduleSlug: "attacking", lessonSlug: "width-and-depth" },
+    challengeQuestion: {
+      question: "What did Ferguson prioritize to sustain success across nearly four decades?",
+      options: [
+        "Playing only youth academy players",
+        "A fixed back three at all times",
+        "Avoiding all summer transfers",
+        "Continuous squad renewal rather than loyalty to one group",
+      ],
+      correctIndex: 3,
+      explanation:
+        "Continuous squad renewal, rather than loyalty to any one group of players, is what let Ferguson sustain success across five different decades.",
+    },
   },
   {
     slug: "carlo-ancelotti",
@@ -585,6 +751,19 @@ export const managers: Manager[] = [
     ],
     legacy:
       "Has won the Champions League a record number of times as a manager across different clubs and footballing cultures, a body of work built on adaptability rather than a single tactical identity.",
+    academyLink: { moduleSlug: "systems", lessonSlug: "diamond-vs-flat-four" },
+    challengeQuestion: {
+      question: "In Ancelotti's midfield diamond, who drops between the center-backs to build play?",
+      options: [
+        "The base of the diamond (holding midfielder)",
+        "The striker",
+        "A winger",
+        "The goalkeeper only",
+      ],
+      correctIndex: 0,
+      explanation:
+        "The base of the diamond drops between the center-backs to collect the ball, turning the back four into a temporary back three.",
+    },
   },
   {
     slug: "diego-simeone",
@@ -624,6 +803,19 @@ export const managers: Manager[] = [
     ],
     legacy:
       "Turned Atlético Madrid into consistent title contenders and Champions League finalists against far wealthier rivals, with the team's relentless defensive identity becoming closely associated with his name.",
+    academyLink: { moduleSlug: "game-management", lessonSlug: "controlling-tempo-and-territory" },
+    challengeQuestion: {
+      question: "What do Simeone's two strikers do out of possession?",
+      options: [
+        "Stay high to catch the offside trap",
+        "Drop out of advanced positions to shorten the block",
+        "Swap with the full-backs",
+        "Take set pieces",
+      ],
+      correctIndex: 1,
+      explanation:
+        "Both strikers drop out of their advanced positions to shorten the distance to midfield, keeping the block compact.",
+    },
   },
   {
     slug: "zinedine-zidane",
@@ -662,6 +854,18 @@ export const managers: Manager[] = [
     ],
     legacy:
       "Won three consecutive Champions League titles as a first-time manager, a feat no one had previously achieved, built on squad management as much as tactical detail.",
+    academyLink: { moduleSlug: "game-management", lessonSlug: "substitutions-that-change-games" },
+    challengeQuestion: {
+      question: "What did Zidane prioritize over a fixed tactical identity?",
+      options: [
+        "A rigid pressing system",
+        "Constant formation changes every match",
+        "Squad harmony and man-management",
+        "Long-ball direct football",
+      ],
+      correctIndex: 2,
+      explanation: "Zidane prioritized squad harmony and man-management over any single fixed tactical identity.",
+    },
   },
   {
     slug: "vicente-del-bosque",
@@ -700,6 +904,19 @@ export const managers: Manager[] = [
     ],
     legacy:
       "Led Spain to the 2010 World Cup and consecutive European Championships either side of it, a run of international dominance built on patient possession football.",
+    academyLink: { moduleSlug: "midfield", lessonSlug: "overloading-the-middle" },
+    challengeQuestion: {
+      question: "What does Del Bosque's central overload aim to control?",
+      options: [
+        "The wide areas only",
+        "Only the defensive third",
+        "Set-piece delivery",
+        "The ball, by overloading the center of the pitch",
+      ],
+      correctIndex: 3,
+      explanation:
+        "The double pivot narrows in to overload the center of the pitch, aiming to control the ball rather than the opponent.",
+    },
   },
   {
     slug: "louis-van-gaal",
@@ -735,6 +952,19 @@ export const managers: Manager[] = [
     ],
     legacy:
       "His back-three system at the 2014 World Cup, built to suit a specific squad rather than personal preference, helped renew wider interest in three-at-the-back systems across European football.",
+    academyLink: { moduleSlug: "systems", lessonSlug: "choosing-a-formation-for-your-players" },
+    challengeQuestion: {
+      question: "Why did Van Gaal switch the Netherlands to a back three at the 2014 World Cup?",
+      options: [
+        "To suit the specific center-backs available for that tournament",
+        "Because a back four was against the rules",
+        "To copy a rival team",
+        "Purely for personal preference",
+      ],
+      correctIndex: 0,
+      explanation:
+        "The switch to a back three was built specifically to suit the center-backs available for that tournament, prioritizing fit over convention.",
+    },
   },
   {
     slug: "helenio-herrera",
@@ -771,6 +1001,18 @@ export const managers: Manager[] = [
     ],
     legacy:
       "His Inter Milan side won consecutive European Cups in the mid-1960s, and the defensively disciplined system he refined became one of the most influential — and most debated — tactical approaches in the sport's history.",
+    academyLink: { moduleSlug: "transitions", lessonSlug: "the-five-second-rule" },
+    challengeQuestion: {
+      question: "What does the libero (extra deep defender) do in Herrera's system?",
+      options: [
+        "Plays as an auxiliary striker",
+        "Sweeps across to cover gaps in the back line",
+        "Takes every corner",
+        "Marks the opposing goalkeeper",
+      ],
+      correctIndex: 1,
+      explanation: "The libero shifts across behind the rest of the back line to sweep up whatever gap has opened.",
+    },
   },
   {
     slug: "valeriy-lobanovskyi",
@@ -803,6 +1045,19 @@ export const managers: Manager[] = [
     ],
     legacy:
       "His Dynamo Kyiv sides dominated Soviet and European football across multiple decades, and his systematic, data-informed approach to training is widely cited as ahead of its time.",
+    academyLink: { moduleSlug: "systems", lessonSlug: "formations-are-tools" },
+    challengeQuestion: {
+      question: "What does \"universal rotation\" mean in Lobanovskyi's system?",
+      options: [
+        "Only strikers rotate positions",
+        "The formation never changes",
+        "Players swap zones, trained to comfortably do each other's job",
+        "Substitutions happen every 15 minutes",
+      ],
+      correctIndex: 2,
+      explanation:
+        "Universal rotation means players are trained to comfortably swap zones and do each other's job as the team presses and moves as one.",
+    },
   },
   {
     slug: "bobby-robson",
@@ -832,6 +1087,19 @@ export const managers: Manager[] = [
     ],
     legacy:
       "Guided England to the semifinals of the 1990 World Cup with a tactical switch to a back three still remembered as one of the tournament's defining moments, and remained a widely respected figure across English and European football.",
+    academyLink: { moduleSlug: "systems", lessonSlug: "wing-backs-and-width" },
+    challengeQuestion: {
+      question: "What allowed Robson's England to switch to a back three mid-tournament in 1990?",
+      options: [
+        "Bringing on entirely new players",
+        "A change in the offside rule",
+        "Playing an extra goalkeeper",
+        "A wing-back stepping into the width a back four would provide",
+      ],
+      correctIndex: 3,
+      explanation:
+        "A wing-back stepping into the width a back four would normally provide let England convert to a back three without changing personnel.",
+    },
   },
   {
     slug: "arsene-wenger",
@@ -861,6 +1129,19 @@ export const managers: Manager[] = [
     ],
     legacy:
       "Managed Arsenal's only unbeaten league-winning season in the modern era and is widely credited with transforming standards of fitness, diet, and technical recruitment across English football.",
+    academyLink: { moduleSlug: "attacking", lessonSlug: "overlaps-and-underlaps" },
+    challengeQuestion: {
+      question: "What did Wenger's wide forwards prioritize over aerial, physical directness?",
+      options: [
+        "Pace and technique in quick combinations",
+        "Long throw-ins",
+        "Physical duels in the air",
+        "Defensive tracking back",
+      ],
+      correctIndex: 0,
+      explanation:
+        "Wenger's wide forwards prioritized pace and technique in quick combinations over the aerial, physical directness common elsewhere at the time.",
+    },
   },
   {
     slug: "unai-emery",
@@ -899,6 +1180,19 @@ export const managers: Manager[] = [
     ],
     legacy:
       "Won the Europa League a record number of times across different clubs, a body of work built on detailed, opponent-specific preparation rather than one repeated system.",
+    academyLink: { moduleSlug: "midfield", lessonSlug: "pressing-triggers" },
+    challengeQuestion: {
+      question: "What is distinctive about Emery's approach to each match?",
+      options: [
+        "Using the exact same lineup every week",
+        "Extensive, opponent-specific preparation rather than one fixed system",
+        "Avoiding video analysis entirely",
+        "Playing without a game plan",
+      ],
+      correctIndex: 1,
+      explanation:
+        "Emery adjusts shape, personnel, and defensive triggers for each specific opponent rather than relying on one fixed system.",
+    },
   },
   {
     slug: "thomas-tuchel",
@@ -941,6 +1235,14 @@ export const managers: Manager[] = [
     ],
     legacy:
       "Won the Champions League with Chelsea within months of taking charge mid-season, a rapid tactical turnaround built on defensive reorganization around a back three.",
+    academyLink: { moduleSlug: "systems", lessonSlug: "wing-backs-and-width" },
+    challengeQuestion: {
+      question: "In Tuchel's 3-4-3, what provides the team's width?",
+      options: ["The center-backs", "The goalkeeper", "The wing-backs", "The front three staying wide"],
+      correctIndex: 2,
+      explanation:
+        "With a back three providing defensive security, the wing-backs push forward to become the team's main source of width.",
+    },
   },
   {
     slug: "julian-nagelsmann",
@@ -979,6 +1281,19 @@ export const managers: Manager[] = [
     ],
     legacy:
       "Became the youngest manager in Bundesliga history at 28 years old and has continued to be closely associated with flexible, data-informed tactical systems at every subsequent club.",
+    academyLink: { moduleSlug: "systems", lessonSlug: "back-four-vs-back-three" },
+    challengeQuestion: {
+      question: "What can Nagelsmann's team switch between within the same match?",
+      options: [
+        "Two different goalkeepers",
+        "Playing with 10 or 12 outfield players",
+        "Home and away kits",
+        "A back three and a back four, depending on possession",
+      ],
+      correctIndex: 3,
+      explanation:
+        "Nagelsmann's teams can switch between a back three and a back four within the same match depending on whether they have the ball.",
+    },
   },
 ];
 

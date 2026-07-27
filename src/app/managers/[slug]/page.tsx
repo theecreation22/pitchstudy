@@ -3,9 +3,11 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getInfluenced, getManager, managers } from "@/lib/managers";
 import { getFormation } from "@/lib/formations";
+import { getLesson, getModule } from "@/lib/curriculum";
 import { MiniFormationDiagram } from "@/components/managers/MiniFormationDiagram";
 import { MechanicDiagram } from "@/components/managers/MechanicDiagram";
 import { CoachingTree } from "@/components/managers/CoachingTree";
+import { ManagerChallengeQuestion } from "@/components/managers/ManagerChallengeQuestion";
 import { AnimatedSection } from "@/components/motion/AnimatedSection";
 import { ChalkDivider } from "@/components/effects/ChalkDivider";
 
@@ -41,6 +43,8 @@ export default async function ManagerPage({
 
   const formation = getFormation(manager.signatureFormationSlug);
   const hasLineage = (manager.influencedBy?.length ?? 0) > 0 || getInfluenced(manager.slug).length > 0;
+  const academyModule = getModule(manager.academyLink.moduleSlug);
+  const academyLesson = getLesson(manager.academyLink.moduleSlug, manager.academyLink.lessonSlug);
 
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-8 px-4 py-10 sm:px-8 sm:py-16">
@@ -178,6 +182,49 @@ export default async function ManagerPage({
           Legacy
         </h2>
         <p className="mt-3 max-w-2xl text-sm leading-relaxed text-pitch-line/90">{manager.legacy}</p>
+      </AnimatedSection>
+
+      <ChalkDivider />
+
+      <AnimatedSection>
+        <h2 className="font-display text-xl font-bold uppercase tracking-tight text-pitch-line">
+          Keep learning
+        </h2>
+        <div className="mt-3 flex flex-col gap-4">
+          {formation && (
+            <Link
+              href={`/explore?formation=${formation.slug}`}
+              className="inline-flex min-h-11 w-fit items-center gap-2 rounded-full border border-pitch-marker px-4 font-mono text-xs uppercase tracking-widest text-pitch-marker transition-colors hover:bg-pitch-marker/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
+            >
+              View the {formation.name} on the pitch →
+            </Link>
+          )}
+
+          {academyModule && academyLesson && (
+            <Link
+              href={`/academy/${academyModule.slug}/${academyLesson.slug}`}
+              className="flex flex-col gap-1 rounded-lg border border-pitch-touchline/20 bg-pitch-card/60 p-4 transition-colors hover:border-pitch-marker/50"
+            >
+              <span className="font-mono text-xs uppercase tracking-widest text-pitch-touchline">
+                Academy Module {academyModule.order}: {academyModule.title}
+              </span>
+              <span className="text-sm font-medium text-pitch-line">{academyLesson.title} →</span>
+            </Link>
+          )}
+
+          <div className="rounded-lg border border-pitch-touchline/20 bg-pitch-card/60 p-4">
+            <p className="mb-3 font-mono text-xs uppercase tracking-widest text-pitch-touchline">
+              Test yourself
+            </p>
+            <ManagerChallengeQuestion question={manager.challengeQuestion} />
+            <Link
+              href="/challenge"
+              className="mt-3 inline-block font-mono text-xs uppercase tracking-widest text-defend-bright hover:underline"
+            >
+              Try the full Challenge Mode →
+            </Link>
+          </div>
+        </div>
       </AnimatedSection>
 
       <p className="border-t border-pitch-touchline/20 pt-4 text-xs leading-relaxed text-pitch-touchline">
