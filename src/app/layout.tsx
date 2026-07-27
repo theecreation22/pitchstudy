@@ -40,26 +40,32 @@ export default function RootLayout({
         <nav className="mx-auto flex w-full max-w-5xl items-center justify-between px-4 pt-6 sm:px-8 sm:pt-8">
           <Link
             href="/"
-            className="font-mono text-xs uppercase tracking-[0.2em] text-pitch-touchline transition-colors hover:text-pitch-marker"
+            className="font-display text-sm font-semibold uppercase tracking-[0.15em] text-pitch-touchline transition-colors hover:text-pitch-marker"
           >
             PitchIQ
           </Link>
           <div className="flex items-center gap-6">
             <Link
+              href="/explore"
+              className="font-display text-sm font-semibold uppercase tracking-[0.15em] text-pitch-touchline transition-colors hover:text-pitch-marker"
+            >
+              Explore
+            </Link>
+            <Link
               href="/managers"
-              className="font-mono text-xs uppercase tracking-[0.2em] text-pitch-touchline transition-colors hover:text-pitch-marker"
+              className="font-display text-sm font-semibold uppercase tracking-[0.15em] text-pitch-touchline transition-colors hover:text-pitch-marker"
             >
               Managers
             </Link>
             <Link
               href="/workouts"
-              className="font-mono text-xs uppercase tracking-[0.2em] text-pitch-touchline transition-colors hover:text-pitch-marker"
+              className="font-display text-sm font-semibold uppercase tracking-[0.15em] text-pitch-touchline transition-colors hover:text-pitch-marker"
             >
               Workouts
             </Link>
             <Link
               href="/quiz"
-              className="font-mono text-xs uppercase tracking-[0.2em] text-pitch-touchline transition-colors hover:text-pitch-marker"
+              className="font-display text-sm font-semibold uppercase tracking-[0.15em] text-pitch-touchline transition-colors hover:text-pitch-marker"
             >
               Quiz
             </Link>

@@ -12,7 +12,7 @@ export function ZoneDiagram({ zones }: Props) {
     <>
       <svg
         viewBox={`0 0 ${PITCH_W} ${PITCH_H}`}
-        className="mx-auto w-full max-w-[160px]"
+        className="mx-auto w-full max-w-[160px] rounded-md border-2 border-pitch-touchline/20"
         aria-hidden="true"
       >
         <defs>
@@ -21,7 +21,7 @@ export function ZoneDiagram({ zones }: Props) {
           </filter>
         </defs>
 
-        <rect x="0" y="0" width={PITCH_W} height={PITCH_H} rx="1.5" fill="var(--pitch-slate)" />
+        <rect x="0" y="0" width={PITCH_W} height={PITCH_H} rx="1.5" fill="var(--pitch-deep)" />
 
         <g fill="none" stroke="var(--pitch-touchline)" strokeWidth="0.3" strokeOpacity="0.5">
           <rect x="1" y="1" width={PITCH_W - 2} height={PITCH_H - 2} />

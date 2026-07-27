@@ -1,15 +1,21 @@
 @import "tailwindcss";
 
 :root {
-  --pitch-slate: #121a2b;
-  --pitch-card: #1b2740;
-  --pitch-line: #e7eaf2;
-  --pitch-touchline: #8794b0;
-  --pitch-marker: #2fd1ce;
+  /* "Floodlit sky" palette — the violet-charcoal cast night-match photography
+     actually has under floodlights, not grass green or navy-SaaS-black.
+     Names kept as pitch-* for backward compat with existing utility classes;
+     think of them as dusk / dusk-deep / board / chalk / haze / floodlight. */
+  --pitch-slate: #1b1626; /* dusk — page background */
+  --pitch-deep: #120e19; /* dusk-deep — recessed/bezel surfaces (pitch board backing) */
+  --pitch-card: #251e30; /* board — panel/card surface */
+  --pitch-line: #edead8; /* chalk — primary text, warm off-white */
+  --pitch-touchline: #9c93a8; /* haze — secondary text, violet-grey */
+  --pitch-marker: #f2a63d; /* floodlight — the one hot accent, warm amber against the violet sky */
 }
 
 @theme inline {
   --color-pitch-slate: var(--pitch-slate);
+  --color-pitch-deep: var(--pitch-deep);
   --color-pitch-card: var(--pitch-card);
   --color-pitch-line: var(--pitch-line);
   --color-pitch-touchline: var(--pitch-touchline);
@@ -24,7 +30,19 @@
 }
 
 body {
-  background: var(--pitch-slate);
+  background-color: var(--pitch-slate);
+  background-image:
+    radial-gradient(
+      ellipse 1400px 700px at 20% -10%,
+      color-mix(in srgb, var(--pitch-marker) 7%, var(--pitch-slate)) 0%,
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse 1200px 800px at 100% 0%,
+      color-mix(in srgb, var(--pitch-line) 5%, var(--pitch-slate)) 0%,
+      transparent 55%
+    );
+  background-attachment: fixed;
   color: var(--pitch-line);
   font-family: var(--font-sans);
 }

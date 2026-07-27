@@ -17,10 +17,10 @@ export function FormationSelector({ formations, selectedSlug, onSelect }: Props)
             type="button"
             aria-pressed={isSelected}
             onClick={() => onSelect(formation.slug)}
-            className={`rounded-full border px-4 py-2 font-display text-lg font-bold tracking-wide transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker ${
+            className={`rounded-md border-2 px-4 py-2 font-display text-lg font-bold tracking-wide transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker ${
               isSelected
-                ? "border-pitch-marker bg-pitch-marker/10 text-pitch-marker"
-                : "border-pitch-touchline/60 text-pitch-touchline hover:border-pitch-touchline hover:text-pitch-line"
+                ? "border-pitch-marker bg-pitch-marker text-pitch-deep"
+                : "border-pitch-touchline/50 text-pitch-touchline hover:border-pitch-touchline hover:text-pitch-line"
             }`}
           >
             {formation.name}

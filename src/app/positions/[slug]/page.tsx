@@ -40,7 +40,7 @@ export default async function PositionPage({
   return (
     <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-8 px-4 py-10 sm:px-8 sm:py-16">
       <Link
-        href="/"
+        href="/explore"
         className="font-mono text-xs uppercase tracking-widest text-pitch-touchline hover:text-pitch-marker"
       >
         ← Back to the pitch

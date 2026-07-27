@@ -64,7 +64,7 @@ export default async function ManagerPage({
         </p>
         {formation && (
           <Link
-            href={`/?formation=${formation.slug}`}
+            href={`/explore?formation=${formation.slug}`}
             className="inline-flex min-h-11 w-fit items-center gap-2 rounded-full border border-pitch-marker px-4 font-mono text-xs uppercase tracking-widest text-pitch-marker transition-colors hover:bg-pitch-marker/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
           >
             View the {formation.name} on the pitch →
