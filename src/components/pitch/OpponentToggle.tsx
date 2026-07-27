@@ -30,7 +30,7 @@ export function OpponentToggle({
         <motion.span
           className="absolute top-1 h-5 w-5 rounded-full bg-pitch-line shadow-[0_2px_4px_rgba(0,0,0,0.5)]"
           animate={{ left: show ? "calc(100% - 1.5rem)" : "0.25rem" }}
-          transition={reduceMotion ? { duration: 0 } : { type: "spring", stiffness: 400, damping: 30 }}
+          transition={reduceMotion ? { duration: 0 } : { duration: 0.2, ease: "easeOut" }}
         />
       </button>
     </div>
