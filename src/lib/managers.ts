@@ -186,12 +186,12 @@ export const managers: Manager[] = [
     name: "Johan Cruyff",
     years: "Club management 1985–1996",
     notableTeams: ["Ajax", "Barcelona"],
-    signatureFormationSlug: "4-3-3",
+    signatureFormationSlug: "3-4-3",
     tagline: "Turned the Total Football principles he played under into a coaching blueprint that shaped Barcelona for decades.",
     philosophy:
-      "Insisted on close control, quick combination passing, and a goalkeeper comfortable as an auxiliary outfield player, building every phase of the team around comfort on the ball rather than physical directness.",
+      "Insisted on close control, quick combination passing, and a goalkeeper comfortable as an auxiliary outfield player, building his Barcelona side around a possession-focused back three that could patiently circulate the ball before releasing wide attackers into space.",
     whyItWorked: [
-      "Built his Barcelona side around technical central midfielders capable of controlling tempo under pressure",
+      "Used a sweeper-led back three to keep the team playing out from defense under pressure rather than clearing danger long",
       "Treated youth development and first-team tactics as a single continuous idea, so young players arrived already trained in the same principles",
       "Used a high defensive line and constant pressing to compress the pitch and keep play in the opponent's half",
     ],
@@ -237,12 +237,12 @@ export const managers: Manager[] = [
     name: "Diego Simeone",
     years: "Club management 2006–present",
     notableTeams: ["Atlético Madrid"],
-    signatureFormationSlug: "4-4-2",
-    tagline: "Built a compact, defiant identity that let Atlético Madrid compete with far wealthier rivals year after year.",
+    signatureFormationSlug: "5-3-2",
+    tagline: "Built a compact, five-at-the-back identity that let Atlético Madrid compete with far wealthier rivals year after year.",
     philosophy:
       "Organizes the team around an extremely compact, disciplined defensive block that surrenders as little space as possible, trusting moments of individual quality to convert the limited chances that approach creates.",
     whyItWorked: [
-      "Keeps the distance between the defensive and attacking lines deliberately short, denying opponents space to play through the middle",
+      "Drops into a disciplined back five for the biggest away fixtures, denying space in behind while still supporting quick transitions",
       "Demands total defensive commitment from attacking players as well as defenders, with no player exempt from tracking back",
       "Builds intense collective identity and work rate as a competitive advantage against squads with greater individual talent",
     ],
@@ -254,13 +254,13 @@ export const managers: Manager[] = [
     name: "Zinedine Zidane",
     years: "Club management 2016–present",
     notableTeams: ["Real Madrid"],
-    signatureFormationSlug: "4-3-3",
+    signatureFormationSlug: "4-4-2-diamond",
     tagline: "Prioritized squad harmony and big-game composure over a fixed tactical identity.",
     philosophy:
       "Manages primarily through man-management and rotation, trusting a squad of experienced, technically excellent players to solve tactical problems on the pitch rather than dictating detailed instructions from the touchline.",
     whyItWorked: [
       "Rotated the squad heavily across midweek and weekend fixtures to keep key players fresh for the most important moments",
-      "Relied on individual quality and composure in knockout football rather than a rigid tactical system",
+      "Packed a compact central diamond in several of Real Madrid's biggest Champions League nights, prioritizing control of the middle over out-and-out width",
       "Kept the dressing room settled by managing playing time carefully across a squad full of established stars",
     ],
     legacy:
