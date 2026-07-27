@@ -2,7 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 import { animate, motion, motionValue, useReducedMotion, type MotionValue } from "framer-motion";
-import type { Formation } from "@/lib/formations";
+import type { Formation, FormationPlayer } from "@/lib/formations";
+import { describeMatchup, findMatchups } from "@/lib/matchups";
+import { getPosition } from "@/lib/positions";
 import { PitchMarkings } from "./PitchMarkings";
 
 function useMarkerMotionValues(count: number) {
@@ -12,24 +14,86 @@ function useMarkerMotionValues(count: number) {
   return values;
 }
 
-export function SandboxPitch({ formation }: { formation: Formation }) {
+function clampPercent(value: number): number {
+  return Math.min(100, Math.max(0, value));
+}
+
+type Props = {
+  formation: Formation;
+  /** A second lineup mirrored to attack the opposite way — shares the opponent overlay toggle with the Formations tab. */
+  opponentPlayers?: FormationPlayer[];
+  opponentFormationName?: string;
+};
+
+export function SandboxPitch({ formation, opponentPlayers, opponentFormationName }: Props) {
   const reduceMotion = useReducedMotion();
   const containerRef = useRef<HTMLDivElement>(null);
   const markerMotion = useMarkerMotionValues(formation.players.length);
+  const [livePositions, setLivePositions] = useState<{ x: number; y: number }[]>(() =>
+    formation.players.map((player) => ({ x: player.x, y: player.y })),
+  );
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+
+  const hasOpponent = Boolean(opponentPlayers && opponentPlayers.length > 0);
 
   function resetToFormation() {
     markerMotion.forEach(({ x, y }) => {
       animate(x, 0, { type: "spring", stiffness: 140, damping: 18 });
       animate(y, 0, { type: "spring", stiffness: 140, damping: 18 });
     });
+    setLivePositions(formation.players.map((player) => ({ x: player.x, y: player.y })));
   }
 
   // Snap any dragged players back home when the underlying formation changes
   // (e.g. switching formations while sandbox mode stays open).
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- resetting drag state to match a newly-selected formation, not derivable during render
     resetToFormation();
+    setSelectedIndex(null);
     // eslint-disable-next-line react-hooks/exhaustive-deps -- resetToFormation is stable across renders (markerMotion never changes)
   }, [formation.slug]);
+
+  // Commits a dragged marker's pixel offset into pitch-percent coordinates on
+  // release (not every drag frame — that would re-render on every animation
+  // frame) so the matchup line/highlight can react to where you dropped it.
+  function commitDragPosition(index: number) {
+    const rect = containerRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    const base = formation.players[index];
+    const offsetXPercent = (markerMotion[index].x.get() / rect.width) * 100;
+    const offsetYPercent = (markerMotion[index].y.get() / rect.height) * 100;
+    setLivePositions((prev) => {
+      const next = [...prev];
+      next[index] = {
+        x: clampPercent(base.x + offsetXPercent),
+        y: clampPercent(base.y + offsetYPercent),
+      };
+      return next;
+    });
+  }
+
+  const selectedBase = selectedIndex !== null ? formation.players[selectedIndex] : undefined;
+  const selectedPlayer: FormationPlayer | undefined =
+    hasOpponent && selectedBase && selectedIndex !== null
+      ? { ...selectedBase, ...livePositions[selectedIndex] }
+      : undefined;
+  const matchups =
+    selectedPlayer && opponentPlayers ? findMatchups(selectedPlayer, opponentPlayers) : [];
+  const matchupIds = new Set(matchups.map((opponent) => opponent.id));
+  const matchupText =
+    selectedPlayer && matchups.length > 0 && opponentFormationName
+      ? describeMatchup({
+          formationName: formation.name,
+          opponentFormationName,
+          playerCode: selectedPlayer.code,
+          opponents: matchups,
+          // Sandbox has no possession phase to model, so the "dropping in to
+          // help defend" qualifier (which only fires for out-of-possession
+          // opponents) simply never applies here.
+          opponentPhase: "in-possession",
+        })
+      : null;
+  const selectedPosition = selectedPlayer ? getPosition(selectedPlayer.code) : undefined;
 
   return (
     <div className="flex flex-col gap-3">
@@ -39,33 +103,109 @@ export function SandboxPitch({ formation }: { formation: Formation }) {
       >
         <PitchMarkings />
 
-        {formation.players.map((player, index) => (
-          <motion.div
-            key={player.id}
-            drag={!reduceMotion}
-            dragConstraints={containerRef}
-            dragElastic={0.05}
-            dragMomentum={false}
-            whileDrag={{ scale: 1.15, zIndex: 30 }}
-            style={{
-              left: `${player.x}%`,
-              top: `${player.y}%`,
-              x: markerMotion[index].x,
-              y: markerMotion[index].y,
-            }}
-            className="absolute z-10 -translate-x-1/2 -translate-y-1/2 cursor-grab touch-none active:cursor-grabbing"
+        {hasOpponent && (
+          <div className="absolute inset-0" aria-hidden="true">
+            {opponentPlayers!.map((opponent) => {
+              const isMatched = matchupIds.has(opponent.id);
+              return (
+                <div
+                  key={`opponent-${opponent.id}`}
+                  className="absolute -translate-x-1/2 -translate-y-1/2"
+                  style={{ left: `${opponent.x}%`, top: `${opponent.y}%` }}
+                >
+                  <div
+                    className={`flex h-11 w-11 items-center justify-center rounded-full border-2 border-dashed font-mono text-xs font-semibold ${
+                      isMatched
+                        ? "border-press bg-press/10 text-press"
+                        : "border-defend/70 bg-defend/10 text-defend-bright"
+                    }`}
+                  >
+                    {opponent.code}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {selectedPlayer && matchups.length > 0 && (
+          <svg
+            viewBox="0 0 100 100"
+            preserveAspectRatio="none"
+            className="pointer-events-none absolute inset-0 h-full w-full"
+            aria-hidden="true"
           >
-            <div className="flex h-11 w-11 items-center justify-center rounded-full border-2 border-pitch-line/20 bg-pitch-card font-mono text-xs font-semibold text-pitch-line shadow-[0_4px_12px_rgba(0,0,0,0.6)]">
-              {player.code}
-            </div>
-          </motion.div>
-        ))}
+            <g stroke="var(--press)" strokeWidth="0.6" strokeOpacity="0.85" strokeDasharray="2.2 1.6">
+              {matchups.map((opponent) => (
+                <line
+                  key={`matchup-${opponent.id}`}
+                  x1={selectedPlayer.x}
+                  y1={selectedPlayer.y}
+                  x2={opponent.x}
+                  y2={opponent.y}
+                  pathLength={1}
+                />
+              ))}
+            </g>
+          </svg>
+        )}
+
+        {formation.players.map((player, index) => {
+          const isSelected = hasOpponent && selectedIndex === index;
+          return (
+            <motion.div
+              key={player.id}
+              drag={!reduceMotion}
+              dragConstraints={containerRef}
+              dragElastic={0.05}
+              dragMomentum={false}
+              whileDrag={{ scale: 1.15, zIndex: 30 }}
+              onDragEnd={() => commitDragPosition(index)}
+              onTap={hasOpponent ? () => setSelectedIndex((prev) => (prev === index ? null : index)) : undefined}
+              style={{
+                left: `${player.x}%`,
+                top: `${player.y}%`,
+                x: markerMotion[index].x,
+                y: markerMotion[index].y,
+              }}
+              className="absolute z-10 -translate-x-1/2 -translate-y-1/2 cursor-grab touch-none active:cursor-grabbing"
+            >
+              <div
+                className={`flex h-11 w-11 items-center justify-center rounded-full border-2 bg-pitch-card font-mono text-xs font-semibold text-pitch-line shadow-[0_4px_12px_rgba(0,0,0,0.6)] ${
+                  isSelected
+                    ? "border-press ring-2 ring-press ring-offset-2 ring-offset-pitch-deep"
+                    : "border-pitch-line/20"
+                }`}
+              >
+                {player.code}
+              </div>
+            </motion.div>
+          );
+        })}
       </div>
 
-      <div className="flex items-center justify-between gap-3">
-        <p className="text-xs leading-relaxed text-pitch-touchline">
-          Drag any player to test your own shape. Nothing here is saved.
-        </p>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        {selectedPlayer && selectedPosition && matchupText ? (
+          <div className="flex flex-1 items-center justify-between gap-3 rounded-full border border-press/40 bg-press/10 px-4 py-2">
+            <p className="text-xs leading-relaxed text-pitch-line/90">
+              <span className="font-mono text-[10px] uppercase tracking-widest text-press">
+                {selectedPosition.name}:
+              </span>{" "}
+              {matchupText}
+            </p>
+            <button
+              type="button"
+              onClick={() => setSelectedIndex(null)}
+              className="shrink-0 font-mono text-[10px] uppercase tracking-widest text-pitch-touchline transition-colors hover:text-pitch-line"
+            >
+              Clear
+            </button>
+          </div>
+        ) : (
+          <p className="text-xs leading-relaxed text-pitch-touchline">
+            Drag any player to test your own shape. Nothing here is saved.
+          </p>
+        )}
         <button
           type="button"
           onClick={resetToFormation}

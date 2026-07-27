@@ -122,8 +122,13 @@ export function FormationExplorer({ initialSlug }: { initialSlug?: string }) {
     formations.find((candidate) => candidate.slug !== selectedSlug) ??
     formations[0];
   const opponentPhase: Phase = phase === "in-possession" ? "out-of-possession" : "in-possession";
-  const opponentPlayers = showOpponent
+  const opponentPlayersForFormation = showOpponent
     ? mirrorFormationPlayers(getFormationPlayers(opponentFormation, opponentPhase))
+    : undefined;
+  // Sandbox has no possession phase, so its opponent overlay just mirrors
+  // the base in-possession shape rather than inverting a phase that doesn't exist there.
+  const opponentPlayersForSandbox = showOpponent
+    ? mirrorFormationPlayers(opponentFormation.players)
     : undefined;
 
   const selectedPlayer = showOpponent
@@ -131,7 +136,9 @@ export function FormationExplorer({ initialSlug }: { initialSlug?: string }) {
     : undefined;
   const selectedPosition = selectedPlayer ? getPosition(selectedPlayer.code) : undefined;
   const matchups =
-    selectedPlayer && opponentPlayers ? findMatchups(selectedPlayer, opponentPlayers) : [];
+    selectedPlayer && opponentPlayersForFormation
+      ? findMatchups(selectedPlayer, opponentPlayersForFormation)
+      : [];
   const matchupText =
     selectedPlayer && matchups.length > 0
       ? describeMatchup({
@@ -209,7 +216,27 @@ export function FormationExplorer({ initialSlug }: { initialSlug?: string }) {
         </div>
       )}
 
-      {viewMode === "sandbox" && <SandboxPitch formation={formation} />}
+      {viewMode !== "compare" && (
+        <div className="flex flex-wrap items-center justify-end gap-3">
+          <OpponentToggle show={showOpponent} onChange={toggleOpponent} />
+          {showOpponent && (
+            <OpponentFormationSelect
+              formations={formations}
+              selectedSlug={opponentFormation.slug}
+              onSelect={selectOpponentFormation}
+            />
+          )}
+          {viewMode === "formation" && <PhaseToggle phase={phase} onChange={setPhase} />}
+        </div>
+      )}
+
+      {viewMode === "sandbox" && (
+        <SandboxPitch
+          formation={formation}
+          opponentPlayers={opponentPlayersForSandbox}
+          opponentFormationName={opponentFormation.name}
+        />
+      )}
 
       {viewMode === "compare" && compareFormation ? (
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
@@ -237,22 +264,11 @@ export function FormationExplorer({ initialSlug }: { initialSlug?: string }) {
       ) : viewMode === "formation" ? (
         <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-10">
           <div className="mx-auto flex w-full max-w-sm flex-col gap-3 lg:mx-0 lg:max-w-md lg:flex-1">
-            <div className="flex flex-wrap items-center justify-end gap-3">
-              <OpponentToggle show={showOpponent} onChange={toggleOpponent} />
-              {showOpponent && (
-                <OpponentFormationSelect
-                  formations={formations}
-                  selectedSlug={opponentFormation.slug}
-                  onSelect={selectOpponentFormation}
-                />
-              )}
-              <PhaseToggle phase={phase} onChange={setPhase} />
-            </div>
             <Pitch
               players={displayedPlayers}
               formationName={formation.name}
               phase={phase}
-              opponentPlayers={opponentPlayers}
+              opponentPlayers={opponentPlayersForFormation}
               selectedPlayerId={selectedPlayerId}
               onSelectPlayer={setSelectedPlayerId}
             />
