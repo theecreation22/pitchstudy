@@ -6,6 +6,7 @@ import {
   getFormation,
   getFormationPlayers,
   mirrorFormationPlayers,
+  type DefensiveStyle,
   type Formation,
   type Phase,
 } from "@/lib/formations";
@@ -16,6 +17,7 @@ import { Pitch } from "./Pitch";
 import { SandboxPitch } from "./SandboxPitch";
 import { FormationSelector } from "./FormationSelector";
 import { PhaseToggle } from "./PhaseToggle";
+import { DefensiveStyleToggle } from "./DefensiveStyleToggle";
 import { OpponentToggle } from "./OpponentToggle";
 import { OpponentFormationSelect } from "./OpponentFormationSelect";
 import { PositionBreakdownPanel } from "./PositionBreakdownPanel";
@@ -108,10 +110,12 @@ export function FormationExplorer({ initialSlug }: { initialSlug?: string }) {
   const [showOpponentRaw, setShowOpponentRaw] = useLocalStorageValue("pitchiq:show-opponent");
   const showOpponent = showOpponentRaw === "true";
   const [opponentSlugRaw, setOpponentSlugRaw] = useLocalStorageValue("pitchiq:opponent-formation");
+  const [defensiveStyleRaw, setDefensiveStyleRaw] = useLocalStorageValue("pitchiq:defensive-style");
+  const defensiveStyle: DefensiveStyle = defensiveStyleRaw === "high-press" ? "high-press" : "low-block";
 
   const formation = getFormation(selectedSlug) ?? formations[0];
   const compareFormation = compareSlug ? getFormation(compareSlug) : null;
-  const displayedPlayers = getFormationPlayers(formation, phase);
+  const displayedPlayers = getFormationPlayers(formation, phase, defensiveStyle);
 
   const storedOpponentSlug =
     opponentSlugRaw && formations.some((candidate) => candidate.slug === opponentSlugRaw)
@@ -123,7 +127,7 @@ export function FormationExplorer({ initialSlug }: { initialSlug?: string }) {
     formations[0];
   const opponentPhase: Phase = phase === "in-possession" ? "out-of-possession" : "in-possession";
   const opponentPlayers = showOpponent
-    ? mirrorFormationPlayers(getFormationPlayers(opponentFormation, opponentPhase))
+    ? mirrorFormationPlayers(getFormationPlayers(opponentFormation, opponentPhase, defensiveStyle))
     : undefined;
 
   const selectedPlayer = showOpponent
@@ -220,6 +224,7 @@ export function FormationExplorer({ initialSlug }: { initialSlug?: string }) {
             />
           )}
           <PhaseToggle phase={phase} onChange={setPhase} />
+          <DefensiveStyleToggle style={defensiveStyle} onChange={setDefensiveStyleRaw} />
         </div>
       )}
 
@@ -227,6 +232,7 @@ export function FormationExplorer({ initialSlug }: { initialSlug?: string }) {
         <SandboxPitch
           formation={formation}
           phase={phase}
+          defensiveStyle={defensiveStyle}
           opponentPlayers={opponentPlayers}
           opponentFormationName={opponentFormation.name}
         />

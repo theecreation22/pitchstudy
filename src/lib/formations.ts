@@ -301,24 +301,38 @@ export function getFormation(slug: string): Formation | undefined {
 export type Phase = "in-possession" | "out-of-possession";
 
 /**
- * Derives a compact, deeper "out of possession" shape from a formation's
- * base (in-possession) coordinates, rather than hand-authoring a second
- * position set per formation. Forward players drop back the most, the
- * back line barely moves, and the whole team pulls in toward the center.
+ * How a team sets up when out of possession — a high press squeezes the
+ * whole team up near the halfway line to deny space early; a low block
+ * cedes the midfield and packs in deep near its own goal instead. Both
+ * pull in toward the center, just at a different height up the pitch.
  */
-function toOutOfPossession(player: FormationPlayer): FormationPlayer {
+export type DefensiveStyle = "high-press" | "low-block";
+
+function toHighPress(player: FormationPlayer): FormationPlayer {
   if (player.code === "GK") {
-    return { ...player, y: Math.min(96, player.y + 1) };
+    return { ...player, y: Math.max(80, player.y - 8) };
   }
-  const dropback = Math.max(0, (55 - player.y) * 0.4);
-  const y = Math.min(92, player.y + dropback);
-  const x = 50 + (player.x - 50) * 0.72;
+  const y = player.y + (45 - player.y) * 0.5;
+  const x = 50 + (player.x - 50) * 0.6;
   return { ...player, x, y };
 }
 
-export function getFormationPlayers(formation: Formation, phase: Phase): FormationPlayer[] {
+function toLowBlock(player: FormationPlayer): FormationPlayer {
+  if (player.code === "GK") {
+    return { ...player, y: Math.min(97, player.y + 2) };
+  }
+  const y = player.y + (88 - player.y) * 0.55;
+  const x = 50 + (player.x - 50) * 0.55;
+  return { ...player, x, y };
+}
+
+export function getFormationPlayers(
+  formation: Formation,
+  phase: Phase,
+  defensiveStyle: DefensiveStyle = "low-block",
+): FormationPlayer[] {
   if (phase === "in-possession") return formation.players;
-  return formation.players.map(toOutOfPossession);
+  return formation.players.map(defensiveStyle === "high-press" ? toHighPress : toLowBlock);
 }
 
 /**

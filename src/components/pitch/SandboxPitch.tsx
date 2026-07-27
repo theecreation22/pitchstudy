@@ -2,7 +2,13 @@
 
 import { useEffect, useRef, useState } from "react";
 import { animate, motion, motionValue, useReducedMotion, type MotionValue } from "framer-motion";
-import { getFormationPlayers, type Formation, type FormationPlayer, type Phase } from "@/lib/formations";
+import {
+  getFormationPlayers,
+  type DefensiveStyle,
+  type Formation,
+  type FormationPlayer,
+  type Phase,
+} from "@/lib/formations";
 import { describeMatchup, findMatchups } from "@/lib/matchups";
 import { getPosition } from "@/lib/positions";
 import { PitchMarkings } from "./PitchMarkings";
@@ -22,17 +28,25 @@ type Props = {
   formation: Formation;
   /** In/out of possession — same toggle and derived compact shape as the Formations tab. */
   phase: Phase;
+  /** High press or low block — same toggle and shape as the Formations tab, applied to whichever side is currently out of possession. */
+  defensiveStyle: DefensiveStyle;
   /** A second lineup mirrored to attack the opposite way — shares the opponent overlay toggle with the Formations tab. */
   opponentPlayers?: FormationPlayer[];
   opponentFormationName?: string;
 };
 
-export function SandboxPitch({ formation, phase, opponentPlayers, opponentFormationName }: Props) {
+export function SandboxPitch({
+  formation,
+  phase,
+  defensiveStyle,
+  opponentPlayers,
+  opponentFormationName,
+}: Props) {
   const reduceMotion = useReducedMotion();
   const containerRef = useRef<HTMLDivElement>(null);
   const markerMotion = useMarkerMotionValues(formation.players.length);
   const opponentMarkerMotion = useMarkerMotionValues(11);
-  const basePlayers = getFormationPlayers(formation, phase);
+  const basePlayers = getFormationPlayers(formation, phase, defensiveStyle);
   const [livePositions, setLivePositions] = useState<{ x: number; y: number }[]>(() =>
     basePlayers.map((player) => ({ x: player.x, y: player.y })),
   );
@@ -61,17 +75,18 @@ export function SandboxPitch({ formation, phase, opponentPlayers, opponentFormat
     setOpponentLivePositions({});
   }
 
-  // Snap any dragged players back home when the underlying formation or
-  // possession phase changes (e.g. switching formations, or toggling phase,
-  // while sandbox mode stays open) — a drag offset computed against the old
-  // base position isn't meaningful against the new one. Also resets when the
-  // opponent's own formation changes, for the same reason.
+  // Snap any dragged players back home when the underlying formation,
+  // possession phase, or defensive style changes (e.g. switching formations,
+  // toggling phase, or toggling high press/low block while sandbox mode
+  // stays open) — a drag offset computed against the old base position
+  // isn't meaningful against the new one. Also resets when the opponent's
+  // own formation changes, for the same reason.
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- resetting drag state to match a newly-selected formation/phase, not derivable during render
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- resetting drag state to match a newly-selected formation/phase/style, not derivable during render
     resetToFormation();
     setSelectedIndex(null);
     // eslint-disable-next-line react-hooks/exhaustive-deps -- resetToFormation is stable across renders (markerMotion/opponentMarkerMotion never change)
-  }, [formation.slug, phase, opponentFormationName]);
+  }, [formation.slug, phase, defensiveStyle, opponentFormationName]);
 
   // Commits a dragged marker's pixel offset into pitch-percent coordinates on
   // release (not every drag frame — that would re-render on every animation
