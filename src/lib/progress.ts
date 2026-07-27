@@ -2,7 +2,7 @@
 
 import { useCallback, useMemo, useRef } from "react";
 import { useLocalStorageValue } from "./useLocalStorageValue";
-import { getModule, totalLessonCount } from "./curriculum";
+import { getModule, modules, totalLessonCount } from "./curriculum";
 
 const STORAGE_KEY = "pitchiq:progress:v2";
 
@@ -13,6 +13,7 @@ export type ProgressState = {
   quizBestScores: Record<string, QuizBest>; // moduleSlug -> best
   xp: number;
   earnedBadges: string[];
+  challengeBestStreak: number;
 };
 
 const DEFAULT_STATE: ProgressState = {
@@ -20,6 +21,7 @@ const DEFAULT_STATE: ProgressState = {
   quizBestScores: {},
   xp: 0,
   earnedBadges: [],
+  challengeBestStreak: 0,
 };
 
 function parseState(raw: string | null): ProgressState {
@@ -111,5 +113,32 @@ export function useProgress() {
     [isLessonComplete],
   );
 
-  return { state, completeLesson, recordQuizScore, isLessonComplete, moduleProgress };
+  const completedModuleSlugs = useMemo(
+    () =>
+      modules
+        .filter((mod) => {
+          const { done, total } = moduleProgress(mod.slug);
+          return total > 0 && done === total;
+        })
+        .map((mod) => mod.slug),
+    [moduleProgress],
+  );
+
+  const recordChallengeStreak = useCallback(
+    (streak: number) => {
+      if (streak <= state.challengeBestStreak) return;
+      persist({ ...state, challengeBestStreak: streak });
+    },
+    [state, persist],
+  );
+
+  return {
+    state,
+    completeLesson,
+    recordQuizScore,
+    isLessonComplete,
+    moduleProgress,
+    completedModuleSlugs,
+    recordChallengeStreak,
+  };
 }

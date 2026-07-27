@@ -110,9 +110,9 @@ export function ModuleQuizRunner({ module }: { module: Module }) {
           let stateClasses = "border-pitch-touchline/40 text-pitch-line hover:border-pitch-touchline";
           if (hasAnswered) {
             if (isCorrect) {
-              stateClasses = "border-gold-flood bg-gold-flood/10 text-gold-flood";
+              stateClasses = "border-attack bg-attack/10 text-attack";
             } else if (isSelected) {
-              stateClasses = "border-pitch-touchline text-pitch-touchline line-through";
+              stateClasses = "border-press bg-press/10 text-press line-through animate-shake";
             } else {
               stateClasses = "border-pitch-touchline/20 text-pitch-touchline";
             }

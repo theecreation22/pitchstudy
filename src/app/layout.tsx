@@ -72,10 +72,10 @@ export default function RootLayout({
               Workouts
             </Link>
             <Link
-              href="/quiz"
+              href="/challenge"
               className="font-display text-sm font-semibold uppercase tracking-[0.15em] text-pitch-touchline transition-colors hover:text-pitch-marker"
             >
-              Quiz
+              Challenge
             </Link>
           </div>
         </nav>

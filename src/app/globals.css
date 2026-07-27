@@ -1,39 +1,50 @@
 @import "tailwindcss";
 
 :root {
-  /* "Cup Final Under the Lights" — v2 palette. Night charcoal base with three
-     floodlight colors (red / blue / gold) as light sources on top, not a
-     flat rainbow wash. pitch-* names kept as aliases for backward compat
-     with existing utility classes. */
-  --night-950: #0c0e12;
-  --night-900: #14161c;
-  --night-800: #1d2029;
-  --chalk: #e9edf2;
+  /* "Floodlit Rebuild" — v3 palette. Violet-tinted charcoal base (never pure
+     black) with three colors that each carry a fixed meaning: amber for
+     attack/progress/XP, blue for defense/structure, red for pressing/danger/
+     mistakes, used sparingly like a red card. v1/v2 names (pitch-*,
+     gold-flood, blue-volt, red-flare, night-*) are kept as aliases so
+     existing utility classes across the app don't need to change. */
+  --night-950: #15121b; /* page background */
+  --night-900: #1e1a29; /* card/panel surface */
+  --night-800: #282235; /* raised surfaces, borders */
+  --chalk: #e9edf2; /* primary text, chalk-line pitch art */
   --touchline-muted: #8b93a3; /* neutral secondary text — deliberately not one of the 3 brand hues */
 
-  --red-flare: #ff3b47;
-  --red-deep: #c1121f;
-  --blue-volt: #2e7cf6;
-  --blue-deep: #1437a8;
-  --gold-flood: #ffc53d;
-  --gold-deep: #e8960c;
+  --attack: #ffb627;
+  --attack-hi: #ffd166;
+  --attack-deep: #d98d0f;
+  --defend: #3d7bff;
+  --defend-bright: #6c9cff; /* AA-safe on --night-900 for blue *text*; --defend itself is for borders/fills/icons (3:1 is enough there) */
+  --defend-deep: #1b3a8f;
+  --press: #ff3b3b;
+  --press-deep: #c11212;
 
-  --grad-kickoff: linear-gradient(120deg, var(--red-flare) 0%, var(--gold-flood) 55%, var(--blue-volt) 100%);
-  --grad-attack: linear-gradient(120deg, var(--red-deep) 0%, var(--red-flare) 45%, var(--gold-flood) 100%);
+  --grad-kickoff: linear-gradient(120deg, var(--press) 0%, var(--attack) 55%, var(--defend) 100%);
+  --grad-attack: linear-gradient(120deg, var(--press-deep) 0%, var(--press) 45%, var(--attack) 100%);
   --grad-control: linear-gradient(
     120deg,
-    var(--blue-deep) 0%,
-    var(--blue-volt) 75%,
-    color-mix(in srgb, var(--blue-volt) 60%, var(--red-flare) 40%) 100%
+    var(--defend-deep) 0%,
+    var(--defend) 75%,
+    color-mix(in srgb, var(--defend) 60%, var(--press) 40%) 100%
   );
 
-  /* aliases — see note above */
+  /* v1/v2 aliases */
+  --red-flare: var(--press);
+  --red-deep: var(--press-deep);
+  --blue-volt: var(--defend);
+  --blue-deep: var(--defend-deep);
+  --gold-flood: var(--attack);
+  --gold-deep: var(--attack-deep);
+
   --pitch-slate: var(--night-950);
   --pitch-deep: var(--night-950);
   --pitch-card: var(--night-900);
   --pitch-line: var(--chalk);
   --pitch-touchline: var(--touchline-muted);
-  --pitch-marker: var(--gold-flood);
+  --pitch-marker: var(--attack);
 }
 
 @theme inline {
@@ -51,6 +62,15 @@
   --color-blue-deep: var(--blue-deep);
   --color-gold-flood: var(--gold-flood);
   --color-gold-deep: var(--gold-deep);
+
+  --color-attack: var(--attack);
+  --color-attack-hi: var(--attack-hi);
+  --color-attack-deep: var(--attack-deep);
+  --color-defend: var(--defend);
+  --color-defend-bright: var(--defend-bright);
+  --color-defend-deep: var(--defend-deep);
+  --color-press: var(--press);
+  --color-press-deep: var(--press-deep);
 
   --color-background: var(--pitch-slate);
   --color-foreground: var(--pitch-line);
@@ -116,6 +136,17 @@ body {
   to {
     stroke-dashoffset: 0;
   }
+}
+
+@keyframes shake {
+  10%, 90% { transform: translateX(-1px); }
+  20%, 80% { transform: translateX(2px); }
+  30%, 50%, 70% { transform: translateX(-4px); }
+  40%, 60% { transform: translateX(4px); }
+}
+
+.animate-shake {
+  animation: shake 0.4s ease-in-out;
 }
 
 @media (prefers-reduced-motion: reduce) {

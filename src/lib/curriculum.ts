@@ -12,11 +12,11 @@ export const moduleAccentGradient: Record<ModuleAccent, string> = {
 };
 
 export const moduleAccentColor: Record<ModuleAccent, string> = {
-  gold: "var(--gold-flood)",
-  blue: "var(--blue-volt)",
-  kickoff: "var(--gold-flood)",
-  attack: "var(--red-flare)",
-  control: "var(--blue-volt)",
+  gold: "var(--attack)",
+  blue: "var(--defend)",
+  kickoff: "var(--attack)",
+  attack: "var(--press)",
+  control: "var(--defend)",
 };
 
 export type ZoneBlock = {

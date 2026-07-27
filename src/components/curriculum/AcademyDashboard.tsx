@@ -7,13 +7,23 @@ import { moduleAccentColor, totalLessonCount, type Module } from "@/lib/curricul
 export function AcademyDashboard({ modules }: { modules: Module[] }) {
   const { state, moduleProgress } = useProgress();
   const totalLessons = totalLessonCount();
+  const completedModules = modules.filter((module) => {
+    const { done, total } = moduleProgress(module.slug);
+    return total > 0 && done === total;
+  }).length;
 
   return (
     <div className="flex flex-col gap-8">
       <div className="flex flex-wrap items-center gap-8 rounded-lg border border-pitch-touchline/30 bg-pitch-card p-6">
         <div>
           <p className="font-mono text-xs uppercase tracking-widest text-pitch-touchline">Total XP</p>
-          <p className="font-display text-4xl font-black text-gold-flood">{state.xp}</p>
+          <p className="font-display text-4xl font-black text-attack">{state.xp}</p>
+        </div>
+        <div>
+          <p className="font-mono text-xs uppercase tracking-widest text-pitch-touchline">Modules complete</p>
+          <p className="font-display text-4xl font-black text-pitch-line">
+            {completedModules} / {modules.length}
+          </p>
         </div>
         <div>
           <p className="font-mono text-xs uppercase tracking-widest text-pitch-touchline">Lessons complete</p>
@@ -32,8 +42,8 @@ export function AcademyDashboard({ modules }: { modules: Module[] }) {
                   title={badge.description}
                   className={`rounded-full border px-3 py-1 font-mono text-xs ${
                     earned
-                      ? "border-gold-flood bg-gold-flood/10 text-gold-flood"
-                      : "border-pitch-touchline/30 text-pitch-touchline/50"
+                      ? "border-attack bg-attack/10 text-attack"
+                      : "border-defend/30 text-defend-bright/50"
                   }`}
                 >
                   {badge.name}

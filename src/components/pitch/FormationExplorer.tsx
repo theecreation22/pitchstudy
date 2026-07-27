@@ -11,6 +11,8 @@ import {
 import { Pitch } from "./Pitch";
 import { SandboxPitch } from "./SandboxPitch";
 import { FormationSelector } from "./FormationSelector";
+import { PhaseToggle } from "./PhaseToggle";
+import { SegmentedTabs } from "@/components/ui/SegmentedTabs";
 
 function FormationNotes({
   formation,
@@ -109,65 +111,19 @@ export function FormationExplorer({ initialSlug }: { initialSlug?: string }) {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <FormationSelector
-          formations={formations}
-          selectedSlug={selectedSlug}
-          onSelect={setSelectedSlug}
-        />
-        <div role="group" aria-label="View mode" className="flex gap-2">
-          {viewModes.map(({ mode, label }) => {
-            const isActive = viewMode === mode;
-            return (
-              <button
-                key={mode}
-                type="button"
-                aria-pressed={isActive}
-                onClick={() => selectMode(mode)}
-                className={`inline-flex min-h-11 items-center justify-center rounded-md border-2 px-4 font-mono text-xs uppercase tracking-widest transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker ${
-                  isActive
-                    ? "border-gold-flood text-gold-flood"
-                    : "border-pitch-touchline/50 text-pitch-touchline hover:border-pitch-touchline hover:text-pitch-line"
-                }`}
-              >
-                {label}
-              </button>
-            );
-          })}
-        </div>
-      </div>
+      <SegmentedTabs
+        id="pitch-view-mode"
+        ariaLabel="View mode"
+        options={viewModes.map(({ mode, label }) => ({ value: mode, label }))}
+        value={viewMode}
+        onChange={selectMode}
+      />
 
-      {viewMode === "formation" && (
-        <div role="group" aria-label="Possession phase" className="flex gap-2">
-          {(
-            [
-              { phase: "in-possession" as Phase, label: "In possession", color: "gold" },
-              { phase: "out-of-possession" as Phase, label: "Out of possession", color: "blue" },
-            ] as const
-          ).map((option) => {
-            const isActive = phase === option.phase;
-            const activeClasses =
-              option.color === "gold"
-                ? "border-gold-flood bg-gold-flood/10 text-gold-flood"
-                : "border-blue-volt bg-blue-volt/10 text-blue-volt";
-            return (
-              <button
-                key={option.phase}
-                type="button"
-                aria-pressed={isActive}
-                onClick={() => setPhase(option.phase)}
-                className={`inline-flex min-h-11 items-center justify-center rounded-md border-2 px-4 font-mono text-xs uppercase tracking-widest transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker ${
-                  isActive
-                    ? activeClasses
-                    : "border-pitch-touchline/50 text-pitch-touchline hover:border-pitch-touchline hover:text-pitch-line"
-                }`}
-              >
-                {option.label}
-              </button>
-            );
-          })}
-        </div>
-      )}
+      <FormationSelector
+        formations={formations}
+        selectedSlug={selectedSlug}
+        onSelect={setSelectedSlug}
+      />
 
       {viewMode === "compare" && compareFormation && (
         <div className="flex flex-col gap-4">
@@ -187,7 +143,7 @@ export function FormationExplorer({ initialSlug }: { initialSlug?: string }) {
             onClick={() => setShowGhost((value) => !value)}
             className={`inline-flex min-h-11 w-fit items-center justify-center rounded-md border-2 px-4 font-mono text-xs uppercase tracking-widest transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker ${
               showGhost
-                ? "border-blue-volt bg-blue-volt/10 text-blue-volt"
+                ? "border-defend bg-defend/10 text-defend-bright"
                 : "border-pitch-touchline/50 text-pitch-touchline hover:border-pitch-touchline hover:text-pitch-line"
             }`}
           >
@@ -223,8 +179,11 @@ export function FormationExplorer({ initialSlug }: { initialSlug?: string }) {
         </div>
       ) : viewMode === "formation" ? (
         <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-10">
-          <div className="mx-auto w-full max-w-sm lg:mx-0 lg:max-w-md lg:flex-1">
-            <Pitch players={displayedPlayers} formationName={formation.name} />
+          <div className="mx-auto flex w-full max-w-sm flex-col gap-3 lg:mx-0 lg:max-w-md lg:flex-1">
+            <div className="flex justify-end">
+              <PhaseToggle phase={phase} onChange={setPhase} />
+            </div>
+            <Pitch players={displayedPlayers} formationName={formation.name} phase={phase} />
           </div>
           <aside
             className="w-full rounded-lg border border-pitch-touchline/30 bg-pitch-card p-6 lg:w-80"

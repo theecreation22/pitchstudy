@@ -124,9 +124,9 @@ export function QuizRunner({ quiz }: { quiz: Quiz }) {
           let stateClasses = "border-pitch-touchline/40 text-pitch-line hover:border-pitch-touchline";
           if (hasAnswered) {
             if (isCorrect) {
-              stateClasses = "border-pitch-marker bg-pitch-marker/10 text-pitch-marker";
+              stateClasses = "border-attack bg-attack/10 text-attack";
             } else if (isSelected) {
-              stateClasses = "border-pitch-touchline text-pitch-touchline line-through";
+              stateClasses = "border-press bg-press/10 text-press line-through animate-shake";
             } else {
               stateClasses = "border-pitch-touchline/20 text-pitch-touchline";
             }

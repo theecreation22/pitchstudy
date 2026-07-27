@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { modules } from "@/lib/curriculum";
 import { AcademyDashboard } from "@/components/curriculum/AcademyDashboard";
 
@@ -24,6 +25,13 @@ export default function AcademyPage() {
       </header>
 
       <AcademyDashboard modules={modules} />
+
+      <p className="text-sm leading-relaxed text-pitch-touchline">
+        Prefer a quick, format-specific quiz instead?{" "}
+        <Link href="/quiz" className="text-defend-bright hover:underline">
+          Try the classic Formations / Positions / Managers quizzes →
+        </Link>
+      </p>
     </div>
   );
 }
