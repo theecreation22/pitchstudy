@@ -168,14 +168,20 @@ export function Pitch({
           {players.map((player, index) => {
             const position = getPosition(player.code);
             const isSelected = hasOpponent && selectedPlayerId === player.id;
+            // Once the opponent overlay is on, the user's own markers stay a
+            // consistent amber regardless of phase — otherwise "out of
+            // possession" tints them blue, the same hue as every opponent
+            // dot, and the two teams become hard to tell apart at a glance.
             const markerClassName = `group flex h-11 w-11 items-center justify-center rounded-full border-2 bg-pitch-card font-mono text-xs font-semibold text-pitch-line shadow-[0_2px_6px_rgba(0,0,0,0.5)] transition-colors hover:border-pitch-marker hover:bg-pitch-marker hover:text-pitch-deep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker ${
               isSelected
                 ? "border-press ring-2 ring-press ring-offset-2 ring-offset-pitch-deep"
-                : phase === "in-possession"
+                : hasOpponent
                   ? "border-attack/40"
-                  : phase === "out-of-possession"
-                    ? "border-defend/40"
-                    : "border-pitch-line/20"
+                  : phase === "in-possession"
+                    ? "border-attack/40"
+                    : phase === "out-of-possession"
+                      ? "border-defend/40"
+                      : "border-pitch-line/20"
             }`;
             return (
               <motion.li

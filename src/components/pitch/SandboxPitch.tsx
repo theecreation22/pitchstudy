@@ -264,9 +264,11 @@ export function SandboxPitch({
                 className={`flex h-11 w-11 items-center justify-center rounded-full border-2 bg-pitch-card font-mono text-xs font-semibold text-pitch-line shadow-[0_4px_12px_rgba(0,0,0,0.6)] ${
                   isSelected
                     ? "border-press ring-2 ring-press ring-offset-2 ring-offset-pitch-deep"
-                    : phase === "in-possession"
+                    : hasOpponent
                       ? "border-attack/40"
-                      : "border-defend/40"
+                      : phase === "in-possession"
+                        ? "border-attack/40"
+                        : "border-defend/40"
                 }`}
               >
                 {player.code}
