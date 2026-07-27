@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { getManager, managers } from "@/lib/managers";
 import { getFormation } from "@/lib/formations";
 import { MiniFormationDiagram } from "@/components/managers/MiniFormationDiagram";
+import { MechanicDiagram } from "@/components/managers/MechanicDiagram";
 import { AnimatedSection } from "@/components/motion/AnimatedSection";
 import { ChalkDivider } from "@/components/effects/ChalkDivider";
 
@@ -87,23 +88,55 @@ export default async function ManagerPage({
 
       <ChalkDivider />
 
-      <AnimatedSection>
-        <h2 className="font-display text-xl font-bold uppercase tracking-tight text-pitch-line">
-          Why it worked
-        </h2>
-        <ul className="mt-3 max-w-2xl space-y-2 text-sm leading-relaxed text-pitch-line/90">
-          {manager.whyItWorked.map((point) => (
-            <li key={point} className="flex gap-2">
-              <span aria-hidden="true" className="text-pitch-marker">
-                ›
-              </span>
-              {point}
-            </li>
-          ))}
-        </ul>
-      </AnimatedSection>
+      {manager.signatureMechanics && manager.signatureMechanics.length > 0 && (
+        <>
+          <AnimatedSection>
+            <h2 className="font-display text-xl font-bold uppercase tracking-tight text-pitch-line">
+              Signature mechanics
+            </h2>
+            <div className="mt-3 flex flex-col gap-4">
+              {manager.signatureMechanics.map((mechanic) => (
+                <div
+                  key={mechanic.id}
+                  className="flex flex-col gap-4 rounded-lg border border-pitch-touchline/20 bg-pitch-card/60 p-4 sm:flex-row"
+                >
+                  <MechanicDiagram mechanic={mechanic} />
+                  <div className="flex flex-col gap-1.5">
+                    <h3 className="font-mono text-xs font-semibold uppercase tracking-widest text-pitch-marker">
+                      {mechanic.name}
+                    </h3>
+                    <p className="text-sm leading-relaxed text-pitch-line/90">{mechanic.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </AnimatedSection>
 
-      <ChalkDivider />
+          <ChalkDivider />
+        </>
+      )}
+
+      {manager.whyItWorked.length > 0 && (
+        <>
+          <AnimatedSection>
+            <h2 className="font-display text-xl font-bold uppercase tracking-tight text-pitch-line">
+              Why it worked
+            </h2>
+            <ul className="mt-3 max-w-2xl space-y-2 text-sm leading-relaxed text-pitch-line/90">
+              {manager.whyItWorked.map((point) => (
+                <li key={point} className="flex gap-2">
+                  <span aria-hidden="true" className="text-pitch-marker">
+                    ›
+                  </span>
+                  {point}
+                </li>
+              ))}
+            </ul>
+          </AnimatedSection>
+
+          <ChalkDivider />
+        </>
+      )}
 
       <AnimatedSection>
         <h2 className="font-display text-xl font-bold uppercase tracking-tight text-pitch-line">
