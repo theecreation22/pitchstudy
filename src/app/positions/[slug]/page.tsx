@@ -50,12 +50,12 @@ export default async function PositionPage({
         <div className="flex items-center gap-3">
           <p className="font-mono text-sm text-pitch-marker">{position.code}</p>
           {position.isHybrid && (
-            <span className="rounded-full border border-pitch-touchline/40 px-2 py-0.5 font-mono text-[10px] uppercase tracking-widest text-pitch-touchline">
+            <span className="rounded-full border border-pitch-touchline/40 px-2 py-0.5 font-mono text-xs uppercase tracking-widest text-pitch-touchline">
               Hybrid role
             </span>
           )}
         </div>
-        <h1 className="font-display text-4xl font-black uppercase tracking-tight text-pitch-line sm:text-6xl">
+        <h1 className="font-display text-4xl font-black uppercase leading-none tracking-tight text-pitch-line sm:text-6xl">
           {position.name}
         </h1>
         <p className="max-w-2xl text-lg leading-relaxed text-pitch-touchline">
@@ -64,7 +64,7 @@ export default async function PositionPage({
         {workoutPlan && (
           <Link
             href={`/workouts/${workoutPlan.slug}`}
-            className="mt-2 inline-flex w-fit items-center gap-2 rounded-full border border-pitch-marker px-4 py-2 font-mono text-xs uppercase tracking-widest text-pitch-marker transition-colors hover:bg-pitch-marker/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
+            className="mt-2 inline-flex min-h-11 w-fit items-center gap-2 rounded-full border border-pitch-marker px-4 font-mono text-xs uppercase tracking-widest text-pitch-marker transition-colors hover:bg-pitch-marker/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
           >
             Train for this position →
           </Link>
@@ -75,17 +75,17 @@ export default async function PositionPage({
         <div className="flex flex-col gap-8 lg:flex-1">
           <section className="grid gap-6 sm:grid-cols-2">
             <div>
-              <h2 className="text-xs font-semibold uppercase tracking-wide text-pitch-touchline">
+              <h3 className="text-xs font-semibold uppercase tracking-wide text-pitch-touchline">
                 In possession
-              </h2>
+              </h3>
               <p className="mt-2 text-sm leading-relaxed text-pitch-line/90">
                 {position.inPossession}
               </p>
             </div>
             <div>
-              <h2 className="text-xs font-semibold uppercase tracking-wide text-pitch-touchline">
+              <h3 className="text-xs font-semibold uppercase tracking-wide text-pitch-touchline">
                 Out of possession
-              </h2>
+              </h3>
               <p className="mt-2 text-sm leading-relaxed text-pitch-line/90">
                 {position.outOfPossession}
               </p>
@@ -96,7 +96,7 @@ export default async function PositionPage({
             <h2 className="font-display text-xl font-bold uppercase tracking-tight text-pitch-line">
               How to play it
             </h2>
-            <ul className="mt-3 space-y-2 text-sm leading-relaxed text-pitch-line/90">
+            <ul className="mt-3 max-w-2xl space-y-2 text-sm leading-relaxed text-pitch-line/90">
               {position.howToPlay.map((step) => (
                 <li key={step} className="flex gap-2">
                   <span aria-hidden="true" className="text-pitch-marker">
@@ -112,7 +112,7 @@ export default async function PositionPage({
             <h2 className="font-display text-xl font-bold uppercase tracking-tight text-pitch-line">
               Common mistakes
             </h2>
-            <ul className="mt-3 space-y-2 text-sm leading-relaxed text-pitch-line/90">
+            <ul className="mt-3 max-w-2xl space-y-2 text-sm leading-relaxed text-pitch-line/90">
               {position.commonMistakes.map((mistake) => (
                 <li key={mistake} className="flex gap-2">
                   <span aria-hidden="true" className="text-pitch-touchline">
@@ -125,16 +125,16 @@ export default async function PositionPage({
           </section>
         </div>
 
-        <aside className="flex w-full flex-col gap-6 rounded-lg border border-pitch-touchline/30 bg-pitch-card p-6 lg:w-72">
+        <aside className="flex w-full flex-col gap-6 rounded-lg border border-pitch-touchline/30 bg-pitch-card p-6 lg:w-80">
           <div>
-            <h2 className="text-xs font-semibold uppercase tracking-wide text-pitch-touchline">
+            <h3 className="text-xs font-semibold uppercase tracking-wide text-pitch-touchline">
               Strong suits
-            </h2>
+            </h3>
             <ul className="mt-2 flex flex-wrap gap-2">
               {position.strongSuits.map((suit) => (
                 <li
                   key={suit}
-                  className="rounded-full border border-pitch-touchline/40 px-3 py-1 font-mono text-[11px] text-pitch-line"
+                  className="rounded-full border border-pitch-touchline/40 px-3 py-1 font-mono text-xs text-pitch-line"
                 >
                   {suit}
                 </li>
@@ -143,9 +143,9 @@ export default async function PositionPage({
           </div>
 
           <div>
-            <h2 className="text-xs font-semibold uppercase tracking-wide text-pitch-touchline">
+            <h3 className="text-xs font-semibold uppercase tracking-wide text-pitch-touchline">
               Typical zone
-            </h2>
+            </h3>
             <div className="mt-3">
               <ZoneDiagram zones={position.zones} />
             </div>
@@ -153,9 +153,9 @@ export default async function PositionPage({
 
           {position.related.length > 0 && (
             <div>
-              <h2 className="text-xs font-semibold uppercase tracking-wide text-pitch-touchline">
+              <h3 className="text-xs font-semibold uppercase tracking-wide text-pitch-touchline">
                 Related positions
-              </h2>
+              </h3>
               <ul className="mt-2 flex flex-col gap-3">
                 {position.related.map((related) => {
                   const relatedPosition = getPosition(related.code);
@@ -167,7 +167,7 @@ export default async function PositionPage({
                       >
                         {relatedPosition?.name ?? related.code}
                       </Link>
-                      <p className="mt-0.5 text-xs leading-relaxed text-pitch-touchline">
+                      <p className="mt-0.5 text-sm leading-relaxed text-pitch-touchline">
                         {related.note}
                       </p>
                     </li>

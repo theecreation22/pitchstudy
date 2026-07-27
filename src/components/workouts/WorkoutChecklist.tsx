@@ -53,7 +53,7 @@ export function WorkoutChecklist({ plan }: { plan: WorkoutPlan }) {
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex flex-col gap-3 rounded-lg border border-pitch-touchline/30 bg-pitch-card p-5">
+      <div className="flex flex-col gap-3 rounded-lg border border-pitch-touchline/30 bg-pitch-card p-6">
         <div className="flex items-center justify-between font-mono text-xs uppercase tracking-widest text-pitch-touchline">
           <span>Progress</span>
           <span className="text-pitch-marker">
@@ -77,10 +77,10 @@ export function WorkoutChecklist({ plan }: { plan: WorkoutPlan }) {
               type="button"
               aria-pressed={isSelected}
               onClick={() => setFilter(category)}
-              className={`rounded-full border px-3 py-1.5 font-mono text-xs uppercase tracking-wide transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker ${
+              className={`inline-flex min-h-11 items-center rounded-full border px-3 py-1.5 font-mono text-xs uppercase tracking-wide transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker ${
                 isSelected
                   ? "border-pitch-marker bg-pitch-marker/10 text-pitch-marker"
-                  : "border-pitch-touchline/40 text-pitch-touchline hover:border-pitch-touchline hover:text-pitch-line"
+                  : "border-pitch-touchline/60 text-pitch-touchline hover:border-pitch-touchline hover:text-pitch-line"
               }`}
             >
               {category === "all" ? "All" : drillCategoryLabels[category]}
@@ -107,14 +107,14 @@ export function WorkoutChecklist({ plan }: { plan: WorkoutPlan }) {
                   return (
                     <li
                       key={drill.id}
-                      className="flex items-start gap-3 rounded-lg border border-pitch-touchline/20 bg-pitch-card p-4"
+                      className="flex items-start gap-3 rounded-lg border border-pitch-touchline/30 bg-pitch-card p-4"
                     >
                       <input
                         type="checkbox"
                         id={drill.id}
                         checked={isChecked}
                         onChange={() => toggleDrill(drill.id)}
-                        className="mt-1 h-4 w-4 shrink-0 accent-pitch-marker"
+                        className="mt-1 h-4 w-4 shrink-0 accent-pitch-marker focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
                       />
                       <label htmlFor={drill.id} className="flex flex-1 flex-col gap-1">
                         <span className="flex flex-wrap items-center gap-2">
@@ -123,7 +123,7 @@ export function WorkoutChecklist({ plan }: { plan: WorkoutPlan }) {
                           >
                             {drill.name}
                           </span>
-                          <span className="rounded-full border border-pitch-touchline/40 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wide text-pitch-touchline">
+                          <span className="rounded-full border border-pitch-touchline/40 px-2 py-0.5 font-mono text-xs uppercase tracking-wide text-pitch-touchline">
                             {drillCategoryLabels[drill.category]}
                           </span>
                         </span>

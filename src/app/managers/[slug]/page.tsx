@@ -49,11 +49,13 @@ export default async function ManagerPage({
       <header className="flex flex-col gap-4">
         <div className="flex items-center gap-4">
           <ManagerBadge name={manager.name} size="lg" />
-          <div>
-            <h1 className="font-display text-3xl font-black uppercase leading-none tracking-tight text-pitch-line sm:text-5xl">
+          <div className="flex flex-col gap-1">
+            <p className="font-mono text-xs uppercase tracking-widest text-pitch-marker">
+              {manager.years}
+            </p>
+            <h1 className="font-display text-4xl font-black uppercase leading-none tracking-tight text-pitch-line sm:text-6xl">
               {manager.name}
             </h1>
-            <p className="mt-1 font-mono text-xs text-pitch-touchline">{manager.years}</p>
           </div>
         </div>
         <p className="max-w-2xl text-lg leading-relaxed text-pitch-touchline">{manager.tagline}</p>
@@ -63,7 +65,7 @@ export default async function ManagerPage({
         {formation && (
           <Link
             href={`/?formation=${formation.slug}`}
-            className="inline-flex w-fit items-center gap-2 rounded-full border border-pitch-marker px-4 py-2 font-mono text-xs uppercase tracking-widest text-pitch-marker transition-colors hover:bg-pitch-marker/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
+            className="inline-flex min-h-11 w-fit items-center gap-2 rounded-full border border-pitch-marker px-4 font-mono text-xs uppercase tracking-widest text-pitch-marker transition-colors hover:bg-pitch-marker/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
           >
             View the {formation.name} on the pitch →
           </Link>
@@ -74,14 +76,16 @@ export default async function ManagerPage({
         <h2 className="font-display text-xl font-bold uppercase tracking-tight text-pitch-line">
           Philosophy
         </h2>
-        <p className="mt-3 text-sm leading-relaxed text-pitch-line/90">{manager.philosophy}</p>
+        <p className="mt-3 max-w-2xl text-sm leading-relaxed text-pitch-line/90">
+          {manager.philosophy}
+        </p>
       </section>
 
       <section>
         <h2 className="font-display text-xl font-bold uppercase tracking-tight text-pitch-line">
           Why it worked
         </h2>
-        <ul className="mt-3 space-y-2 text-sm leading-relaxed text-pitch-line/90">
+        <ul className="mt-3 max-w-2xl space-y-2 text-sm leading-relaxed text-pitch-line/90">
           {manager.whyItWorked.map((point) => (
             <li key={point} className="flex gap-2">
               <span aria-hidden="true" className="text-pitch-marker">
@@ -97,7 +101,7 @@ export default async function ManagerPage({
         <h2 className="font-display text-xl font-bold uppercase tracking-tight text-pitch-line">
           Legacy
         </h2>
-        <p className="mt-3 text-sm leading-relaxed text-pitch-line/90">{manager.legacy}</p>
+        <p className="mt-3 max-w-2xl text-sm leading-relaxed text-pitch-line/90">{manager.legacy}</p>
       </section>
 
       <p className="text-xs text-pitch-touchline">

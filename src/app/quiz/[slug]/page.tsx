@@ -44,10 +44,11 @@ export default async function QuizPage({
       </Link>
 
       <header className="flex flex-col gap-2">
-        <h1 className="font-display text-3xl font-black uppercase tracking-tight text-pitch-line sm:text-5xl">
-          {quiz.title} Quiz
+        <p className="font-mono text-xs uppercase tracking-widest text-pitch-marker">Quiz</p>
+        <h1 className="font-display text-4xl font-black uppercase leading-none tracking-tight text-pitch-line sm:text-6xl">
+          {quiz.title}
         </h1>
-        <p className="text-lg leading-relaxed text-pitch-touchline">{quiz.tagline}</p>
+        <p className="max-w-2xl text-lg leading-relaxed text-pitch-touchline">{quiz.tagline}</p>
       </header>
 
       <QuizRunner key={quiz.slug} quiz={quiz} />

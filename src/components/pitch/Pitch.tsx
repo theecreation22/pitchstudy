@@ -77,7 +77,7 @@ export function Pitch({ players, formationName }: Props) {
               <Link
                 href={`/positions/${player.code.toLowerCase()}`}
                 aria-label={`${position?.name ?? player.code} — view position guide`}
-                className="group flex h-8 w-8 items-center justify-center rounded-full border border-pitch-touchline/60 bg-pitch-slate font-mono text-[10px] font-medium text-pitch-line transition-colors hover:border-pitch-marker hover:text-pitch-marker focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker sm:h-10 sm:w-10 sm:text-xs"
+                className="group flex h-11 w-11 items-center justify-center rounded-full border border-pitch-touchline/60 bg-pitch-slate font-mono text-xs font-medium text-pitch-line transition-colors hover:border-pitch-marker hover:text-pitch-marker focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
               >
                 {player.code}
               </Link>

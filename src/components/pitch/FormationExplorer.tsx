@@ -100,7 +100,7 @@ export function FormationExplorer({ initialSlug }: { initialSlug?: string }) {
         <button
           type="button"
           onClick={toggleCompare}
-          className="rounded-full border border-pitch-touchline/40 px-4 py-2 font-mono text-xs uppercase tracking-widest text-pitch-touchline transition-colors hover:border-pitch-marker hover:text-pitch-marker focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
+          className="inline-flex min-h-11 items-center justify-center rounded-full border border-pitch-touchline/60 px-4 font-mono text-xs uppercase tracking-widest text-pitch-touchline transition-colors hover:border-pitch-marker hover:text-pitch-marker focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
         >
           {compareFormation ? "Exit compare" : "Compare formations"}
         </button>

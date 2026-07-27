@@ -7,6 +7,32 @@ export type Zone = {
   height: number;
 };
 
+function thirdLabel(centerY: number): string {
+  if (centerY < 100 / 3) return "attacking third";
+  if (centerY < 200 / 3) return "middle third";
+  return "defensive third";
+}
+
+function flankLabel(centerX: number): string {
+  if (centerX < 100 / 3) return "left side";
+  if (centerX < 200 / 3) return "central area";
+  return "right side";
+}
+
+function describeZone(zone: Zone): string {
+  const centerX = zone.x + zone.width / 2;
+  const centerY = zone.y + zone.height / 2;
+  return `${thirdLabel(centerY)}, ${flankLabel(centerX)}`;
+}
+
+/** Plain-language equivalent of the zone diagram, for screen readers. */
+export function describeZones(zones: Zone[]): string {
+  if (zones.length === 1) {
+    return `Primarily active in the ${describeZone(zones[0])} of the pitch.`;
+  }
+  return `Primarily active across the ${zones.map(describeZone).join(" and the ")} of the pitch.`;
+}
+
 export type RelatedPosition = {
   code: PositionCode;
   note: string;

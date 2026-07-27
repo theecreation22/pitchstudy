@@ -21,20 +21,20 @@ export default function QuizIndexPage() {
         </p>
       </header>
 
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {quizzes.map((quiz) => (
           <Link
             key={quiz.slug}
             href={`/quiz/${quiz.slug}`}
             className="group flex flex-col gap-3 rounded-lg border border-pitch-touchline/30 bg-pitch-card p-6 transition-colors hover:border-pitch-marker focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
           >
+            <p className="font-mono text-xs uppercase tracking-widest text-pitch-marker">
+              {quiz.questions.length} questions
+            </p>
             <h2 className="font-display text-2xl font-bold uppercase tracking-tight text-pitch-line group-hover:text-pitch-marker">
               {quiz.title}
             </h2>
             <p className="text-sm leading-relaxed text-pitch-touchline">{quiz.tagline}</p>
-            <p className="font-mono text-xs text-pitch-touchline">
-              {quiz.questions.length} questions
-            </p>
             <QuizBestScore slug={quiz.slug} total={quiz.questions.length} />
           </Link>
         ))}

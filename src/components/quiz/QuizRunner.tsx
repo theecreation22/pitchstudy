@@ -60,7 +60,7 @@ export function QuizRunner({ quiz }: { quiz: Quiz }) {
 
   if (finished) {
     return (
-      <div className="flex flex-col items-start gap-6 rounded-lg border border-pitch-touchline/30 bg-pitch-card p-8">
+      <div className="flex flex-col items-start gap-6 rounded-lg border border-pitch-touchline/30 bg-pitch-card p-6">
         <p className="font-mono text-xs uppercase tracking-widest text-pitch-marker">
           Quiz complete
         </p>
@@ -80,13 +80,13 @@ export function QuizRunner({ quiz }: { quiz: Quiz }) {
           <button
             type="button"
             onClick={restart}
-            className="rounded-full border border-pitch-marker px-4 py-2 font-mono text-xs uppercase tracking-widest text-pitch-marker transition-colors hover:bg-pitch-marker/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
+            className="inline-flex min-h-11 items-center justify-center rounded-full border border-pitch-marker px-4 font-mono text-xs uppercase tracking-widest text-pitch-marker transition-colors hover:bg-pitch-marker/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
           >
             Try again
           </button>
           <Link
             href="/quiz"
-            className="rounded-full border border-pitch-touchline/40 px-4 py-2 font-mono text-xs uppercase tracking-widest text-pitch-touchline transition-colors hover:border-pitch-touchline hover:text-pitch-line focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
+            className="inline-flex min-h-11 items-center justify-center rounded-full border border-pitch-touchline/60 px-4 font-mono text-xs uppercase tracking-widest text-pitch-touchline transition-colors hover:border-pitch-touchline hover:text-pitch-line focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
           >
             Back to quizzes
           </Link>
@@ -128,7 +128,7 @@ export function QuizRunner({ quiz }: { quiz: Quiz }) {
             } else if (isSelected) {
               stateClasses = "border-pitch-touchline text-pitch-touchline line-through";
             } else {
-              stateClasses = "border-pitch-touchline/20 text-pitch-touchline/60";
+              stateClasses = "border-pitch-touchline/20 text-pitch-touchline";
             }
           }
 
@@ -159,7 +159,7 @@ export function QuizRunner({ quiz }: { quiz: Quiz }) {
         type="button"
         onClick={goNext}
         disabled={!hasAnswered}
-        className="w-fit rounded-full border border-pitch-marker px-5 py-2 font-mono text-xs uppercase tracking-widest text-pitch-marker transition-colors hover:bg-pitch-marker/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent"
+        className="inline-flex min-h-11 w-fit items-center justify-center rounded-full border border-pitch-marker px-5 font-mono text-xs uppercase tracking-widest text-pitch-marker transition-colors hover:bg-pitch-marker/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent"
       >
         {isLast ? "See results →" : "Next question →"}
       </button>

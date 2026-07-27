@@ -45,7 +45,7 @@ export default async function WorkoutPlanPage({
 
       <header className="flex flex-col gap-2">
         <p className="font-mono text-sm text-pitch-marker">{plan.group}</p>
-        <h1 className="font-display text-4xl font-black uppercase tracking-tight text-pitch-line sm:text-6xl">
+        <h1 className="font-display text-4xl font-black uppercase leading-none tracking-tight text-pitch-line sm:text-6xl">
           {plan.title}
         </h1>
         <p className="max-w-2xl text-lg leading-relaxed text-pitch-touchline">{plan.tagline}</p>
