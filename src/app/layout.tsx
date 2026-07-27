@@ -46,7 +46,13 @@ export default function RootLayout({
           >
             PitchIQ
           </Link>
-          <div className="flex items-center gap-6">
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+            <Link
+              href="/academy"
+              className="font-display text-sm font-semibold uppercase tracking-[0.15em] text-pitch-touchline transition-colors hover:text-pitch-marker"
+            >
+              Academy
+            </Link>
             <Link
               href="/explore"
               className="font-display text-sm font-semibold uppercase tracking-[0.15em] text-pitch-touchline transition-colors hover:text-pitch-marker"
