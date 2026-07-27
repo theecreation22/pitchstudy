@@ -7,6 +7,7 @@ import {
   getFormationPlayers,
   keepOnside,
   mirrorFormationPlayers,
+  resolveOverlaps,
   type DefensiveStyle,
   type Formation,
   type Phase,
@@ -137,10 +138,16 @@ export function FormationExplorer({ initialSlug }: { initialSlug?: string }) {
     baseOpponentPlayers && phase === "in-possession"
       ? keepOnside(baseDisplayedPlayers, baseOpponentPlayers, true)
       : baseDisplayedPlayers;
-  const opponentPlayers =
+  const opponentPlayersOnside =
     baseOpponentPlayers && opponentPhase === "in-possession"
-      ? keepOnside(baseOpponentPlayers, baseDisplayedPlayers, false)
+      ? keepOnside(baseOpponentPlayers, displayedPlayers, false)
       : baseOpponentPlayers;
+  // Final pass: nudges the opponent's dots away from the user's own team
+  // whenever the two happen to sit close enough to visually collide,
+  // regardless of which side is attacking.
+  const opponentPlayers = opponentPlayersOnside
+    ? resolveOverlaps(opponentPlayersOnside, displayedPlayers)
+    : opponentPlayersOnside;
 
   const selectedPlayer = showOpponent
     ? displayedPlayers.find((player) => player.id === selectedPlayerId)

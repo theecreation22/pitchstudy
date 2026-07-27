@@ -346,12 +346,20 @@ export function mirrorFormationPlayers(players: FormationPlayer[]): FormationPla
 }
 
 /**
+ * Percent of pitch height a clamped attacker is held behind the last
+ * defender's line, rather than exactly on it — enough vertical separation
+ * that the two markers (each ~44px across at typical render sizes) don't
+ * visually overlap regardless of how close their x-positions happen to be.
+ */
+const ONSIDE_BUFFER = 8;
+
+/**
  * Keeps an attacking lineup from visually standing offside against the
  * defending lineup's last outfield defender (goalkeeper excluded) — the
  * deepest non-GK defender sets the line, and no attacker is allowed to sit
- * further forward than it. `attackTowardZero` should be true for the user's
- * own (unmirrored) team, which attacks toward y=0, and false for a mirrored
- * opponent, which attacks toward y=100.
+ * further forward than a small buffer behind it. `attackTowardZero` should
+ * be true for the user's own (unmirrored) team, which attacks toward y=0,
+ * and false for a mirrored opponent, which attacks toward y=100.
  */
 export function keepOnside(
   attackers: FormationPlayer[],
@@ -364,13 +372,73 @@ export function keepOnside(
   const lastDefenderY = attackTowardZero
     ? Math.min(...outfieldDefenders.map((player) => player.y))
     : Math.max(...outfieldDefenders.map((player) => player.y));
+  const onsideLine = attackTowardZero
+    ? Math.min(100, lastDefenderY + ONSIDE_BUFFER)
+    : Math.max(0, lastDefenderY - ONSIDE_BUFFER);
 
   return attackers.map((player) => {
     if (player.code === "GK") return player;
-    const y = attackTowardZero
-      ? Math.max(player.y, lastDefenderY)
-      : Math.min(player.y, lastDefenderY);
+    const y = attackTowardZero ? Math.max(player.y, onsideLine) : Math.min(player.y, onsideLine);
     return y === player.y ? player : { ...player, y };
+  });
+}
+
+/** Pitch width:height (68:105) — scales x-deltas onto the same visual footing as y-deltas, since a percent of width and a percent of height cover different real distances on the rendered (taller-than-wide) pitch. */
+const PITCH_ASPECT = 68 / 105;
+/** In "percent of pitch height" units — comfortably clears two ~44px markers at typical render sizes. */
+const MIN_MARKER_SEPARATION = 9;
+
+/** Passes over the fixed set per player — a point squeezed between several defenders may need a few rounds to fully clear all of them, since resolving one can shift its distance to the others. */
+const OVERLAP_RESOLUTION_PASSES = 14;
+
+/**
+ * Nudges each player in `movable` away from every player in `fixed` that
+ * ends up closer than a marker's width apart, so two teams' dots never
+ * visually collide on the shared pitch — a fixed onside buffer alone can't
+ * guarantee this, since some *other* nearby player (not the one that set
+ * the offside line) may happen to end up close by. Sums the push from every
+ * violated neighbor before moving (rather than resolving one at a time),
+ * so a player squeezed symmetrically between two defenders gets pushed
+ * along the one axis that actually clears both, instead of bouncing back
+ * and forth between them. Only ever moves `movable`; `fixed` never does,
+ * so the two teams don't fight each other across repeated calls.
+ */
+export function resolveOverlaps(movable: FormationPlayer[], fixed: FormationPlayer[]): FormationPlayer[] {
+  return movable.map((player) => {
+    let { x, y } = player;
+    // A perfectly symmetric standoff (e.g. stacked with several other
+    // players exactly on the pitch's center line) can make opposing push
+    // vectors cancel out exactly, leaving nothing to resolve it — this small
+    // constant sideways bias, applied every pass a violation remains,
+    // guarantees the player eventually drifts toward one side instead of
+    // sitting at a stable but unresolved equilibrium.
+    const tieBreak = (player.x >= 50 ? 1 : -1) * 1.5;
+
+    for (let pass = 0; pass < OVERLAP_RESOLUTION_PASSES; pass++) {
+      let pushX = 0;
+      let pushY = 0;
+      let violated = false;
+      for (const other of fixed) {
+        const dxRaw = x - other.x;
+        const dyRaw = y - other.y;
+        const distance = Math.hypot(dxRaw * PITCH_ASPECT, dyRaw);
+        if (distance >= MIN_MARKER_SEPARATION) continue;
+        violated = true;
+
+        if (distance === 0) {
+          pushY += MIN_MARKER_SEPARATION;
+          continue;
+        }
+        const shortfall = MIN_MARKER_SEPARATION - distance;
+        const angle = Math.atan2(dyRaw, dxRaw);
+        pushX += (Math.cos(angle) * shortfall) / PITCH_ASPECT;
+        pushY += Math.sin(angle) * shortfall;
+      }
+      if (!violated) break;
+      x += pushX + tieBreak;
+      y += pushY;
+    }
+    return { ...player, x: Math.min(100, Math.max(0, x)), y: Math.min(100, Math.max(0, y)) };
   });
 }
 

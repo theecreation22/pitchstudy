@@ -5,6 +5,7 @@ import { animate, motion, motionValue, useReducedMotion, type MotionValue } from
 import {
   getFormationPlayers,
   keepOnside,
+  resolveOverlaps,
   type DefensiveStyle,
   type Formation,
   type FormationPlayer,
@@ -49,13 +50,17 @@ export function SandboxPitch({
   const opponentMarkerMotion = useMarkerMotionValues(11);
   const rawBasePlayers = getFormationPlayers(formation, phase, defensiveStyle);
   // Keeps the user's own attackers from starting out visually offside
-  // against the opponent's last defender — doesn't fight manual dragging
-  // afterward, since this only recomputes when the underlying base
+  // against the opponent's last defender, then nudges apart anything still
+  // close enough to visually collide — neither fights manual dragging
+  // afterward, since both only recompute when the underlying base
   // positions actually change, not on every drag frame.
-  const basePlayers =
+  const onsidePlayers =
     opponentPlayers && phase === "in-possession"
       ? keepOnside(rawBasePlayers, opponentPlayers, true)
       : rawBasePlayers;
+  const basePlayers = opponentPlayers
+    ? resolveOverlaps(onsidePlayers, opponentPlayers)
+    : onsidePlayers;
   const [livePositions, setLivePositions] = useState<{ x: number; y: number }[]>(() =>
     basePlayers.map((player) => ({ x: player.x, y: player.y })),
   );
