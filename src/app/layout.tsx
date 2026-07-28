@@ -77,6 +77,12 @@ export default function RootLayout({
             >
               Challenge
             </Link>
+            <Link
+              href="/tactics-lab"
+              className="font-display text-sm font-semibold uppercase tracking-[0.15em] text-pitch-touchline transition-colors hover:text-pitch-marker"
+            >
+              Tactics Lab
+            </Link>
           </div>
         </nav>
         {children}
