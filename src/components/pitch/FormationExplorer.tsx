@@ -275,7 +275,7 @@ export function FormationExplorer({ initialSlug }: { initialSlug?: string }) {
       {viewMode === "compare" && compareFormation ? (
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
           <div className="flex flex-col gap-4">
-            <div className="mx-auto w-full max-w-sm">
+            <div className="mx-auto w-full max-w-md">
               <Pitch
                 players={formation.players}
                 formationName={formation.name}
@@ -287,7 +287,7 @@ export function FormationExplorer({ initialSlug }: { initialSlug?: string }) {
             </div>
           </div>
           <div className="flex flex-col gap-4">
-            <div className="mx-auto w-full max-w-sm">
+            <div className="mx-auto w-full max-w-md">
               <Pitch players={compareFormation.players} formationName={compareFormation.name} />
             </div>
             <div className="rounded-lg border border-pitch-touchline/30 bg-pitch-card p-6">
@@ -297,7 +297,7 @@ export function FormationExplorer({ initialSlug }: { initialSlug?: string }) {
         </div>
       ) : viewMode === "formation" ? (
         <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-10">
-          <div className="mx-auto flex w-full max-w-sm flex-col gap-3 lg:mx-0 lg:max-w-md lg:flex-1">
+          <div className="mx-auto flex w-full max-w-md flex-col gap-3 lg:mx-0 lg:max-w-lg lg:flex-1">
             <Pitch
               players={displayedPlayers}
               formationName={formation.name}
