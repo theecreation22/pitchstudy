@@ -442,6 +442,64 @@ export function resolveOverlaps(movable: FormationPlayer[], fixed: FormationPlay
   });
 }
 
+/**
+ * Nudges a team's own players apart from each other so a compressed
+ * high-press/low-block shape never leaves two teammates closer than a
+ * marker's width apart. `toHighPress`/`toLowBlock` scale each player's x/y
+ * toward a center point using only that player's own original coordinates,
+ * with no awareness of where other teammates land — every formation
+ * collides somewhere under at least one defensive style (verified across
+ * all 8 formations × both styles). Unlike `resolveOverlaps`, both players in
+ * a colliding pair move here (each covers half the required separation),
+ * since there's no "fixed" side within a single team — splitting the
+ * correction symmetrically also tends to preserve a formation's natural
+ * left-right symmetry instead of favoring whichever player happens to be
+ * processed first.
+ */
+export function resolveSelfOverlaps(players: FormationPlayer[]): FormationPlayer[] {
+  let current = players.map((player) => ({ ...player }));
+
+  for (let pass = 0; pass < OVERLAP_RESOLUTION_PASSES; pass++) {
+    const pushes = current.map(() => ({ x: 0, y: 0 }));
+    let violated = false;
+
+    for (let i = 0; i < current.length; i++) {
+      for (let j = i + 1; j < current.length; j++) {
+        const a = current[i];
+        const b = current[j];
+        const dxRaw = a.x - b.x;
+        const dyRaw = a.y - b.y;
+        const distance = Math.hypot(dxRaw * PITCH_ASPECT, dyRaw);
+        if (distance >= MIN_MARKER_SEPARATION) continue;
+        violated = true;
+
+        // An exact tie (two players landing on the identical point) has no
+        // angle to push along — separate them vertically instead, since
+        // same-x collisions here are almost always two different roles
+        // sharing the pitch's central spine (e.g. a CAM and a striker).
+        const angle = distance === 0 ? Math.PI / 2 : Math.atan2(dyRaw, dxRaw);
+        const shortfall = MIN_MARKER_SEPARATION - distance;
+        const pushXHalf = (Math.cos(angle) * shortfall) / PITCH_ASPECT / 2;
+        const pushYHalf = (Math.sin(angle) * shortfall) / 2;
+
+        pushes[i].x += pushXHalf;
+        pushes[i].y += pushYHalf;
+        pushes[j].x -= pushXHalf;
+        pushes[j].y -= pushYHalf;
+      }
+    }
+
+    if (!violated) break;
+    current = current.map((player, index) => ({
+      ...player,
+      x: Math.min(100, Math.max(0, player.x + pushes[index].x)),
+      y: Math.min(100, Math.max(0, player.y + pushes[index].y)),
+    }));
+  }
+
+  return current;
+}
+
 export type PlayerPair = { from: FormationPlayer; to: FormationPlayer };
 
 /**

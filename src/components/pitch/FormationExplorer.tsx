@@ -8,6 +8,7 @@ import {
   keepOnside,
   mirrorFormationPlayers,
   resolveOverlaps,
+  resolveSelfOverlaps,
   type DefensiveStyle,
   type Formation,
   type Phase,
@@ -117,7 +118,10 @@ export function FormationExplorer({ initialSlug }: { initialSlug?: string }) {
 
   const formation = getFormation(selectedSlug) ?? formations[0];
   const compareFormation = compareSlug ? getFormation(compareSlug) : null;
-  const baseDisplayedPlayers = getFormationPlayers(formation, phase, defensiveStyle);
+  // Compression toward a high press or low block scales each player toward
+  // a center point independently, which can leave two teammates closer than
+  // a marker's width apart — resolve that before anything cross-team.
+  const baseDisplayedPlayers = resolveSelfOverlaps(getFormationPlayers(formation, phase, defensiveStyle));
 
   const storedOpponentSlug =
     opponentSlugRaw && formations.some((candidate) => candidate.slug === opponentSlugRaw)
@@ -129,7 +133,7 @@ export function FormationExplorer({ initialSlug }: { initialSlug?: string }) {
     formations[0];
   const opponentPhase: Phase = phase === "in-possession" ? "out-of-possession" : "in-possession";
   const baseOpponentPlayers = showOpponent
-    ? mirrorFormationPlayers(getFormationPlayers(opponentFormation, opponentPhase, defensiveStyle))
+    ? mirrorFormationPlayers(resolveSelfOverlaps(getFormationPlayers(opponentFormation, opponentPhase, defensiveStyle)))
     : undefined;
 
   // Keeps whichever side is currently attacking from visually standing

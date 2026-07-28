@@ -6,6 +6,7 @@ import {
   getFormationPlayers,
   keepOnside,
   resolveOverlaps,
+  resolveSelfOverlaps,
   type DefensiveStyle,
   type Formation,
   type FormationPlayer,
@@ -48,7 +49,7 @@ export function SandboxPitch({
   const containerRef = useRef<HTMLDivElement>(null);
   const markerMotion = useMarkerMotionValues(formation.players.length);
   const opponentMarkerMotion = useMarkerMotionValues(11);
-  const rawBasePlayers = getFormationPlayers(formation, phase, defensiveStyle);
+  const rawBasePlayers = resolveSelfOverlaps(getFormationPlayers(formation, phase, defensiveStyle));
   // Keeps the user's own attackers from starting out visually offside
   // against the opponent's last defender, then nudges apart anything still
   // close enough to visually collide — neither fights manual dragging
