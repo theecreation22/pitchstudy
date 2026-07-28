@@ -391,8 +391,25 @@ const MIN_MARKER_SEPARATION = 9;
 /** Passes over the set per player — a point squeezed between several others may need many rounds to fully clear all of them, since resolving one can shift its distance to the others. */
 const OVERLAP_RESOLUTION_PASSES = 40;
 
-function clampPercent(value: number): number {
-  return Math.min(100, Math.max(0, value));
+/**
+ * Half a marker's rendered width/height, in x/y-percent units, at the
+ * narrowest realistic pitch render size (~300px wide on mobile, before the
+ * outer border/padding) — a marker pushed closer to the edge than this
+ * would have part of its circle spill past the pitch's bordered box, since
+ * neither pitch container clips overflow. Only applied to markers that
+ * actually get pushed during overlap resolution; a marker that's never
+ * violated (like the goalkeeper, sitting alone near its own goal line at
+ * y=95–97 by design in every formation) keeps its original position
+ * untouched regardless of this margin.
+ */
+const EDGE_MARGIN_X = 7.5;
+const EDGE_MARGIN_Y = 5;
+
+function clampWithEdgeMargin(x: number, y: number): { x: number; y: number } {
+  return {
+    x: Math.min(100 - EDGE_MARGIN_X, Math.max(EDGE_MARGIN_X, x)),
+    y: Math.min(100 - EDGE_MARGIN_Y, Math.max(EDGE_MARGIN_Y, y)),
+  };
 }
 
 /**
@@ -468,8 +485,11 @@ export function resolveOverlaps(movable: FormationPlayer[], fixed: FormationPlay
       // sitting at a stable but unresolved equilibrium.
       if (ownGroupViolation) {
         current[i] = { ...current[i], x: current[i].x + (current[i].x >= 50 ? 1 : -1) * 1.5 };
+        // Keep pushed markers off the pitch edge — but only markers that
+        // actually moved this pass, so a never-violated player (like the
+        // goalkeeper) keeps its exact original position.
+        current[i] = { ...current[i], ...clampWithEdgeMargin(current[i].x, current[i].y) };
       }
-      current[i] = { ...current[i], x: clampPercent(current[i].x), y: clampPercent(current[i].y) };
     }
 
     if (!violated) break;
@@ -519,8 +539,8 @@ export function resolveMatchupOverlaps(
     const shortfall = MIN_MARKER_SEPARATION - distance;
     const pushXHalf = (Math.cos(angle) * shortfall) / PITCH_ASPECT / 2;
     const pushYHalf = (Math.sin(angle) * shortfall) / 2;
-    listA[i] = { ...a, x: clampPercent(a.x + pushXHalf), y: clampPercent(a.y + pushYHalf) };
-    listB[j] = { ...b, x: clampPercent(b.x - pushXHalf), y: clampPercent(b.y - pushYHalf) };
+    listA[i] = { ...a, ...clampWithEdgeMargin(a.x + pushXHalf, a.y + pushYHalf) };
+    listB[j] = { ...b, ...clampWithEdgeMargin(b.x - pushXHalf, b.y - pushYHalf) };
     return true;
   };
 
