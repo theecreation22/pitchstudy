@@ -1,4 +1,5 @@
 import { getFormation, type PositionCode } from "@/lib/formations";
+import type { PlayStep } from "./playSchema";
 
 /** A single designed player: freely placed (not tied to any one canonical formation), in the same 0–100 pitch-percent space as FormationPlayer. */
 export type LabPlayer = {
@@ -34,6 +35,8 @@ export type Design = {
   instructions: Instructions;
   /** The formation slug this design started from, if seeded from a template — purely informational, not re-derived. */
   seededFrom?: string;
+  /** A choreographed move built on top of this formation's starting positions, in Play Designer mode. Absent until the user adds a first step. */
+  play?: PlayStep[];
 };
 
 export function createEmptyPlayer(id: string, role: PositionCode, x: number, y: number): LabPlayer {
