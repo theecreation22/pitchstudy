@@ -18,6 +18,7 @@ import { TeamInstructionsPanel } from "./TeamInstructionsPanel";
 import { ShapeReadout } from "./ShapeReadout";
 import { TacticalRadar } from "./TacticalRadar";
 import { AutoNotes } from "./AutoNotes";
+import { CoachVerdictPanel } from "./CoachVerdictPanel";
 
 const STORAGE_KEY = "pitchiq:tactics-lab:design:v1";
 
@@ -35,7 +36,7 @@ function parseDesign(raw: string | null): Design {
   return { players: seedFromFormation("4-4-2"), instructions: DEFAULT_INSTRUCTIONS, seededFrom: "4-4-2" };
 }
 
-export function TacticsLab() {
+export function TacticsLab({ coachAvailable }: { coachAvailable: boolean }) {
   const [raw, setRaw] = useLocalStorageValue(STORAGE_KEY);
   const design = useMemo(() => parseDesign(raw), [raw]);
   const [selectedPlayerId, setSelectedPlayerId] = useState<string | null>(null);
@@ -113,6 +114,7 @@ export function TacticsLab() {
             <p className="font-mono text-xs uppercase tracking-widest text-pitch-marker">Coach&apos;s notes</p>
             <AutoNotes notes={notes} />
           </div>
+          <CoachVerdictPanel design={design} coachAvailable={coachAvailable} />
           <TeamInstructionsPanel instructions={design.instructions} onChange={setInstructions} />
         </aside>
       </div>

@@ -8,6 +8,12 @@ export const metadata: Metadata = {
     "Design your own formation, set team instructions, and get instant tactical feedback from a live analysis engine.",
 };
 
+// Whether the coach verdict is available depends on a runtime secret
+// (ANTHROPIC_API_KEY) that may be configured independently of the build —
+// prerendering this page statically would bake in whatever the key's
+// presence was at build time, not the actual runtime environment.
+export const dynamic = "force-dynamic";
+
 export default function TacticsLabPage() {
   return (
     <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-10 px-4 py-10 sm:px-8 sm:py-16">
@@ -25,7 +31,7 @@ export default function TacticsLabPage() {
 
       <ChalkDivider />
 
-      <TacticsLab />
+      <TacticsLab coachAvailable={Boolean(process.env.ANTHROPIC_API_KEY)} />
     </div>
   );
 }
