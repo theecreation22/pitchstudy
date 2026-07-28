@@ -1,4 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk";
+import { getFormation, mirrorFormationPlayers } from "@/lib/formations";
 import { computeScores, generateNotes } from "@/lib/tactics-lab/engine";
 import { recognizeShape } from "@/lib/tactics-lab/shapeRecognition";
 import type { Design } from "@/lib/tactics-lab/designSchema";
@@ -25,7 +26,9 @@ OPPONENT_PLAN: <2-3 sentences on how a smart opponent would attack this shape, o
 ONE_TWEAK: <the single highest-value adjustment you'd suggest, one line>
 END
 
-Exactly two STRENGTH lines and exactly two VULNERABILITY lines — no more, no fewer. Ground every line in the actual coordinates, roles, and instructions given, not generic advice that would apply to any formation. Write as coaching interpretation for learning, not objective truth: confident, but not absolutist — this is one read on the shape, not a verdict on the player.`;
+Exactly two STRENGTH lines and exactly two VULNERABILITY lines — no more, no fewer. Ground every line in the actual coordinates, roles, and instructions given, not generic advice that would apply to any formation. Write as coaching interpretation for learning, not objective truth: confident, but not absolutist — this is one read on the shape, not a verdict on the player.
+
+If the payload includes an "opponentFormation" field, make OPPONENT_PLAN specific to that named formation and its given player coordinates — reference its actual shape and how it lines up against this one, not a generic hypothetical. If "opponentFormation" is absent, describe a plausible generic opponent instead.`;
 
 /**
  * Best-effort, in-memory rate limit. Resets on cold start / redeploy and
@@ -85,12 +88,21 @@ export async function POST(request: Request) {
   const scores = computeScores(design.players, design.instructions);
   const notes = generateNotes(design.players, design.instructions, scores);
 
+  const opponentFormation =
+    typeof design.opponentFormationSlug === "string" ? getFormation(design.opponentFormationSlug) : undefined;
+
   const analystPayload = {
     shapeName,
     players: design.players.map((p) => ({ role: p.role, x: p.x, y: p.y })),
     instructions: design.instructions,
     engineScores: scores,
     engineNotes: notes.map((n) => n.text),
+    ...(opponentFormation && {
+      opponentFormation: {
+        name: opponentFormation.name,
+        players: mirrorFormationPlayers(opponentFormation.players).map((p) => ({ role: p.code, x: p.x, y: p.y })),
+      },
+    }),
   };
 
   const client = new Anthropic({ apiKey });

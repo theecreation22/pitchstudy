@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { PitchMarkings } from "@/components/pitch/PitchMarkings";
+import type { FormationPlayer } from "@/lib/formations";
 import type { LabPlayer } from "@/lib/tactics-lab/designSchema";
 import { computePlayFrames, type PlayActionKind, type PlayStep } from "@/lib/tactics-lab/playSchema";
 import { StepTimeline } from "./StepTimeline";
@@ -36,9 +37,11 @@ type Props = {
   players: LabPlayer[];
   steps: PlayStep[];
   onStepsChange: (steps: PlayStep[]) => void;
+  /** A mirrored opponent lineup rendered as a non-interactive dashed-blue overlay, from Opponent Sim. */
+  opponentPlayers?: FormationPlayer[];
 };
 
-export function PlayDesigner({ players, steps, onStepsChange }: Props) {
+export function PlayDesigner({ players, steps, onStepsChange, opponentPlayers }: Props) {
   const reduceMotion = useReducedMotion();
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -139,6 +142,22 @@ export function PlayDesigner({ players, steps, onStepsChange }: Props) {
         className="relative w-full touch-none select-none aspect-[68/105] rounded-xl border-2 border-pitch-touchline/25 bg-pitch-deep p-2 shadow-[0_12px_32px_-12px_rgba(0,0,0,0.7)] sm:p-3"
       >
         <PitchMarkings />
+
+        {opponentPlayers && opponentPlayers.length > 0 && (
+          <div className="absolute inset-0" aria-hidden="true">
+            {opponentPlayers.map((opponent) => (
+              <div
+                key={`opponent-${opponent.id}`}
+                className="absolute -translate-x-1/2 -translate-y-1/2"
+                style={{ left: `${opponent.x}%`, top: `${opponent.y}%` }}
+              >
+                <div className="flex h-11 w-11 items-center justify-center rounded-full border-2 border-dashed border-defend/70 bg-defend/10 font-mono text-xs font-semibold text-defend-bright">
+                  {opponent.code}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
 
         <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="pointer-events-none absolute inset-0 h-full w-full" aria-hidden="true">
           {steps.map((step, index) => {

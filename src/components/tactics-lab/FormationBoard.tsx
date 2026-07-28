@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { motion, motionValue, useReducedMotion, type MotionValue } from "framer-motion";
 import { PitchMarkings } from "@/components/pitch/PitchMarkings";
+import type { FormationPlayer } from "@/lib/formations";
 import type { LabPlayer } from "@/lib/tactics-lab/designSchema";
 
 /** Fixed at 11 for the lifetime of a design in Phase 1 — players never join or leave the roster, only move or change role — so these can be created once via a lazy initializer (never touched during render) and indexed positionally, the same pattern used by SandboxPitch's marker motion values. */
@@ -30,9 +31,11 @@ type Props = {
   onMovePlayer: (id: string, x: number, y: number) => void;
   selectedPlayerId: string | null;
   onSelectPlayer: (id: string | null) => void;
+  /** A mirrored opponent lineup rendered as a non-interactive dashed-blue overlay, from Opponent Sim. */
+  opponentPlayers?: FormationPlayer[];
 };
 
-export function FormationBoard({ players, onMovePlayer, selectedPlayerId, onSelectPlayer }: Props) {
+export function FormationBoard({ players, onMovePlayer, selectedPlayerId, onSelectPlayer, opponentPlayers }: Props) {
   const reduceMotion = useReducedMotion();
   const containerRef = useRef<HTMLDivElement>(null);
   const motionValues = usePlayerMotionValues(players.length);
@@ -74,6 +77,21 @@ export function FormationBoard({ players, onMovePlayer, selectedPlayerId, onSele
       className="relative w-full touch-none select-none aspect-[68/105] rounded-xl border-2 border-pitch-touchline/25 bg-pitch-deep p-2 shadow-[0_12px_32px_-12px_rgba(0,0,0,0.7)] sm:p-3"
     >
       <PitchMarkings />
+      {opponentPlayers && opponentPlayers.length > 0 && (
+        <div className="absolute inset-0" aria-hidden="true">
+          {opponentPlayers.map((opponent) => (
+            <div
+              key={`opponent-${opponent.id}`}
+              className="absolute -translate-x-1/2 -translate-y-1/2"
+              style={{ left: `${opponent.x}%`, top: `${opponent.y}%` }}
+            >
+              <div className="flex h-11 w-11 items-center justify-center rounded-full border-2 border-dashed border-defend/70 bg-defend/10 font-mono text-xs font-semibold text-defend-bright">
+                {opponent.code}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
       {players.map((player, index) => {
         const mv = motionValues[index];
         const isSelected = selectedPlayerId === player.id;

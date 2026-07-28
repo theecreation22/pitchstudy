@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { formations } from "@/lib/formations";
+import { formations, getFormation, mirrorFormationPlayers, resolveOverlaps } from "@/lib/formations";
 import { useLocalStorageValue } from "@/lib/useLocalStorageValue";
 import { SegmentedTabs } from "@/components/ui/SegmentedTabs";
 import {
@@ -22,6 +22,7 @@ import { TacticalRadar } from "./TacticalRadar";
 import { AutoNotes } from "./AutoNotes";
 import { CoachVerdictPanel } from "./CoachVerdictPanel";
 import { PlayDesigner } from "./PlayDesigner";
+import { OpponentSim } from "./OpponentSim";
 
 const STORAGE_KEY = "pitchiq:tactics-lab:design:v1";
 
@@ -41,6 +42,7 @@ function parseDesign(raw: string | null): Design {
           instructions: parsed.instructions,
           seededFrom: parsed.seededFrom,
           play: Array.isArray(parsed.play) ? parsed.play : undefined,
+          opponentFormationSlug: parsed.opponentFormationSlug,
         };
       }
     } catch {
@@ -64,6 +66,10 @@ export function TacticsLab({ coachAvailable }: { coachAvailable: boolean }) {
     persist({ ...design, play });
   }
 
+  function setOpponentSlug(opponentFormationSlug: string | undefined) {
+    persist({ ...design, opponentFormationSlug });
+  }
+
   function movePlayer(id: string, x: number, y: number) {
     persist({ ...design, players: design.players.map((p) => (p.id === id ? { ...p, x, y } : p)) });
   }
@@ -81,6 +87,17 @@ export function TacticsLab({ coachAvailable }: { coachAvailable: boolean }) {
     if (!selectedPlayerId) return;
     persist({ ...design, players: design.players.map((p) => (p.id === selectedPlayerId ? { ...p, role } : p)) });
   }
+
+  const opponentPlayers = useMemo(() => {
+    const formation = design.opponentFormationSlug ? getFormation(design.opponentFormationSlug) : undefined;
+    if (!formation) return undefined;
+    const mirrored = mirrorFormationPlayers(formation.players);
+    // Only the opponent's dots move to clear a collision — the user's own
+    // markers are their authored design and must never be nudged just
+    // because a comparison overlay happens to be on.
+    const myPlayersAsFixed = design.players.map((p) => ({ id: p.id, code: p.role, x: p.x, y: p.y }));
+    return resolveOverlaps(mirrored, myPlayersAsFixed);
+  }, [design.opponentFormationSlug, design.players]);
 
   const shapeName = useMemo(() => recognizeShape(design.players), [design.players]);
   const scores = useMemo(() => computeScores(design.players, design.instructions), [design.players, design.instructions]);
@@ -118,13 +135,19 @@ export function TacticsLab({ coachAvailable }: { coachAvailable: boolean }) {
                 onMovePlayer={movePlayer}
                 selectedPlayerId={selectedPlayerId}
                 onSelectPlayer={setSelectedPlayerId}
+                opponentPlayers={opponentPlayers}
               />
               <p className="mt-3 text-xs leading-relaxed text-pitch-touchline">
                 Drag a player to reposition them, or select one and use the arrow keys. Select a player to assign their role below.
               </p>
             </>
           ) : (
-            <PlayDesigner players={design.players} steps={design.play ?? []} onStepsChange={setPlaySteps} />
+            <PlayDesigner
+              players={design.players}
+              steps={design.play ?? []}
+              onStepsChange={setPlaySteps}
+              opponentPlayers={opponentPlayers}
+            />
           )}
         </div>
 
@@ -141,6 +164,12 @@ export function TacticsLab({ coachAvailable }: { coachAvailable: boolean }) {
             <p className="font-mono text-xs uppercase tracking-widest text-pitch-marker">Coach&apos;s notes</p>
             <AutoNotes notes={notes} />
           </div>
+          <OpponentSim
+            myPlayers={design.players}
+            opponentSlug={design.opponentFormationSlug}
+            opponentPlayers={opponentPlayers}
+            onOpponentSlugChange={setOpponentSlug}
+          />
           <CoachVerdictPanel design={design} coachAvailable={coachAvailable} />
           <TeamInstructionsPanel instructions={design.instructions} onChange={setInstructions} />
         </aside>

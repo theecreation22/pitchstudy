@@ -37,6 +37,8 @@ export type Design = {
   seededFrom?: string;
   /** A choreographed move built on top of this formation's starting positions, in Play Designer mode. Absent until the user adds a first step. */
   play?: PlayStep[];
+  /** The opponent formation slug selected in Opponent Sim, if any — absent means no opponent overlay is shown. */
+  opponentFormationSlug?: string;
 };
 
 export function createEmptyPlayer(id: string, role: PositionCode, x: number, y: number): LabPlayer {
