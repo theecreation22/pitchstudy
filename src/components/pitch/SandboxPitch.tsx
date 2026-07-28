@@ -49,19 +49,21 @@ export function SandboxPitch({
   const containerRef = useRef<HTMLDivElement>(null);
   const markerMotion = useMarkerMotionValues(formation.players.length);
   const opponentMarkerMotion = useMarkerMotionValues(11);
-  const rawBasePlayers = resolveSelfOverlaps(getFormationPlayers(formation, phase, defensiveStyle));
+  const rawBasePlayers = getFormationPlayers(formation, phase, defensiveStyle);
   // Keeps the user's own attackers from starting out visually offside
   // against the opponent's last defender, then nudges apart anything still
   // close enough to visually collide — neither fights manual dragging
   // afterward, since both only recompute when the underlying base
-  // positions actually change, not on every drag frame.
+  // positions actually change, not on every drag frame. keepOnside must run
+  // before overlap resolution, not after — otherwise it can re-stack
+  // players that resolution already spaced apart.
   const onsidePlayers =
     opponentPlayers && phase === "in-possession"
       ? keepOnside(rawBasePlayers, opponentPlayers, true)
       : rawBasePlayers;
   const basePlayers = opponentPlayers
     ? resolveOverlaps(onsidePlayers, opponentPlayers)
-    : onsidePlayers;
+    : resolveSelfOverlaps(onsidePlayers);
   const [livePositions, setLivePositions] = useState<{ x: number; y: number }[]>(() =>
     basePlayers.map((player) => ({ x: player.x, y: player.y })),
   );

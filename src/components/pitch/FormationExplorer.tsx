@@ -7,10 +7,11 @@ import {
   getFormationPlayers,
   keepOnside,
   mirrorFormationPlayers,
-  resolveOverlaps,
+  resolveMatchupOverlaps,
   resolveSelfOverlaps,
   type DefensiveStyle,
   type Formation,
+  type FormationPlayer,
   type Phase,
 } from "@/lib/formations";
 import { describeMatchup, findMatchups } from "@/lib/matchups";
@@ -118,10 +119,7 @@ export function FormationExplorer({ initialSlug }: { initialSlug?: string }) {
 
   const formation = getFormation(selectedSlug) ?? formations[0];
   const compareFormation = compareSlug ? getFormation(compareSlug) : null;
-  // Compression toward a high press or low block scales each player toward
-  // a center point independently, which can leave two teammates closer than
-  // a marker's width apart — resolve that before anything cross-team.
-  const baseDisplayedPlayers = resolveSelfOverlaps(getFormationPlayers(formation, phase, defensiveStyle));
+  const rawDisplayedPlayers = getFormationPlayers(formation, phase, defensiveStyle);
 
   const storedOpponentSlug =
     opponentSlugRaw && formations.some((candidate) => candidate.slug === opponentSlugRaw)
@@ -132,26 +130,39 @@ export function FormationExplorer({ initialSlug }: { initialSlug?: string }) {
     formations.find((candidate) => candidate.slug !== selectedSlug) ??
     formations[0];
   const opponentPhase: Phase = phase === "in-possession" ? "out-of-possession" : "in-possession";
-  const baseOpponentPlayers = showOpponent
-    ? mirrorFormationPlayers(resolveSelfOverlaps(getFormationPlayers(opponentFormation, opponentPhase, defensiveStyle)))
+  const rawOpponentPlayers = showOpponent
+    ? mirrorFormationPlayers(getFormationPlayers(opponentFormation, opponentPhase, defensiveStyle))
     : undefined;
 
   // Keeps whichever side is currently attacking from visually standing
-  // offside against the other side's last defender.
-  const displayedPlayers =
-    baseOpponentPlayers && phase === "in-possession"
-      ? keepOnside(baseDisplayedPlayers, baseOpponentPlayers, true)
-      : baseDisplayedPlayers;
-  const opponentPlayersOnside =
-    baseOpponentPlayers && opponentPhase === "in-possession"
-      ? keepOnside(baseOpponentPlayers, displayedPlayers, false)
-      : baseOpponentPlayers;
-  // Final pass: nudges the opponent's dots away from the user's own team
-  // whenever the two happen to sit close enough to visually collide,
-  // regardless of which side is attacking.
-  const opponentPlayers = opponentPlayersOnside
-    ? resolveOverlaps(opponentPlayersOnside, displayedPlayers)
-    : opponentPlayersOnside;
+  // offside against the other side's last defender. Uses each side's raw
+  // (pre-overlap-resolution) positions as the reference line — a coarse
+  // check, so it doesn't need to account for the few units of movement
+  // overlap resolution applies afterward.
+  const onsideDisplayedPlayers =
+    rawOpponentPlayers && phase === "in-possession"
+      ? keepOnside(rawDisplayedPlayers, rawOpponentPlayers, true)
+      : rawDisplayedPlayers;
+  const onsideOpponentPlayers =
+    rawOpponentPlayers && opponentPhase === "in-possession"
+      ? keepOnside(rawOpponentPlayers, rawDisplayedPlayers, false)
+      : rawOpponentPlayers;
+
+  // Resolves every marker overlap — both within a team (a compressed shape,
+  // or the onside adjustment above, can stack two teammates close together)
+  // and between the two teams — together. Doing this as separate sequential
+  // phases (self-overlaps, then cross-team) was tried first and doesn't
+  // fully converge: fixing one collision kind can reintroduce the other.
+  let displayedPlayers: FormationPlayer[];
+  let opponentPlayers: FormationPlayer[] | undefined;
+  if (onsideOpponentPlayers) {
+    const resolved = resolveMatchupOverlaps(onsideDisplayedPlayers, onsideOpponentPlayers);
+    displayedPlayers = resolved.own;
+    opponentPlayers = resolved.opponent;
+  } else {
+    displayedPlayers = resolveSelfOverlaps(onsideDisplayedPlayers);
+    opponentPlayers = undefined;
+  }
 
   const selectedPlayer = showOpponent
     ? displayedPlayers.find((player) => player.id === selectedPlayerId)

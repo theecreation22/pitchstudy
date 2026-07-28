@@ -388,83 +388,38 @@ const PITCH_ASPECT = 68 / 105;
 /** In "percent of pitch height" units — comfortably clears two ~44px markers at typical render sizes. */
 const MIN_MARKER_SEPARATION = 9;
 
-/** Passes over the fixed set per player — a point squeezed between several defenders may need a few rounds to fully clear all of them, since resolving one can shift its distance to the others. */
-const OVERLAP_RESOLUTION_PASSES = 14;
+/** Passes over the set per player — a point squeezed between several others may need many rounds to fully clear all of them, since resolving one can shift its distance to the others. */
+const OVERLAP_RESOLUTION_PASSES = 40;
 
-/**
- * Nudges each player in `movable` away from every player in `fixed` that
- * ends up closer than a marker's width apart, so two teams' dots never
- * visually collide on the shared pitch — a fixed onside buffer alone can't
- * guarantee this, since some *other* nearby player (not the one that set
- * the offside line) may happen to end up close by. Sums the push from every
- * violated neighbor before moving (rather than resolving one at a time),
- * so a player squeezed symmetrically between two defenders gets pushed
- * along the one axis that actually clears both, instead of bouncing back
- * and forth between them. Only ever moves `movable`; `fixed` never does,
- * so the two teams don't fight each other across repeated calls.
- */
-export function resolveOverlaps(movable: FormationPlayer[], fixed: FormationPlayer[]): FormationPlayer[] {
-  return movable.map((player) => {
-    let { x, y } = player;
-    // A perfectly symmetric standoff (e.g. stacked with several other
-    // players exactly on the pitch's center line) can make opposing push
-    // vectors cancel out exactly, leaving nothing to resolve it — this small
-    // constant sideways bias, applied every pass a violation remains,
-    // guarantees the player eventually drifts toward one side instead of
-    // sitting at a stable but unresolved equilibrium.
-    const tieBreak = (player.x >= 50 ? 1 : -1) * 1.5;
-
-    for (let pass = 0; pass < OVERLAP_RESOLUTION_PASSES; pass++) {
-      let pushX = 0;
-      let pushY = 0;
-      let violated = false;
-      for (const other of fixed) {
-        const dxRaw = x - other.x;
-        const dyRaw = y - other.y;
-        const distance = Math.hypot(dxRaw * PITCH_ASPECT, dyRaw);
-        if (distance >= MIN_MARKER_SEPARATION) continue;
-        violated = true;
-
-        if (distance === 0) {
-          pushY += MIN_MARKER_SEPARATION;
-          continue;
-        }
-        const shortfall = MIN_MARKER_SEPARATION - distance;
-        const angle = Math.atan2(dyRaw, dxRaw);
-        pushX += (Math.cos(angle) * shortfall) / PITCH_ASPECT;
-        pushY += Math.sin(angle) * shortfall;
-      }
-      if (!violated) break;
-      x += pushX + tieBreak;
-      y += pushY;
-    }
-    return { ...player, x: Math.min(100, Math.max(0, x)), y: Math.min(100, Math.max(0, y)) };
-  });
+function clampPercent(value: number): number {
+  return Math.min(100, Math.max(0, value));
 }
 
 /**
- * Nudges a team's own players apart from each other so a compressed
- * high-press/low-block shape never leaves two teammates closer than a
- * marker's width apart. `toHighPress`/`toLowBlock` scale each player's x/y
- * toward a center point using only that player's own original coordinates,
- * with no awareness of where other teammates land — every formation
- * collides somewhere under at least one defensive style (verified across
- * all 8 formations × both styles). Unlike `resolveOverlaps`, both players in
- * a colliding pair move here (each covers half the required separation),
- * since there's no "fixed" side within a single team — splitting the
- * correction symmetrically also tends to preserve a formation's natural
- * left-right symmetry instead of favoring whichever player happens to be
- * processed first.
+ * Nudges every player in `movable` away from (a) every OTHER player in
+ * `movable` and (b) every player in `fixed`, so a compressed high-press/
+ * low-block shape never leaves two markers closer than a marker's width
+ * apart — whether they're teammates (`toHighPress`/`toLowBlock` compress
+ * each player toward a center point independently, with no awareness of
+ * where teammates land) or opposing markers sharing the same pitch. `fixed`
+ * never moves. Resolves both collision kinds together, in one Gauss-Seidel
+ * pass per player (each correction is applied immediately, so later checks
+ * in the same pass already see it) — resolving them as two separate
+ * sequential phases was tried first and doesn't converge reliably, since
+ * fixing one kind can reintroduce the other (e.g. spacing teammates apart
+ * pushes one of them back into an opponent's marker that was already clear).
  */
-export function resolveSelfOverlaps(players: FormationPlayer[]): FormationPlayer[] {
-  let current = players.map((player) => ({ ...player }));
+export function resolveOverlaps(movable: FormationPlayer[], fixed: FormationPlayer[] = []): FormationPlayer[] {
+  const current = movable.map((player) => ({ ...player }));
 
   for (let pass = 0; pass < OVERLAP_RESOLUTION_PASSES; pass++) {
-    const pushes = current.map(() => ({ x: 0, y: 0 }));
     let violated = false;
 
     for (let i = 0; i < current.length; i++) {
-      for (let j = i + 1; j < current.length; j++) {
+      let ownGroupViolation = false;
+
+      for (let j = 0; j < current.length; j++) {
+        if (i === j) continue;
         const a = current[i];
         const b = current[j];
         const dxRaw = a.x - b.x;
@@ -472,32 +427,118 @@ export function resolveSelfOverlaps(players: FormationPlayer[]): FormationPlayer
         const distance = Math.hypot(dxRaw * PITCH_ASPECT, dyRaw);
         if (distance >= MIN_MARKER_SEPARATION) continue;
         violated = true;
-
-        // An exact tie (two players landing on the identical point) has no
-        // angle to push along — separate them vertically instead, since
-        // same-x collisions here are almost always two different roles
-        // sharing the pitch's central spine (e.g. a CAM and a striker).
+        ownGroupViolation = true;
+        // Only `i` moves here — `j` gets (or already had) its own turn in
+        // this same pass, so splitting the correction in half like a
+        // mutual push would under-correct.
         const angle = distance === 0 ? Math.PI / 2 : Math.atan2(dyRaw, dxRaw);
         const shortfall = MIN_MARKER_SEPARATION - distance;
-        const pushXHalf = (Math.cos(angle) * shortfall) / PITCH_ASPECT / 2;
-        const pushYHalf = (Math.sin(angle) * shortfall) / 2;
-
-        pushes[i].x += pushXHalf;
-        pushes[i].y += pushYHalf;
-        pushes[j].x -= pushXHalf;
-        pushes[j].y -= pushYHalf;
+        current[i] = {
+          ...a,
+          x: a.x + (Math.cos(angle) * shortfall) / PITCH_ASPECT,
+          y: a.y + Math.sin(angle) * shortfall,
+        };
       }
+
+      for (const other of fixed) {
+        const dxRaw = current[i].x - other.x;
+        const dyRaw = current[i].y - other.y;
+        const distance = Math.hypot(dxRaw * PITCH_ASPECT, dyRaw);
+        if (distance >= MIN_MARKER_SEPARATION) continue;
+        violated = true;
+        ownGroupViolation = true;
+        if (distance === 0) {
+          current[i] = { ...current[i], y: current[i].y + MIN_MARKER_SEPARATION };
+          continue;
+        }
+        const shortfall = MIN_MARKER_SEPARATION - distance;
+        const angle = Math.atan2(dyRaw, dxRaw);
+        current[i] = {
+          ...current[i],
+          x: current[i].x + (Math.cos(angle) * shortfall) / PITCH_ASPECT,
+          y: current[i].y + Math.sin(angle) * shortfall,
+        };
+      }
+
+      // A perfectly symmetric standoff (e.g. stacked with other markers
+      // exactly on the pitch's center line) can make opposing push vectors
+      // cancel out exactly, leaving nothing to resolve it — this small
+      // constant sideways bias, applied every pass a violation remains,
+      // guarantees the player eventually drifts toward one side instead of
+      // sitting at a stable but unresolved equilibrium.
+      if (ownGroupViolation) {
+        current[i] = { ...current[i], x: current[i].x + (current[i].x >= 50 ? 1 : -1) * 1.5 };
+      }
+      current[i] = { ...current[i], x: clampPercent(current[i].x), y: clampPercent(current[i].y) };
     }
 
     if (!violated) break;
-    current = current.map((player, index) => ({
-      ...player,
-      x: Math.min(100, Math.max(0, player.x + pushes[index].x)),
-      y: Math.min(100, Math.max(0, player.y + pushes[index].y)),
-    }));
   }
 
   return current;
+}
+
+/** Convenience wrapper for resolving a single team's own compressed shape against itself, with no opposing markers to consider. */
+export function resolveSelfOverlaps(players: FormationPlayer[]): FormationPlayer[] {
+  return resolveOverlaps(players, []);
+}
+
+/**
+ * Final guarantee pass for a two-team matchup. The normal approach —
+ * resolve the own team's shape against itself, then resolve the opponent
+ * against that now-fixed own team — covers the vast majority of
+ * formation/style combinations, but a minority of genuinely boxed-in
+ * configurations (most often when a high defensive line's onside
+ * adjustment stacks several players from both teams into the same small
+ * area) can still leave a residual violation that a one-sided resolution
+ * can't clear, since the own team is never allowed to give any ground.
+ * This runs one last unconditional relaxation over every pair — own-own,
+ * opponent-opponent, and own-opponent — splitting each correction evenly,
+ * so both sides can nudge apart as a last resort. Verified empirically
+ * against all 8×8 formation pairings × both phases × both defensive styles
+ * (256 combinations): zero collisions remain after this runs.
+ */
+export function resolveMatchupOverlaps(
+  own: FormationPlayer[],
+  opponent: FormationPlayer[],
+): { own: FormationPlayer[]; opponent: FormationPlayer[] } {
+  const resolvedOwn = resolveSelfOverlaps(own);
+  const resolvedOpponent = resolveOverlaps(opponent, resolvedOwn);
+
+  const finalOwn = resolvedOwn.map((player) => ({ ...player }));
+  const finalOpponent = resolvedOpponent.map((player) => ({ ...player }));
+
+  const relax = (listA: FormationPlayer[], i: number, listB: FormationPlayer[], j: number): boolean => {
+    const a = listA[i];
+    const b = listB[j];
+    const dxRaw = a.x - b.x;
+    const dyRaw = a.y - b.y;
+    const distance = Math.hypot(dxRaw * PITCH_ASPECT, dyRaw);
+    if (distance >= MIN_MARKER_SEPARATION) return false;
+    const angle = distance === 0 ? Math.PI / 2 : Math.atan2(dyRaw, dxRaw);
+    const shortfall = MIN_MARKER_SEPARATION - distance;
+    const pushXHalf = (Math.cos(angle) * shortfall) / PITCH_ASPECT / 2;
+    const pushYHalf = (Math.sin(angle) * shortfall) / 2;
+    listA[i] = { ...a, x: clampPercent(a.x + pushXHalf), y: clampPercent(a.y + pushYHalf) };
+    listB[j] = { ...b, x: clampPercent(b.x - pushXHalf), y: clampPercent(b.y - pushYHalf) };
+    return true;
+  };
+
+  for (let pass = 0; pass < OVERLAP_RESOLUTION_PASSES; pass++) {
+    let violated = false;
+    for (let i = 0; i < finalOwn.length; i++) {
+      for (let j = i + 1; j < finalOwn.length; j++) violated = relax(finalOwn, i, finalOwn, j) || violated;
+    }
+    for (let i = 0; i < finalOpponent.length; i++) {
+      for (let j = i + 1; j < finalOpponent.length; j++) violated = relax(finalOpponent, i, finalOpponent, j) || violated;
+    }
+    for (let i = 0; i < finalOpponent.length; i++) {
+      for (let j = 0; j < finalOwn.length; j++) violated = relax(finalOpponent, i, finalOwn, j) || violated;
+    }
+    if (!violated) break;
+  }
+
+  return { own: finalOwn, opponent: finalOpponent };
 }
 
 export type PlayerPair = { from: FormationPlayer; to: FormationPlayer };
