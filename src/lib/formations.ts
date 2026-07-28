@@ -503,6 +503,106 @@ export function resolveSelfOverlaps(players: FormationPlayer[]): FormationPlayer
   return resolveOverlaps(players, []);
 }
 
+type FormationLine = "defense" | "midfield" | "attack";
+const FORMATION_LINE: Partial<Record<PositionCode, FormationLine>> = {
+  LB: "defense", RB: "defense", CB: "defense", LWB: "defense", RWB: "defense",
+  CDM: "midfield", CM: "midfield", CAM: "midfield", LM: "midfield", RM: "midfield",
+  LW: "attack", RW: "attack", ST: "attack",
+};
+/** Wing-backs advancing well beyond a deep-lying midfielder is a normal, well-established tactical pattern — exempted from the "defenders stay behind midfield" depth check that otherwise applies. */
+const DEPTH_CHECK_EXEMPT: Partial<Record<PositionCode, true>> = { LWB: true, RWB: true };
+
+function swapPlayers(players: FormationPlayer[], idA: string, idB: string): void {
+  const i = players.findIndex((p) => p.id === idA);
+  const j = players.findIndex((p) => p.id === idB);
+  const { x, y } = players[i];
+  players[i] = { ...players[i], x: players[j].x, y: players[j].y };
+  players[j] = { ...players[j], x, y };
+}
+
+/**
+ * The geometric relaxation above has no concept of position roles — it
+ * only knows "stay N units from every other marker." In crowded scenarios
+ * (typically when an extreme high-press onside line stacks several players
+ * near the same spot) it can produce a technically clean, non-overlapping
+ * arrangement that no longer makes football sense: two central midfielders
+ * swapped left-right, or an attacking midfielder ending up more advanced
+ * than the team's own forwards. Since any two already-resolved points are
+ * each individually valid (clear of every other marker), swapping which
+ * player-id sits at which point can't reintroduce a collision or boundary
+ * issue — it only changes the assignment, not the set of occupied points —
+ * so this runs as a free final pass. `referenceOrder` is the line-up's
+ * order *before* this function's own relaxation ran; `toHighPress`/
+ * `toLowBlock`/mirroring never change relative x-order or which line is
+ * deepest, so the input to `resolveMatchupOverlaps` is already a valid
+ * "this is the intended order" reference.
+ */
+function restoreFormationOrder(
+  players: FormationPlayer[],
+  referenceOrder: FormationPlayer[],
+  attackTowardZero: boolean,
+): void {
+  const isAheadOf = (aY: number, bY: number) => (attackTowardZero ? aY < bY - 6 : aY > bY + 6);
+  // Strict, tolerance-free comparator for finding the shallowest player in
+  // a line — reusing the tolerance-banded isAheadOf here would let two
+  // attackers within 6 units of each other fail to compare, leaving the
+  // reduce stuck on the array's first element instead of the true minimum.
+  const isShallowerThan = (aY: number, bY: number) => (attackTowardZero ? aY > bY : aY < bY);
+
+  const fixLeftRight = (): boolean => {
+    let changed = false;
+    for (const line of ["defense", "midfield", "attack"] as FormationLine[]) {
+      const inLine = referenceOrder.filter((p) => FORMATION_LINE[p.code] === line);
+      for (let i = 0; i < inLine.length; i++) {
+        for (let j = i + 1; j < inLine.length; j++) {
+          const a = inLine[i];
+          const b = inLine[j];
+          if (Math.abs(a.x - b.x) <= 5) continue;
+          const [leftId, rightId] = a.x < b.x ? [a.id, b.id] : [b.id, a.id];
+          const left = players.find((p) => p.id === leftId)!;
+          const right = players.find((p) => p.id === rightId)!;
+          if (left.x > right.x) {
+            swapPlayers(players, leftId, rightId);
+            changed = true;
+          }
+        }
+      }
+    }
+    return changed;
+  };
+
+  const fixDepth = (): boolean => {
+    let changed = false;
+    const swapAheadOfLine = (behindLine: FormationLine, aheadLine: FormationLine) => {
+      const behindPlayers = players.filter((p) => FORMATION_LINE[p.code] === behindLine && !DEPTH_CHECK_EXEMPT[p.code]);
+      for (const behind of behindPlayers) {
+        const aheadPlayers = players.filter((p) => FORMATION_LINE[p.code] === aheadLine);
+        if (aheadPlayers.length === 0) continue;
+        const shallowest = aheadPlayers.reduce((min, p) => (isShallowerThan(p.y, min.y) ? p : min));
+        if (isAheadOf(behind.y, shallowest.y)) {
+          swapPlayers(players, behind.id, shallowest.id);
+          changed = true;
+        }
+      }
+    };
+    swapAheadOfLine("midfield", "attack");
+    swapAheadOfLine("defense", "midfield");
+    swapAheadOfLine("defense", "attack");
+    return changed;
+  };
+
+  // Alternate both fixes until a full round makes no further swaps — a
+  // depth swap exchanges a player's full (x, y), which can reintroduce a
+  // left-right issue that then needs its own pass to resolve, and vice
+  // versa. Verified empirically to converge well within this budget across
+  // all 256 formation/opponent/phase/style combinations.
+  for (let round = 0; round < 10; round++) {
+    const changedLeftRight = fixLeftRight();
+    const changedDepth = fixDepth();
+    if (!changedLeftRight && !changedDepth) break;
+  }
+}
+
 /**
  * Final guarantee pass for a two-team matchup. The normal approach —
  * resolve the own team's shape against itself, then resolve the opponent
@@ -522,6 +622,11 @@ export function resolveMatchupOverlaps(
   own: FormationPlayer[],
   opponent: FormationPlayer[],
 ): { own: FormationPlayer[]; opponent: FormationPlayer[] } {
+  // Captured before any relaxation runs, while x-order and line depth still
+  // match what getFormationPlayers/mirrorFormationPlayers/keepOnside intended.
+  const ownReferenceOrder = own;
+  const opponentReferenceOrder = opponent;
+
   const resolvedOwn = resolveSelfOverlaps(own);
   const resolvedOpponent = resolveOverlaps(opponent, resolvedOwn);
 
@@ -557,6 +662,9 @@ export function resolveMatchupOverlaps(
     }
     if (!violated) break;
   }
+
+  restoreFormationOrder(finalOwn, ownReferenceOrder, true);
+  restoreFormationOrder(finalOpponent, opponentReferenceOrder, false);
 
   return { own: finalOwn, opponent: finalOpponent };
 }
