@@ -49,7 +49,7 @@ export function CoachVerdictPanel({ design, coachAvailable }: Props) {
     if (status === "loading" || status === "streaming") return;
 
     const cached = cache[designHash];
-    if (cached) {
+    if (cached && cached.grade && cached.summary) {
       setVerdict(cached);
       setStatus("done");
       return;
@@ -93,6 +93,18 @@ export function CoachVerdictPanel({ design, coachAvailable }: Props) {
       }
 
       const finalVerdict = parseVerdictStream(buffer, true);
+
+      // A well-formed response always has at least a grade and a summary —
+      // if the model's output didn't match the expected format (or was cut
+      // off before producing anything usable), don't cache an empty result
+      // that would otherwise silently replay as a blank panel on every
+      // future click for this exact design.
+      if (!finalVerdict.grade || !finalVerdict.summary) {
+        setErrorMessage(UNREACHABLE_MESSAGE);
+        setStatus("error");
+        return;
+      }
+
       setVerdict(finalVerdict);
       setStatus("done");
 

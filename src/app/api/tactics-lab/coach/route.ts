@@ -98,10 +98,19 @@ export async function POST(request: Request) {
 
   const responseStream = new ReadableStream<Uint8Array>({
     async start(controller) {
-      const anthropicStream = client.messages.stream({
+      // thinking is explicitly disabled: this model defaults to adaptive
+      // extended thinking, which spends part of max_tokens on an invisible
+      // reasoning block before any visible text. For a short, direct
+      // tactical read like this the reasoning budget isn't needed, and
+      // without this it previously consumed the entire token budget before
+      // the model ever reached the actual GRADE/SUMMARY output. `thinking`
+      // is only typed on the beta namespace in this SDK version, hence
+      // `client.beta.messages` here rather than `client.messages`.
+      const anthropicStream = client.beta.messages.stream({
         model: MODEL,
         max_tokens: MAX_TOKENS,
         system: SYSTEM_PROMPT,
+        thinking: { type: "disabled" },
         messages: [{ role: "user", content: JSON.stringify(analystPayload) }],
       });
 
