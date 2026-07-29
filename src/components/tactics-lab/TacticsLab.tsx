@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   formations,
   getFormation,
@@ -38,13 +38,15 @@ import { AutoNotes } from "./AutoNotes";
 import { CoachVerdictPanel } from "./CoachVerdictPanel";
 import { PlayDesigner } from "./PlayDesigner";
 import { OpponentSim } from "./OpponentSim";
+import { ScenarioMode } from "./scenario-mode/ScenarioMode";
 
 const STORAGE_KEY = "pitchiq:tactics-lab:design:v1";
 
-type LabMode = "formation" | "play";
+type LabMode = "formation" | "play" | "scenario";
 const MODE_OPTIONS = [
   { value: "formation", label: "Formation Designer" },
   { value: "play", label: "Play Designer" },
+  { value: "scenario", label: "Scenario Mode" },
 ] as const satisfies { value: LabMode; label: string }[];
 
 function parseDesign(raw: string | null): Design {
@@ -75,6 +77,16 @@ export function TacticsLab({ coachAvailable }: { coachAvailable: boolean }) {
   const [phase, setPhase] = useState<Phase>("in-possession");
   const [defensiveStyleRaw, setDefensiveStyleRaw] = useLocalStorageValue("pitchiq:tactics-lab:defensive-style");
   const defensiveStyle: DefensiveStyle = defensiveStyleRaw === "high-press" ? "high-press" : "low-block";
+
+  // A shared scenario play arrives as a `?play=` query param — land directly
+  // on Scenario Mode (which reads the param itself) rather than requiring an
+  // extra manual tab click before a shared link actually shows anything.
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).has("play")) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- reading a one-time URL param on mount, not derivable during render
+      setMode("scenario");
+    }
+  }, []);
 
   function changePhase(next: Phase) {
     setPhase(next);
@@ -167,6 +179,15 @@ export function TacticsLab({ coachAvailable }: { coachAvailable: boolean }) {
   const scores = useMemo(() => computeScores(design.players, design.instructions), [design.players, design.instructions]);
   const notes = useMemo(() => generateNotes(design.players, design.instructions, scores), [design.players, design.instructions, scores]);
   const selectedPlayer = design.players.find((p) => p.id === selectedPlayerId) ?? null;
+
+  if (mode === "scenario") {
+    return (
+      <div className="flex flex-col gap-6">
+        <SegmentedTabs id="tactics-lab-mode" ariaLabel="Designer mode" options={MODE_OPTIONS} value={mode} onChange={setMode} />
+        <ScenarioMode />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-6">

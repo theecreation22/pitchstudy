@@ -8,12 +8,15 @@ const STORAGE_KEY = "pitchiq:progress:v2";
 
 export type QuizBest = { score: number; total: number };
 
+export type ScenarioBest = { grade: string; steps: number };
+
 export type ProgressState = {
   completedLessons: string[]; // `${moduleSlug}/${lessonSlug}`
   quizBestScores: Record<string, QuizBest>; // moduleSlug -> best
   xp: number;
   earnedBadges: string[];
   challengeBestStreak: number;
+  scenarioBests: Record<string, ScenarioBest>; // `${scenarioSlug}:${tier}` -> best
 };
 
 const DEFAULT_STATE: ProgressState = {
@@ -22,6 +25,7 @@ const DEFAULT_STATE: ProgressState = {
   xp: 0,
   earnedBadges: [],
   challengeBestStreak: 0,
+  scenarioBests: {},
 };
 
 function parseState(raw: string | null): ProgressState {
@@ -40,9 +44,22 @@ export const badges = [
   { id: "full-90", name: "Full 90", description: "Complete every lesson in a module." },
   { id: "clean-sheet", name: "Clean Sheet", description: "Score 100% on a module quiz." },
   { id: "ballon-dor", name: "Ballon d'Or", description: "Complete every lesson on PitchIQ." },
+  { id: "set-piece-specialist", name: "Set-Piece Specialist", description: "Beat a set-piece scenario in the Play Designer." },
+  { id: "counter-puncher", name: "Counter Puncher", description: "Beat a counter-attack scenario in the Play Designer." },
+  { id: "lock-picker", name: "Lock-Picker", description: "Beat a low-block scenario in the Play Designer." },
+  { id: "perfect-move", name: "Perfect Move", description: "Score Gold on a scenario using the minimum steps." },
 ] as const;
 
 export type BadgeId = (typeof badges)[number]["id"];
+
+const SCENARIO_FAMILY_BADGE: Partial<Record<string, BadgeId>> = {
+  "set-piece": "set-piece-specialist",
+  "counter-attack": "counter-puncher",
+  "low-block": "lock-picker",
+};
+
+const SCENARIO_XP_BY_GRADE: Record<string, number> = { gold: 100, silver: 60, bronze: 30 };
+const SCENARIO_GRADE_RANK: Record<string, number> = { bronze: 1, silver: 2, gold: 3 };
 
 export function useProgress() {
   const [raw, setRaw] = useLocalStorageValue(STORAGE_KEY);
@@ -132,6 +149,28 @@ export function useProgress() {
     [state, persist],
   );
 
+  const completeScenario = useCallback(
+    (scenarioSlug: string, family: string, tier: string, grade: string, stepsUsed: number, isMinimumSteps: boolean) => {
+      const key = `${scenarioSlug}:${tier}`;
+      const previous = state.scenarioBests[key];
+      const isNewBest =
+        !previous || SCENARIO_GRADE_RANK[grade] > SCENARIO_GRADE_RANK[previous.grade] || (grade === previous.grade && stepsUsed < previous.steps);
+
+      const nextBadges = new Set(state.earnedBadges);
+      const familyBadge = SCENARIO_FAMILY_BADGE[family];
+      if (familyBadge) nextBadges.add(familyBadge);
+      if (grade === "gold" && isMinimumSteps) nextBadges.add("perfect-move");
+
+      persist({
+        ...state,
+        scenarioBests: isNewBest ? { ...state.scenarioBests, [key]: { grade, steps: stepsUsed } } : state.scenarioBests,
+        xp: state.xp + (SCENARIO_XP_BY_GRADE[grade] ?? 0),
+        earnedBadges: [...nextBadges],
+      });
+    },
+    [state, persist],
+  );
+
   return {
     state,
     completeLesson,
@@ -140,5 +179,6 @@ export function useProgress() {
     moduleProgress,
     completedModuleSlugs,
     recordChallengeStreak,
+    completeScenario,
   };
 }
