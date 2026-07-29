@@ -7,7 +7,7 @@ import { computeScenarioFrames, getCarrierId } from "@/lib/scenario-mode/simulat
 import { evaluateScenario, type ScenarioResult } from "@/lib/scenario-mode/evaluation";
 import { decodeSharedPlay, encodeSharedPlay, usePlaybook } from "@/lib/scenario-mode/persistence";
 import { useProgress } from "@/lib/progress";
-import type { Constraint, DifficultyTier, Point, ScenarioActionKind, ScenarioStep } from "@/lib/scenario-mode/schema";
+import type { DifficultyTier, Point, ScenarioActionKind, ScenarioStep } from "@/lib/scenario-mode/schema";
 import { SegmentedTabs } from "@/components/ui/SegmentedTabs";
 import { ScenarioPicker } from "./ScenarioPicker";
 import { ScenarioStage } from "./ScenarioStage";
@@ -22,13 +22,6 @@ const TIER_OPTIONS = [
   { value: "silver", label: "Silver" },
   { value: "gold", label: "Gold" },
 ] as const satisfies { value: DifficultyTier; label: string }[];
-
-function describeConstraint(constraint: Constraint): string {
-  if (constraint.kind === "maxPasses") return `At most ${constraint.value} passes.`;
-  if (constraint.kind === "maxSteps") return `Complete it within ${constraint.value} steps.`;
-  if (constraint.kind === "mustReachZone") return "The ball must reach the target zone.";
-  return `At least ${constraint.value} decoy run(s).`;
-}
 
 export function ScenarioMode() {
   const reduceMotion = useReducedMotion();
@@ -401,15 +394,6 @@ export function ScenarioMode() {
         </div>
 
         <aside className="flex w-full flex-col gap-4 lg:w-96">
-          <div className="flex flex-col gap-2 rounded-lg border border-pitch-touchline/30 bg-pitch-card p-4">
-            <p className="font-mono text-xs uppercase tracking-widest text-pitch-marker">Constraints</p>
-            <ul className="flex flex-col gap-1 text-sm text-pitch-line/90">
-              {scenario.constraints.map((constraint, index) => (
-                <li key={index}>• {describeConstraint(constraint)}</li>
-              ))}
-            </ul>
-          </div>
-
           {!readOnly && (
             <ScenarioTimeline
               scenario={scenario}

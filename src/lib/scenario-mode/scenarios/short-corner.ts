@@ -49,7 +49,6 @@ export const shortCorner: Scenario = {
       },
     ],
   },
-  constraints: [{ kind: "maxSteps", value: 6 }],
   successCriteria: [
     { kind: "receiverInSpace", zone: { x: 55, y: 12, radius: 20 }, minOpponentDistance: 9 },
     { kind: "shotOnTarget" },

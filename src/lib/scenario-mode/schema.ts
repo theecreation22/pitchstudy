@@ -24,12 +24,6 @@ export type ScenarioOpponent = {
 
 export type ScenarioPlayer = { id: string; code: PositionCode; start: Point };
 
-export type Constraint =
-  | { kind: "maxPasses"; value: number }
-  | { kind: "maxSteps"; value: number }
-  | { kind: "mustReachZone"; zone: Zone }
-  | { kind: "minDecoyRuns"; value: number };
-
 export type SuccessCriterion =
   /** A teammate receives the ball with no opponent within `minOpponentDistance` pitch-units, optionally only counting a delivery into `zone`. */
   | { kind: "receiverInSpace"; zone?: Zone; minOpponentDistance: number }
@@ -55,7 +49,6 @@ export type Scenario = {
     players: ScenarioPlayer[];
     opponents: ScenarioOpponent[];
   };
-  constraints: Constraint[];
   successCriteria: SuccessCriterion[];
   tiers: Record<DifficultyTier, TierModifiers>;
   /** A known routine (near-post corner, give-and-go, overlap) seeded as a starting point the user edits, rather than a blank stage. */

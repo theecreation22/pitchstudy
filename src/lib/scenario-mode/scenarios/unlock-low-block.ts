@@ -56,7 +56,6 @@ export const unlockLowBlock: Scenario = {
       },
     ],
   },
-  constraints: [{ kind: "maxSteps", value: 7 }],
   successCriteria: [
     { kind: "receiverInSpace", zone: { x: 55, y: 15, radius: 20 }, minOpponentDistance: 8 },
     { kind: "shotOnTarget" },

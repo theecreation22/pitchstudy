@@ -46,7 +46,6 @@ export const overlapCross: Scenario = {
       },
     ],
   },
-  constraints: [{ kind: "maxSteps", value: 6 }],
   successCriteria: [
     { kind: "receiverInSpace", zone: { x: 62, y: 10, radius: 18 }, minOpponentDistance: 8 },
     { kind: "shotOnTarget" },

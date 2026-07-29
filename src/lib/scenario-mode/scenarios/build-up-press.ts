@@ -43,7 +43,6 @@ export const buildUpPress: Scenario = {
       },
     ],
   },
-  constraints: [{ kind: "maxSteps", value: 5 }],
   successCriteria: [{ kind: "receiverInSpace", zone: { x: 50, y: 65, radius: 20 }, minOpponentDistance: 9 }],
   tiers: {
     bronze: { speedMultiplier: 1, reactionDelayDelta: 0 },

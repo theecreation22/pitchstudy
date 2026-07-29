@@ -29,25 +29,6 @@ function distanceToSegment(point: Point, a: Point, b: Point): number {
   return distance(point, { x: a.x + t * dx, y: a.y + t * dy });
 }
 
-function checkConstraints(scenario: Scenario, steps: ScenarioStep[]): ScenarioResult | null {
-  const passCount = steps.filter((s) => s.kind === "pass" || s.kind === "shot").length;
-  const decoyRunCount = steps.filter((s) => s.kind === "run").length;
-  const lastStepIndex = steps.reduce((max, s) => Math.max(max, s.endStep ?? s.startStep + 1), 0);
-
-  for (const constraint of scenario.constraints) {
-    if (constraint.kind === "maxPasses" && passCount > constraint.value) {
-      return { outcome: "TOO_SLOW", grade: null, reason: `Used ${passCount} passes — the scenario allows at most ${constraint.value}.` };
-    }
-    if (constraint.kind === "maxSteps" && lastStepIndex > constraint.value) {
-      return { outcome: "TOO_SLOW", grade: null, reason: `Took ${lastStepIndex} steps — the scenario allows at most ${constraint.value}.` };
-    }
-    if (constraint.kind === "minDecoyRuns" && decoyRunCount < constraint.value) {
-      return { outcome: "TOO_SLOW", grade: null, reason: `Needs at least ${constraint.value} decoy run(s) — only ${decoyRunCount} were made.` };
-    }
-  }
-  return null;
-}
-
 /** Finds the first pass/shot whose flight path (passer's position → target, both at the step's start frame) passes within interception range of any opponent at that same frame. */
 function findInterception(
   steps: ScenarioStep[],
@@ -124,9 +105,6 @@ function gradeFor(scenario: Scenario, steps: ScenarioStep[]): ScenarioGrade {
 }
 
 export function evaluateScenario(scenario: Scenario, tier: DifficultyTier, steps: ScenarioStep[], frames: ScenarioFrame[]): ScenarioResult {
-  const constraintFailure = checkConstraints(scenario, steps);
-  if (constraintFailure) return constraintFailure;
-
   const interception = findInterception(steps, frames);
   if (interception) {
     return {

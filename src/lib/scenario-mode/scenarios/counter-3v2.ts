@@ -45,7 +45,6 @@ export const counter3v2: Scenario = {
       },
     ],
   },
-  constraints: [{ kind: "maxSteps", value: 6 }],
   successCriteria: [
     { kind: "receiverInSpace", zone: { x: 50, y: 20, radius: 25 }, minOpponentDistance: 9 },
     { kind: "shotOnTarget" },

@@ -35,11 +35,6 @@ export function ScenarioTimeline({
   onRedo,
   onPlay,
 }: Props) {
-  const passCount = steps.filter((s) => s.kind === "pass" || s.kind === "shot").length;
-  const maxPasses = scenario.constraints.find((c) => c.kind === "maxPasses");
-  const maxSteps = scenario.constraints.find((c) => c.kind === "maxSteps");
-  const lastStepIndex = steps.reduce((max, s) => Math.max(max, s.endStep ?? s.startStep + 1), 0);
-
   return (
     <div className="flex flex-col gap-3 rounded-lg border border-pitch-touchline/30 bg-pitch-card p-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
@@ -56,12 +51,6 @@ export function ScenarioTimeline({
           </button>
         </div>
       </div>
-
-      <p className="font-mono text-[10px] uppercase tracking-widest text-pitch-touchline">
-        {passCount} pass{passCount === 1 ? "" : "es"}
-        {maxPasses ? ` / ${maxPasses.value} max` : ""} · {lastStepIndex} step{lastStepIndex === 1 ? "" : "s"}
-        {maxSteps ? ` / ${maxSteps.value} max` : ""}
-      </p>
 
       {steps.length === 0 ? (
         <p className="text-xs leading-relaxed text-pitch-touchline">
