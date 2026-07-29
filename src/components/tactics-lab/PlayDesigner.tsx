@@ -5,7 +5,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { PitchMarkings } from "@/components/pitch/PitchMarkings";
 import type { DefensiveStyle, FormationPlayer, Phase } from "@/lib/formations";
 import type { LabPlayer } from "@/lib/tactics-lab/designSchema";
-import { computePlayFrames, type PlayActionKind, type PlayStep } from "@/lib/tactics-lab/playSchema";
+import { computePlayFrames, getCarrierId, type PlayActionKind, type PlayStep } from "@/lib/tactics-lab/playSchema";
 import { StepTimeline } from "./StepTimeline";
 
 /** How long each step's movement animates for, and the gap before the next step starts — the gap is what makes playback read as a sequence rather than everything arriving at once. */
@@ -78,6 +78,17 @@ export function PlayDesigner({
   const displayIndex = isPlaying ? playbackIndex : (previewIndex ?? frames.length - 1);
   const frame = frames[displayIndex];
 
+  // A new pass/shot always extends from the LATEST recorded state, not
+  // whatever's being previewed via the timeline — only whoever is actually
+  // on the ball right now can play it, never an arbitrary player.
+  const latestFrame = frames[frames.length - 1];
+  const carrierId = getCarrierId(latestFrame);
+  const pendingActorHasBall = pendingActorId !== null && pendingActorId === carrierId;
+  // For the on-pitch highlight specifically, which should reflect whichever
+  // frame is currently displayed (including a scrubbed preview), not always
+  // the latest — distinct from `carrierId` above, which gates new actions.
+  const displayedCarrierId = getCarrierId(frame);
+
   useEffect(() => {
     if (!isPlaying) return;
     const timer = setTimeout(() => {
@@ -118,7 +129,10 @@ export function PlayDesigner({
   }
 
   function handleSelectPlayer(playerId: string) {
-    if (pendingActorId && pendingKind === "pass" && playerId !== pendingActorId) {
+    // Re-checked here (not just at the Pass button itself) so a pass can
+    // never commit for a player who isn't actually on the ball, regardless
+    // of how `pendingKind` got set to "pass".
+    if (pendingActorId && pendingKind === "pass" && playerId !== pendingActorId && pendingActorId === carrierId) {
       commitStep({ id: crypto.randomUUID(), kind: "pass", playerId: pendingActorId, toPlayerId: playerId });
       return;
     }
@@ -128,6 +142,7 @@ export function PlayDesigner({
 
   function handlePitchClick(event: React.MouseEvent<HTMLDivElement>) {
     if (!containerRef.current || !pendingActorId || !pendingKind) return;
+    if (pendingKind !== "run" && pendingActorId !== carrierId) return;
     const point = pointFromClick(event, containerRef.current);
     commitStep({ id: crypto.randomUUID(), kind: pendingKind, playerId: pendingActorId, toPoint: point });
   }
@@ -238,6 +253,7 @@ export function PlayDesigner({
         {players.map((player) => {
           const position = frame.positions[player.id];
           const isSelected = pendingActorId === player.id;
+          const hasBall = displayedCarrierId === player.id;
           // Matches Explore's Pitch.tsx exactly: once an opponent is shown,
           // the user's own markers stay a consistent amber regardless of
           // phase, so the two teams never both read as the same blue.
@@ -248,7 +264,7 @@ export function PlayDesigner({
               type="button"
               disabled={readOnly}
               tabIndex={readOnly ? -1 : 0}
-              aria-label={`${player.role}${isSelected ? " (selected)" : ""}`}
+              aria-label={`${player.role}${hasBall ? " (has the ball)" : ""}${isSelected ? " (selected)" : ""}`}
               aria-pressed={readOnly ? undefined : isSelected}
               onClick={
                 readOnly
@@ -271,7 +287,7 @@ export function PlayDesigner({
                       : phase === "out-of-possession"
                         ? "border-defend/40"
                         : "border-attack/40"
-                }`}
+                } ${hasBall && !isSelected ? "ring-2 ring-pitch-marker/60 ring-offset-2 ring-offset-pitch-deep" : ""}`}
               >
                 {player.role}
               </div>
@@ -301,23 +317,35 @@ export function PlayDesigner({
             {pendingActor ? (
               <>
                 <span className="font-mono text-xs uppercase tracking-widest text-pitch-marker">{pendingActor.role}:</span>
-                {(["pass", "run", "shot"] as PlayActionKind[]).map((kind) => (
-                  <button
-                    key={kind}
-                    type="button"
-                    aria-pressed={pendingKind === kind}
-                    onClick={() => setPendingKind(kind)}
-                    className={`min-h-9 rounded-md border px-3 font-mono text-xs uppercase tracking-widest transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker ${
-                      pendingKind === kind
-                        ? "border-attack bg-attack/15 text-attack"
-                        : "border-pitch-touchline/40 text-pitch-touchline hover:border-pitch-touchline hover:text-pitch-line"
-                    }`}
-                  >
-                    {KIND_LABEL[kind]}
-                  </button>
-                ))}
+                {(["pass", "run", "shot"] as PlayActionKind[]).map((kind) => {
+                  const disabled = kind !== "run" && !pendingActorHasBall;
+                  return (
+                    <button
+                      key={kind}
+                      type="button"
+                      disabled={disabled}
+                      aria-pressed={pendingKind === kind}
+                      onClick={() => setPendingKind(kind)}
+                      className={`min-h-9 rounded-md border px-3 font-mono text-xs uppercase tracking-widest transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker ${
+                        disabled
+                          ? "cursor-not-allowed border-pitch-touchline/20 text-pitch-touchline/40"
+                          : pendingKind === kind
+                            ? "border-attack bg-attack/15 text-attack"
+                            : "border-pitch-touchline/40 text-pitch-touchline hover:border-pitch-touchline hover:text-pitch-line"
+                      }`}
+                    >
+                      {KIND_LABEL[kind]}
+                    </button>
+                  );
+                })}
                 <span className="text-xs text-pitch-touchline">
-                  {pendingKind === "pass" ? "Click a teammate, or the pitch for a pass into space." : pendingKind ? "Click the pitch for the destination." : "Choose an action."}
+                  {!pendingActorHasBall
+                    ? `${pendingActor.role} doesn't have the ball — only a run is available.`
+                    : pendingKind === "pass"
+                      ? "Click a teammate, or the pitch for a pass into space."
+                      : pendingKind
+                        ? "Click the pitch for the destination."
+                        : "Choose an action."}
                 </span>
                 <button type="button" onClick={resetPending} className="font-mono text-[10px] uppercase tracking-widest text-pitch-touchline hover:text-pitch-line">
                   Cancel

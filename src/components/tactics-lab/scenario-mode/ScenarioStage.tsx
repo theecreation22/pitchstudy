@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { PitchMarkings } from "@/components/pitch/PitchMarkings";
-import type { ScenarioFrame } from "@/lib/scenario-mode/simulation";
+import { getCarrierId, type ScenarioFrame } from "@/lib/scenario-mode/simulation";
 import type { Point, Scenario, ScenarioActionKind, ScenarioStep } from "@/lib/scenario-mode/schema";
 
 /** How long each step's movement animates for during playback. */
@@ -62,6 +62,7 @@ export function ScenarioStage({
 }: Props) {
   const reduceMotion = useReducedMotion();
   const containerRef = useRef<HTMLDivElement>(null);
+  const carrierId = getCarrierId(frame);
 
   function handlePitchClick(event: React.MouseEvent<HTMLDivElement>) {
     if (readOnly || !containerRef.current || !pendingActorId || !pendingKind) return;
@@ -153,13 +154,14 @@ export function ScenarioStage({
       {scenario.stage.players.map((player) => {
         const position = frame.playerPositions[player.id];
         const isSelected = pendingActorId === player.id;
+        const hasBall = carrierId === player.id;
         return (
           <motion.button
             key={player.id}
             type="button"
             disabled={readOnly}
             tabIndex={readOnly ? -1 : 0}
-            aria-label={`${player.code}${isSelected ? " (selected)" : ""}`}
+            aria-label={`${player.code}${hasBall ? " (has the ball)" : ""}${isSelected ? " (selected)" : ""}`}
             aria-pressed={isSelected}
             onClick={
               readOnly
@@ -175,7 +177,11 @@ export function ScenarioStage({
           >
             <div
               className={`flex h-11 w-11 items-center justify-center rounded-full border-2 bg-pitch-card font-mono text-xs font-semibold text-pitch-line shadow-[0_4px_12px_rgba(0,0,0,0.6)] transition-colors ${
-                isSelected ? "border-press ring-2 ring-press ring-offset-2 ring-offset-pitch-deep" : "border-attack/50"
+                isSelected
+                  ? "border-press ring-2 ring-press ring-offset-2 ring-offset-pitch-deep"
+                  : hasBall
+                    ? "border-pitch-marker ring-2 ring-pitch-marker/60 ring-offset-2 ring-offset-pitch-deep"
+                    : "border-attack/50"
               }`}
             >
               {player.code}

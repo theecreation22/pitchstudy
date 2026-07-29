@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useReducedMotion } from "framer-motion";
 import { scenarios, getScenario } from "@/lib/scenario-mode/scenarios";
-import { computeScenarioFrames } from "@/lib/scenario-mode/simulation";
+import { computeScenarioFrames, getCarrierId } from "@/lib/scenario-mode/simulation";
 import { evaluateScenario, type ScenarioResult } from "@/lib/scenario-mode/evaluation";
 import { decodeSharedPlay, encodeSharedPlay, usePlaybook } from "@/lib/scenario-mode/persistence";
 import { useProgress } from "@/lib/progress";
@@ -72,6 +72,14 @@ export function ScenarioMode() {
   const frame = frames[displayIndex];
   const readOnly = isSharedReadOnly || isPlaying;
 
+  // A new pass/shot always extends from the LATEST recorded state, not
+  // whatever's being previewed via the timeline — the ball can only be
+  // played by whoever is actually on it right now, never an arbitrary
+  // player, matching the physical constraint of the real game.
+  const latestFrame = frames[frames.length - 1];
+  const carrierId = latestFrame ? getCarrierId(latestFrame) : null;
+  const pendingActorHasBall = pendingActorId !== null && pendingActorId === carrierId;
+
   useEffect(() => {
     if (!isPlaying) return;
     const timer = setTimeout(() => {
@@ -111,7 +119,10 @@ export function ScenarioMode() {
   }
 
   function handleSelectPlayer(playerId: string) {
-    if (pendingActorId && pendingKind === "pass" && playerId !== pendingActorId) {
+    // Re-checked here (not just at the Pass button itself) so a pass can
+    // never commit for a player who isn't actually on the ball, regardless
+    // of how `pendingKind` got set to "pass".
+    if (pendingActorId && pendingKind === "pass" && playerId !== pendingActorId && pendingActorId === carrierId) {
       commitStep({ id: crypto.randomUUID(), kind: "pass", playerId: pendingActorId, toPlayerId: playerId, startStep: nextStartStep() });
       return;
     }
@@ -121,6 +132,7 @@ export function ScenarioMode() {
 
   function handlePitchClick(point: Point) {
     if (!pendingActorId || !pendingKind) return;
+    if (pendingKind !== "run" && pendingActorId !== carrierId) return;
     const startStep = nextStartStep();
     if (pendingKind === "run") {
       commitStep({ id: crypto.randomUUID(), kind: "run", playerId: pendingActorId, startStep, endStep: startStep + 2, toPoint: point });
@@ -342,23 +354,35 @@ export function ScenarioMode() {
             ) : pendingActor ? (
               <>
                 <span className="font-mono text-xs uppercase tracking-widest text-pitch-marker">{pendingActor.code}:</span>
-                {(["pass", "run", "shot"] as ScenarioActionKind[]).map((kind) => (
-                  <button
-                    key={kind}
-                    type="button"
-                    aria-pressed={pendingKind === kind}
-                    onClick={() => setPendingKind(kind)}
-                    className={`min-h-9 rounded-md border px-3 font-mono text-xs uppercase tracking-widest transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker ${
-                      pendingKind === kind
-                        ? "border-attack bg-attack/15 text-attack"
-                        : "border-pitch-touchline/40 text-pitch-touchline hover:border-pitch-touchline hover:text-pitch-line"
-                    }`}
-                  >
-                    {KIND_LABEL[kind]}
-                  </button>
-                ))}
+                {(["pass", "run", "shot"] as ScenarioActionKind[]).map((kind) => {
+                  const disabled = kind !== "run" && !pendingActorHasBall;
+                  return (
+                    <button
+                      key={kind}
+                      type="button"
+                      disabled={disabled}
+                      aria-pressed={pendingKind === kind}
+                      onClick={() => setPendingKind(kind)}
+                      className={`min-h-9 rounded-md border px-3 font-mono text-xs uppercase tracking-widest transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker ${
+                        disabled
+                          ? "cursor-not-allowed border-pitch-touchline/20 text-pitch-touchline/40"
+                          : pendingKind === kind
+                            ? "border-attack bg-attack/15 text-attack"
+                            : "border-pitch-touchline/40 text-pitch-touchline hover:border-pitch-touchline hover:text-pitch-line"
+                      }`}
+                    >
+                      {KIND_LABEL[kind]}
+                    </button>
+                  );
+                })}
                 <span className="text-xs text-pitch-touchline">
-                  {pendingKind === "pass" ? "Click a teammate, or the pitch for a pass into space." : pendingKind ? "Click the pitch for the destination." : "Choose an action."}
+                  {!pendingActorHasBall
+                    ? `${pendingActor.code} doesn't have the ball — only a run is available.`
+                    : pendingKind === "pass"
+                      ? "Click a teammate, or the pitch for a pass into space."
+                      : pendingKind
+                        ? "Click the pitch for the destination."
+                        : "Choose an action."}
                 </span>
                 <button type="button" onClick={resetPending} className="font-mono text-[10px] uppercase tracking-widest text-pitch-touchline hover:text-pitch-line">
                   Cancel

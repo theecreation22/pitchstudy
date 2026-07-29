@@ -6,6 +6,17 @@ export type ScenarioFrame = {
   ballPosition: Point;
 };
 
+/** How close a player must be to the ball to count as its carrier — small enough to require an actual, specific owner, generous enough to tolerate the ball sitting slightly off a player's exact marker. */
+const CARRIER_PROXIMITY = 3;
+
+/** Whoever is within `CARRIER_PROXIMITY` of the ball at this frame, if anyone — null means the ball currently belongs to no one, so nobody can pass or shoot it yet. */
+export function getCarrierId(frame: ScenarioFrame): string | null {
+  for (const [id, position] of Object.entries(frame.playerPositions)) {
+    if (Math.hypot(position.x - frame.ballPosition.x, position.y - frame.ballPosition.y) <= CARRIER_PROXIMITY) return id;
+  }
+  return null;
+}
+
 function lerp(from: Point, to: Point, t: number): Point {
   return { x: from.x + (to.x - from.x) * t, y: from.y + (to.y - from.y) * t };
 }
