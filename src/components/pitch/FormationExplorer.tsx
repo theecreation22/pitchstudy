@@ -263,13 +263,15 @@ export function FormationExplorer({ initialSlug }: { initialSlug?: string }) {
       )}
 
       {viewMode === "sandbox" && (
-        <SandboxPitch
-          formation={formation}
-          phase={phase}
-          defensiveStyle={defensiveStyle}
-          opponentPlayers={opponentPlayers}
-          opponentFormationName={opponentFormation.name}
-        />
+        <div className="mx-auto w-full max-w-md lg:max-w-lg">
+          <SandboxPitch
+            formation={formation}
+            phase={phase}
+            defensiveStyle={defensiveStyle}
+            opponentPlayers={opponentPlayers}
+            opponentFormationName={opponentFormation.name}
+          />
+        </div>
       )}
 
       {viewMode === "compare" && compareFormation ? (
