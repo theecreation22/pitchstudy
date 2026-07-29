@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import { motion, motionValue, useReducedMotion, type MotionValue } from "framer-motion";
 import { PitchMarkings } from "@/components/pitch/PitchMarkings";
-import type { FormationPlayer } from "@/lib/formations";
+import type { FormationPlayer, Phase } from "@/lib/formations";
 import type { LabPlayer } from "@/lib/tactics-lab/designSchema";
 
 /** Fixed at 11 for the lifetime of a design in Phase 1 — players never join or leave the roster, only move or change role — so these can be created once via a lazy initializer (never touched during render) and indexed positionally, the same pattern used by SandboxPitch's marker motion values. */
@@ -33,9 +33,21 @@ type Props = {
   onSelectPlayer: (id: string | null) => void;
   /** A mirrored opponent lineup rendered as a non-interactive dashed-blue overlay, from Opponent Sim. */
   opponentPlayers?: FormationPlayer[];
+  /** In/out of possession — only drives the ambient glow tint here (same cue used on the Explore pitch); the actual reshaping happens before `players` reaches this component. */
+  phase?: Phase;
+  /** True while `players` is a derived out-of-possession preview rather than the design's real, editable positions — disables drag/keyboard-nudge/role-menu so there's nothing to "commit" against a shape that isn't the authored one. */
+  readOnly?: boolean;
 };
 
-export function FormationBoard({ players, onMovePlayer, selectedPlayerId, onSelectPlayer, opponentPlayers }: Props) {
+export function FormationBoard({
+  players,
+  onMovePlayer,
+  selectedPlayerId,
+  onSelectPlayer,
+  opponentPlayers,
+  phase = "in-possession",
+  readOnly = false,
+}: Props) {
   const reduceMotion = useReducedMotion();
   const containerRef = useRef<HTMLDivElement>(null);
   const motionValues = usePlayerMotionValues(players.length);
@@ -76,6 +88,21 @@ export function FormationBoard({ players, onMovePlayer, selectedPlayerId, onSele
       ref={containerRef}
       className="relative w-full touch-none select-none aspect-[68/105] rounded-xl border-2 border-pitch-touchline/25 bg-pitch-deep p-2 shadow-[0_12px_32px_-12px_rgba(0,0,0,0.7)] sm:p-3"
     >
+      <motion.div
+        aria-hidden="true"
+        className="pointer-events-none absolute -inset-8 -z-10 rounded-[2.5rem] blur-2xl"
+        style={{ background: "radial-gradient(circle, var(--attack) 0%, transparent 70%)" }}
+        animate={{ opacity: phase === "in-possession" ? 0.28 : 0 }}
+        transition={{ duration: reduceMotion ? 0 : 0.6 }}
+      />
+      <motion.div
+        aria-hidden="true"
+        className="pointer-events-none absolute -inset-8 -z-10 rounded-[2.5rem] blur-2xl"
+        style={{ background: "radial-gradient(circle, var(--defend) 0%, transparent 70%)" }}
+        animate={{ opacity: phase === "out-of-possession" ? 0.28 : 0 }}
+        transition={{ duration: reduceMotion ? 0 : 0.6 }}
+      />
+
       <PitchMarkings />
       {opponentPlayers && opponentPlayers.length > 0 && (
         <div className="absolute inset-0" aria-hidden="true">
@@ -94,28 +121,38 @@ export function FormationBoard({ players, onMovePlayer, selectedPlayerId, onSele
       )}
       {players.map((player, index) => {
         const mv = motionValues[index];
-        const isSelected = selectedPlayerId === player.id;
+        const isSelected = !readOnly && selectedPlayerId === player.id;
         return (
           <motion.div
             key={player.id}
-            role="button"
-            tabIndex={0}
-            aria-label={`${player.role} — selected: ${isSelected}. Arrow keys move, Enter opens role menu.`}
-            aria-pressed={isSelected}
-            drag={!reduceMotion}
+            role={readOnly ? undefined : "button"}
+            tabIndex={readOnly ? -1 : 0}
+            aria-label={
+              readOnly ? player.role : `${player.role} — selected: ${isSelected}. Arrow keys move, Enter opens role menu.`
+            }
+            aria-pressed={readOnly ? undefined : isSelected}
+            drag={!reduceMotion && !readOnly}
             dragConstraints={containerRef}
             dragElastic={0.05}
             dragMomentum={false}
             whileDrag={{ scale: 1.15, zIndex: 30 }}
-            onDragEnd={() => commitDrag(index, player.id)}
-            onTap={() => onSelectPlayer(isSelected ? null : player.id)}
-            onKeyDown={(event) => handleKeyDown(event, player)}
+            onDragEnd={readOnly ? undefined : () => commitDrag(index, player.id)}
+            onTap={readOnly ? undefined : () => onSelectPlayer(isSelected ? null : player.id)}
+            onKeyDown={readOnly ? undefined : (event) => handleKeyDown(event, player)}
             style={{ left: `${player.x}%`, top: `${player.y}%`, x: mv.x, y: mv.y }}
-            className="absolute z-10 -translate-x-1/2 -translate-y-1/2 cursor-grab touch-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker active:cursor-grabbing"
+            className={`absolute z-10 -translate-x-1/2 -translate-y-1/2 touch-none ${
+              readOnly ? "" : "cursor-grab focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker active:cursor-grabbing"
+            }`}
           >
             <div
               className={`flex h-11 w-11 items-center justify-center rounded-full border-2 bg-pitch-card font-mono text-xs font-semibold text-pitch-line shadow-[0_4px_12px_rgba(0,0,0,0.6)] transition-colors ${
-                isSelected ? "border-press ring-2 ring-press ring-offset-2 ring-offset-pitch-deep" : "border-attack/50"
+                isSelected
+                  ? "border-press ring-2 ring-press ring-offset-2 ring-offset-pitch-deep"
+                  : readOnly
+                    ? phase === "out-of-possession"
+                      ? "border-defend/40"
+                      : "border-attack/40"
+                    : "border-attack/50"
               }`}
             >
               {player.role}

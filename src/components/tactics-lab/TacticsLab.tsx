@@ -1,9 +1,20 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { formations, getFormation, mirrorFormationPlayers, resolveOverlaps } from "@/lib/formations";
+import {
+  formations,
+  getFormation,
+  mirrorFormationPlayers,
+  resolveOverlaps,
+  toHighPress,
+  toLowBlock,
+  type DefensiveStyle,
+  type Phase,
+} from "@/lib/formations";
 import { useLocalStorageValue } from "@/lib/useLocalStorageValue";
 import { SegmentedTabs } from "@/components/ui/SegmentedTabs";
+import { PhaseToggle } from "@/components/pitch/PhaseToggle";
+import { DefensiveStyleToggle } from "@/components/pitch/DefensiveStyleToggle";
 import {
   DEFAULT_INSTRUCTIONS,
   seedFromFormation,
@@ -57,6 +68,14 @@ export function TacticsLab({ coachAvailable }: { coachAvailable: boolean }) {
   const design = useMemo(() => parseDesign(raw), [raw]);
   const [selectedPlayerId, setSelectedPlayerId] = useState<string | null>(null);
   const [mode, setMode] = useState<LabMode>("formation");
+  const [phase, setPhase] = useState<Phase>("in-possession");
+  const [defensiveStyleRaw, setDefensiveStyleRaw] = useLocalStorageValue("pitchiq:tactics-lab:defensive-style");
+  const defensiveStyle: DefensiveStyle = defensiveStyleRaw === "high-press" ? "high-press" : "low-block";
+
+  function changePhase(next: Phase) {
+    setPhase(next);
+    setSelectedPlayerId(null);
+  }
 
   function persist(next: Design) {
     setRaw(JSON.stringify(next));
@@ -99,6 +118,19 @@ export function TacticsLab({ coachAvailable }: { coachAvailable: boolean }) {
     return resolveOverlaps(mirrored, myPlayersAsFixed);
   }, [design.opponentFormationSlug, design.players]);
 
+  // A pure display transform, reusing the exact same compression/drop math
+  // the Explore pitch applies to canonical formations — the underlying
+  // design is never mutated, so switching back to "In possession" always
+  // restores the authored positions exactly.
+  const boardPlayers = useMemo(() => {
+    if (phase === "in-possession") return design.players;
+    const transform = defensiveStyle === "high-press" ? toHighPress : toLowBlock;
+    return design.players.map((player) => {
+      const { x, y } = transform({ id: player.id, code: player.role, x: player.x, y: player.y });
+      return { ...player, x, y };
+    });
+  }, [phase, defensiveStyle, design.players]);
+
   const shapeName = useMemo(() => recognizeShape(design.players), [design.players]);
   const scores = useMemo(() => computeScores(design.players, design.instructions), [design.players, design.instructions]);
   const notes = useMemo(() => generateNotes(design.players, design.instructions, scores), [design.players, design.instructions, scores]);
@@ -124,6 +156,12 @@ export function TacticsLab({ coachAvailable }: { coachAvailable: boolean }) {
           </select>
         </label>
         <ShapeReadout shapeName={shapeName} />
+        {mode === "formation" && (
+          <>
+            <PhaseToggle phase={phase} onChange={changePhase} />
+            <DefensiveStyleToggle style={defensiveStyle} onChange={setDefensiveStyleRaw} />
+          </>
+        )}
       </div>
 
       <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-10">
@@ -131,14 +169,18 @@ export function TacticsLab({ coachAvailable }: { coachAvailable: boolean }) {
           {mode === "formation" ? (
             <>
               <FormationBoard
-                players={design.players}
+                players={boardPlayers}
                 onMovePlayer={movePlayer}
                 selectedPlayerId={selectedPlayerId}
                 onSelectPlayer={setSelectedPlayerId}
                 opponentPlayers={opponentPlayers}
+                phase={phase}
+                readOnly={phase === "out-of-possession"}
               />
               <p className="mt-3 text-xs leading-relaxed text-pitch-touchline">
-                Drag a player to reposition them, or select one and use the arrow keys. Select a player to assign their role below.
+                {phase === "out-of-possession"
+                  ? `Previewing how this shape compresses out of possession (${defensiveStyle === "high-press" ? "high press" : "low block"}). Switch back to In possession to keep editing.`
+                  : "Drag a player to reposition them, or select one and use the arrow keys. Select a player to assign their role below."}
               </p>
             </>
           ) : (
@@ -152,7 +194,7 @@ export function TacticsLab({ coachAvailable }: { coachAvailable: boolean }) {
         </div>
 
         <aside className="flex w-full flex-col gap-4 lg:w-96">
-          {mode === "formation" && selectedPlayer && (
+          {mode === "formation" && phase === "in-possession" && selectedPlayer && (
             <PlayerRoleMenu
               currentRole={selectedPlayer.role}
               onSelectRole={setRole}

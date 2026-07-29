@@ -308,7 +308,7 @@ export type Phase = "in-possession" | "out-of-possession";
  */
 export type DefensiveStyle = "high-press" | "low-block";
 
-function toHighPress(player: FormationPlayer): FormationPlayer {
+export function toHighPress(player: FormationPlayer): FormationPlayer {
   if (player.code === "GK") {
     return { ...player, y: Math.max(80, player.y - 8) };
   }
@@ -317,7 +317,7 @@ function toHighPress(player: FormationPlayer): FormationPlayer {
   return { ...player, x, y };
 }
 
-function toLowBlock(player: FormationPlayer): FormationPlayer {
+export function toLowBlock(player: FormationPlayer): FormationPlayer {
   if (player.code === "GK") {
     return { ...player, y: Math.min(97, player.y + 2) };
   }
