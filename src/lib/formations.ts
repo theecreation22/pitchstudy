@@ -405,9 +405,27 @@ const OVERLAP_RESOLUTION_PASSES = 40;
 const EDGE_MARGIN_X = 7.5;
 const EDGE_MARGIN_Y = 5;
 
-function clampWithEdgeMargin(x: number, y: number): { x: number; y: number } {
+/**
+ * Roles that read as "central" in every formation this file defines — their
+ * raw x always falls within [28, 72] (CB is deliberately excluded: a
+ * back-three's outer center-backs legitimately sit as wide as x=25/75).
+ * `toHighPress`/`toLowBlock` only ever pull x closer to 50, never further
+ * from it, so the only way one of these roles can drift past this band is
+ * through overlap-resolution repulsion — which has no notion of role, and
+ * left unchecked can shove a marked-central player (e.g. a CM) out into the
+ * same space a winger or full-back occupies, reading as a role swap even
+ * though the label never changed.
+ */
+const CENTRAL_ROLES: Partial<Record<PositionCode, true>> = { CDM: true, CM: true, CAM: true, ST: true };
+/** Matches the widest x any central role naturally reaches in this file's own data (the 4-4-2 Diamond's CM pairing, at x=28/72) — repulsion can never push a central role any wider than that already-normal example, while every central role's actual raw position stays untouched since none exceeds this bound to begin with. */
+const CENTRAL_ROLE_MARGIN_X = 28;
+
+function clampWithEdgeMargin(x: number, y: number, code?: PositionCode): { x: number; y: number } {
+  const isCentral = code !== undefined && CENTRAL_ROLES[code];
+  const minX = isCentral ? CENTRAL_ROLE_MARGIN_X : EDGE_MARGIN_X;
+  const maxX = isCentral ? 100 - CENTRAL_ROLE_MARGIN_X : 100 - EDGE_MARGIN_X;
   return {
-    x: Math.min(100 - EDGE_MARGIN_X, Math.max(EDGE_MARGIN_X, x)),
+    x: Math.min(maxX, Math.max(minX, x)),
     y: Math.min(100 - EDGE_MARGIN_Y, Math.max(EDGE_MARGIN_Y, y)),
   };
 }
@@ -488,7 +506,7 @@ export function resolveOverlaps(movable: FormationPlayer[], fixed: FormationPlay
         // Keep pushed markers off the pitch edge — but only markers that
         // actually moved this pass, so a never-violated player (like the
         // goalkeeper) keeps its exact original position.
-        current[i] = { ...current[i], ...clampWithEdgeMargin(current[i].x, current[i].y) };
+        current[i] = { ...current[i], ...clampWithEdgeMargin(current[i].x, current[i].y, current[i].code) };
       }
     }
 
@@ -512,12 +530,28 @@ const FORMATION_LINE: Partial<Record<PositionCode, FormationLine>> = {
 /** Wing-backs advancing well beyond a deep-lying midfielder is a normal, well-established tactical pattern — exempted from the "defenders stay behind midfield" depth check that otherwise applies. */
 const DEPTH_CHECK_EXEMPT: Partial<Record<PositionCode, true>> = { LWB: true, RWB: true };
 
+/**
+ * Every position swap in this file — left-right order fixes and depth-order
+ * fixes alike — goes through this one function, so this is the single choke
+ * point that can guarantee a central role never inherits a wide role's
+ * x-coordinate: a defender or wide midfielder found out of order can
+ * legitimately swap with (and take the exact spot of) a central player, but
+ * the reverse — a CDM/CM/CAM/ST landing at a full-back's or winger's x —
+ * would read as that central player teleporting out to the wing. Only x is
+ * reclamped; y is left exactly as the swap intended, since y is what the
+ * order fix was actually correcting.
+ */
+function clampCentralX(code: PositionCode, x: number): number {
+  if (!CENTRAL_ROLES[code]) return x;
+  return Math.min(100 - CENTRAL_ROLE_MARGIN_X, Math.max(CENTRAL_ROLE_MARGIN_X, x));
+}
+
 function swapPlayers(players: FormationPlayer[], idA: string, idB: string): void {
   const i = players.findIndex((p) => p.id === idA);
   const j = players.findIndex((p) => p.id === idB);
   const { x, y } = players[i];
-  players[i] = { ...players[i], x: players[j].x, y: players[j].y };
-  players[j] = { ...players[j], x, y };
+  players[i] = { ...players[i], x: clampCentralX(players[i].code, players[j].x), y: players[j].y };
+  players[j] = { ...players[j], x: clampCentralX(players[j].code, x), y };
 }
 
 /**
@@ -578,11 +612,17 @@ function restoreFormationOrder(
       for (const behind of behindPlayers) {
         const aheadPlayers = players.filter((p) => FORMATION_LINE[p.code] === aheadLine);
         if (aheadPlayers.length === 0) continue;
-        const shallowest = aheadPlayers.reduce((min, p) => (isShallowerThan(p.y, min.y) ? p : min));
-        if (isAheadOf(behind.y, shallowest.y)) {
-          swapPlayers(players, behind.id, shallowest.id);
-          changed = true;
-        }
+        const mostWithdrawn = aheadPlayers.reduce((min, p) => (isShallowerThan(p.y, min.y) ? p : min));
+        if (!isAheadOf(behind.y, mostWithdrawn.y)) continue;
+        // Swap with whichever ahead-line player sits nearest in x, not simply
+        // the most withdrawn one — otherwise a central player (e.g. a CM)
+        // can trade its entire (x, y) with a wide one (e.g. a winger) and
+        // visually swap roles, which this depth fix was never meant to do.
+        const nearestInX = aheadPlayers.reduce((closest, p) =>
+          Math.abs(p.x - behind.x) < Math.abs(closest.x - behind.x) ? p : closest,
+        );
+        swapPlayers(players, behind.id, nearestInX.id);
+        changed = true;
       }
     };
     swapAheadOfLine("midfield", "attack");
@@ -614,9 +654,12 @@ function restoreFormationOrder(
  * can't clear, since the own team is never allowed to give any ground.
  * This runs one last unconditional relaxation over every pair — own-own,
  * opponent-opponent, and own-opponent — splitting each correction evenly,
- * so both sides can nudge apart as a last resort. Verified empirically
- * against all 8×8 formation pairings × both phases × both defensive styles
- * (256 combinations): zero collisions remain after this runs.
+ * so both sides can nudge apart as a last resort. It then runs a second time
+ * after `restoreFormationOrder`, since that pass's swaps can themselves
+ * introduce a fresh collision when `clampCentralX` reclaims a central role's
+ * x. Verified empirically against all 8×8 formation pairings × both phases
+ * × both defensive styles (256 combinations): zero collisions remain after
+ * this runs, and no CDM/CM/CAM/ST ever ends up past x=28/72.
  */
 export function resolveMatchupOverlaps(
   own: FormationPlayer[],
@@ -644,27 +687,39 @@ export function resolveMatchupOverlaps(
     const shortfall = MIN_MARKER_SEPARATION - distance;
     const pushXHalf = (Math.cos(angle) * shortfall) / PITCH_ASPECT / 2;
     const pushYHalf = (Math.sin(angle) * shortfall) / 2;
-    listA[i] = { ...a, ...clampWithEdgeMargin(a.x + pushXHalf, a.y + pushYHalf) };
-    listB[j] = { ...b, ...clampWithEdgeMargin(b.x - pushXHalf, b.y - pushYHalf) };
+    listA[i] = { ...a, ...clampWithEdgeMargin(a.x + pushXHalf, a.y + pushYHalf, a.code) };
+    listB[j] = { ...b, ...clampWithEdgeMargin(b.x - pushXHalf, b.y - pushYHalf, b.code) };
     return true;
   };
 
-  for (let pass = 0; pass < OVERLAP_RESOLUTION_PASSES; pass++) {
-    let violated = false;
-    for (let i = 0; i < finalOwn.length; i++) {
-      for (let j = i + 1; j < finalOwn.length; j++) violated = relax(finalOwn, i, finalOwn, j) || violated;
+  const relaxAllPairs = () => {
+    for (let pass = 0; pass < OVERLAP_RESOLUTION_PASSES; pass++) {
+      let violated = false;
+      for (let i = 0; i < finalOwn.length; i++) {
+        for (let j = i + 1; j < finalOwn.length; j++) violated = relax(finalOwn, i, finalOwn, j) || violated;
+      }
+      for (let i = 0; i < finalOpponent.length; i++) {
+        for (let j = i + 1; j < finalOpponent.length; j++) violated = relax(finalOpponent, i, finalOpponent, j) || violated;
+      }
+      for (let i = 0; i < finalOpponent.length; i++) {
+        for (let j = 0; j < finalOwn.length; j++) violated = relax(finalOpponent, i, finalOwn, j) || violated;
+      }
+      if (!violated) break;
     }
-    for (let i = 0; i < finalOpponent.length; i++) {
-      for (let j = i + 1; j < finalOpponent.length; j++) violated = relax(finalOpponent, i, finalOpponent, j) || violated;
-    }
-    for (let i = 0; i < finalOpponent.length; i++) {
-      for (let j = 0; j < finalOwn.length; j++) violated = relax(finalOpponent, i, finalOwn, j) || violated;
-    }
-    if (!violated) break;
-  }
+  };
+
+  relaxAllPairs();
 
   restoreFormationOrder(finalOwn, ownReferenceOrder, true);
   restoreFormationOrder(finalOpponent, opponentReferenceOrder, false);
+
+  // restoreFormationOrder's swaps can hand a central role a new x that its
+  // own central-x clamp then pulls back in (see `clampCentralX`) — a
+  // correction to that single coordinate, not a re-check against whichever
+  // teammate or opponent now sits nearby. Re-running the same relaxation
+  // catches any collision that clamp introduced, same as it already covers
+  // the rare boxed-in cases described above.
+  relaxAllPairs();
 
   return { own: finalOwn, opponent: finalOpponent };
 }
