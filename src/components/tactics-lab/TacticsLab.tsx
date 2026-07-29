@@ -156,12 +156,8 @@ export function TacticsLab({ coachAvailable }: { coachAvailable: boolean }) {
           </select>
         </label>
         <ShapeReadout shapeName={shapeName} />
-        {mode === "formation" && (
-          <>
-            <PhaseToggle phase={phase} onChange={changePhase} />
-            <DefensiveStyleToggle style={defensiveStyle} onChange={setDefensiveStyleRaw} />
-          </>
-        )}
+        <PhaseToggle phase={phase} onChange={changePhase} />
+        <DefensiveStyleToggle style={defensiveStyle} onChange={setDefensiveStyleRaw} />
       </div>
 
       <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-10">
@@ -185,10 +181,13 @@ export function TacticsLab({ coachAvailable }: { coachAvailable: boolean }) {
             </>
           ) : (
             <PlayDesigner
-              players={design.players}
+              players={boardPlayers}
               steps={design.play ?? []}
               onStepsChange={setPlaySteps}
               opponentPlayers={opponentPlayers}
+              phase={phase}
+              defensiveStyle={defensiveStyle}
+              readOnly={phase === "out-of-possession"}
             />
           )}
         </div>

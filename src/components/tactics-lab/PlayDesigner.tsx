@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { PitchMarkings } from "@/components/pitch/PitchMarkings";
-import type { FormationPlayer } from "@/lib/formations";
+import type { DefensiveStyle, FormationPlayer, Phase } from "@/lib/formations";
 import type { LabPlayer } from "@/lib/tactics-lab/designSchema";
 import { computePlayFrames, type PlayActionKind, type PlayStep } from "@/lib/tactics-lab/playSchema";
 import { StepTimeline } from "./StepTimeline";
@@ -39,9 +39,23 @@ type Props = {
   onStepsChange: (steps: PlayStep[]) => void;
   /** A mirrored opponent lineup rendered as a non-interactive dashed-blue overlay, from Opponent Sim. */
   opponentPlayers?: FormationPlayer[];
+  /** In/out of possession — only drives the ambient glow tint here (same cue used elsewhere); the actual reshaping happens before `players` reaches this component. */
+  phase?: Phase;
+  /** High press or low block — only used for the preview hint text below. */
+  defensiveStyle?: DefensiveStyle;
+  /** True while `players` is a derived out-of-possession preview rather than the design's real, editable positions — disables choreographing so there's nothing recorded against a shape that isn't the authored one. */
+  readOnly?: boolean;
 };
 
-export function PlayDesigner({ players, steps, onStepsChange, opponentPlayers }: Props) {
+export function PlayDesigner({
+  players,
+  steps,
+  onStepsChange,
+  opponentPlayers,
+  phase = "in-possession",
+  defensiveStyle = "low-block",
+  readOnly = false,
+}: Props) {
   const reduceMotion = useReducedMotion();
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -52,6 +66,13 @@ export function PlayDesigner({ players, steps, onStepsChange, opponentPlayers }:
   const [isPlaying, setIsPlaying] = useState(false);
   const [playbackIndex, setPlaybackIndex] = useState(0);
   const [justShot, setJustShot] = useState(false);
+
+  useEffect(() => {
+    if (!readOnly) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- clearing an in-progress step selection that no longer applies once the pitch switches to a read-only preview, not derivable during render
+    setPendingActorId(null);
+    setPendingKind(null);
+  }, [readOnly]);
 
   const frames = computePlayFrames(players, steps);
   const displayIndex = isPlaying ? playbackIndex : (previewIndex ?? frames.length - 1);
@@ -138,9 +159,24 @@ export function PlayDesigner({ players, steps, onStepsChange, opponentPlayers }:
     <div className="flex flex-col gap-4">
       <div
         ref={containerRef}
-        onClick={handlePitchClick}
+        onClick={readOnly ? undefined : handlePitchClick}
         className="relative w-full touch-none select-none aspect-[68/105] rounded-xl border-2 border-pitch-touchline/25 bg-pitch-deep p-2 shadow-[0_12px_32px_-12px_rgba(0,0,0,0.7)] sm:p-3"
       >
+        <motion.div
+          aria-hidden="true"
+          className="pointer-events-none absolute -inset-8 -z-10 rounded-[2.5rem] blur-2xl"
+          style={{ background: "radial-gradient(circle, var(--attack) 0%, transparent 70%)" }}
+          animate={{ opacity: phase === "in-possession" ? 0.28 : 0 }}
+          transition={{ duration: reduceMotion ? 0 : 0.6 }}
+        />
+        <motion.div
+          aria-hidden="true"
+          className="pointer-events-none absolute -inset-8 -z-10 rounded-[2.5rem] blur-2xl"
+          style={{ background: "radial-gradient(circle, var(--defend) 0%, transparent 70%)" }}
+          animate={{ opacity: phase === "out-of-possession" ? 0.28 : 0 }}
+          transition={{ duration: reduceMotion ? 0 : 0.6 }}
+        />
+
         <PitchMarkings />
 
         {opponentPlayers && opponentPlayers.length > 0 && (
@@ -204,19 +240,31 @@ export function PlayDesigner({ players, steps, onStepsChange, opponentPlayers }:
             <motion.button
               key={player.id}
               type="button"
+              disabled={readOnly}
+              tabIndex={readOnly ? -1 : 0}
               aria-label={`${player.role}${isSelected ? " (selected)" : ""}`}
-              aria-pressed={isSelected}
-              onClick={(event) => {
-                event.stopPropagation();
-                handleSelectPlayer(player.id);
-              }}
+              aria-pressed={readOnly ? undefined : isSelected}
+              onClick={
+                readOnly
+                  ? undefined
+                  : (event) => {
+                      event.stopPropagation();
+                      handleSelectPlayer(player.id);
+                    }
+              }
               animate={{ left: `${position.x}%`, top: `${position.y}%` }}
               transition={{ duration: reduceMotion ? 0 : STEP_ANIMATION_SECONDS, ease: "easeInOut" }}
-              className="absolute z-10 -translate-x-1/2 -translate-y-1/2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
+              className={`absolute z-10 -translate-x-1/2 -translate-y-1/2 ${readOnly ? "" : "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"}`}
             >
               <div
                 className={`flex h-11 w-11 items-center justify-center rounded-full border-2 bg-pitch-card font-mono text-xs font-semibold text-pitch-line shadow-[0_4px_12px_rgba(0,0,0,0.6)] transition-colors ${
-                  isSelected ? "border-press ring-2 ring-press ring-offset-2 ring-offset-pitch-deep" : "border-attack/50"
+                  isSelected
+                    ? "border-press ring-2 ring-press ring-offset-2 ring-offset-pitch-deep"
+                    : readOnly
+                      ? phase === "out-of-possession"
+                        ? "border-defend/40"
+                        : "border-attack/40"
+                      : "border-attack/50"
                 }`}
               >
                 {player.role}
@@ -237,52 +285,60 @@ export function PlayDesigner({ players, steps, onStepsChange, opponentPlayers }:
         />
       </div>
 
-      <div className="flex flex-wrap items-center gap-2">
-        {pendingActor ? (
-          <>
-            <span className="font-mono text-xs uppercase tracking-widest text-pitch-marker">{pendingActor.role}:</span>
-            {(["pass", "run", "shot"] as PlayActionKind[]).map((kind) => (
-              <button
-                key={kind}
-                type="button"
-                aria-pressed={pendingKind === kind}
-                onClick={() => setPendingKind(kind)}
-                className={`min-h-9 rounded-md border px-3 font-mono text-xs uppercase tracking-widest transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker ${
-                  pendingKind === kind
-                    ? "border-attack bg-attack/15 text-attack"
-                    : "border-pitch-touchline/40 text-pitch-touchline hover:border-pitch-touchline hover:text-pitch-line"
-                }`}
-              >
-                {KIND_LABEL[kind]}
-              </button>
-            ))}
-            <span className="text-xs text-pitch-touchline">
-              {pendingKind === "pass" ? "Click a teammate, or the pitch for a pass into space." : pendingKind ? "Click the pitch for the destination." : "Choose an action."}
-            </span>
-            <button type="button" onClick={resetPending} className="font-mono text-[10px] uppercase tracking-widest text-pitch-touchline hover:text-pitch-line">
-              Cancel
-            </button>
-          </>
-        ) : (
-          <p className="text-xs leading-relaxed text-pitch-touchline">Select a player to start choreographing a move.</p>
-        )}
-      </div>
+      {readOnly ? (
+        <p className="text-xs leading-relaxed text-pitch-touchline">
+          Previewing how this shape compresses out of possession ({defensiveStyle === "high-press" ? "high press" : "low block"}). Switch back to In possession to keep choreographing.
+        </p>
+      ) : (
+        <>
+          <div className="flex flex-wrap items-center gap-2">
+            {pendingActor ? (
+              <>
+                <span className="font-mono text-xs uppercase tracking-widest text-pitch-marker">{pendingActor.role}:</span>
+                {(["pass", "run", "shot"] as PlayActionKind[]).map((kind) => (
+                  <button
+                    key={kind}
+                    type="button"
+                    aria-pressed={pendingKind === kind}
+                    onClick={() => setPendingKind(kind)}
+                    className={`min-h-9 rounded-md border px-3 font-mono text-xs uppercase tracking-widest transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker ${
+                      pendingKind === kind
+                        ? "border-attack bg-attack/15 text-attack"
+                        : "border-pitch-touchline/40 text-pitch-touchline hover:border-pitch-touchline hover:text-pitch-line"
+                    }`}
+                  >
+                    {KIND_LABEL[kind]}
+                  </button>
+                ))}
+                <span className="text-xs text-pitch-touchline">
+                  {pendingKind === "pass" ? "Click a teammate, or the pitch for a pass into space." : pendingKind ? "Click the pitch for the destination." : "Choose an action."}
+                </span>
+                <button type="button" onClick={resetPending} className="font-mono text-[10px] uppercase tracking-widest text-pitch-touchline hover:text-pitch-line">
+                  Cancel
+                </button>
+              </>
+            ) : (
+              <p className="text-xs leading-relaxed text-pitch-touchline">Select a player to start choreographing a move.</p>
+            )}
+          </div>
 
-      <StepTimeline
-        steps={steps}
-        players={players}
-        currentIndex={displayIndex}
-        canRedo={redoStack.length > 0}
-        isPlaying={isPlaying}
-        onSelectStep={(index) => {
-          setIsPlaying(false);
-          setPreviewIndex(index);
-        }}
-        onDeleteStep={handleDeleteStep}
-        onUndo={handleUndo}
-        onRedo={handleRedo}
-        onPlay={handlePlay}
-      />
+          <StepTimeline
+            steps={steps}
+            players={players}
+            currentIndex={displayIndex}
+            canRedo={redoStack.length > 0}
+            isPlaying={isPlaying}
+            onSelectStep={(index) => {
+              setIsPlaying(false);
+              setPreviewIndex(index);
+            }}
+            onDeleteStep={handleDeleteStep}
+            onUndo={handleUndo}
+            onRedo={handleRedo}
+            onPlay={handlePlay}
+          />
+        </>
+      )}
     </div>
   );
 }

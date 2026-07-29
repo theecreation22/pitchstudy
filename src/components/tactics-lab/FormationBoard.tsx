@@ -122,41 +122,68 @@ export function FormationBoard({
       {players.map((player, index) => {
         const mv = motionValues[index];
         const isSelected = !readOnly && selectedPlayerId === player.id;
+        const circle = (
+          <div
+            className={`flex h-11 w-11 items-center justify-center rounded-full border-2 bg-pitch-card font-mono text-xs font-semibold text-pitch-line shadow-[0_4px_12px_rgba(0,0,0,0.6)] transition-colors ${
+              isSelected
+                ? "border-press ring-2 ring-press ring-offset-2 ring-offset-pitch-deep"
+                : readOnly
+                  ? phase === "out-of-possession"
+                    ? "border-defend/40"
+                    : "border-attack/40"
+                  : "border-attack/50"
+            }`}
+          >
+            {player.role}
+          </div>
+        );
+
+        // The out-of-possession preview reuses the Explore pitch's own
+        // `layout`-driven FLIP animation (Pitch.tsx) instead of the drag
+        // branch's plain style-based positioning below — `layout` animates
+        // any before/after position change regardless of cause, so it
+        // correctly animates both into and back out of the preview. Doing
+        // this with the draggable branch's `animate`/`style` mix instead
+        // risks a visible "snap back" glitch right after a drag commit
+        // (the drag offset resets to 0 instantly while `left`/`top` would
+        // still be mid-animation), so the two are kept as separate branches
+        // rather than one element handling both.
+        if (readOnly) {
+          return (
+            <motion.div
+              key={player.id}
+              layout
+              aria-label={player.role}
+              style={{ left: `${player.x}%`, top: `${player.y}%` }}
+              transition={reduceMotion ? { duration: 0 } : { type: "spring", stiffness: 120, damping: 16, mass: 0.7 }}
+              className="absolute z-10 -translate-x-1/2 -translate-y-1/2"
+            >
+              {circle}
+            </motion.div>
+          );
+        }
+
         return (
           <motion.div
             key={player.id}
-            role={readOnly ? undefined : "button"}
-            tabIndex={readOnly ? -1 : 0}
-            aria-label={
-              readOnly ? player.role : `${player.role} — selected: ${isSelected}. Arrow keys move, Enter opens role menu.`
-            }
-            aria-pressed={readOnly ? undefined : isSelected}
-            drag={!reduceMotion && !readOnly}
+            layout
+            role="button"
+            tabIndex={0}
+            aria-label={`${player.role} — selected: ${isSelected}. Arrow keys move, Enter opens role menu.`}
+            aria-pressed={isSelected}
+            drag={!reduceMotion}
             dragConstraints={containerRef}
             dragElastic={0.05}
             dragMomentum={false}
             whileDrag={{ scale: 1.15, zIndex: 30 }}
-            onDragEnd={readOnly ? undefined : () => commitDrag(index, player.id)}
-            onTap={readOnly ? undefined : () => onSelectPlayer(isSelected ? null : player.id)}
-            onKeyDown={readOnly ? undefined : (event) => handleKeyDown(event, player)}
+            onDragEnd={() => commitDrag(index, player.id)}
+            onTap={() => onSelectPlayer(isSelected ? null : player.id)}
+            onKeyDown={(event) => handleKeyDown(event, player)}
+            transition={reduceMotion ? { duration: 0 } : { type: "spring", stiffness: 120, damping: 16, mass: 0.7 }}
             style={{ left: `${player.x}%`, top: `${player.y}%`, x: mv.x, y: mv.y }}
-            className={`absolute z-10 -translate-x-1/2 -translate-y-1/2 touch-none ${
-              readOnly ? "" : "cursor-grab focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker active:cursor-grabbing"
-            }`}
+            className="absolute z-10 -translate-x-1/2 -translate-y-1/2 cursor-grab touch-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker active:cursor-grabbing"
           >
-            <div
-              className={`flex h-11 w-11 items-center justify-center rounded-full border-2 bg-pitch-card font-mono text-xs font-semibold text-pitch-line shadow-[0_4px_12px_rgba(0,0,0,0.6)] transition-colors ${
-                isSelected
-                  ? "border-press ring-2 ring-press ring-offset-2 ring-offset-pitch-deep"
-                  : readOnly
-                    ? phase === "out-of-possession"
-                      ? "border-defend/40"
-                      : "border-attack/40"
-                    : "border-attack/50"
-              }`}
-            >
-              {player.role}
-            </div>
+            {circle}
           </motion.div>
         );
       })}
