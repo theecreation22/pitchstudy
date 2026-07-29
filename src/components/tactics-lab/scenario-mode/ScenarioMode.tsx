@@ -212,7 +212,10 @@ export function ScenarioMode() {
 
   function handleSave() {
     if (!scenario || !result) return;
-    const name = saveName.trim() || `${scenario.name} — ${GRADE_LABEL[result.grade ?? "bronze"]}`;
+    // The Playbook list already appends "— {tier} ({grade})" itself, so the
+    // default name here is just the scenario — avoids a redundant "Silver —
+    // bronze (Silver)" when the user doesn't type their own name.
+    const name = saveName.trim() || scenario.name;
     savePlay({ scenarioSlug: scenario.slug, tier, steps, grade: result.grade, name });
     setSaveName("");
   }
