@@ -77,6 +77,18 @@ export function TacticsLab({ coachAvailable }: { coachAvailable: boolean }) {
     setSelectedPlayerId(null);
   }
 
+  // High press / low block is only a meaningful shape while out of possession
+  // (there's no such thing as "pressing" while your own team has the ball) —
+  // so picking a style also switches into that preview, the same way Explore
+  // requires it. Without this, clicking the style toggle while still in
+  // possession silently does nothing, which reads as broken rather than as
+  // "you also need to flip the other switch."
+  function changeDefensiveStyle(next: DefensiveStyle) {
+    setDefensiveStyleRaw(next);
+    setPhase("out-of-possession");
+    setSelectedPlayerId(null);
+  }
+
   function persist(next: Design) {
     setRaw(JSON.stringify(next));
   }
@@ -157,7 +169,7 @@ export function TacticsLab({ coachAvailable }: { coachAvailable: boolean }) {
         </label>
         <ShapeReadout shapeName={shapeName} />
         <PhaseToggle phase={phase} onChange={changePhase} />
-        <DefensiveStyleToggle style={defensiveStyle} onChange={setDefensiveStyleRaw} />
+        <DefensiveStyleToggle style={defensiveStyle} onChange={changeDefensiveStyle} />
       </div>
 
       <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-10">
