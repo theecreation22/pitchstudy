@@ -107,15 +107,17 @@ export function FormationBoard({
       {opponentPlayers && opponentPlayers.length > 0 && (
         <div className="absolute inset-0" aria-hidden="true">
           {opponentPlayers.map((opponent) => (
-            <div
+            <motion.div
               key={`opponent-${opponent.id}`}
+              layout
               className="absolute -translate-x-1/2 -translate-y-1/2"
               style={{ left: `${opponent.x}%`, top: `${opponent.y}%` }}
+              transition={reduceMotion ? { duration: 0 } : { type: "spring", stiffness: 120, damping: 16, mass: 0.7 }}
             >
               <div className="flex h-11 w-11 items-center justify-center rounded-full border-2 border-dashed border-defend/70 bg-defend/10 font-mono text-xs font-semibold text-defend-bright">
                 {opponent.code}
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       )}
