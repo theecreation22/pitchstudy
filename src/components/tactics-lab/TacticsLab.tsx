@@ -8,11 +8,11 @@ import {
   keepOnside,
   mirrorFormationPlayers,
   resolveMatchupOverlaps,
-  resolveOverlaps,
   resolveSelfOverlaps,
   toHighPress,
   toLowBlock,
   type DefensiveStyle,
+  type FormationPlayer,
   type Phase,
 } from "@/lib/formations";
 import { useLocalStorageValue } from "@/lib/useLocalStorageValue";
@@ -123,53 +123,44 @@ export function TacticsLab({ coachAvailable }: { coachAvailable: boolean }) {
     persist({ ...design, players: design.players.map((p) => (p.id === selectedPlayerId ? { ...p, role } : p)) });
   }
 
-  // Derives both the displayed shape for the user's own team and the
-  // opponent overlay together, since — while out of possession — the user's
-  // own displayed positions are already a derived preview (never the real,
-  // persisted design), so both sides are free to be jointly resolved for a
-  // fully clean, onside matchup, exactly the guarantee Explore's own
-  // resolveMatchupOverlaps already provides. While in possession, though,
-  // `design.players` IS the user's real, authored design and must never be
-  // nudged — only the opponent (if any) adjusts around it there.
+  // A direct port of FormationExplorer.tsx's own derivation — same shape in,
+  // same steps, same functions, in the same order — so every combination of
+  // phase/style/opponent behaves identically to Explore, not just similarly.
+  // `design.players` itself is never mutated (only this render-time result
+  // differs from it); dragging still reads/writes the real, persisted values.
   const { boardPlayers, opponentPlayers } = useMemo(() => {
     const opponentFormation = design.opponentFormationSlug ? getFormation(design.opponentFormationSlug) : undefined;
-    // The opponent is always in the opposite phase from the user's own team,
-    // reshaped (high press/low block) with the same shared style control
-    // whenever THEY'RE the one out of possession — exactly Explore's model,
-    // where phase/style describe "whichever side doesn't have the ball"
-    // rather than "the user's team" specifically.
-    const opponentPhase: Phase = phase === "in-possession" ? "out-of-possession" : "in-possession";
-
-    if (phase === "in-possession") {
-      if (!opponentFormation) return { boardPlayers: design.players, opponentPlayers: undefined };
-      const mirrored = mirrorFormationPlayers(getFormationPlayers(opponentFormation, opponentPhase, defensiveStyle));
-      // Give the opponent's own shape a head start clearing itself before
-      // also having to dodge the user's fixed points — matching the same
-      // self-then-cross ordering resolveMatchupOverlaps uses for its "own"
-      // side, since a single combined pass can otherwise leave a rare
-      // residual self-overlap when the fixed side crowds the available space.
-      const selfResolved = resolveSelfOverlaps(mirrored);
-      const myPlayersAsFixed = design.players.map((p) => ({ id: p.id, code: p.role, x: p.x, y: p.y }));
-      return { boardPlayers: design.players, opponentPlayers: resolveOverlaps(selfResolved, myPlayersAsFixed) };
-    }
 
     const transform = defensiveStyle === "high-press" ? toHighPress : toLowBlock;
-    const transformed = design.players.map((player) => transform({ id: player.id, code: player.role, x: player.x, y: player.y }));
+    const rawOwn: FormationPlayer[] =
+      phase === "in-possession"
+        ? design.players.map((p) => ({ id: p.id, code: p.role, x: p.x, y: p.y }))
+        : design.players.map((player) => transform({ id: player.id, code: player.role, x: player.x, y: player.y }));
 
-    if (!opponentFormation) {
-      const resolvedMine = resolveSelfOverlaps(transformed);
-      const boardPlayers = design.players.map((player, index) => ({ ...player, x: resolvedMine[index].x, y: resolvedMine[index].y }));
-      return { boardPlayers, opponentPlayers: undefined };
+    const opponentPhase: Phase = phase === "in-possession" ? "out-of-possession" : "in-possession";
+    const rawOpponent = opponentFormation
+      ? mirrorFormationPlayers(getFormationPlayers(opponentFormation, opponentPhase, defensiveStyle))
+      : undefined;
+
+    // Keeps whichever side is currently attacking from visually standing
+    // offside against the other side's last defender — same as Explore,
+    // this only ever nudges the render, never `design.players` itself.
+    const onsideOwn = rawOpponent && phase === "in-possession" ? keepOnside(rawOwn, rawOpponent, true) : rawOwn;
+    const onsideOpponent = rawOpponent && opponentPhase === "in-possession" ? keepOnside(rawOpponent, rawOwn, false) : rawOpponent;
+
+    let resolvedOwn: FormationPlayer[];
+    let resolvedOpponent: FormationPlayer[] | undefined;
+    if (onsideOpponent) {
+      const resolved = resolveMatchupOverlaps(onsideOwn, onsideOpponent);
+      resolvedOwn = resolved.own;
+      resolvedOpponent = resolved.opponent;
+    } else {
+      resolvedOwn = resolveSelfOverlaps(onsideOwn);
+      resolvedOpponent = undefined;
     }
 
-    const mirrored = mirrorFormationPlayers(getFormationPlayers(opponentFormation, opponentPhase, defensiveStyle));
-    // The opponent is attacking here (opponentPhase is "in-possession") —
-    // keep them onside against the user's own (pre-relaxation) compressed
-    // shape, then let both sides jointly relax to clear any collision.
-    const onside = keepOnside(mirrored, transformed, false);
-    const resolved = resolveMatchupOverlaps(transformed, onside);
-    const boardPlayers = design.players.map((player, index) => ({ ...player, x: resolved.own[index].x, y: resolved.own[index].y }));
-    return { boardPlayers, opponentPlayers: resolved.opponent };
+    const boardPlayers = design.players.map((player, index) => ({ ...player, x: resolvedOwn[index].x, y: resolvedOwn[index].y }));
+    return { boardPlayers, opponentPlayers: resolvedOpponent };
   }, [design.opponentFormationSlug, design.players, phase, defensiveStyle]);
 
   const shapeName = useMemo(() => recognizeShape(design.players), [design.players]);

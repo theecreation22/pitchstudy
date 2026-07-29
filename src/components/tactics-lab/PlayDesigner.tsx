@@ -238,6 +238,10 @@ export function PlayDesigner({
         {players.map((player) => {
           const position = frame.positions[player.id];
           const isSelected = pendingActorId === player.id;
+          // Matches Explore's Pitch.tsx exactly: once an opponent is shown,
+          // the user's own markers stay a consistent amber regardless of
+          // phase, so the two teams never both read as the same blue.
+          const hasOpponent = Boolean(opponentPlayers && opponentPlayers.length > 0);
           return (
             <motion.button
               key={player.id}
@@ -262,11 +266,11 @@ export function PlayDesigner({
                 className={`flex h-11 w-11 items-center justify-center rounded-full border-2 bg-pitch-card font-mono text-xs font-semibold text-pitch-line shadow-[0_4px_12px_rgba(0,0,0,0.6)] transition-colors ${
                   isSelected
                     ? "border-press ring-2 ring-press ring-offset-2 ring-offset-pitch-deep"
-                    : readOnly
-                      ? phase === "out-of-possession"
+                    : hasOpponent
+                      ? "border-attack/40"
+                      : phase === "out-of-possession"
                         ? "border-defend/40"
                         : "border-attack/40"
-                      : "border-attack/50"
                 }`}
               >
                 {player.role}
