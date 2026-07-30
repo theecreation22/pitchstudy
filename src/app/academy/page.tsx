@@ -6,7 +6,7 @@ import { AcademyChalkLoop } from "@/components/curriculum/AcademyChalkLoop";
 import { ChalkDivider } from "@/components/effects/ChalkDivider";
 
 export const metadata: Metadata = {
-  title: "Academy · PitchIQ",
+  title: "Academy · PitchStudy",
   description: "Structured football lessons with knowledge checks, module quizzes, XP, and badges.",
 };
 

@@ -24,7 +24,7 @@ export async function generateMetadata({
   const manager = getManager(slug);
 
   return {
-    title: manager ? `${manager.name} · PitchIQ` : "Manager · PitchIQ",
+    title: manager ? `${manager.name} · PitchStudy` : "Manager · PitchStudy",
     description: manager?.tagline,
   };
 }

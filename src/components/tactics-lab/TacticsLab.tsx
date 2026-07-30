@@ -40,7 +40,7 @@ import { PlayDesigner } from "./PlayDesigner";
 import { OpponentSim } from "./OpponentSim";
 import { ScenarioMode } from "./scenario-mode/ScenarioMode";
 
-const STORAGE_KEY = "pitchiq:tactics-lab:design:v1";
+const STORAGE_KEY = "pitchstudy:tactics-lab:design:v1";
 
 type LabMode = "formation" | "play" | "scenario";
 const MODE_OPTIONS = [
@@ -75,7 +75,7 @@ export function TacticsLab({ coachAvailable }: { coachAvailable: boolean }) {
   const [selectedPlayerId, setSelectedPlayerId] = useState<string | null>(null);
   const [mode, setMode] = useState<LabMode>("formation");
   const [phase, setPhase] = useState<Phase>("in-possession");
-  const [defensiveStyleRaw, setDefensiveStyleRaw] = useLocalStorageValue("pitchiq:tactics-lab:defensive-style");
+  const [defensiveStyleRaw, setDefensiveStyleRaw] = useLocalStorageValue("pitchstudy:tactics-lab:defensive-style");
   const defensiveStyle: DefensiveStyle = defensiveStyleRaw === "high-press" ? "high-press" : "low-block";
 
   // A shared scenario play arrives as a `?play=` query param — land directly

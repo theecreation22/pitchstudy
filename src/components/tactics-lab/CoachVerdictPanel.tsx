@@ -6,7 +6,7 @@ import { useLocalStorageValue } from "@/lib/useLocalStorageValue";
 import type { Design } from "@/lib/tactics-lab/designSchema";
 import { emptyVerdict, hashDesign, parseVerdictStream, type PartialCoachVerdict } from "@/lib/tactics-lab/coachSchema";
 
-const CACHE_KEY = "pitchiq:tactics-lab:coach-cache:v1";
+const CACHE_KEY = "pitchstudy:tactics-lab:coach-cache:v1";
 /** Caps the cache so it can't grow unbounded across a long session — oldest entries drop first. */
 const MAX_CACHE_ENTRIES = 20;
 
@@ -28,6 +28,28 @@ const UNAVAILABLE_MESSAGE = "Coach verdict unavailable — running on the live a
 const UNREACHABLE_MESSAGE = "The coaching staff couldn't be reached — the live analysis engine above still stands.";
 
 type Props = { design: Design; coachAvailable: boolean };
+
+/** A hand-drawn clipboard motif — matches the chalk-line stroke style used across the rest of the Lab rather than pulling in an icon library. */
+function ClipboardIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.8}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      <rect x="5" y="4" width="14" height="17" rx="2" />
+      <rect x="9" y="2" width="6" height="3" rx="1" />
+      <line x1="8" y1="10.5" x2="16" y2="10.5" />
+      <line x1="8" y1="14.5" x2="16" y2="14.5" />
+      <line x1="8" y1="18.5" x2="13" y2="18.5" />
+    </svg>
+  );
+}
 
 /** The optional, on-demand LLM layer. The deterministic engine above this panel is always live and free — this is purely an additional prose verdict, never a dependency the rest of the Lab needs. */
 export function CoachVerdictPanel({ design, coachAvailable }: Props) {
@@ -120,13 +142,14 @@ export function CoachVerdictPanel({ design, coachAvailable }: Props) {
 
   if (!coachAvailable) {
     return (
-      <div className="flex flex-col gap-2 rounded-lg border border-pitch-touchline/20 bg-pitch-card/60 p-4">
+      <div className="tactics-panel flex flex-col gap-2 rounded-lg border border-pitch-touchline/20 p-4">
         <p className="font-mono text-xs uppercase tracking-widest text-pitch-touchline">Coaching staff</p>
         <button
           type="button"
           disabled
-          className="min-h-11 cursor-not-allowed rounded-md border border-pitch-touchline/30 px-4 text-left font-mono text-xs uppercase tracking-widest text-pitch-touchline/60"
+          className="inline-flex min-h-11 cursor-not-allowed items-center gap-2 rounded-full border border-pitch-touchline/30 px-5 text-left font-mono text-xs uppercase tracking-widest text-pitch-touchline"
         >
+          <ClipboardIcon className="h-4 w-4 shrink-0" />
           {UNAVAILABLE_MESSAGE}
         </button>
       </div>
@@ -136,17 +159,26 @@ export function CoachVerdictPanel({ design, coachAvailable }: Props) {
   const isBusy = status === "loading" || status === "streaming";
 
   return (
-    <div className="flex flex-col gap-3 rounded-lg border border-pitch-touchline/30 bg-pitch-card p-4">
+    <div className="tactics-panel flex flex-col gap-3 rounded-lg border border-pitch-touchline/30 p-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <p className="font-mono text-xs uppercase tracking-widest text-pitch-marker">Coaching staff</p>
-        <button
+        <motion.button
           type="button"
           onClick={requestVerdict}
           disabled={isBusy}
-          className="min-h-11 rounded-md border border-attack px-4 font-mono text-xs uppercase tracking-widest text-attack transition-colors hover:bg-attack/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker disabled:cursor-not-allowed disabled:opacity-50"
+          whileHover={reduceMotion || isBusy ? undefined : { y: -1 }}
+          whileTap={reduceMotion || isBusy ? undefined : { scale: 0.97 }}
+          className="inline-flex min-h-11 items-center gap-2 rounded-full bg-attack px-5 font-mono text-xs font-bold uppercase tracking-widest text-night-950 shadow-[0_2px_10px_-2px_color-mix(in_srgb,var(--attack)_55%,transparent)] transition-colors hover:bg-attack-hi focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker disabled:cursor-not-allowed disabled:opacity-60 disabled:shadow-none"
         >
+          <motion.span
+            className="flex"
+            animate={isBusy && !reduceMotion ? { rotate: [0, -10, 10, 0] } : { rotate: 0 }}
+            transition={isBusy && !reduceMotion ? { duration: 1.1, repeat: Infinity, ease: "easeInOut" } : { duration: 0 }}
+          >
+            <ClipboardIcon className="h-4 w-4 shrink-0" />
+          </motion.span>
           {isBusy ? "Reviewing…" : status === "done" ? "Send again" : "Send to the coaching staff"}
-        </button>
+        </motion.button>
       </div>
 
       {status === "loading" && <p className="text-sm italic text-pitch-touchline">The staff are reviewing your setup…</p>}
@@ -213,7 +245,7 @@ export function CoachVerdictPanel({ design, coachAvailable }: Props) {
         </motion.div>
       )}
 
-      <p className="text-[11px] leading-relaxed text-pitch-touchline/70">
+      <p className="text-[10px] leading-snug text-pitch-touchline">
         Coaching interpretation for learning — one read on this shape, not objective truth.
       </p>
     </div>

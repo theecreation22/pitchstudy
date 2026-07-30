@@ -4,7 +4,7 @@ import { quizzes } from "@/lib/quizzes";
 import { QuizBestScore } from "@/components/quiz/QuizBestScore";
 
 export const metadata: Metadata = {
-  title: "Quizzes · PitchIQ",
+  title: "Quizzes · PitchStudy",
   description: "Short quizzes on formations, positions, and managers with instant feedback.",
 };
 

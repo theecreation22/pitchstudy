@@ -24,9 +24,9 @@ export function PhaseToggle({ phase, onChange }: { phase: Phase; onChange: (phas
         style={{ background: isOut ? "var(--defend)" : "var(--attack)" }}
       >
         <motion.span
-          className="absolute top-1 h-5 w-5 rounded-full bg-night-950 shadow-[0_2px_4px_rgba(0,0,0,0.5)]"
-          animate={{ left: isOut ? "calc(100% - 1.5rem)" : "0.25rem" }}
-          transition={reduceMotion ? { duration: 0 } : { type: "spring", stiffness: 400, damping: 30 }}
+          className="absolute top-1 left-1 h-5 w-5 rounded-full bg-pitch-line shadow-[0_2px_4px_rgba(0,0,0,0.5)]"
+          animate={{ x: isOut ? 24 : 0 }}
+          transition={reduceMotion ? { duration: 0 } : { duration: 0.2, ease: "easeOut" }}
         />
       </button>
       <span

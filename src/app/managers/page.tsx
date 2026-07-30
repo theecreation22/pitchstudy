@@ -6,7 +6,7 @@ import { ManagerEraTimeline } from "@/components/managers/ManagerEraTimeline";
 import { ChalkDivider } from "@/components/effects/ChalkDivider";
 
 export const metadata: Metadata = {
-  title: "Managers & Tactics · PitchIQ",
+  title: "Managers & Tactics · PitchStudy",
   description:
     "Factual profiles of influential football managers and the tactical systems they became known for.",
 };

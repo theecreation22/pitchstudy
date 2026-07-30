@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { ChallengeMode } from "@/components/curriculum/ChallengeMode";
 
 export const metadata: Metadata = {
-  title: "Challenge · PitchIQ",
+  title: "Challenge · PitchStudy",
   description: "Random questions drawn from the Academy modules you've completed, with a best-streak score.",
 };
 

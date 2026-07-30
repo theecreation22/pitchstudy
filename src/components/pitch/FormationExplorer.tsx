@@ -111,10 +111,10 @@ export function FormationExplorer({ initialSlug }: { initialSlug?: string }) {
   const [showGhost, setShowGhost] = useState(true);
   const [selectedPlayerId, setSelectedPlayerId] = useState<string | null>(null);
 
-  const [showOpponentRaw, setShowOpponentRaw] = useLocalStorageValue("pitchiq:show-opponent");
+  const [showOpponentRaw, setShowOpponentRaw] = useLocalStorageValue("pitchstudy:show-opponent");
   const showOpponent = showOpponentRaw === "true";
-  const [opponentSlugRaw, setOpponentSlugRaw] = useLocalStorageValue("pitchiq:opponent-formation");
-  const [defensiveStyleRaw, setDefensiveStyleRaw] = useLocalStorageValue("pitchiq:defensive-style");
+  const [opponentSlugRaw, setOpponentSlugRaw] = useLocalStorageValue("pitchstudy:opponent-formation");
+  const [defensiveStyleRaw, setDefensiveStyleRaw] = useLocalStorageValue("pitchstudy:defensive-style");
   const defensiveStyle: DefensiveStyle = defensiveStyleRaw === "high-press" ? "high-press" : "low-block";
 
   const formation = getFormation(selectedSlug) ?? formations[0];

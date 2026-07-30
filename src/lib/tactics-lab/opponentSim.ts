@@ -74,3 +74,30 @@ export function computeMatchupNotes(myPlayers: LabPlayer[], opponentMirrored: Fo
 
   return notes.slice(0, 4);
 }
+
+export type ZoneSeverity = "overload" | "hole" | "even";
+export type MatchupZone = { channel: Channel; mine: number; theirs: number; severity: ZoneSeverity };
+
+function severityFor(mine: number, theirs: number): ZoneSeverity {
+  if (theirs - mine >= 2) return "hole";
+  if (mine - theirs >= 2) return "overload";
+  return "even";
+}
+
+/**
+ * The same left/center/right channel counts `computeMatchupNotes` already
+ * derives numerical-mismatch sentences from, exposed as structured data
+ * instead of prose — lets the UI render this spatially (a tinted mini-pitch)
+ * rather than as a bare sentence. Additive: doesn't change
+ * `computeMatchupNotes`'s own signature or output.
+ */
+export function computeMatchupZones(myPlayers: LabPlayer[], opponentMirrored: FormationPlayer[]): MatchupZone[] {
+  const myOutfield = myPlayers.filter((p) => p.role !== "GK" && p.role !== "SK");
+  const oppOutfield = asLabPlayers(opponentMirrored).filter((p) => p.role !== "GK");
+
+  return (["left", "center", "right"] as const).map((channel) => {
+    const mine = countInChannel(myOutfield, channel);
+    const theirs = countInChannel(oppOutfield, channel);
+    return { channel, mine, theirs, severity: severityFor(mine, theirs) };
+  });
+}

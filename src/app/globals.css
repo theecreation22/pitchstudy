@@ -22,6 +22,11 @@
   --press: #ff3b3b;
   --press-deep: #c11212;
 
+  /* A subtle warm lean for choices that tilt aggressive without being a full
+     risk takeover (that's reserved for --press alone, e.g. High Press) —
+     used for the Mentality panel's "Attacking" option. */
+  --attack-warm-lean: color-mix(in srgb, var(--attack) 75%, var(--press) 25%);
+
   --grad-kickoff: linear-gradient(120deg, var(--press) 0%, var(--attack) 55%, var(--defend) 100%);
   --grad-attack: linear-gradient(120deg, var(--press-deep) 0%, var(--press) 45%, var(--attack) 100%);
   --grad-control: linear-gradient(
@@ -56,6 +61,7 @@
   --color-pitch-marker: var(--pitch-marker);
 
   --color-night-800: var(--night-800);
+  --color-night-950: var(--night-950);
   --color-red-flare: var(--red-flare);
   --color-red-deep: var(--red-deep);
   --color-blue-volt: var(--blue-volt);
@@ -189,6 +195,35 @@ body {
 
 .animate-shake {
   animation: shake 0.4s ease-in-out;
+}
+
+/** A risky selection (High Press, High defensive line) should be felt, not just repainted — a brief red pulse ring on the moment it's chosen. */
+@keyframes risk-pulse {
+  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--press) 55%, transparent); }
+  70% { box-shadow: 0 0 0 9px color-mix(in srgb, var(--press) 0%, transparent); }
+  100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--press) 0%, transparent); }
+}
+
+.animate-risk-pulse {
+  animation: risk-pulse 0.6s ease-out;
+}
+
+.bg-attack-warm-lean {
+  background-color: var(--attack-warm-lean);
+}
+
+/**
+ * Shared card treatment for the Tactics Lab's Team Instructions / Opponent
+ * Sim / Coaching Staff panels — a slightly translucent fill (instead of a
+ * flat opaque one) lets a whisper of the page's fixed ghost-pitch texture
+ * (FloodlitAtmosphere) show through, plus a 1px top highlight and a soft
+ * inner shadow for a physical, tactile card rather than a flat color fill.
+ */
+.tactics-panel {
+  background-color: color-mix(in srgb, var(--pitch-card) 95%, transparent);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.05),
+    inset 0 -10px 18px -12px rgba(0, 0, 0, 0.4);
 }
 
 @media (prefers-reduced-motion: reduce) {

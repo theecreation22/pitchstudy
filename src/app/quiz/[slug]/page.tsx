@@ -17,7 +17,7 @@ export async function generateMetadata({
   const quiz = getQuiz(slug);
 
   return {
-    title: quiz ? `${quiz.title} Quiz · PitchIQ` : "Quiz · PitchIQ",
+    title: quiz ? `${quiz.title} Quiz · PitchStudy` : "Quiz · PitchStudy",
     description: quiz?.tagline,
   };
 }

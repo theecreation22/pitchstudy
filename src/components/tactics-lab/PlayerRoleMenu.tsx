@@ -16,7 +16,7 @@ type Props = {
   onClose: () => void;
 };
 
-/** Docked role picker for the currently-selected player — a dropdown-equivalent menu grouped by line, using the site's own position dataset for names so hybrid roles (Inverted Full-Back, False 9, etc.) read the same way they do everywhere else on PitchIQ. */
+/** Docked role picker for the currently-selected player — a dropdown-equivalent menu grouped by line, using the site's own position dataset for names so hybrid roles (Inverted Full-Back, False 9, etc.) read the same way they do everywhere else on PitchStudy. */
 export function PlayerRoleMenu({ currentRole, onSelectRole, onClose }: Props) {
   return (
     <div className="flex flex-col gap-3 rounded-lg border border-pitch-touchline/30 bg-pitch-card p-4">

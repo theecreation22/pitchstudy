@@ -3,7 +3,7 @@ import { TacticsLab } from "@/components/tactics-lab/TacticsLab";
 import { ChalkDivider } from "@/components/effects/ChalkDivider";
 
 export const metadata: Metadata = {
-  title: "Tactics Lab · PitchIQ",
+  title: "Tactics Lab · PitchStudy",
   description:
     "Design your own formation, set team instructions, and get instant tactical feedback from a live analysis engine.",
 };

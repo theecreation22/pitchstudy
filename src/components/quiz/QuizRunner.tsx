@@ -21,7 +21,7 @@ export function QuizRunner({ quiz }: { quiz: Quiz }) {
   const [finished, setFinished] = useState(false);
   const [isNewBest, setIsNewBest] = useState(false);
 
-  const bestScoreKey = `pitchiq:quiz:${quiz.slug}:best`;
+  const bestScoreKey = `pitchstudy:quiz:${quiz.slug}:best`;
   const [bestScoreRaw, setBestScoreRaw] = useLocalStorageValue(bestScoreKey);
   const bestScore = bestScoreRaw ? Number(bestScoreRaw) : null;
 

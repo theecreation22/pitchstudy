@@ -5,7 +5,7 @@ import { useLocalStorageValue } from "@/lib/useLocalStorageValue";
 import type { DifficultyTier, ScenarioStep } from "./schema";
 import type { ScenarioGrade } from "./evaluation";
 
-const PLAYBOOK_KEY = "pitchiq:scenario-mode:playbook:v1";
+const PLAYBOOK_KEY = "pitchstudy:scenario-mode:playbook:v1";
 /** Caps the playbook so it can't grow unbounded across a long session — oldest entries drop first, matching the coach-verdict cache's own cap. */
 const MAX_PLAYBOOK_ENTRIES = 30;
 

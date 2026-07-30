@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { Big_Shoulders, Public_Sans, IBM_Plex_Mono } from "next/font/google";
 import { FloodlitAtmosphere } from "@/components/effects/FloodlitAtmosphere";
+import { SiteNav } from "@/components/nav/SiteNav";
 import "./globals.css";
 
 const bigShoulders = Big_Shoulders({
@@ -22,7 +22,7 @@ const plexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "PitchIQ: Learn football tactics, interactively",
+  title: "PitchStudy: Learn football tactics, interactively",
   description:
     "Explore formations on an interactive pitch, learn what every position does, and train for the role you want to play.",
 };
@@ -39,52 +39,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col bg-pitch-slate text-pitch-line antialiased">
         <FloodlitAtmosphere />
-        <nav className="mx-auto flex w-full max-w-5xl items-center justify-between px-4 pt-6 sm:px-8 sm:pt-8">
-          <Link
-            href="/"
-            className="font-display text-sm font-semibold uppercase tracking-[0.15em] text-pitch-touchline transition-colors hover:text-pitch-marker"
-          >
-            PitchIQ
-          </Link>
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
-            <Link
-              href="/academy"
-              className="font-display text-sm font-semibold uppercase tracking-[0.15em] text-pitch-touchline transition-colors hover:text-pitch-marker"
-            >
-              Academy
-            </Link>
-            <Link
-              href="/explore"
-              className="font-display text-sm font-semibold uppercase tracking-[0.15em] text-pitch-touchline transition-colors hover:text-pitch-marker"
-            >
-              Explore
-            </Link>
-            <Link
-              href="/managers"
-              className="font-display text-sm font-semibold uppercase tracking-[0.15em] text-pitch-touchline transition-colors hover:text-pitch-marker"
-            >
-              Managers
-            </Link>
-            <Link
-              href="/workouts"
-              className="font-display text-sm font-semibold uppercase tracking-[0.15em] text-pitch-touchline transition-colors hover:text-pitch-marker"
-            >
-              Workouts
-            </Link>
-            <Link
-              href="/challenge"
-              className="font-display text-sm font-semibold uppercase tracking-[0.15em] text-pitch-touchline transition-colors hover:text-pitch-marker"
-            >
-              Challenge
-            </Link>
-            <Link
-              href="/tactics-lab"
-              className="font-display text-sm font-semibold uppercase tracking-[0.15em] text-pitch-touchline transition-colors hover:text-pitch-marker"
-            >
-              Tactics Lab
-            </Link>
-          </div>
-        </nav>
+        <SiteNav />
         {children}
       </body>
     </html>

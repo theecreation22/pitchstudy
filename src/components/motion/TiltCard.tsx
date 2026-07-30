@@ -4,7 +4,7 @@ import { type ReactNode, useRef } from "react";
 import Link from "next/link";
 import { motion, useMotionValue, useReducedMotion, useSpring, useTransform } from "framer-motion";
 
-const MotionLink = motion(Link);
+const MotionLink = motion.create(Link);
 
 type Props = {
   href: string;

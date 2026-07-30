@@ -420,10 +420,32 @@ const CENTRAL_ROLES: Partial<Record<PositionCode, true>> = { CDM: true, CM: true
 /** Matches the widest x any central role naturally reaches in this file's own data (the 4-4-2 Diamond's CM pairing, at x=28/72) — repulsion can never push a central role any wider than that already-normal example, while every central role's actual raw position stays untouched since none exceeds this bound to begin with. */
 const CENTRAL_ROLE_MARGIN_X = 28;
 
+/**
+ * Wingers and wide midfielders — the mirror image of CENTRAL_ROLES, guarding
+ * against the opposite failure (a wide role drifting in toward the center
+ * far enough to stand where a CM/CDM belongs). Unlike central roles,
+ * `toHighPress`/`toLowBlock` legitimately pull these MORE central than their
+ * raw data every single time (that's the real, intended "tucking in" under
+ * compression) — so the threshold can't just be the raw x range, it has to
+ * be the most-compressed value any of these roles *legitimately* reaches.
+ * Low-block's 0.55 multiplier compresses harder than high-press's 0.6, and
+ * LW/RW's raw x=18/82 is the narrowest starting point in this file's data,
+ * so `50 + (18-50)*0.55` = 32.4 (mirrored: 67.6) is that exact boundary —
+ * verified against every raw x this file defines for these codes, not just
+ * asserted. LM/RM's own narrowest legitimate compression (30.75) sits safely
+ * inside this band, so nothing here ever gets clipped tighter than intended.
+ */
+const WIDE_LEFT_ROLES: Partial<Record<PositionCode, true>> = { LW: true, LM: true };
+const WIDE_RIGHT_ROLES: Partial<Record<PositionCode, true>> = { RW: true, RM: true };
+const WIDE_ROLE_MAX_X = 32.4;
+const WIDE_ROLE_MIN_X = 100 - WIDE_ROLE_MAX_X;
+
 function clampWithEdgeMargin(x: number, y: number, code?: PositionCode): { x: number; y: number } {
   const isCentral = code !== undefined && CENTRAL_ROLES[code];
-  const minX = isCentral ? CENTRAL_ROLE_MARGIN_X : EDGE_MARGIN_X;
-  const maxX = isCentral ? 100 - CENTRAL_ROLE_MARGIN_X : 100 - EDGE_MARGIN_X;
+  let minX = isCentral ? CENTRAL_ROLE_MARGIN_X : EDGE_MARGIN_X;
+  let maxX = isCentral ? 100 - CENTRAL_ROLE_MARGIN_X : 100 - EDGE_MARGIN_X;
+  if (code !== undefined && WIDE_LEFT_ROLES[code]) maxX = Math.min(maxX, WIDE_ROLE_MAX_X);
+  if (code !== undefined && WIDE_RIGHT_ROLES[code]) minX = Math.max(minX, WIDE_ROLE_MIN_X);
   return {
     x: Math.min(maxX, Math.max(minX, x)),
     y: Math.min(100 - EDGE_MARGIN_Y, Math.max(EDGE_MARGIN_Y, y)),
@@ -533,25 +555,29 @@ const DEPTH_CHECK_EXEMPT: Partial<Record<PositionCode, true>> = { LWB: true, RWB
 /**
  * Every position swap in this file — left-right order fixes and depth-order
  * fixes alike — goes through this one function, so this is the single choke
- * point that can guarantee a central role never inherits a wide role's
- * x-coordinate: a defender or wide midfielder found out of order can
- * legitimately swap with (and take the exact spot of) a central player, but
- * the reverse — a CDM/CM/CAM/ST landing at a full-back's or winger's x —
- * would read as that central player teleporting out to the wing. Only x is
+ * point that can guarantee a role never inherits a coordinate that belongs
+ * to a different kind of role: a defender or wide midfielder found out of
+ * order can legitimately swap with (and take the exact spot of) a central
+ * player, but the reverse — a CDM/CM/CAM/ST landing at a full-back's or
+ * winger's x — would read as that central player teleporting out to the
+ * wing. Symmetrically, a winger inheriting a central player's x would read
+ * as the winger tucking in all the way to the middle of the pitch. Only x is
  * reclamped; y is left exactly as the swap intended, since y is what the
  * order fix was actually correcting.
  */
-function clampCentralX(code: PositionCode, x: number): number {
-  if (!CENTRAL_ROLES[code]) return x;
-  return Math.min(100 - CENTRAL_ROLE_MARGIN_X, Math.max(CENTRAL_ROLE_MARGIN_X, x));
+function clampRoleX(code: PositionCode, x: number): number {
+  if (CENTRAL_ROLES[code]) return Math.min(100 - CENTRAL_ROLE_MARGIN_X, Math.max(CENTRAL_ROLE_MARGIN_X, x));
+  if (WIDE_LEFT_ROLES[code]) return Math.min(WIDE_ROLE_MAX_X, x);
+  if (WIDE_RIGHT_ROLES[code]) return Math.max(WIDE_ROLE_MIN_X, x);
+  return x;
 }
 
 function swapPlayers(players: FormationPlayer[], idA: string, idB: string): void {
   const i = players.findIndex((p) => p.id === idA);
   const j = players.findIndex((p) => p.id === idB);
   const { x, y } = players[i];
-  players[i] = { ...players[i], x: clampCentralX(players[i].code, players[j].x), y: players[j].y };
-  players[j] = { ...players[j], x: clampCentralX(players[j].code, x), y };
+  players[i] = { ...players[i], x: clampRoleX(players[i].code, players[j].x), y: players[j].y };
+  players[j] = { ...players[j], x: clampRoleX(players[j].code, x), y };
 }
 
 /**
@@ -656,10 +682,11 @@ function restoreFormationOrder(
  * opponent-opponent, and own-opponent — splitting each correction evenly,
  * so both sides can nudge apart as a last resort. It then runs a second time
  * after `restoreFormationOrder`, since that pass's swaps can themselves
- * introduce a fresh collision when `clampCentralX` reclaims a central role's
- * x. Verified empirically against all 8×8 formation pairings × both phases
- * × both defensive styles (256 combinations): zero collisions remain after
- * this runs, and no CDM/CM/CAM/ST ever ends up past x=28/72.
+ * introduce a fresh collision when `clampRoleX` reclaims a central or wide
+ * role's x. Verified empirically against all 8×8 formation pairings × both
+ * phases × both defensive styles (256 combinations): zero collisions remain
+ * after this runs, no CDM/CM/CAM/ST ever ends up past x=28/72, and no
+ * LW/RW/LM/RM ever ends up more central than x=32.4/67.6.
  */
 export function resolveMatchupOverlaps(
   own: FormationPlayer[],
@@ -713,8 +740,8 @@ export function resolveMatchupOverlaps(
   restoreFormationOrder(finalOwn, ownReferenceOrder, true);
   restoreFormationOrder(finalOpponent, opponentReferenceOrder, false);
 
-  // restoreFormationOrder's swaps can hand a central role a new x that its
-  // own central-x clamp then pulls back in (see `clampCentralX`) — a
+  // restoreFormationOrder's swaps can hand a central or wide role a new x
+  // that its own role-x clamp then pulls back in (see `clampRoleX`) — a
   // correction to that single coordinate, not a re-check against whichever
   // teammate or opponent now sits nearby. Re-running the same relaxation
   // catches any collision that clamp introduced, same as it already covers

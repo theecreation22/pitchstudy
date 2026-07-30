@@ -22,7 +22,7 @@ export async function generateMetadata({
   const lesson = getLesson(moduleSlug, lessonSlug);
 
   return {
-    title: lesson ? `${lesson.title} · PitchIQ Academy` : "Lesson · PitchIQ",
+    title: lesson ? `${lesson.title} · PitchStudy Academy` : "Lesson · PitchStudy",
     description: lesson?.hook,
   };
 }
