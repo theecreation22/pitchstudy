@@ -18,9 +18,9 @@ __pycache__/
 secrets/
 
 # Build output
-dist/
-build/
-out/
+/dist/
+/build/
+/out/
 .next/
 .nuxt/
 .output/

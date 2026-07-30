@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { getAllDrills, workoutPlans } from "@/lib/workouts";
+import { getAllDrillIds, positionGroupLabels, workoutPlans } from "@/lib/workouts";
 
 export const metadata: Metadata = {
-  title: "Workouts · PitchIQ",
+  title: "Workouts · PitchStudy",
   description:
     "Position-specific training plans for goalkeepers, defenders, midfielders, and attackers.",
 };
@@ -26,6 +26,29 @@ export default function WorkoutsPage() {
         medical professional before starting a new training program.
       </div>
 
+      <div className="flex flex-wrap gap-3 rounded-lg border border-attack/30 bg-attack/10 p-6">
+        <div className="flex flex-1 flex-col gap-1">
+          <p className="font-mono text-xs uppercase tracking-widest text-attack">Want something more specific?</p>
+          <p className="text-sm leading-relaxed text-pitch-line/90">
+            Build a program tuned to your exact role, playstyle, level, and equipment.
+          </p>
+        </div>
+        <div className="flex flex-wrap gap-3">
+          <Link
+            href="/workouts/my-program"
+            className="inline-flex min-h-11 items-center rounded-full border border-attack/50 px-5 font-mono text-xs uppercase tracking-widest text-attack hover:border-attack"
+          >
+            My Program
+          </Link>
+          <Link
+            href="/workouts/build"
+            className="inline-flex min-h-11 items-center rounded-full bg-attack px-5 font-mono text-xs font-semibold uppercase tracking-widest text-night-950"
+          >
+            Build Your Program
+          </Link>
+        </div>
+      </div>
+
       <div className="grid gap-4 sm:grid-cols-2">
         {workoutPlans.map((plan) => (
           <Link
@@ -34,14 +57,14 @@ export default function WorkoutsPage() {
             className="group flex flex-col gap-3 rounded-lg border border-pitch-touchline/30 bg-pitch-card p-6 transition-colors hover:border-pitch-marker focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
           >
             <p className="font-mono text-xs uppercase tracking-widest text-pitch-marker">
-              {plan.group}
+              {positionGroupLabels[plan.positionGroup]}
             </p>
             <h2 className="font-display text-2xl font-bold uppercase tracking-tight text-pitch-line group-hover:text-pitch-marker">
               {plan.title}
             </h2>
             <p className="text-sm leading-relaxed text-pitch-touchline">{plan.tagline}</p>
             <p className="mt-auto font-mono text-xs text-pitch-touchline">
-              {plan.weeks.length} weeks · {getAllDrills(plan).length} drills
+              {plan.weeks.length} weeks · {getAllDrillIds(plan).length} drills
             </p>
           </Link>
         ))}

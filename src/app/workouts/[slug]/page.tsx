@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getWorkoutPlan, workoutPlans } from "@/lib/workouts";
-import { WorkoutChecklist } from "@/components/workouts/WorkoutChecklist";
+import { getWorkoutPlan, positionGroupLabels, workoutPlans } from "@/lib/workouts";
+import { WorkoutPlanView } from "@/components/workouts/WorkoutPlanView";
 import { ChalkDivider } from "@/components/effects/ChalkDivider";
 
 export function generateStaticParams() {
@@ -18,7 +18,7 @@ export async function generateMetadata({
   const plan = getWorkoutPlan(slug);
 
   return {
-    title: plan ? `${plan.title} · PitchIQ` : "Workout plan · PitchIQ",
+    title: plan ? `${plan.title} · PitchStudy` : "Workout plan · PitchStudy",
     description: plan?.tagline,
   };
 }
@@ -45,7 +45,7 @@ export default async function WorkoutPlanPage({
       </Link>
 
       <header className="flex flex-col gap-2">
-        <p className="font-mono text-sm text-pitch-marker">{plan.group}</p>
+        <p className="font-mono text-sm text-pitch-marker">{positionGroupLabels[plan.positionGroup]}</p>
         <h1 className="font-display text-4xl font-black uppercase leading-none tracking-tight text-pitch-line sm:text-6xl">
           {plan.title}
         </h1>
@@ -59,7 +59,7 @@ export default async function WorkoutPlanPage({
 
       <ChalkDivider />
 
-      <WorkoutChecklist plan={plan} />
+      <WorkoutPlanView initialPlan={plan} />
     </div>
   );
 }

@@ -4,7 +4,7 @@ import { useCallback, useMemo, useRef } from "react";
 import { useLocalStorageValue } from "./useLocalStorageValue";
 import { getModule, modules, totalLessonCount } from "./curriculum";
 
-const STORAGE_KEY = "pitchiq:progress:v2";
+const STORAGE_KEY = "pitchstudy:progress:v2";
 
 export type QuizBest = { score: number; total: number };
 
@@ -17,6 +17,7 @@ export type ProgressState = {
   earnedBadges: string[];
   challengeBestStreak: number;
   scenarioBests: Record<string, ScenarioBest>; // `${scenarioSlug}:${tier}` -> best
+  completedDrillInstances: string[]; // `${planSlug}:${weekNumber}:${drillId}` — instance-keyed since a drill can recur across weeks
 };
 
 const DEFAULT_STATE: ProgressState = {
@@ -26,6 +27,7 @@ const DEFAULT_STATE: ProgressState = {
   earnedBadges: [],
   challengeBestStreak: 0,
   scenarioBests: {},
+  completedDrillInstances: [],
 };
 
 function parseState(raw: string | null): ProgressState {
@@ -43,11 +45,12 @@ export const badges = [
   { id: "hat-trick", name: "Hat-Trick", description: "Complete 3 lessons in one visit." },
   { id: "full-90", name: "Full 90", description: "Complete every lesson in a module." },
   { id: "clean-sheet", name: "Clean Sheet", description: "Score 100% on a module quiz." },
-  { id: "ballon-dor", name: "Ballon d'Or", description: "Complete every lesson on PitchIQ." },
+  { id: "ballon-dor", name: "Ballon d'Or", description: "Complete every lesson on PitchStudy." },
   { id: "set-piece-specialist", name: "Set-Piece Specialist", description: "Beat a set-piece scenario in the Play Designer." },
   { id: "counter-puncher", name: "Counter Puncher", description: "Beat a counter-attack scenario in the Play Designer." },
   { id: "lock-picker", name: "Lock-Picker", description: "Beat a low-block scenario in the Play Designer." },
   { id: "perfect-move", name: "Perfect Move", description: "Score Gold on a scenario using the minimum steps." },
+  { id: "match-fit", name: "Match Fit", description: "Complete every drill in a training week." },
 ] as const;
 
 export type BadgeId = (typeof badges)[number]["id"];
@@ -171,6 +174,40 @@ export function useProgress() {
     [state, persist],
   );
 
+  const isDrillComplete = useCallback(
+    (instanceKey: string) => state.completedDrillInstances.includes(instanceKey),
+    [state.completedDrillInstances],
+  );
+
+  /**
+   * Toggles one drill instance (week + drill, since the same drill can recur
+   * across a program's weeks) and awards/revokes its XP symmetrically —
+   * checking is the workout system's core action, so it rides the same
+   * XP/badge state everything else does rather than a separate localStorage
+   * key. `weekJustCompleted` is passed in by the caller (WorkoutChecklist
+   * knows which week a drill belongs to; this hook doesn't need to) so the
+   * Match Fit badge can be awarded here alongside the rest of badge-earning.
+   */
+  const toggleDrillCompletion = useCallback(
+    (instanceKey: string, options?: { xpAward?: number; weekJustCompleted?: boolean }) => {
+      const xpAward = options?.xpAward ?? 15;
+      const has = state.completedDrillInstances.includes(instanceKey);
+      const nextCompleted = has
+        ? state.completedDrillInstances.filter((key) => key !== instanceKey)
+        : [...state.completedDrillInstances, instanceKey];
+      const nextBadges = new Set(state.earnedBadges);
+      if (!has && options?.weekJustCompleted) nextBadges.add("match-fit");
+
+      persist({
+        ...state,
+        completedDrillInstances: nextCompleted,
+        xp: state.xp + (has ? -xpAward : xpAward),
+        earnedBadges: [...nextBadges],
+      });
+    },
+    [state, persist],
+  );
+
   return {
     state,
     completeLesson,
@@ -180,5 +217,7 @@ export function useProgress() {
     completedModuleSlugs,
     recordChallengeStreak,
     completeScenario,
+    isDrillComplete,
+    toggleDrillCompletion,
   };
 }
