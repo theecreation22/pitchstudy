@@ -1,6 +1,6 @@
 # Implementation Plan
 
-**Project:** PitchIQ
+**Project:** PitchStudy
 **Author:** [Your name]
 **Date:** [YYYY-MM-DD]
 **Status:** [Draft / In Review / Approved]

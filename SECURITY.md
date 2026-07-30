@@ -2,7 +2,7 @@
 
 These rules apply to all code in this project. Claude must follow them without exception.
 
-> **Context:** PitchIQ v1 is a static, account-free content site (no database, no auth, no user input beyond client-side UI interaction). The Authentication/Authorization and Injection sections below are forward-looking for Phase 3 (accounts, progress tracking) — apply them once a backend/accounts exist, but don't build auth/DB scaffolding before it's needed.
+> **Context:** PitchStudy v1 is a static, account-free content site (no database, no auth, no user input beyond client-side UI interaction). The Authentication/Authorization and Injection sections below are forward-looking for Phase 3 (accounts, progress tracking) — apply them once a backend/accounts exist, but don't build auth/DB scaffolding before it's needed.
 
 ## Input Validation
 - Validate and sanitize all user input at system boundaries (API routes, CLI args, form handlers)

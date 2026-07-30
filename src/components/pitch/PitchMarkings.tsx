@@ -7,7 +7,7 @@ export function PitchMarkings() {
       aria-hidden="true"
     >
       <defs>
-        <filter id="pitchiq-chalk" x="-10%" y="-10%" width="120%" height="120%">
+        <filter id="pitchstudy-chalk" x="-10%" y="-10%" width="120%" height="120%">
           <feTurbulence
             type="fractalNoise"
             baseFrequency="0.9"
@@ -27,7 +27,7 @@ export function PitchMarkings() {
         strokeWidth="0.35"
         strokeLinecap="round"
         strokeOpacity="0.55"
-        filter="url(#pitchiq-chalk)"
+        filter="url(#pitchstudy-chalk)"
       >
         <rect className="pitch-draw" x="1" y="1" width="66" height="103" pathLength={1} />
         <line className="pitch-draw" x1="1" y1="52.5" x2="67" y2="52.5" pathLength={1} />

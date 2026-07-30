@@ -1,7 +1,7 @@
-# CLAUDE.md — PitchIQ
+# CLAUDE.md — PitchStudy
 
 ## Project Overview
-**Name:** PitchIQ
+**Name:** PitchStudy
 **Description:** Interactive web platform that teaches football (soccer) formations, positions, and tactics through a hands-on, visual interface (draggable/clickable pitch, position encyclopedia, position-specific workouts, manager tactics profiles).
 **Status:** Pre-MVP — project not yet scaffolded (no code written)
 **Repo:** local only

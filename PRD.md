@@ -1,6 +1,6 @@
 # Product Requirements Document (PRD)
 ## Interactive Football (Soccer) Education Website
-**Working title:** PitchIQ
+**Working title:** PitchStudy
 **Version:** 0.1 — Draft
 **Last updated:** July 26, 2026
 
@@ -150,7 +150,7 @@ Ship the smallest lovable version:
 - **Utility:** Workout plan start rate from position pages (target: 10%+ click-through)
 
 ## 12. Name
-PitchIQ
+PitchStudy
 
 ## 13. Open Questions
 

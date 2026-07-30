@@ -5,11 +5,11 @@
 
 ## Problem
 
-`/` currently *is* the interactive pitch explorer directly — a short headline plus the live `FormationExplorer`. There is no page that introduces PitchIQ as a product, explains what it offers, or gives an equally-weighted path into the other four sections (Workouts, Managers, Quiz, and positions in general). A first-time visitor lands straight in a tool with no framing.
+`/` currently *is* the interactive pitch explorer directly — a short headline plus the live `FormationExplorer`. There is no page that introduces PitchStudy as a product, explains what it offers, or gives an equally-weighted path into the other four sections (Workouts, Managers, Quiz, and positions in general). A first-time visitor lands straight in a tool with no framing.
 
 ## Goals
 
-- Give the site a real entry point that explains what PitchIQ is before dropping visitors into a tool.
+- Give the site a real entry point that explains what PitchStudy is before dropping visitors into a tool.
 - Surface all major sections (Explore, Workouts, Managers, Quiz) with equal visual weight — per PRD Section 13 open question #4 (tactics-first vs. training-first messaging), this resolves **balanced / no lean**: the copy doesn't favor new-fan or player framing.
 - Do this without growing scope into a new Positions index page — Positions stays reachable only via the pitch explorer and related-position links, as today. The landing page's Explore card copy covers this instead of a dedicated card.
 
@@ -25,7 +25,7 @@
 
 - The current `src/app/page.tsx` content (the full `FormationExplorer` — formation switching, compare mode, `?formation=` deep-link support) moves as-is to a new `src/app/explore/page.tsx`.
 - `src/app/page.tsx` is replaced with the new landing page.
-- `src/app/layout.tsx` nav gains an "Explore" link. Final nav order: **PitchIQ** (logo/home) · **Explore** · **Managers** · **Workouts** · **Quiz**.
+- `src/app/layout.tsx` nav gains an "Explore" link. Final nav order: **PitchStudy** (logo/home) · **Explore** · **Managers** · **Workouts** · **Quiz**.
 
 ### 2. Internal links to update
 
@@ -58,7 +58,7 @@ Every link that currently points to `/` expecting the pitch tool must become `/e
 
 ### 5. Metadata
 
-- Root layout metadata (`src/app/layout.tsx`) stays as the site-wide default — it already reads as landing-page-appropriate ("PitchIQ — Learn football tactics, interactively").
+- Root layout metadata (`src/app/layout.tsx`) stays as the site-wide default — it already reads as landing-page-appropriate ("PitchStudy — Learn football tactics, interactively").
 - `src/app/explore/page.tsx` gains its own `metadata` export (title/description specific to the formation explorer), matching the pattern every other section page already follows.
 
 ## Testing / verification

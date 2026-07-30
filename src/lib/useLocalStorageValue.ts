@@ -2,7 +2,7 @@
 
 import { useCallback, useSyncExternalStore } from "react";
 
-const CHANGE_EVENT_PREFIX = "pitchiq-storage-change:";
+const CHANGE_EVENT_PREFIX = "pitchstudy-storage-change:";
 
 function subscribe(key: string) {
   return (callback: () => void) => {
