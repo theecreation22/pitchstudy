@@ -278,7 +278,7 @@ export const workoutPlans: GeneratedProgram[] = [
   }),
 ];
 
-const POSITION_TO_GROUP: Record<PositionCode, PositionGroup> = {
+export const POSITION_TO_GROUP: Record<PositionCode, PositionGroup> = {
   GK: "goalkeepers",
   SK: "goalkeepers",
   LB: "defenders",

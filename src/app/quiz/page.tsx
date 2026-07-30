@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { quizzes } from "@/lib/quizzes";
 import { QuizBestScore } from "@/components/quiz/QuizBestScore";
+import { TiltCard } from "@/components/motion/TiltCard";
 
 export const metadata: Metadata = {
   title: "Quizzes · PitchStudy",
@@ -23,7 +23,7 @@ export default function QuizIndexPage() {
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {quizzes.map((quiz) => (
-          <Link
+          <TiltCard
             key={quiz.slug}
             href={`/quiz/${quiz.slug}`}
             className="group flex flex-col gap-3 rounded-lg border border-pitch-touchline/30 bg-pitch-card p-6 transition-colors hover:border-pitch-marker focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
@@ -36,7 +36,7 @@ export default function QuizIndexPage() {
             </h2>
             <p className="text-sm leading-relaxed text-pitch-touchline">{quiz.tagline}</p>
             <QuizBestScore slug={quiz.slug} total={quiz.questions.length} />
-          </Link>
+          </TiltCard>
         ))}
       </div>
     </div>

@@ -11,10 +11,28 @@ const sections = [
     href: "/explore",
   },
   {
+    eyebrow: "Learn",
+    title: "Academy",
+    copy: "Structured lessons on formations, positions, and tactics, with knowledge checks, XP, and badges as you go.",
+    href: "/academy",
+  },
+  {
     eyebrow: "Training",
     title: "Workouts",
     copy: "Four-week plans for every position group: strength, speed, endurance, and position-specific drills.",
     href: "/workouts",
+  },
+  {
+    eyebrow: "Build & analyze",
+    title: "Tactics Lab",
+    copy: "Design your own formation, set team instructions, and get instant tactical feedback from a live analysis engine.",
+    href: "/tactics-lab",
+  },
+  {
+    eyebrow: "Daily challenge",
+    title: "Challenge",
+    copy: "Random questions from every Academy module you've completed. One wrong answer resets the streak.",
+    href: "/challenge",
   },
   {
     eyebrow: "Tactics history",
@@ -62,7 +80,7 @@ export default function Home() {
 
       <ChalkDivider />
 
-      <section className="grid gap-4 sm:grid-cols-2">
+      <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {sections.map((section) => (
           <TiltCard
             key={section.href}

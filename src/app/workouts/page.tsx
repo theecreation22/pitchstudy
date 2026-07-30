@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getAllDrillIds, positionGroupLabels, workoutPlans } from "@/lib/workouts";
+import { TiltCard } from "@/components/motion/TiltCard";
 
 export const metadata: Metadata = {
   title: "Workouts · PitchStudy",
@@ -51,7 +52,7 @@ export default function WorkoutsPage() {
 
       <div className="grid gap-4 sm:grid-cols-2">
         {workoutPlans.map((plan) => (
-          <Link
+          <TiltCard
             key={plan.slug}
             href={`/workouts/${plan.slug}`}
             className="group flex flex-col gap-3 rounded-lg border border-pitch-touchline/30 bg-pitch-card p-6 transition-colors hover:border-pitch-marker focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
@@ -66,7 +67,7 @@ export default function WorkoutsPage() {
             <p className="mt-auto font-mono text-xs text-pitch-touchline">
               {plan.weeks.length} weeks · {getAllDrillIds(plan).length} drills
             </p>
-          </Link>
+          </TiltCard>
         ))}
       </div>
     </div>
