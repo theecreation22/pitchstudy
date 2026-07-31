@@ -177,7 +177,7 @@ export function DrillCard({ drill, level, checked, onToggle, isSignature, prescr
             )}
             {isSignature && (
               <span className="rounded-full border border-attack/50 bg-attack/10 px-2 py-0.5 font-mono text-[10px] uppercase tracking-widest text-attack">
-                Signature for this role
+                Non-negotiable for your role
               </span>
             )}
             <span className="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 font-mono text-xs uppercase tracking-wide" style={{ borderColor: color, color }}>

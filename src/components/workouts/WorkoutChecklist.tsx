@@ -31,11 +31,15 @@ export function WorkoutChecklist({ plan }: { plan: GeneratedProgram }) {
   const [categoryFilter, setCategoryFilter] = useState<CategoryFilter>("all");
   const [movementFilter, setMovementFilter] = useState<MovementPattern | "all">("all");
   const [milestoneWeek, setMilestoneWeek] = useState<number | null>(null);
+  const [milestoneBlock, setMilestoneBlock] = useState(false);
   const [sessionWeek, setSessionWeek] = useState<GeneratedWeek | undefined>(undefined);
 
   useEffect(() => {
     if (milestoneWeek === null) return;
-    const timeout = setTimeout(() => setMilestoneWeek(null), 3200);
+    const timeout = setTimeout(() => {
+      setMilestoneWeek(null);
+      setMilestoneBlock(false);
+    }, 3200);
     return () => clearTimeout(timeout);
   }, [milestoneWeek]);
 
@@ -57,8 +61,14 @@ export function WorkoutChecklist({ plan }: { plan: GeneratedProgram }) {
     const weekKeys = week.drillIds.map((id) => instanceKey(plan.slug, week.weekNumber, id));
     const completedInWeek = weekKeys.filter((k) => isDrillComplete(k)).length;
     const weekJustCompleted = isChecking && completedInWeek + 1 === weekKeys.length;
-    toggleDrillCompletion(key, { xpAward: DRILL_XP, weekJustCompleted });
-    if (weekJustCompleted) setMilestoneWeek(week.weekNumber);
+    const blockJustCompleted = isChecking && completedCount + 1 === allInstanceKeys.length;
+    toggleDrillCompletion(key, { xpAward: DRILL_XP, weekJustCompleted, blockJustCompleted });
+    if (blockJustCompleted) {
+      setMilestoneBlock(true);
+      setMilestoneWeek(week.weekNumber);
+    } else if (weekJustCompleted) {
+      setMilestoneWeek(week.weekNumber);
+    }
   }
 
   const movementOptions = useMemo(() => {
@@ -239,8 +249,12 @@ export function WorkoutChecklist({ plan }: { plan: GeneratedProgram }) {
             exit={{ opacity: 0, y: 8, scale: 0.97 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
           >
-            <span className="font-display text-lg font-bold uppercase tracking-tight text-attack">Week {milestoneWeek} Complete</span>
-            <span className="font-mono text-xs uppercase tracking-widest text-pitch-touchline">Match Fit badge earned</span>
+            <span className="font-display text-lg font-bold uppercase tracking-tight text-attack">
+              {milestoneBlock ? "Block Complete" : `Week ${milestoneWeek} Complete`}
+            </span>
+            <span className="font-mono text-xs uppercase tracking-widest text-pitch-touchline">
+              {milestoneBlock ? "Block Complete badge earned — new card, new block whenever you're ready" : "Match Fit badge earned"}
+            </span>
           </motion.div>
         )}
       </AnimatePresence>

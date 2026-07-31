@@ -864,3 +864,9 @@ export const positions: Record<PositionCode, PositionInfo> = {
 export function getPosition(code: string): PositionInfo | undefined {
   return positions[code as PositionCode];
 }
+
+/** The center of a position's primary zone, in the same 0-100 coordinate space `ZoneDiagram` already converts to pitch units — the one marker point shared by the Player Card and the Trial Day pitch-picker. */
+export function positionMarkerPoint(position: PositionInfo): { x: number; y: number } {
+  const zone = position.zones[0];
+  return { x: zone.x + zone.width / 2, y: zone.y + zone.height / 2 };
+}

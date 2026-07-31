@@ -68,24 +68,38 @@ const MOVEMENT_ATTRIBUTE_WEIGHTS: Record<MovementPattern, Partial<Record<Attribu
 };
 
 /**
- * A drill's relevance to a playstyle's 6-axis attribute profile, derived
- * from the drill's *existing* category and movement tags — no new per-drill
- * data. This is what makes selection actually obey the radar rather than
- * just the 4 broad category slot-counts: two drills tied on category and
- * movement-tag overlap can still be told apart by which one leans toward
- * this playstyle's strongest axes.
+ * A drill's relevance to each of the radar's 6 axes, derived from its
+ * *existing* category and movement tags — no new per-drill data. Exported
+ * so the Training Ground's growth loop (§2 — completing drills fills the
+ * user's radar) can reuse the exact same relevance signal that already
+ * drives the generator's ranking, rather than inventing a second one.
  */
-function attributeScore(drill: Drill, playstyle: Playstyle | undefined): number {
-  if (!playstyle) return 0;
+export function drillAttributeWeights(drill: Drill): Record<Attribute, number> {
   const categoryWeights = CATEGORY_ATTRIBUTE_WEIGHTS[drill.category];
-  let score = 0;
+  const weights = {} as Record<Attribute, number>;
   for (const attribute of ATTRIBUTES) {
-    const priority = playstyle.attributeProfile[attribute] / 100;
     const categoryWeight = categoryWeights[attribute] ?? 0;
     const movementWeight =
       drill.movementPatterns.reduce((sum, m) => sum + (MOVEMENT_ATTRIBUTE_WEIGHTS[m][attribute] ?? 0), 0) /
       Math.max(1, drill.movementPatterns.length);
-    score += priority * (categoryWeight + movementWeight);
+    weights[attribute] = categoryWeight + movementWeight;
+  }
+  return weights;
+}
+
+/**
+ * A drill's relevance to a playstyle's 6-axis attribute profile. This is
+ * what makes selection actually obey the radar rather than just the 4 broad
+ * category slot-counts: two drills tied on category and movement-tag
+ * overlap can still be told apart by which one leans toward this
+ * playstyle's strongest axes.
+ */
+function attributeScore(drill: Drill, playstyle: Playstyle | undefined): number {
+  if (!playstyle) return 0;
+  const weights = drillAttributeWeights(drill);
+  let score = 0;
+  for (const attribute of ATTRIBUTES) {
+    score += (playstyle.attributeProfile[attribute] / 100) * weights[attribute];
   }
   return score;
 }
@@ -243,41 +257,6 @@ export function generateProgram(input: GenerateProgramInput): GeneratedProgram {
 }
 
 /** One-tap starting points (§5) — the balanced "Foundations" plan per group, generated the same way a custom program would be, just with no single archetype favored. */
-export const workoutPlans: GeneratedProgram[] = [
-  generateProgram({
-    slug: "goalkeepers",
-    positionGroup: "goalkeepers",
-    level: "amateur",
-    equipment: "minimal",
-    title: "Goalkeeper Foundations",
-    tagline: "Reflexes, footwork, and shot-stopping fundamentals for a season-ready goalkeeper.",
-  }),
-  generateProgram({
-    slug: "defenders",
-    positionGroup: "defenders",
-    level: "amateur",
-    equipment: "minimal",
-    title: "Defender Foundations",
-    tagline: "Duels, aerial ability, and recovery pace for full-backs, wing-backs, and center-backs.",
-  }),
-  generateProgram({
-    slug: "midfielders",
-    positionGroup: "midfielders",
-    level: "amateur",
-    equipment: "minimal",
-    title: "Midfielder Foundations",
-    tagline: "Engine, range, and pressing triggers for holding, box-to-box, and attacking midfielders.",
-  }),
-  generateProgram({
-    slug: "attackers",
-    positionGroup: "attackers",
-    level: "amateur",
-    equipment: "minimal",
-    title: "Attacker Foundations",
-    tagline: "Explosiveness, finishing, and movement for wingers and strikers.",
-  }),
-];
-
 export const POSITION_TO_GROUP: Record<PositionCode, PositionGroup> = {
   GK: "goalkeepers",
   SK: "goalkeepers",
@@ -301,15 +280,6 @@ export const POSITION_TO_GROUP: Record<PositionCode, PositionGroup> = {
   IW: "attackers",
 };
 
-export function getWorkoutPlan(slug: string): GeneratedProgram | undefined {
-  return workoutPlans.find((plan) => plan.slug === slug);
-}
-
-export function getWorkoutPlanForPosition(code: PositionCode): GeneratedProgram | undefined {
-  const group = POSITION_TO_GROUP[code];
-  return group ? getWorkoutPlan(group) : undefined;
-}
-
 export function getWarmupDrillIds(level: Level, equipment: Equipment): string[] {
   return pickWarmupCooldown(level, equipment, true);
 }
@@ -328,4 +298,81 @@ export const DRILL_XP = 15;
 /** The same drill can legitimately appear in more than one week, and the same drill id can appear across different plans — so this keys by (plan, week, drill) rather than by drill id alone. */
 export function instanceKey(slug: string, weekNumber: number, drillId: string): string {
   return `${slug}:${weekNumber}:${drillId}`;
+}
+
+export type SessionDay = {
+  dayNumber: number;
+  focus: string;
+  drillIds: string[];
+};
+
+const CATEGORY_DAY_FOCUS: Record<DrillCategory, string> = {
+  strength: "Strength & Duels",
+  "speed-agility": "Speed Work",
+  endurance: "Engine",
+  "position-specific": "Role Work",
+};
+
+/**
+ * A purely presentational grouping of a week's *existing* drillIds into
+ * pinboard-sized chunks (§4's "gaffer's whiteboard") — the generator itself
+ * is untouched; this only reshapes its output for the week-board view.
+ * Chunking preserves the generator's own push order, which already groups
+ * roughly by category (signature drills first, then each category's fill in
+ * turn), so a day's dominant category is usually genuinely dominant rather
+ * than an arbitrary label.
+ */
+export function splitWeekIntoDays(week: GeneratedWeek, drillsPerDay = 2): SessionDay[] {
+  const days: SessionDay[] = [];
+  for (let i = 0; i < week.drillIds.length; i += drillsPerDay) {
+    const chunk = week.drillIds.slice(i, i + drillsPerDay);
+    const counts = new Map<DrillCategory, number>();
+    for (const id of chunk) {
+      const category = getDrill(id)?.category;
+      if (category) counts.set(category, (counts.get(category) ?? 0) + 1);
+    }
+    const dominant = [...counts.entries()].sort((a, b) => b[1] - a[1])[0]?.[0] ?? "position-specific";
+    days.push({ dayNumber: days.length + 1, focus: CATEGORY_DAY_FOCUS[dominant], drillIds: chunk });
+  }
+  return days;
+}
+
+const ZERO_COVERAGE: Record<Attribute, number> = { strength: 0, power: 0, speed: 0, agility: 0, endurance: 0, technical: 0 };
+
+/**
+ * "Training Focus" (§2) — how much of the block's own training has actually
+ * been done, per axis, expressed on the *same* 0-100 scale as the target
+ * profile so the two shapes can share one radar. For each axis:
+ * `target * (completed weight / total possible weight)` — finish every
+ * drill in the block and every axis lands exactly on the target, which is
+ * what makes "filled shape meets the outline" a real milestone rather than
+ * an approximation. This tracks training *done*, not fitness gained — it
+ * must never be presented as measuring the latter (§2 guardrail).
+ */
+export function computeTrainingCoverage(
+  program: GeneratedProgram,
+  targetProfile: Record<Attribute, number>,
+  isDrillInstanceComplete: (key: string) => boolean,
+): Record<Attribute, number> {
+  const maxPossible: Record<Attribute, number> = { ...ZERO_COVERAGE };
+  const accumulated: Record<Attribute, number> = { ...ZERO_COVERAGE };
+
+  for (const week of program.weeks) {
+    for (const drillId of week.drillIds) {
+      const drill = getDrill(drillId);
+      if (!drill) continue;
+      const weights = drillAttributeWeights(drill);
+      const done = isDrillInstanceComplete(instanceKey(program.slug, week.weekNumber, drillId));
+      for (const attribute of ATTRIBUTES) {
+        maxPossible[attribute] += weights[attribute];
+        if (done) accumulated[attribute] += weights[attribute];
+      }
+    }
+  }
+
+  const coverage: Record<Attribute, number> = { ...ZERO_COVERAGE };
+  for (const attribute of ATTRIBUTES) {
+    coverage[attribute] = maxPossible[attribute] > 0 ? targetProfile[attribute] * (accumulated[attribute] / maxPossible[attribute]) : 0;
+  }
+  return coverage;
 }

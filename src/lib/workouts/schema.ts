@@ -130,6 +130,8 @@ export type Playstyle = {
   relatedPositionCode?: PositionCode;
   tagline: string;
   rationale: string;
+  /** One punchy, coach-voiced line for Trial Day's mini-cards (§3) — distinct from `tagline`/`rationale`, which are written to be read, not said out loud by someone who just watched you play. */
+  coachLine: string;
   /** 0-100 per axis — hand-authored, not aggregated from tagged drills, so each playstyle's radar reads as a deliberate statement. */
   attributeProfile: Record<Attribute, number>;
   /** 0-1 per category — drives the Plan Builder's session-slot allocation. */
@@ -152,6 +154,7 @@ export const playstyles: Playstyle[] = [
     name: "Sweeper-Keeper",
     relatedPositionCode: "SK",
     tagline: "Plays like an extra defender and starts attacks with the ball at feet.",
+    coachLine: "You're an extra defender who happens to wear gloves.",
     rationale:
       "Spends real minutes outside the box, so needs the aerobic base and straight-line speed of a covering defender on top of goalkeeping fundamentals, plus the composure to play under pressure with feet.",
     attributeProfile: { strength: 40, power: 45, speed: 70, agility: 60, endurance: 75, technical: 80 },
@@ -166,6 +169,7 @@ export const playstyles: Playstyle[] = [
     positionGroup: "goalkeepers",
     name: "Shot-Stopper",
     tagline: "Wins the game in the six-yard box with reflexes and raw power.",
+    coachLine: "Six-yard box is yours. Nobody gets past you there.",
     rationale:
       "Rarely strays from the line, so training concentrates almost entirely on explosive power into a dive, reflex speed, and the strength to hold a shape against a hit ball, over the aerobic demands a sweeper-keeper needs.",
     attributeProfile: { strength: 55, power: 85, speed: 45, agility: 90, endurance: 40, technical: 50 },
@@ -181,6 +185,7 @@ export const playstyles: Playstyle[] = [
     positionGroup: "defenders",
     name: "Ball-Playing Center-Back",
     tagline: "Steps into midfield and breaks lines with a pass, not just a clearance.",
+    coachLine: "You break lines with a pass, not just a clearance.",
     rationale:
       "Needs to repeat a clean first touch and an accurate long pass while fatigued and under a striker's press, so passing technique under load matters as much as raw physicality here.",
     attributeProfile: { strength: 65, power: 55, speed: 45, agility: 55, endurance: 60, technical: 80 },
@@ -195,6 +200,7 @@ export const playstyles: Playstyle[] = [
     positionGroup: "defenders",
     name: "Aggressive Stopper",
     tagline: "Wins the physical duel first and asks questions later.",
+    coachLine: "You win the physical battle first. Questions come later.",
     rationale:
       "Lives in genuine one-on-one contests and in the air, so raw strength and jump power dominate the program over the ball-playing CB's passing-under-fatigue work.",
     attributeProfile: { strength: 90, power: 80, speed: 40, agility: 50, endurance: 45, technical: 40 },
@@ -209,6 +215,7 @@ export const playstyles: Playstyle[] = [
     positionGroup: "defenders",
     name: "Overlapping Wing-Back",
     tagline: "Covers the entire touchline, in both directions, all match.",
+    coachLine: "You cover every blade of grass down that flank.",
     rationale:
       "No position runs more total distance at high intensity — the program is built around repeat-sprint endurance and the crossing technique to make all that running count.",
     attributeProfile: { strength: 45, power: 55, speed: 80, agility: 60, endurance: 90, technical: 65 },
@@ -224,6 +231,7 @@ export const playstyles: Playstyle[] = [
     name: "Inverted Full-Back",
     relatedPositionCode: "IFB",
     tagline: "Tucks into midfield in possession instead of overlapping wide.",
+    coachLine: "You tuck inside and run the game from there.",
     rationale:
       "Trades the wing-back's long straight sprints for sharp, short-area change-of-direction and close control in a crowded midfield, so the program looks much more like a midfielder's than a full-back's.",
     attributeProfile: { strength: 50, power: 60, speed: 55, agility: 80, endurance: 60, technical: 75 },
@@ -240,6 +248,7 @@ export const playstyles: Playstyle[] = [
     name: "Deep-Lying Playmaker",
     relatedPositionCode: "DLP",
     tagline: "Sets the tempo from deep and rarely loses the ball.",
+    coachLine: "You read the game and start attacks from deep.",
     rationale:
       "Covers ground steadily for 90 minutes rather than in explosive bursts, so the program leans heavily aerobic, with rotational core work to support turning under pressure in tight areas.",
     attributeProfile: { strength: 50, power: 40, speed: 45, agility: 60, endurance: 85, technical: 85 },
@@ -255,6 +264,7 @@ export const playstyles: Playstyle[] = [
     name: "Box-to-Box Midfielder",
     relatedPositionCode: "B2B",
     tagline: "The engine that covers every blade of grass, twice.",
+    coachLine: "You cover every blade of grass, twice.",
     rationale:
       "The single most physically demanding midfield role — needs to repeat maximal efforts for the full 90, so repeat-high-intensity conditioning is the clear priority over any other archetype here.",
     attributeProfile: { strength: 65, power: 65, speed: 65, agility: 60, endurance: 90, technical: 60 },
@@ -269,6 +279,7 @@ export const playstyles: Playstyle[] = [
     positionGroup: "midfielders",
     name: "Ball-Winning Defensive Midfielder",
     tagline: "Steps in to end the opponent's attack before it starts.",
+    coachLine: "You win it. Simple as that.",
     rationale:
       "Success is decided in the split-second deceleration into a tackle or interception, so the program prioritizes duel strength and controlled stopping power over the DLP's aerobic base or the B2B's total distance.",
     attributeProfile: { strength: 75, power: 60, speed: 50, agility: 65, endurance: 65, technical: 55 },
@@ -283,6 +294,7 @@ export const playstyles: Playstyle[] = [
     positionGroup: "midfielders",
     name: "Advanced Playmaker",
     tagline: "Finds the pocket between the lines and picks the final pass.",
+    coachLine: "You find the gap and pick the pass nobody else sees.",
     rationale:
       "Operates in tight, fast-closing spaces near goal, so short-area acceleration and a composed finishing touch under fatigue matter more here than the deep-lying playmaker's long-range passing endurance.",
     attributeProfile: { strength: 40, power: 55, speed: 60, agility: 75, endurance: 55, technical: 90 },
@@ -298,6 +310,7 @@ export const playstyles: Playstyle[] = [
     positionGroup: "attackers",
     name: "Target Man",
     tagline: "Wins the ball in the air and holds it up with his back to goal.",
+    coachLine: "You win it in the air and hold it up until help arrives.",
     rationale:
       "Almost every touch happens under physical contact, so the program is built around holding strength and aerial power rather than the poacher's reactive first-step quickness.",
     attributeProfile: { strength: 85, power: 75, speed: 40, agility: 45, endurance: 55, technical: 55 },
@@ -312,6 +325,7 @@ export const playstyles: Playstyle[] = [
     positionGroup: "attackers",
     name: "Poacher",
     tagline: "Needs half a yard and half a second — nothing more.",
+    coachLine: "Half a yard, half a second — that's all you need.",
     rationale:
       "The whole job is decided by a single explosive reaction to a half-chance, so the program is almost entirely reactive first-step power and finishing under minimal touches, with comparatively little aerobic work.",
     attributeProfile: { strength: 50, power: 85, speed: 80, agility: 70, endurance: 35, technical: 75 },
@@ -327,6 +341,7 @@ export const playstyles: Playstyle[] = [
     name: "False 9",
     relatedPositionCode: "F9",
     tagline: "Drops deep to link play, then has to get back into the box.",
+    coachLine: "You drop deep, then you're gone before they notice.",
     rationale:
       "Covers far more ground than a fixed striker, dropping to receive and then re-accelerating in behind, so the program blends genuine aerobic endurance with the turning agility to escape a marker in a crowd.",
     attributeProfile: { strength: 45, power: 55, speed: 60, agility: 75, endurance: 70, technical: 85 },
@@ -341,6 +356,7 @@ export const playstyles: Playstyle[] = [
     positionGroup: "attackers",
     name: "Inside Forward / Winger",
     tagline: "Beats a full-back on the outside, then cuts inside to shoot.",
+    coachLine: "You beat your man, then you shoot.",
     rationale:
       "Repeats the same explosive 1v1 move dozens of times a match — top-end speed and change-of-direction dominate the program, on top of the repeat-sprint capacity to do it again five minutes later.",
     attributeProfile: { strength: 40, power: 70, speed: 90, agility: 85, endurance: 60, technical: 70 },
@@ -355,6 +371,7 @@ export const playstyles: Playstyle[] = [
     positionGroup: "attackers",
     name: "Pressing Forward",
     tagline: "The first defender, sprinting to cut off the goalkeeper's pass.",
+    coachLine: "You're the first defender the moment we lose it.",
     rationale:
       "Sprints repeatedly to press with little recovery, so repeat-high-intensity aerobic conditioning is the clear priority — this is the attacking archetype trained closest to a box-to-box midfielder.",
     attributeProfile: { strength: 55, power: 65, speed: 75, agility: 60, endurance: 85, technical: 55 },

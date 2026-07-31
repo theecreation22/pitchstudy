@@ -18,6 +18,7 @@ export type ProgressState = {
   challengeBestStreak: number;
   scenarioBests: Record<string, ScenarioBest>; // `${scenarioSlug}:${tier}` -> best
   completedDrillInstances: string[]; // `${planSlug}:${weekNumber}:${drillId}` — instance-keyed since a drill can recur across weeks
+  trainingDates: string[]; // unique YYYY-MM-DD dates a drill was completed on, for the Training Ground's streak
 };
 
 const DEFAULT_STATE: ProgressState = {
@@ -28,7 +29,32 @@ const DEFAULT_STATE: ProgressState = {
   challengeBestStreak: 0,
   scenarioBests: {},
   completedDrillInstances: [],
+  trainingDates: [],
 };
+
+function todayKey(): string {
+  return new Date().toISOString().slice(0, 10);
+}
+
+/** Consecutive days ending today (or yesterday, so a streak isn't lost the instant a new day starts before that day's first session) with at least one drill completed. */
+function computeTrainingStreak(dates: string[]): number {
+  const set = new Set(dates);
+  const cursor = new Date();
+  cursor.setHours(0, 0, 0, 0);
+  const dateKey = (d: Date) => d.toISOString().slice(0, 10);
+
+  if (!set.has(dateKey(cursor))) {
+    cursor.setDate(cursor.getDate() - 1);
+    if (!set.has(dateKey(cursor))) return 0;
+  }
+
+  let streak = 0;
+  while (set.has(dateKey(cursor))) {
+    streak += 1;
+    cursor.setDate(cursor.getDate() - 1);
+  }
+  return streak;
+}
 
 function parseState(raw: string | null): ProgressState {
   if (!raw) return DEFAULT_STATE;
@@ -51,6 +77,7 @@ export const badges = [
   { id: "lock-picker", name: "Lock-Picker", description: "Beat a low-block scenario in the Play Designer." },
   { id: "perfect-move", name: "Perfect Move", description: "Score Gold on a scenario using the minimum steps." },
   { id: "match-fit", name: "Match Fit", description: "Complete every drill in a training week." },
+  { id: "block-complete", name: "Block Complete", description: "Finish every session in a training block." },
 ] as const;
 
 export type BadgeId = (typeof badges)[number]["id"];
@@ -189,7 +216,7 @@ export function useProgress() {
    * Match Fit badge can be awarded here alongside the rest of badge-earning.
    */
   const toggleDrillCompletion = useCallback(
-    (instanceKey: string, options?: { xpAward?: number; weekJustCompleted?: boolean }) => {
+    (instanceKey: string, options?: { xpAward?: number; weekJustCompleted?: boolean; blockJustCompleted?: boolean }) => {
       const xpAward = options?.xpAward ?? 15;
       const has = state.completedDrillInstances.includes(instanceKey);
       const nextCompleted = has
@@ -197,10 +224,16 @@ export function useProgress() {
         : [...state.completedDrillInstances, instanceKey];
       const nextBadges = new Set(state.earnedBadges);
       if (!has && options?.weekJustCompleted) nextBadges.add("match-fit");
+      if (!has && options?.blockJustCompleted) nextBadges.add("block-complete");
+      // Only added on check, never removed on uncheck — a streak is about
+      // having shown up that day, not a live-updating tally.
+      const today = todayKey();
+      const nextDates = !has && !state.trainingDates.includes(today) ? [...state.trainingDates, today] : state.trainingDates;
 
       persist({
         ...state,
         completedDrillInstances: nextCompleted,
+        trainingDates: nextDates,
         xp: state.xp + (has ? -xpAward : xpAward),
         earnedBadges: [...nextBadges],
       });
@@ -208,8 +241,11 @@ export function useProgress() {
     [state, persist],
   );
 
+  const trainingStreak = useMemo(() => computeTrainingStreak(state.trainingDates), [state.trainingDates]);
+
   return {
     state,
+    trainingStreak,
     completeLesson,
     recordQuizScore,
     isLessonComplete,

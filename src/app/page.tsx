@@ -18,8 +18,8 @@ const sections = [
   },
   {
     eyebrow: "Training",
-    title: "Workouts",
-    copy: "Four-week plans for every position group: strength, speed, endurance, and position-specific drills.",
+    title: "Training Ground",
+    copy: "Build your Player Card, get a four-week block built for your role, and train it one guided session at a time.",
     href: "/workouts",
   },
   {

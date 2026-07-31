@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getPosition, positions } from "@/lib/positions";
-import { getWorkoutPlanForPosition } from "@/lib/workouts";
 import { ZoneDiagram } from "@/components/pitch/ZoneDiagram";
 
 export function generateStaticParams() {
@@ -35,8 +34,6 @@ export default async function PositionPage({
     notFound();
   }
 
-  const workoutPlan = getWorkoutPlanForPosition(position.code);
-
   return (
     <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-8 px-4 py-10 sm:px-8 sm:py-16">
       <Link
@@ -61,14 +58,12 @@ export default async function PositionPage({
         <p className="max-w-2xl text-lg leading-relaxed text-pitch-touchline">
           {position.summary}
         </p>
-        {workoutPlan && (
-          <Link
-            href={`/workouts/${workoutPlan.slug}`}
-            className="mt-2 inline-flex min-h-11 w-fit items-center gap-2 rounded-full border border-pitch-marker px-4 font-mono text-xs uppercase tracking-widest text-pitch-marker transition-colors hover:bg-pitch-marker/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
-          >
-            Train for this position →
-          </Link>
-        )}
+        <Link
+          href="/workouts"
+          className="mt-2 inline-flex min-h-11 w-fit items-center gap-2 rounded-full border border-pitch-marker px-4 font-mono text-xs uppercase tracking-widest text-pitch-marker transition-colors hover:bg-pitch-marker/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
+        >
+          Train for this role →
+        </Link>
       </header>
 
       <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-10">
