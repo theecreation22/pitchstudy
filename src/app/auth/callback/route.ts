@@ -10,7 +10,15 @@ export const runtime = "nodejs";
  * merge-summary screen) rather than duplicating that here.
  */
 export async function GET(request: Request) {
-  const { searchParams, origin } = new URL(request.url);
+  const url = new URL(request.url);
+  // Render (and most reverse proxies) forward the request to this container
+  // on an internal host/port (e.g. localhost:10000) — url.origin reflects
+  // that internal address, not the public domain the browser actually hit.
+  // The standard forwarded headers carry the real one.
+  const forwardedHost = request.headers.get("x-forwarded-host") ?? request.headers.get("host");
+  const forwardedProto = request.headers.get("x-forwarded-proto") ?? url.protocol.replace(":", "");
+  const origin = forwardedHost ? `${forwardedProto}://${forwardedHost}` : url.origin;
+  const { searchParams } = url;
   const code = searchParams.get("code");
   const next = searchParams.get("next") ?? "/join";
 

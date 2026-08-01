@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
@@ -44,11 +44,25 @@ export function JoinFlow() {
   const { status, user, lastMerge } = useSync();
   const { card, setSquadNumber } = usePlayerCard();
   const [stage, setStage] = useState<Stage>("tunnel");
-  const [squadNumber, setSquadNumberInput] = useState(card?.squadNumber ?? 7);
+  const [squadNumber, setSquadNumberInput] = useState(7);
   const [email, setEmail] = useState("");
   const [sendStatus, setSendStatus] = useState<SendStatus>("idle");
   const [errorMessage, setErrorMessage] = useState("");
   const reduceMotion = useReducedMotion();
+
+  // usePlayerCard's `card` reads localStorage via useSyncExternalStore, whose
+  // hydration-render snapshot is always "empty" (no localStorage on the
+  // server) — a useState initializer reading `card?.squadNumber` here would
+  // permanently capture that stale `undefined` and never notice the real
+  // value arriving a render later. Syncing once via effect (and never again,
+  // so it doesn't clobber whatever the user types afterward) avoids that.
+  const syncedSquadNumber = useRef(false);
+  useEffect(() => {
+    if (!syncedSquadNumber.current && card?.squadNumber) {
+      setSquadNumberInput(card.squadNumber);
+      syncedSquadNumber.current = true;
+    }
+  }, [card?.squadNumber]);
 
   if (user) {
     const isSyncing = status === "syncing";
