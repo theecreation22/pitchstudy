@@ -34,7 +34,7 @@ export function AccountView() {
   if (!user) {
     return (
       <div className="flex flex-col gap-3 rounded-lg border border-pitch-touchline/30 bg-pitch-card p-6 text-sm leading-relaxed text-pitch-touchline">
-        <p>You&apos;re training as a guest — there&apos;s no account to manage.</p>
+        <p>You&apos;re using PitchStudy as a guest — there&apos;s no account to manage.</p>
         <div className="flex gap-4">
           <Link href="/join" className="font-display text-xs font-semibold uppercase tracking-widest text-attack">
             Join the Club

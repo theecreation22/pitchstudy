@@ -10,7 +10,7 @@ import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { PlayerCardView } from "@/components/workouts/PlayerCardView";
 
-type Stage = "tunnel" | "no-card" | "register" | "sent";
+type Stage = "tunnel" | "register" | "sent";
 type SendStatus = "idle" | "sending" | "error";
 
 function StepShell({ children }: { children: React.ReactNode }) {
@@ -32,9 +32,12 @@ function StepShell({ children }: { children: React.ReactNode }) {
  * The "Join the Club" tunnel (§4 of the accounts spec). Three doors: start
  * training as a guest (no account, ever, if that's what someone wants),
  * register for cross-device sync, or a quiet link back in for a returning
- * player. Registration itself never blocks training — it just stamps a
- * squad number on the card that's already there and hands off to Supabase
- * for the actual link/OAuth exchange.
+ * player. A Player Card is only one of three things an account can carry —
+ * Academy/Quiz progress and the Tactics Lab playbook sync with no card at
+ * all — so registration never requires one. Whoever's here (a player, a
+ * manager who just uses the Tactics Lab, a fan working through the Academy)
+ * gets the same two sign-in options; the card preview and squad number
+ * picker only show up if there's already a card to stamp.
  */
 export function JoinFlow() {
   const router = useRouter();
@@ -126,8 +129,9 @@ export function JoinFlow() {
             Three ways in.
           </h1>
           <p className="max-w-sm text-sm leading-relaxed text-pitch-touchline">
-            An account only does one thing — it carries your card and progress from one device to the next. Training
-            works exactly the same either way.
+            An account carries your progress across devices — lessons, quizzes, badges, your Tactics Lab plays, and
+            your Player Card if you&apos;ve built one. Whether you&apos;re training, coaching, or just here to learn,
+            it works the same way.
           </p>
 
           <div className="flex w-full max-w-sm flex-col gap-3">
@@ -140,7 +144,7 @@ export function JoinFlow() {
             </button>
             <button
               type="button"
-              onClick={() => setStage(card ? "register" : "no-card")}
+              onClick={() => setStage("register")}
               disabled={status === "disabled"}
               className="border-grad-kickoff inline-flex min-h-11 items-center justify-center rounded-full px-8 font-mono text-xs font-semibold uppercase tracking-widest text-attack transition-colors hover:bg-attack/10 disabled:cursor-not-allowed disabled:opacity-40"
             >
@@ -162,61 +166,43 @@ export function JoinFlow() {
         </StepShell>
       )}
 
-      {stage === "no-card" && (
-        <StepShell key="no-card">
-          <p className="font-mono text-xs uppercase tracking-widest text-attack">Almost there</p>
-          <h1 className="text-grad-attack font-display text-3xl font-black uppercase leading-none tracking-tight sm:text-4xl">
-            Get your card first.
-          </h1>
-          <p className="max-w-sm text-sm leading-relaxed text-pitch-touchline">
-            Squad registration stamps a number on your Player Card — we just need to build one first. Takes about a
-            minute.
-          </p>
-          <button
-            type="button"
-            onClick={() => router.push("/workouts")}
-            className="inline-flex min-h-11 items-center rounded-full bg-attack px-8 font-mono text-xs font-semibold uppercase tracking-widest text-night-950 shadow-[0_0_32px_-8px_var(--attack)] transition-transform hover:scale-[1.02]"
-          >
-            Build My Card →
-          </button>
-          <button
-            type="button"
-            onClick={() => setStage("tunnel")}
-            className="font-mono text-xs uppercase tracking-widest text-pitch-touchline/70 hover:text-pitch-marker"
-          >
-            ← Back
-          </button>
-        </StepShell>
-      )}
-
-      {stage === "register" && card && (
+      {stage === "register" && (
         <StepShell key="register">
-          <p className="font-mono text-xs uppercase tracking-widest text-attack">Squad Registration</p>
+          <p className="font-mono text-xs uppercase tracking-widest text-attack">{card ? "Squad Registration" : "Create Your Account"}</p>
           <h1 className="text-grad-attack font-display text-3xl font-black uppercase leading-none tracking-tight sm:text-4xl">
-            Pick your number.
+            {card ? "Pick your number." : "Join the club."}
           </h1>
 
-          <div className="flex items-center gap-3">
-            <label htmlFor="squad-number" className="font-mono text-xs uppercase tracking-widest text-pitch-touchline">
-              Squad #
-            </label>
-            <input
-              id="squad-number"
-              type="number"
-              min={1}
-              max={99}
-              value={squadNumber}
-              onChange={(event) => {
-                const next = Number(event.target.value);
-                if (!Number.isNaN(next)) setSquadNumberInput(Math.min(99, Math.max(1, next)));
-              }}
-              className="w-20 rounded-full border border-pitch-touchline/40 bg-pitch-card px-4 py-2 text-center text-lg font-bold text-pitch-line focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
-            />
-          </div>
+          {card ? (
+            <>
+              <div className="flex items-center gap-3">
+                <label htmlFor="squad-number" className="font-mono text-xs uppercase tracking-widest text-pitch-touchline">
+                  Squad #
+                </label>
+                <input
+                  id="squad-number"
+                  type="number"
+                  min={1}
+                  max={99}
+                  value={squadNumber}
+                  onChange={(event) => {
+                    const next = Number(event.target.value);
+                    if (!Number.isNaN(next)) setSquadNumberInput(Math.min(99, Math.max(1, next)));
+                  }}
+                  className="w-20 rounded-full border border-pitch-touchline/40 bg-pitch-card px-4 py-2 text-center text-lg font-bold text-pitch-line focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
+                />
+              </div>
 
-          <div className="w-full max-w-xl">
-            <PlayerCardView card={{ ...card, squadNumber }} />
-          </div>
+              <div className="w-full max-w-xl">
+                <PlayerCardView card={{ ...card, squadNumber }} />
+              </div>
+            </>
+          ) : (
+            <p className="max-w-sm text-sm leading-relaxed text-pitch-touchline">
+              No Player Card yet — that&apos;s fine. Your Academy progress, quiz scores, and Tactics Lab plays will
+              still sync. You can build a card anytime from Training.
+            </p>
+          )}
 
           <form onSubmit={handleMagicLink} className="flex w-full max-w-sm flex-col gap-3">
             <button
@@ -269,7 +255,7 @@ export function JoinFlow() {
         >
           <p className="font-display text-lg font-bold uppercase tracking-tight text-pitch-line">Check your inbox.</p>
           <p className="max-w-sm text-sm leading-relaxed text-pitch-touchline">
-            We sent a link to {email}. Open it on this device or any other — your squad number is already saved.
+            We sent a link to {email}. Open it on this device or any other{card ? " — your squad number is already saved" : ""}.
           </p>
         </motion.div>
       )}

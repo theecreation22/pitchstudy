@@ -32,7 +32,7 @@ function GoogleMark() {
   );
 }
 
-/** The sign-in half of "Join the Club" — for a player who already registered on another device and just needs to get back in. Registration itself lives at /join. */
+/** The sign-in half of "Join the Club" — for anyone who already registered on another device and just needs to get back in, whether they're a player, a manager, or just here for the Academy. Registration itself lives at /join. */
 export function LoginForm() {
   const searchParams = useSearchParams();
   const linkExpired = searchParams.get("error") === "link-expired";
@@ -44,7 +44,7 @@ export function LoginForm() {
   if (!isSupabaseConfigured) {
     return (
       <div className="flex flex-col gap-3 rounded-lg border border-pitch-touchline/30 bg-pitch-card p-6 text-sm leading-relaxed text-pitch-touchline">
-        <p>Accounts aren&apos;t switched on for this squad yet — training still works exactly the same as a guest.</p>
+        <p>Accounts aren&apos;t switched on for this squad yet — everything still works exactly the same as a guest.</p>
         <Link href="/" className="font-display text-xs font-semibold uppercase tracking-widest text-attack">
           ← Back to the pitch
         </Link>
@@ -94,7 +94,7 @@ export function LoginForm() {
     return (
       <div className="flex flex-col gap-3 rounded-lg border border-attack/40 bg-attack/10 p-6 text-sm leading-relaxed text-pitch-line">
         <p className="font-display text-lg font-bold uppercase tracking-tight">Check your inbox.</p>
-        <p>We sent a sign-in link to {email}. Tap it on this device or any other to get back to your card.</p>
+        <p>We sent a sign-in link to {email}. Tap it on this device or any other to get back to your progress.</p>
       </div>
     );
   }
