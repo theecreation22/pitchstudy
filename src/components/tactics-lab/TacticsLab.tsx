@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { AnimatePresence } from "framer-motion";
 import {
   formations,
   getFormation,
@@ -29,6 +30,10 @@ import {
 import type { PlayStep } from "@/lib/tactics-lab/playSchema";
 import { computeScores, generateNotes } from "@/lib/tactics-lab/engine";
 import { recognizeShape } from "@/lib/tactics-lab/shapeRecognition";
+import { useTacticsPlaybook } from "@/lib/tactics-lab/usePlaybook";
+import { decodeSharedBoard, type SharedBoard } from "@/lib/tactics-lab/playbookShare";
+import { formationEntryToFormation, PLAYBOOK_OPPONENT_PREFIX, type PlaybookEntry } from "@/lib/tactics-lab/playbookSchema";
+import { useProgress } from "@/lib/progress";
 import { FormationBoard } from "./FormationBoard";
 import { PlayerRoleMenu } from "./PlayerRoleMenu";
 import { TeamInstructionsPanel } from "./TeamInstructionsPanel";
@@ -39,15 +44,20 @@ import { CoachVerdictPanel } from "./CoachVerdictPanel";
 import { PlayDesigner } from "./PlayDesigner";
 import { OpponentSim } from "./OpponentSim";
 import { ScenarioMode } from "./scenario-mode/ScenarioMode";
+import { Playbook } from "./Playbook";
+import { PlaybookSaveSheet, type SaveSheetResult } from "./PlaybookSaveSheet";
 
 const STORAGE_KEY = "pitchstudy:tactics-lab:design:v1";
 
-type LabMode = "formation" | "play" | "scenario";
+type LabMode = "formation" | "play" | "scenario" | "playbook";
 const MODE_OPTIONS = [
   { value: "formation", label: "Formation Designer" },
   { value: "play", label: "Play Designer" },
   { value: "scenario", label: "Scenario Mode" },
+  { value: "playbook", label: "Playbook" },
 ] as const satisfies { value: LabMode; label: string }[];
+
+type ActiveEntry = { id: string; type: "formation" | "play"; number: number; name: string };
 
 function parseDesign(raw: string | null): Design {
   if (raw) {
@@ -73,20 +83,66 @@ export function TacticsLab({ coachAvailable }: { coachAvailable: boolean }) {
   const [raw, setRaw] = useLocalStorageValue(STORAGE_KEY);
   const design = useMemo(() => parseDesign(raw), [raw]);
   const [selectedPlayerId, setSelectedPlayerId] = useState<string | null>(null);
-  const [mode, setMode] = useState<LabMode>("formation");
+  const [mode, setModeRaw] = useState<LabMode>("formation");
   const [phase, setPhase] = useState<Phase>("in-possession");
   const [defensiveStyleRaw, setDefensiveStyleRaw] = useLocalStorageValue("pitchstudy:tactics-lab:defensive-style");
   const defensiveStyle: DefensiveStyle = defensiveStyleRaw === "high-press" ? "high-press" : "low-block";
 
+  const playbook = useTacticsPlaybook();
+  const progress = useProgress();
+  const [activeEntry, setActiveEntry] = useState<ActiveEntry | null>(null);
+  const [dirty, setDirty] = useState(false);
+  const [showSaveSheet, setShowSaveSheet] = useState(false);
+  const [sharedBoard, setSharedBoard] = useState<SharedBoard | null>(null);
+  const [pendingSaveName, setPendingSaveName] = useState<string | null>(null);
+  const dirtyRef = useRef(dirty);
+  useEffect(() => {
+    dirtyRef.current = dirty;
+  }, [dirty]);
+
   // A shared scenario play arrives as a `?play=` query param — land directly
   // on Scenario Mode (which reads the param itself) rather than requiring an
-  // extra manual tab click before a shared link actually shows anything.
+  // extra manual tab click before a shared link actually shows anything. A
+  // shared Formation/Play Designer board arrives as `?board=` instead (§5's
+  // share reuses the existing scenario mechanism for scenario-origin entries,
+  // this one's just for designer-origin formations/plays).
   useEffect(() => {
-    if (new URLSearchParams(window.location.search).has("play")) {
+    const params = new URLSearchParams(window.location.search);
+    if (params.has("play")) {
       // eslint-disable-next-line react-hooks/set-state-in-effect -- reading a one-time URL param on mount, not derivable during render
-      setMode("scenario");
+      setModeRaw("scenario");
+      return;
+    }
+    const boardParam = params.get("board");
+    if (boardParam) {
+      const decoded = decodeSharedBoard(boardParam);
+      if (decoded) {
+        setSharedBoard(decoded);
+        setModeRaw(decoded.kind === "play" ? "play" : "formation");
+      }
     }
   }, []);
+
+  // Warns once before losing real, unsaved work (§3) — a browser-level
+  // close/reload/typed-URL guard. In-app mode switches and Playbook loads
+  // get their own guard below; this one only covers navigation this
+  // component can't otherwise intercept.
+  useEffect(() => {
+    function handleBeforeUnload(event: BeforeUnloadEvent) {
+      if (dirtyRef.current && activeEntry) event.preventDefault();
+    }
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [activeEntry]);
+
+  /** Switching modes never silently discards a loaded, edited page (§3) — only guards leaving the Formation/Play board entirely (toggling between those two tabs keeps the same board, so it's exempt). */
+  function setMode(next: LabMode) {
+    const leavingBoard = (mode === "formation" || mode === "play") && next !== "formation" && next !== "play";
+    if (leavingBoard && dirty && activeEntry) {
+      if (!window.confirm(`Leave without saving No. ${activeEntry.number}?`)) return;
+    }
+    setModeRaw(next);
+  }
 
   function changePhase(next: Phase) {
     setPhase(next);
@@ -107,6 +163,59 @@ export function TacticsLab({ coachAvailable }: { coachAvailable: boolean }) {
 
   function persist(next: Design) {
     setRaw(JSON.stringify(next));
+    setDirty(true);
+  }
+
+  /** Loads a Playbook entry onto the board — guarded the same way mode switches are, since it discards whatever's currently on the board. */
+  function loadEntryFromPlaybook(entry: PlaybookEntry) {
+    if (entry.type === "play" && entry.origin === "scenario") return; // scenario-origin entries open in Scenario Mode instead, not handled here
+    if (dirty && activeEntry) {
+      if (!window.confirm(`Leave without saving No. ${activeEntry.number}?`)) return;
+    }
+    const nextDesign: Design =
+      entry.type === "formation"
+        ? { players: entry.players, instructions: entry.instructions }
+        : { players: entry.players, instructions: entry.instructions, play: entry.steps, seededFrom: entry.seededFrom };
+    setRaw(JSON.stringify(nextDesign));
+    setDirty(false);
+    setActiveEntry({ id: entry.id, type: entry.type, number: entry.number, name: entry.name });
+    setSharedBoard(null);
+    setSelectedPlayerId(null);
+    setModeRaw(entry.type);
+  }
+
+  function handleSaveConfirm(result: SaveSheetResult, entryType: "formation" | "play") {
+    if (result.conflictingEntryId) {
+      if (!result.asNew && activeEntry) {
+        // A true swap — both entries already have their own established numbers to trade.
+        playbook.renumber(result.conflictingEntryId, activeEntry.number);
+      } else {
+        // The saved-as-new entry has no prior number to give back, so the
+        // conflicting entry is displaced to the next free slot instead.
+        const displaced = playbook.entries.find((entry) => entry.id === result.conflictingEntryId);
+        if (displaced) {
+          const nextFree = (() => {
+            const taken = new Set(playbook.entries.filter((e) => e.type === entryType && e.id !== displaced.id).map((e) => e.number));
+            for (let n = 1; n <= 99; n += 1) if (!taken.has(n)) return n;
+            return 99;
+          })();
+          playbook.renumber(result.conflictingEntryId, nextFree);
+        }
+      }
+    }
+
+    const now = new Date().toISOString();
+    const base = { id: result.id, schemaVersion: 1 as const, number: result.number, name: result.name, createdAt: now, updatedAt: now };
+    const entry: PlaybookEntry =
+      entryType === "formation"
+        ? { ...base, type: "formation", players: design.players, instructions: design.instructions, shapeName: recognizeShape(design.players) }
+        : { ...base, type: "play", origin: "designer", players: design.players, instructions: design.instructions, steps: design.play ?? [], seededFrom: design.seededFrom };
+
+    playbook.upsert(entry);
+    progress.recordPlaybookSave(playbook.entries.length + (result.asNew || !activeEntry ? 1 : 0));
+    setActiveEntry({ id: result.id, type: entryType, number: result.number, name: result.name });
+    setDirty(false);
+    setShowSaveSheet(false);
   }
 
   function setPlaySteps(play: PlayStep[]) {
@@ -127,6 +236,8 @@ export function TacticsLab({ coachAvailable }: { coachAvailable: boolean }) {
 
   function loadTemplate(slug: string) {
     persist({ players: seedFromFormation(slug), instructions: design.instructions, seededFrom: slug });
+    setActiveEntry(null);
+    setSharedBoard(null);
     setSelectedPlayerId(null);
   }
 
@@ -135,19 +246,35 @@ export function TacticsLab({ coachAvailable }: { coachAvailable: boolean }) {
     persist({ ...design, players: design.players.map((p) => (p.id === selectedPlayerId ? { ...p, role } : p)) });
   }
 
+  // Viewing a shared design substitutes its data for display purposes only —
+  // `design` itself (and every mutation handler above) keeps reading/writing
+  // the user's own real board untouched, so a preview can never bleed into
+  // their own saved work before they explicitly duplicate it.
+  const effectivePlayers = sharedBoard ? sharedBoard.players : design.players;
+  const effectiveInstructions = sharedBoard ? sharedBoard.instructions : design.instructions;
+  const effectiveSteps = sharedBoard ? (sharedBoard.kind === "play" ? sharedBoard.steps : []) : (design.play ?? []);
+
   // A direct port of FormationExplorer.tsx's own derivation — same shape in,
   // same steps, same functions, in the same order — so every combination of
   // phase/style/opponent behaves identically to Explore, not just similarly.
   // `design.players` itself is never mutated (only this render-time result
   // differs from it); dragging still reads/writes the real, persisted values.
   const { boardPlayers, opponentPlayers } = useMemo(() => {
-    const opponentFormation = design.opponentFormationSlug ? getFormation(design.opponentFormationSlug) : undefined;
+    const opponentFormation = design.opponentFormationSlug?.startsWith(PLAYBOOK_OPPONENT_PREFIX)
+      ? (() => {
+          const entryId = design.opponentFormationSlug!.slice(PLAYBOOK_OPPONENT_PREFIX.length);
+          const entry = playbook.entries.find((e) => e.id === entryId && e.type === "formation");
+          return entry && entry.type === "formation" ? formationEntryToFormation(entry) : undefined;
+        })()
+      : design.opponentFormationSlug
+        ? getFormation(design.opponentFormationSlug)
+        : undefined;
 
     const transform = defensiveStyle === "high-press" ? toHighPress : toLowBlock;
     const rawOwn: FormationPlayer[] =
       phase === "in-possession"
-        ? design.players.map((p) => ({ id: p.id, code: p.role, x: p.x, y: p.y }))
-        : design.players.map((player) => transform({ id: player.id, code: player.role, x: player.x, y: player.y }));
+        ? effectivePlayers.map((p) => ({ id: p.id, code: p.role, x: p.x, y: p.y }))
+        : effectivePlayers.map((player) => transform({ id: player.id, code: player.role, x: player.x, y: player.y }));
 
     const opponentPhase: Phase = phase === "in-possession" ? "out-of-possession" : "in-possession";
     const rawOpponent = opponentFormation
@@ -171,14 +298,14 @@ export function TacticsLab({ coachAvailable }: { coachAvailable: boolean }) {
       resolvedOpponent = undefined;
     }
 
-    const boardPlayers = design.players.map((player, index) => ({ ...player, x: resolvedOwn[index].x, y: resolvedOwn[index].y }));
+    const boardPlayers = effectivePlayers.map((player, index) => ({ ...player, x: resolvedOwn[index].x, y: resolvedOwn[index].y }));
     return { boardPlayers, opponentPlayers: resolvedOpponent };
-  }, [design.opponentFormationSlug, design.players, phase, defensiveStyle]);
+  }, [design.opponentFormationSlug, effectivePlayers, phase, defensiveStyle, playbook.entries]);
 
-  const shapeName = useMemo(() => recognizeShape(design.players), [design.players]);
-  const scores = useMemo(() => computeScores(design.players, design.instructions), [design.players, design.instructions]);
-  const notes = useMemo(() => generateNotes(design.players, design.instructions, scores), [design.players, design.instructions, scores]);
-  const selectedPlayer = design.players.find((p) => p.id === selectedPlayerId) ?? null;
+  const shapeName = useMemo(() => recognizeShape(effectivePlayers), [effectivePlayers]);
+  const scores = useMemo(() => computeScores(effectivePlayers, effectiveInstructions), [effectivePlayers, effectiveInstructions]);
+  const notes = useMemo(() => generateNotes(effectivePlayers, effectiveInstructions, scores), [effectivePlayers, effectiveInstructions, scores]);
+  const selectedPlayer = effectivePlayers.find((p) => p.id === selectedPlayerId) ?? null;
 
   if (mode === "scenario") {
     return (
@@ -189,9 +316,67 @@ export function TacticsLab({ coachAvailable }: { coachAvailable: boolean }) {
     );
   }
 
+  if (mode === "playbook") {
+    return (
+      <div className="flex flex-col gap-6">
+        <SegmentedTabs id="tactics-lab-mode" ariaLabel="Designer mode" options={MODE_OPTIONS} value={mode} onChange={setMode} />
+        <Playbook onLoadEntry={loadEntryFromPlaybook} />
+      </div>
+    );
+  }
+
+  const currentEntryType: "formation" | "play" = design.play && design.play.length > 0 ? "play" : "formation";
+  const activeEntryForSheet = activeEntry && activeEntry.type === currentEntryType ? activeEntry : null;
+
   return (
     <div className="flex flex-col gap-6">
       <SegmentedTabs id="tactics-lab-mode" ariaLabel="Designer mode" options={MODE_OPTIONS} value={mode} onChange={setMode} />
+
+      {sharedBoard ? (
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded-md border border-attack/40 bg-attack/10 px-4 py-3">
+          <p className="text-sm text-pitch-line">
+            Viewing a shared design — <span className="font-semibold">{sharedBoard.name}</span>.
+          </p>
+          <button
+            type="button"
+            onClick={() => {
+              const nextDesign: Design =
+                sharedBoard.kind === "formation"
+                  ? { players: sharedBoard.players, instructions: sharedBoard.instructions }
+                  : { players: sharedBoard.players, instructions: sharedBoard.instructions, play: sharedBoard.steps };
+              setRaw(JSON.stringify(nextDesign));
+              setActiveEntry(null);
+              setDirty(false);
+              setPendingSaveName(sharedBoard.name);
+              setSharedBoard(null);
+              setShowSaveSheet(true);
+            }}
+            className="inline-flex min-h-9 items-center rounded-full bg-attack px-5 font-mono text-xs font-semibold uppercase tracking-widest text-night-950"
+          >
+            Duplicate to my Playbook
+          </button>
+        </div>
+      ) : (
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <p className="font-mono text-xs uppercase tracking-widest text-pitch-touchline">
+            {activeEntryForSheet ? (
+              <>
+                Editing <span className="text-attack">No. {activeEntryForSheet.number}</span> — {activeEntryForSheet.name}
+                {dirty && <span className="text-pitch-touchline/70"> (unsaved)</span>}
+              </>
+            ) : (
+              "Unsaved board"
+            )}
+          </p>
+          <button
+            type="button"
+            onClick={() => setShowSaveSheet(true)}
+            className="inline-flex min-h-9 items-center rounded-full border border-attack/60 px-5 font-mono text-xs font-semibold uppercase tracking-widest text-attack transition-colors hover:bg-attack/10"
+          >
+            Save to Playbook
+          </button>
+        </div>
+      )}
 
       <div className="flex flex-wrap items-center gap-3">
         <label className="flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-pitch-touchline">
@@ -199,7 +384,8 @@ export function TacticsLab({ coachAvailable }: { coachAvailable: boolean }) {
           <select
             value={design.seededFrom ?? ""}
             onChange={(event) => loadTemplate(event.target.value)}
-            className="min-h-11 rounded-md border border-pitch-touchline/40 bg-pitch-card px-3 font-mono text-xs uppercase tracking-widest text-pitch-line focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
+            disabled={!!sharedBoard}
+            className="min-h-11 rounded-md border border-pitch-touchline/40 bg-pitch-card px-3 font-mono text-xs uppercase tracking-widest text-pitch-line focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker disabled:opacity-50"
           >
             {formations.map((formation) => (
               <option key={formation.slug} value={formation.slug}>
@@ -213,6 +399,25 @@ export function TacticsLab({ coachAvailable }: { coachAvailable: boolean }) {
         <DefensiveStyleToggle style={defensiveStyle} onChange={changeDefensiveStyle} />
       </div>
 
+      <AnimatePresence>
+        {showSaveSheet && !sharedBoard && (
+          <PlaybookSaveSheet
+            entryType={currentEntryType}
+            entries={playbook.entries}
+            activeEntry={activeEntryForSheet}
+            initialName={pendingSaveName ?? undefined}
+            onCancel={() => {
+              setShowSaveSheet(false);
+              setPendingSaveName(null);
+            }}
+            onConfirm={(result) => {
+              handleSaveConfirm(result, currentEntryType);
+              setPendingSaveName(null);
+            }}
+          />
+        )}
+      </AnimatePresence>
+
       <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-10">
         <div className="mx-auto w-full max-w-md lg:mx-0 lg:max-w-lg lg:flex-1">
           {mode === "formation" ? (
@@ -224,29 +429,31 @@ export function TacticsLab({ coachAvailable }: { coachAvailable: boolean }) {
                 onSelectPlayer={setSelectedPlayerId}
                 opponentPlayers={opponentPlayers}
                 phase={phase}
-                readOnly={phase === "out-of-possession"}
+                readOnly={!!sharedBoard || phase === "out-of-possession"}
               />
               <p className="mt-3 text-xs leading-relaxed text-pitch-touchline">
-                {phase === "out-of-possession"
-                  ? `Previewing how this shape compresses out of possession (${defensiveStyle === "high-press" ? "high press" : "low block"}). Switch back to In possession to keep editing.`
-                  : "Drag a player to reposition them, or select one and use the arrow keys. Select a player to assign their role below."}
+                {sharedBoard
+                  ? "Read-only preview — duplicate it to your own Playbook to edit."
+                  : phase === "out-of-possession"
+                    ? `Previewing how this shape compresses out of possession (${defensiveStyle === "high-press" ? "high press" : "low block"}). Switch back to In possession to keep editing.`
+                    : "Drag a player to reposition them, or select one and use the arrow keys. Select a player to assign their role below."}
               </p>
             </>
           ) : (
             <PlayDesigner
               players={boardPlayers}
-              steps={design.play ?? []}
+              steps={effectiveSteps}
               onStepsChange={setPlaySteps}
               opponentPlayers={opponentPlayers}
               phase={phase}
               defensiveStyle={defensiveStyle}
-              readOnly={phase === "out-of-possession"}
+              readOnly={!!sharedBoard || phase === "out-of-possession"}
             />
           )}
         </div>
 
         <aside className="flex w-full flex-col gap-4 lg:w-96">
-          {mode === "formation" && phase === "in-possession" && selectedPlayer && (
+          {mode === "formation" && !sharedBoard && phase === "in-possession" && selectedPlayer && (
             <PlayerRoleMenu
               currentRole={selectedPlayer.role}
               onSelectRole={setRole}
@@ -259,13 +466,14 @@ export function TacticsLab({ coachAvailable }: { coachAvailable: boolean }) {
             <AutoNotes notes={notes} />
           </div>
           <OpponentSim
-            myPlayers={design.players}
+            myPlayers={effectivePlayers}
             opponentSlug={design.opponentFormationSlug}
             opponentPlayers={opponentPlayers}
             onOpponentSlugChange={setOpponentSlug}
+            playbookFormations={playbook.entries.filter((entry): entry is Extract<PlaybookEntry, { type: "formation" }> => entry.type === "formation")}
           />
-          <CoachVerdictPanel design={design} coachAvailable={coachAvailable} />
-          <TeamInstructionsPanel instructions={design.instructions} onChange={setInstructions} />
+          <CoachVerdictPanel design={{ players: effectivePlayers, instructions: effectiveInstructions }} coachAvailable={coachAvailable} />
+          <TeamInstructionsPanel instructions={effectiveInstructions} onChange={setInstructions} />
         </aside>
       </div>
     </div>

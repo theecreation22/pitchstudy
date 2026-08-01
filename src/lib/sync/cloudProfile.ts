@@ -2,6 +2,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import type { PlayerCard } from "@/lib/playerCard";
 import type { ProgressState } from "@/lib/progress";
 import type { SavedPlay } from "@/lib/scenario-mode/persistence";
+import type { PlaybookEntry } from "@/lib/tactics-lab/playbookSchema";
 import type { CloudProfile, LocalSnapshot } from "./types";
 
 type ProfileRow = {
@@ -11,6 +12,7 @@ type ProfileRow = {
   player_card: PlayerCard | null;
   progress: ProgressState | null;
   playbook: SavedPlay[] | null;
+  tactics_playbook: PlaybookEntry[] | null;
   updated_at: string;
 };
 
@@ -22,6 +24,7 @@ function rowToCloudProfile(row: ProfileRow): CloudProfile {
     playerCard: row.player_card,
     progress: row.progress,
     playbook: row.playbook,
+    tacticsPlaybook: row.tactics_playbook,
     updatedAt: row.updated_at,
   };
 }
@@ -52,6 +55,7 @@ export async function pushCloudProfile(
     player_card: snapshot.playerCard ?? null,
     progress: snapshot.progress,
     playbook: snapshot.playbook,
+    tactics_playbook: snapshot.tacticsPlaybook,
   });
 }
 

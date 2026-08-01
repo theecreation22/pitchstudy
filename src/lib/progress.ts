@@ -78,6 +78,8 @@ export const badges = [
   { id: "perfect-move", name: "Perfect Move", description: "Score Gold on a scenario using the minimum steps." },
   { id: "match-fit", name: "Match Fit", description: "Complete every drill in a training week." },
   { id: "block-complete", name: "Block Complete", description: "Finish every session in a training block." },
+  { id: "opening-pages", name: "Opening Pages", description: "Save your first page to the Playbook." },
+  { id: "thick-binder", name: "Thick Binder", description: "Save 10 pages to the Playbook." },
 ] as const;
 
 export type BadgeId = (typeof badges)[number]["id"];
@@ -244,6 +246,24 @@ export function useProgress() {
 
   const trainingStreak = useMemo(() => computeTrainingStreak(state.trainingDates), [state.trainingDates]);
 
+  /** Called with the Playbook's total entry count right after a save — XP only on the very first save (§6: "a small XP award"), badges at 1 and 10 entries. A no-op persist is skipped when neither milestone is hit. */
+  const recordPlaybookSave = useCallback(
+    (totalEntries: number, xpAward = 15) => {
+      const nextBadges = new Set(state.earnedBadges);
+      const isFirstSave = totalEntries === 1;
+      if (isFirstSave) nextBadges.add("opening-pages");
+      if (totalEntries === 10) nextBadges.add("thick-binder");
+      if (!isFirstSave && nextBadges.size === state.earnedBadges.length) return;
+
+      persist({
+        ...state,
+        xp: state.xp + (isFirstSave ? xpAward : 0),
+        earnedBadges: [...nextBadges],
+      });
+    },
+    [state, persist],
+  );
+
   // Writes a fully-formed state wholesale — used by sync's merge step, which
   // has already combined local and cloud progress and just needs it stored.
   const replace = useCallback((next: ProgressState) => persist(next), [persist]);
@@ -260,6 +280,7 @@ export function useProgress() {
     completeScenario,
     isDrillComplete,
     toggleDrillCompletion,
+    recordPlaybookSave,
     replace,
   };
 }

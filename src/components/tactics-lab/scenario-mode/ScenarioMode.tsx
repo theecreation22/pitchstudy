@@ -6,6 +6,7 @@ import { scenarios, getScenario } from "@/lib/scenario-mode/scenarios";
 import { computeScenarioFrames, getCarrierId } from "@/lib/scenario-mode/simulation";
 import { evaluateScenario, type ScenarioResult } from "@/lib/scenario-mode/evaluation";
 import { decodeSharedPlay, encodeSharedPlay, usePlaybook } from "@/lib/scenario-mode/persistence";
+import { useTacticsPlaybook, lowestFreeNumber } from "@/lib/tactics-lab/usePlaybook";
 import { useProgress } from "@/lib/progress";
 import type { DifficultyTier, Point, ScenarioActionKind, ScenarioStep } from "@/lib/scenario-mode/schema";
 import { SegmentedTabs } from "@/components/ui/SegmentedTabs";
@@ -25,8 +26,11 @@ const TIER_OPTIONS = [
 
 export function ScenarioMode() {
   const reduceMotion = useReducedMotion();
-  const { completeScenario } = useProgress();
+  const progress = useProgress();
+  const { completeScenario } = progress;
   const { plays, savePlay, deletePlay } = usePlaybook();
+  const tacticsPlaybook = useTacticsPlaybook();
+  const [savedToPlaybook, setSavedToPlaybook] = useState(false);
 
   const [scenarioSlug, setScenarioSlug] = useState<string | null>(null);
   const [tier, setTier] = useState<DifficultyTier>("bronze");
@@ -223,6 +227,30 @@ export function ScenarioMode() {
     const name = saveName.trim() || scenario.name;
     savePlay({ scenarioSlug: scenario.slug, tier, steps, grade: result.grade, name });
     setSaveName("");
+  }
+
+  /** §6: a scenario win offers a one-click save into the general Playbook (a numbered, gallery-visible entry) — separate from the scenario-specific list above, which this doesn't touch. */
+  function handleSaveToPlaybook() {
+    if (!scenario || !result) return;
+    const name = saveName.trim() || scenario.name;
+    const now = new Date().toISOString();
+    tacticsPlaybook.upsert({
+      id: crypto.randomUUID(),
+      schemaVersion: 1,
+      type: "play",
+      origin: "scenario",
+      number: lowestFreeNumber(tacticsPlaybook.entries, "play"),
+      name,
+      scenarioSlug: scenario.slug,
+      tier,
+      steps,
+      grade: result.grade,
+      createdAt: now,
+      updatedAt: now,
+    });
+    progress.recordPlaybookSave(tacticsPlaybook.entries.length + 1);
+    setSavedToPlaybook(true);
+    setTimeout(() => setSavedToPlaybook(false), 2000);
   }
 
   function handleShare() {
@@ -429,6 +457,13 @@ export function ScenarioMode() {
                   Save
                 </button>
               </div>
+              <button
+                type="button"
+                onClick={handleSaveToPlaybook}
+                className="min-h-9 rounded-md border border-attack/60 px-3 font-mono text-[10px] uppercase tracking-widest text-attack hover:bg-attack/10"
+              >
+                {savedToPlaybook ? "Saved to Playbook!" : "Save this to the Playbook"}
+              </button>
               <button
                 type="button"
                 onClick={handleShare}

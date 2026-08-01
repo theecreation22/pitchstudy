@@ -1,6 +1,7 @@
 import { formations, type FormationPlayer } from "@/lib/formations";
 import type { LabPlayer } from "@/lib/tactics-lab/designSchema";
 import { computeMatchupZones, type MatchupZone } from "@/lib/tactics-lab/opponentSim";
+import { PLAYBOOK_OPPONENT_PREFIX, type PlaybookFormationEntry } from "@/lib/tactics-lab/playbookSchema";
 import { MatchupMiniPitch } from "./MatchupMiniPitch";
 
 type Props = {
@@ -8,6 +9,8 @@ type Props = {
   opponentSlug: string | undefined;
   opponentPlayers: FormationPlayer[] | undefined;
   onOpponentSlugChange: (slug: string | undefined) => void;
+  /** Saved formations from the Playbook (§6) — shown in their own group below the 8 presets, so you can test a play against a formation you designed yourself. */
+  playbookFormations?: PlaybookFormationEntry[];
 };
 
 function describeZone(zone: MatchupZone): string {
@@ -59,7 +62,7 @@ const VERDICT_TEXT: Record<Verdict["tone"], string> = {
 };
 
 /** Opponent formation picker plus a spatial read on the matchup once selected — a tinted mini-pitch and a coach-voiced verdict instead of a bare "no mismatch" sentence. */
-export function OpponentSim({ myPlayers, opponentSlug, opponentPlayers, onOpponentSlugChange }: Props) {
+export function OpponentSim({ myPlayers, opponentSlug, opponentPlayers, onOpponentSlugChange, playbookFormations = [] }: Props) {
   const zones = opponentPlayers ? computeMatchupZones(myPlayers, opponentPlayers) : [];
   const verdict = opponentPlayers ? buildVerdict(zones) : null;
 
@@ -74,11 +77,22 @@ export function OpponentSim({ myPlayers, opponentSlug, opponentPlayers, onOppone
             className="min-h-9 appearance-none rounded-full border border-pitch-touchline/40 bg-pitch-card py-1 pl-3 pr-8 font-mono text-xs uppercase tracking-widest text-pitch-line transition-colors hover:border-attack/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
           >
             <option value="">None</option>
-            {formations.map((formation) => (
-              <option key={formation.slug} value={formation.slug}>
-                {formation.name}
-              </option>
-            ))}
+            <optgroup label="Presets">
+              {formations.map((formation) => (
+                <option key={formation.slug} value={formation.slug}>
+                  {formation.name}
+                </option>
+              ))}
+            </optgroup>
+            {playbookFormations.length > 0 && (
+              <optgroup label="My Playbook">
+                {playbookFormations.map((entry) => (
+                  <option key={entry.id} value={`${PLAYBOOK_OPPONENT_PREFIX}${entry.id}`}>
+                    No. {entry.number} — {entry.name}
+                  </option>
+                ))}
+              </optgroup>
+            )}
           </select>
           <svg
             viewBox="0 0 24 24"

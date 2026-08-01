@@ -18,12 +18,23 @@ create table if not exists public.profiles (
   -- quizBestScores, xp, earnedBadges, challengeBestStreak, scenarioBests,
   -- completedDrillInstances, trainingDates.
   progress jsonb,
-  -- Mirrors SavedPlay[] (scenario-mode/persistence.ts) — the Tactics Lab
-  -- playbook.
+  -- Mirrors SavedPlay[] (scenario-mode/persistence.ts) — the Scenario Mode
+  -- playbook (saved scenario attempts only).
   playbook jsonb,
+  -- Mirrors PlaybookEntry[] (tactics-lab/playbookSchema.ts) — the general
+  -- Tactics Lab Playbook (saved formations and Play Designer plays). A
+  -- separate column from `playbook` above since the two hold structurally
+  -- different entries (see playbookSchema.ts's own comment on why they
+  -- aren't unified into one collection).
+  tactics_playbook jsonb,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
+
+-- Adds the column to a profiles table that already existed before this
+-- feature shipped — `create table if not exists` above is a no-op against
+-- an existing table, so this is what actually applies it to a live project.
+alter table public.profiles add column if not exists tactics_playbook jsonb;
 
 comment on table public.profiles is
   'One row per registered player. Populated and read entirely by the owning user via row-level security — there is no admin/service-role write path in the app.';

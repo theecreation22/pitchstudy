@@ -6,6 +6,7 @@ import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { usePlayerCard } from "@/lib/playerCard";
 import { useProgress } from "@/lib/progress";
 import { usePlaybook } from "@/lib/scenario-mode/persistence";
+import { useTacticsPlaybook } from "@/lib/tactics-lab/usePlaybook";
 import { mergeProfiles } from "./mergeProfiles";
 import { deleteCloudProfile, fetchCloudProfile, pushCloudProfile } from "./cloudProfile";
 import type { LocalSnapshot, MergeResult } from "./types";
@@ -30,6 +31,7 @@ export function useCloudSync() {
   const { card, replace: replaceCard } = usePlayerCard();
   const { state: progressState, replace: replaceProgress } = useProgress();
   const { plays, replaceAll: replacePlaybook } = usePlaybook();
+  const { entries: tacticsPlaybookEntries, replaceAll: replaceTacticsPlaybook } = useTacticsPlaybook();
 
   const [status, setStatus] = useState<SyncStatus>(isSupabaseConfigured ? "guest" : "disabled");
   const [user, setUser] = useState<CloudUser | null>(null);
@@ -42,10 +44,15 @@ export function useCloudSync() {
 
   // Local values change on every keystroke/checkbox; refs let the debounced
   // push always read the latest snapshot without re-subscribing constantly.
-  const localRef = useRef<LocalSnapshot>({ playerCard: card, progress: progressState, playbook: plays });
+  const localRef = useRef<LocalSnapshot>({
+    playerCard: card,
+    progress: progressState,
+    playbook: plays,
+    tacticsPlaybook: tacticsPlaybookEntries,
+  });
   useEffect(() => {
-    localRef.current = { playerCard: card, progress: progressState, playbook: plays };
-  }, [card, progressState, plays]);
+    localRef.current = { playerCard: card, progress: progressState, playbook: plays, tacticsPlaybook: tacticsPlaybookEntries };
+  }, [card, progressState, plays, tacticsPlaybookEntries]);
 
   const runInitialMerge = useCallback(
     async (userId: string, email: string | null) => {
@@ -60,15 +67,17 @@ export function useCloudSync() {
       if (merged.playerCard) replaceCard(merged.playerCard);
       replaceProgress(merged.progress);
       replacePlaybook(merged.playbook);
+      replaceTacticsPlaybook(merged.tacticsPlaybook);
       setLastMerge(merged);
       await pushCloudProfile(supabase, userId, email, {
         playerCard: merged.playerCard,
         progress: merged.progress,
         playbook: merged.playbook,
+        tacticsPlaybook: merged.tacticsPlaybook,
       });
       setStatus("synced");
     },
-    [replaceCard, replaceProgress, replacePlaybook],
+    [replaceCard, replaceProgress, replacePlaybook, replaceTacticsPlaybook],
   );
 
   useEffect(() => {
@@ -118,7 +127,7 @@ export function useCloudSync() {
     return () => {
       if (pushTimerRef.current) clearTimeout(pushTimerRef.current);
     };
-  }, [user, card, progressState, plays, status]);
+  }, [user, card, progressState, plays, tacticsPlaybookEntries, status]);
 
   const signOut = useCallback(async () => {
     const supabase = getSupabaseBrowserClient();

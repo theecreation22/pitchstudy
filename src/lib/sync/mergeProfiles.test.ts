@@ -39,6 +39,7 @@ function cloudProfile(overrides: Partial<CloudProfile> = {}): CloudProfile {
     playerCard: null,
     progress: null,
     playbook: null,
+    tacticsPlaybook: null,
     updatedAt: "2026-01-01T00:00:00.000Z",
     ...overrides,
   };
@@ -49,6 +50,7 @@ function localSnapshot(overrides: Partial<LocalSnapshot> = {}): LocalSnapshot {
     playerCard: undefined,
     progress: progress(),
     playbook: [],
+    tacticsPlaybook: [],
     ...overrides,
   };
 }
@@ -57,7 +59,13 @@ describe("mergeProfiles", () => {
   it("passes the local snapshot through untouched when there is no cloud profile yet", () => {
     const local = localSnapshot({ playerCard: card(), progress: progress({ xp: 40 }) });
     const result = mergeProfiles(local, null);
-    expect(result).toEqual({ playerCard: local.playerCard, progress: local.progress, playbook: [], hadConflict: false });
+    expect(result).toEqual({
+      playerCard: local.playerCard,
+      progress: local.progress,
+      playbook: [],
+      tacticsPlaybook: [],
+      hadConflict: false,
+    });
   });
 
   it("unions completedLessons, earnedBadges, completedDrillInstances, and trainingDates", () => {
@@ -172,6 +180,34 @@ describe("mergeProfiles", () => {
     expect(result.playbook).toHaveLength(2);
     expect(result.playbook.find((p) => p.id === "play-1")?.name).toBe("Local version");
     expect(result.playbook.find((p) => p.id === "play-2")?.name).toBe("Cloud only");
+  });
+
+  it("dedupes the general Tactics Lab Playbook by id too, same rule as the scenario playbook", () => {
+    const shared = {
+      id: "entry-1",
+      schemaVersion: 1 as const,
+      type: "formation" as const,
+      number: 7,
+      name: "Local Formation",
+      players: [],
+      instructions: { mentality: "balanced" as const, tempo: 50, width: 50, press: "balanced" as const, line: "medium" as const },
+      shapeName: "4-4-2",
+      createdAt: "2026-01-01T00:00:00.000Z",
+      updatedAt: "2026-01-01T00:00:00.000Z",
+    };
+    const local = localSnapshot({ tacticsPlaybook: [shared] });
+    const cloud = cloudProfile({
+      tacticsPlaybook: [
+        { ...shared, name: "Cloud Formation" },
+        { ...shared, id: "entry-2", number: 8, name: "Cloud Only" },
+      ],
+    });
+
+    const result = mergeProfiles(local, cloud);
+
+    expect(result.tacticsPlaybook).toHaveLength(2);
+    expect(result.tacticsPlaybook.find((e) => e.id === "entry-1")?.name).toBe("Local Formation");
+    expect(result.tacticsPlaybook.find((e) => e.id === "entry-2")?.name).toBe("Cloud Only");
   });
 
   it("flags hadConflict only when both sides already had real progress", () => {

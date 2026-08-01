@@ -1,7 +1,6 @@
 import type { QuizBest, ScenarioBest, ProgressState } from "@/lib/progress";
 import { SCENARIO_GRADE_RANK } from "@/lib/progress";
 import type { PlayerCard } from "@/lib/playerCard";
-import type { SavedPlay } from "@/lib/scenario-mode/persistence";
 import type { CloudProfile, LocalSnapshot, MergeResult } from "./types";
 
 function union(a: string[], b: string[]): string[] {
@@ -61,11 +60,11 @@ function mergePlayerCard(local: PlayerCard | undefined, cloud: PlayerCard | null
   return new Date(cloud.updatedAt).getTime() > new Date(local.updatedAt).getTime() ? cloud : local;
 }
 
-/** Union by id — every SavedPlay already carries a UUID, so this is a plain dedupe rather than a real conflict; local wins ties since ids collide only when the same save round-tripped through both sides. */
-function mergePlaybook(local: SavedPlay[], cloud: SavedPlay[]): SavedPlay[] {
-  const byId = new Map<string, SavedPlay>();
-  for (const play of cloud) byId.set(play.id, play);
-  for (const play of local) byId.set(play.id, play);
+/** Union by id — every entry already carries a UUID, so this is a plain dedupe rather than a real conflict; local wins ties since ids collide only when the same save round-tripped through both sides. Shared by both the scenario-mode playbook and the general Tactics Lab Playbook — same rule, same reasoning, no need for two near-identical functions. */
+function unionById<T extends { id: string }>(local: T[], cloud: T[]): T[] {
+  const byId = new Map<string, T>();
+  for (const entry of cloud) byId.set(entry.id, entry);
+  for (const entry of local) byId.set(entry.id, entry);
   return Array.from(byId.values());
 }
 
@@ -86,7 +85,13 @@ function hasRealProgress(progress: ProgressState): boolean {
  */
 export function mergeProfiles(local: LocalSnapshot, cloud: CloudProfile | null): MergeResult {
   if (!cloud) {
-    return { playerCard: local.playerCard, progress: local.progress, playbook: local.playbook, hadConflict: false };
+    return {
+      playerCard: local.playerCard,
+      progress: local.progress,
+      playbook: local.playbook,
+      tacticsPlaybook: local.tacticsPlaybook,
+      hadConflict: false,
+    };
   }
 
   const hadConflict = hasRealProgress(local.progress) && !!cloud.progress && hasRealProgress(cloud.progress);
@@ -94,7 +99,8 @@ export function mergeProfiles(local: LocalSnapshot, cloud: CloudProfile | null):
   return {
     playerCard: mergePlayerCard(local.playerCard, cloud.playerCard),
     progress: mergeProgress(local.progress, cloud.progress),
-    playbook: mergePlaybook(local.playbook, cloud.playbook ?? []),
+    playbook: unionById(local.playbook, cloud.playbook ?? []),
+    tacticsPlaybook: unionById(local.tacticsPlaybook, cloud.tacticsPlaybook ?? []),
     hadConflict,
   };
 }
