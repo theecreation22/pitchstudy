@@ -89,7 +89,8 @@ const SCENARIO_FAMILY_BADGE: Partial<Record<string, BadgeId>> = {
 };
 
 const SCENARIO_XP_BY_GRADE: Record<string, number> = { gold: 100, silver: 60, bronze: 30 };
-const SCENARIO_GRADE_RANK: Record<string, number> = { bronze: 1, silver: 2, gold: 3 };
+/** Exported so sync/mergeProfiles.ts can compare two ScenarioBests the same way completeScenario does, instead of re-deriving the ranking. */
+export const SCENARIO_GRADE_RANK: Record<string, number> = { bronze: 1, silver: 2, gold: 3 };
 
 export function useProgress() {
   const [raw, setRaw] = useLocalStorageValue(STORAGE_KEY);
@@ -243,6 +244,10 @@ export function useProgress() {
 
   const trainingStreak = useMemo(() => computeTrainingStreak(state.trainingDates), [state.trainingDates]);
 
+  // Writes a fully-formed state wholesale — used by sync's merge step, which
+  // has already combined local and cloud progress and just needs it stored.
+  const replace = useCallback((next: ProgressState) => persist(next), [persist]);
+
   return {
     state,
     trainingStreak,
@@ -255,5 +260,6 @@ export function useProgress() {
     completeScenario,
     isDrillComplete,
     toggleDrillCompletion,
+    replace,
   };
 }

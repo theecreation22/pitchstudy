@@ -60,7 +60,11 @@ export function usePlaybook() {
     [plays, savePlay],
   );
 
-  return { plays, savePlay, deletePlay, duplicatePlay };
+  // Writes the whole playbook wholesale — used by sync's merge step, which
+  // has already unioned local and cloud plays and just needs it stored.
+  const replaceAll = useCallback((next: SavedPlay[]) => setRaw(JSON.stringify(next)), [setRaw]);
+
+  return { plays, savePlay, deletePlay, duplicatePlay, replaceAll };
 }
 
 export type SharedPlay = { scenarioSlug: string; tier: DifficultyTier; steps: ScenarioStep[] };

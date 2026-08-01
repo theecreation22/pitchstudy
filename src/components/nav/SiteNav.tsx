@@ -4,6 +4,8 @@ import { useEffect, useId, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AuthChip } from "./AuthChip";
+import { useSync } from "@/lib/sync/SyncProvider";
 
 const NAV_LINKS = [
   { href: "/academy", label: "Academy" },
@@ -47,6 +49,7 @@ export function SiteNav() {
   const reduceMotion = useReducedMotion();
   const pathname = usePathname();
   const menuId = useId();
+  const { status } = useSync();
 
   // Closes on every way the route can change (link click, keyboard Enter,
   // browser back/forward), covered generically instead of an onClick per
@@ -90,6 +93,7 @@ export function SiteNav() {
               {link.label}
             </Link>
           ))}
+          <AuthChip />
         </div>
 
         <button
@@ -135,6 +139,11 @@ export function SiteNav() {
                   {link.label}
                 </Link>
               ))}
+              {status !== "disabled" && (
+                <div className="mt-1 border-t border-pitch-touchline/20 px-3 pt-3">
+                  <AuthChip />
+                </div>
+              )}
             </motion.div>
           </>
         )}

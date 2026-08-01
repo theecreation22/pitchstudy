@@ -212,6 +212,7 @@ export function TrialDayFlow({ onComplete }: { onComplete: () => void }) {
                   positionGroup: positionGroup!,
                   version: 1,
                   createdAt: new Date().toISOString(),
+                  updatedAt: new Date().toISOString(),
                 }}
               />
             </div>

@@ -40,12 +40,6 @@ const sections = [
     copy: "Profiles of the managers who shaped how the game is played, and the formations they made famous.",
     href: "/managers",
   },
-  {
-    eyebrow: "Test yourself",
-    title: "Quiz",
-    copy: "Short quizzes on formations, positions, and managers with instant feedback, no accounts needed.",
-    href: "/quiz",
-  },
 ];
 
 export default function Home() {

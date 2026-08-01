@@ -94,9 +94,14 @@ export function PlayerCardView({ card, onEdit, compact, coverage }: Props) {
         </div>
 
         <div className="flex flex-1 flex-col gap-1">
-          <p className="font-display text-2xl font-black uppercase leading-none tracking-tight text-pitch-line sm:text-3xl">
-            {card.nickname || position?.name || "Your Card"}
-          </p>
+          <div className="flex items-center gap-2">
+            <p className="font-display text-2xl font-black uppercase leading-none tracking-tight text-pitch-line sm:text-3xl">
+              {card.nickname || position?.name || "Your Card"}
+            </p>
+            {typeof card.squadNumber === "number" && (
+              <span className="font-display text-xl font-black leading-none text-attack sm:text-2xl">#{card.squadNumber}</span>
+            )}
+          </div>
           <p className="font-mono text-xs uppercase tracking-widest text-attack">{roleLine}</p>
           <div className="mt-2 flex flex-wrap gap-2 font-mono text-[10px] uppercase tracking-widest text-pitch-touchline">
             <span className="rounded-full border border-pitch-touchline/40 px-2 py-0.5">{levelLabels[card.level]}</span>

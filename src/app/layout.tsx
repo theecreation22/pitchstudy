@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Big_Shoulders, Public_Sans, IBM_Plex_Mono } from "next/font/google";
 import { FloodlitAtmosphere } from "@/components/effects/FloodlitAtmosphere";
 import { SiteNav } from "@/components/nav/SiteNav";
+import { SyncProvider } from "@/lib/sync/SyncProvider";
+import { SyncInvitation } from "@/components/auth/SyncInvitation";
 import "./globals.css";
 
 const bigShoulders = Big_Shoulders({
@@ -38,9 +40,12 @@ export default function RootLayout({
       className={`${bigShoulders.variable} ${publicSans.variable} ${plexMono.variable} h-full`}
     >
       <body className="min-h-full flex flex-col bg-pitch-slate text-pitch-line antialiased">
-        <FloodlitAtmosphere />
-        <SiteNav />
-        {children}
+        <SyncProvider>
+          <FloodlitAtmosphere />
+          <SiteNav />
+          {children}
+          <SyncInvitation />
+        </SyncProvider>
       </body>
     </html>
   );
