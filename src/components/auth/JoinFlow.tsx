@@ -54,7 +54,7 @@ export function JoinFlow() {
         <p className="font-mono text-xs uppercase tracking-widest text-attack">
           {isSyncing ? "One second…" : "You're in."}
         </p>
-        <h1 className="font-display text-3xl font-black uppercase leading-none tracking-tight text-pitch-line sm:text-4xl">
+        <h1 className="text-grad-attack font-display text-3xl font-black uppercase leading-none tracking-tight sm:text-4xl">
           {isSyncing ? "Combining your progress." : "Welcome to the club."}
         </h1>
         {card && !isSyncing && (
@@ -72,7 +72,7 @@ export function JoinFlow() {
           <div className="flex flex-wrap items-center justify-center gap-3">
             <Link
               href="/workouts"
-              className="inline-flex min-h-11 items-center rounded-full bg-attack px-8 font-mono text-xs font-semibold uppercase tracking-widest text-night-950"
+              className="inline-flex min-h-11 items-center rounded-full bg-attack px-8 font-mono text-xs font-semibold uppercase tracking-widest text-night-950 shadow-[0_0_32px_-8px_var(--attack)] transition-transform hover:scale-[1.02]"
             >
               Get to training →
             </Link>
@@ -122,7 +122,7 @@ export function JoinFlow() {
       {stage === "tunnel" && (
         <StepShell key="tunnel">
           <p className="font-mono text-xs uppercase tracking-widest text-attack">Join the Club</p>
-          <h1 className="font-display text-3xl font-black uppercase leading-none tracking-tight text-pitch-line sm:text-4xl">
+          <h1 className="text-grad-attack font-display text-3xl font-black uppercase leading-none tracking-tight sm:text-4xl">
             Three ways in.
           </h1>
           <p className="max-w-sm text-sm leading-relaxed text-pitch-touchline">
@@ -134,7 +134,7 @@ export function JoinFlow() {
             <button
               type="button"
               onClick={() => router.push("/workouts")}
-              className="inline-flex min-h-11 items-center justify-center rounded-full bg-attack px-8 font-mono text-xs font-semibold uppercase tracking-widest text-night-950"
+              className="inline-flex min-h-11 items-center justify-center rounded-full bg-attack px-8 font-mono text-xs font-semibold uppercase tracking-widest text-night-950 shadow-[0_0_32px_-8px_var(--attack)] transition-transform hover:scale-[1.02]"
             >
               Start Training (stay a guest)
             </button>
@@ -142,7 +142,7 @@ export function JoinFlow() {
               type="button"
               onClick={() => setStage(card ? "register" : "no-card")}
               disabled={status === "disabled"}
-              className="inline-flex min-h-11 items-center justify-center rounded-full border border-attack/60 px-8 font-mono text-xs font-semibold uppercase tracking-widest text-attack transition-colors hover:bg-attack/10 disabled:cursor-not-allowed disabled:opacity-40"
+              className="border-grad-kickoff inline-flex min-h-11 items-center justify-center rounded-full px-8 font-mono text-xs font-semibold uppercase tracking-widest text-attack transition-colors hover:bg-attack/10 disabled:cursor-not-allowed disabled:opacity-40"
             >
               Join the Club
             </button>
@@ -165,7 +165,7 @@ export function JoinFlow() {
       {stage === "no-card" && (
         <StepShell key="no-card">
           <p className="font-mono text-xs uppercase tracking-widest text-attack">Almost there</p>
-          <h1 className="font-display text-3xl font-black uppercase leading-none tracking-tight text-pitch-line sm:text-4xl">
+          <h1 className="text-grad-attack font-display text-3xl font-black uppercase leading-none tracking-tight sm:text-4xl">
             Get your card first.
           </h1>
           <p className="max-w-sm text-sm leading-relaxed text-pitch-touchline">
@@ -175,7 +175,7 @@ export function JoinFlow() {
           <button
             type="button"
             onClick={() => router.push("/workouts")}
-            className="inline-flex min-h-11 items-center rounded-full bg-attack px-8 font-mono text-xs font-semibold uppercase tracking-widest text-night-950"
+            className="inline-flex min-h-11 items-center rounded-full bg-attack px-8 font-mono text-xs font-semibold uppercase tracking-widest text-night-950 shadow-[0_0_32px_-8px_var(--attack)] transition-transform hover:scale-[1.02]"
           >
             Build My Card →
           </button>
@@ -192,7 +192,7 @@ export function JoinFlow() {
       {stage === "register" && card && (
         <StepShell key="register">
           <p className="font-mono text-xs uppercase tracking-widest text-attack">Squad Registration</p>
-          <h1 className="font-display text-3xl font-black uppercase leading-none tracking-tight text-pitch-line sm:text-4xl">
+          <h1 className="text-grad-attack font-display text-3xl font-black uppercase leading-none tracking-tight sm:text-4xl">
             Pick your number.
           </h1>
 
@@ -243,7 +243,7 @@ export function JoinFlow() {
             <button
               type="submit"
               disabled={sendStatus === "sending"}
-              className="inline-flex min-h-11 items-center justify-center rounded-full bg-attack px-8 font-mono text-xs font-semibold uppercase tracking-widest text-night-950 disabled:opacity-60"
+              className="inline-flex min-h-11 items-center justify-center rounded-full bg-attack px-8 font-mono text-xs font-semibold uppercase tracking-widest text-night-950 shadow-[0_0_32px_-8px_var(--attack)] transition-transform hover:scale-[1.02] disabled:opacity-60 disabled:shadow-none disabled:hover:scale-100"
             >
               {sendStatus === "sending" ? "Sending…" : "Confirm & Send Link"}
             </button>
