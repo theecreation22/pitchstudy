@@ -12,7 +12,7 @@ const PROVIDER_LABELS: Record<string, string> = {
   google: "Google",
 };
 
-/** The plain-language home for "what does an account actually do here" — email, squad number, connected provider, and a working, honest delete path. */
+/** The plain-language home for "what does an account actually do here": email, squad number, connected provider, and a working, honest delete path. */
 export function AccountView() {
   const router = useRouter();
   const { user, signOut, deleteAccount } = useSync();
@@ -34,7 +34,7 @@ export function AccountView() {
   if (!user) {
     return (
       <div className="flex flex-col gap-3 rounded-lg border border-pitch-touchline/30 bg-pitch-card p-6 text-sm leading-relaxed text-pitch-touchline">
-        <p>You&apos;re using PitchStudy as a guest — there&apos;s no account to manage.</p>
+        <p>You&apos;re using PitchStudy as a guest, so there&apos;s no account to manage.</p>
         <div className="flex gap-4">
           <Link href="/join" className="font-display text-xs font-semibold uppercase tracking-widest text-attack">
             Join the Club
@@ -65,7 +65,7 @@ export function AccountView() {
       <div className="flex flex-col gap-4 rounded-lg border border-pitch-touchline/30 bg-pitch-card p-6">
         <div className="flex flex-col gap-1">
           <span className="font-mono text-[10px] uppercase tracking-widest text-pitch-touchline">Email</span>
-          <span className="text-sm text-pitch-line">{user.email ?? "—"}</span>
+          <span className="text-sm text-pitch-line">{user.email ?? "-"}</span>
         </div>
         <div className="flex flex-col gap-1">
           <span className="font-mono text-[10px] uppercase tracking-widest text-pitch-touchline">Connected via</span>
@@ -93,7 +93,7 @@ export function AccountView() {
 
       <div className="rounded-lg border border-pitch-touchline/20 bg-pitch-card/50 p-5 text-sm leading-relaxed text-pitch-touchline">
         Your Player Card, training progress, and Tactics Lab playbook are stored here so they can follow you to
-        another device. Only your account can read or write it — nobody else can see it.
+        another device. Only your account can read or write it, and nobody else can see it.
       </div>
 
       <div className="flex flex-wrap gap-3">

@@ -32,9 +32,9 @@ function StepShell({ children }: { children: React.ReactNode }) {
  * The "Join the Club" tunnel (§4 of the accounts spec). Three doors: start
  * training as a guest (no account, ever, if that's what someone wants),
  * register for cross-device sync, or a quiet link back in for a returning
- * player. A Player Card is only one of three things an account can carry —
+ * player. A Player Card is only one of three things an account can carry:
  * Academy/Quiz progress and the Tactics Lab playbook sync with no card at
- * all — so registration never requires one. Whoever's here (a player, a
+ * all, so registration never requires one. Whoever's here (a player, a
  * manager who just uses the Tactics Lab, a fan working through the Academy)
  * gets the same two sign-in options; the card preview and squad number
  * picker only show up if there's already a card to stamp.
@@ -67,7 +67,7 @@ export function JoinFlow() {
         )}
         {!isSyncing && lastMerge?.hadConflict && (
           <p className="max-w-md rounded-lg border border-attack/40 bg-attack/10 px-5 py-3 text-sm leading-relaxed text-pitch-line">
-            We found progress on this account from another device and combined it here — nothing was lost from either
+            We found progress on this account from another device and combined it here. Nothing was lost from either
             side.
           </p>
         )}
@@ -129,7 +129,7 @@ export function JoinFlow() {
             Three ways in.
           </h1>
           <p className="max-w-sm text-sm leading-relaxed text-pitch-touchline">
-            An account carries your progress across devices — lessons, quizzes, badges, your Tactics Lab plays, and
+            An account carries your progress across devices: lessons, quizzes, badges, your Tactics Lab plays, and
             your Player Card if you&apos;ve built one. Whether you&apos;re training, coaching, or just here to learn,
             it works the same way.
           </p>
@@ -199,7 +199,7 @@ export function JoinFlow() {
             </>
           ) : (
             <p className="max-w-sm text-sm leading-relaxed text-pitch-touchline">
-              No Player Card yet — that&apos;s fine. Your Academy progress, quiz scores, and Tactics Lab plays will
+              No Player Card yet, and that&apos;s fine. Your Academy progress, quiz scores, and Tactics Lab plays will
               still sync. You can build a card anytime from Training.
             </p>
           )}
@@ -255,7 +255,7 @@ export function JoinFlow() {
         >
           <p className="font-display text-lg font-bold uppercase tracking-tight text-pitch-line">Check your inbox.</p>
           <p className="max-w-sm text-sm leading-relaxed text-pitch-touchline">
-            We sent a link to {email}. Open it on this device or any other{card ? " — your squad number is already saved" : ""}.
+            We sent a link to {email}. Open it on this device or any other{card ? ", your squad number is already saved" : ""}.
           </p>
         </motion.div>
       )}

@@ -12,7 +12,7 @@ const XP_THRESHOLD = 100;
 const SUPPRESSED_PATHS = ["/join", "/login", "/account"];
 
 /**
- * A single, dismissible nudge toward "Join the Club" — shown once a guest
+ * A single, dismissible nudge toward "Join the Club": shown once a guest
  * has real progress worth protecting (100+ XP or a first badge), never
  * before. Dismissing it (or joining) hides it for good; guest mode never
  * sees it again after that one decision.

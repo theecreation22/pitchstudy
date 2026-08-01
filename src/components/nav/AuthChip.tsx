@@ -11,12 +11,12 @@ function initialsFor(label: string): string {
 }
 
 /**
- * Signed-out: a quiet "Join" link into the club tunnel (/join) — deliberately
+ * Signed-out: a quiet "Join" link into the club tunnel (/join), deliberately
  * unshowy, sitting alongside the other nav links rather than as a loud CTA,
  * since accounts are an optional add-on, not the point of the site.
  * Signed-in: the player's own card identity as a small chip, opening a menu
  * with Account + Sign out. Renders nothing at all when Supabase isn't
- * configured — guest mode has no auth UI to speak of until that's set up.
+ * configured, since guest mode has no auth UI to speak of until that's set up.
  */
 export function AuthChip() {
   const { status, user, signOut } = useSync();
