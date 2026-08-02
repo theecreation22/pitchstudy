@@ -8,6 +8,7 @@ import type { CloudProfile, LocalSnapshot } from "./types";
 type ProfileRow = {
   id: string;
   email: string | null;
+  username: string | null;
   squad_number: number | null;
   player_card: PlayerCard | null;
   progress: ProgressState | null;
@@ -20,6 +21,7 @@ function rowToCloudProfile(row: ProfileRow): CloudProfile {
   return {
     id: row.id,
     email: row.email,
+    username: row.username,
     squadNumber: row.squad_number,
     playerCard: row.player_card,
     progress: row.progress,
@@ -61,4 +63,34 @@ export async function pushCloudProfile(
 
 export async function deleteCloudProfile(supabase: SupabaseClient, userId: string): Promise<void> {
   await supabase.from("profiles").delete().eq("id", userId);
+}
+
+/** Resolves a username to its account's email via the `email_for_username` security-definer function (supabase/schema.sql) — the one narrow, deliberate exception to "RLS blocks reading anyone else's row," scoped to exactly this lookup. Returns null if no account has that username. */
+export async function emailForUsername(supabase: SupabaseClient, username: string): Promise<string | null> {
+  const { data, error } = await supabase.rpc("email_for_username", { lookup_username: username });
+  if (error || !data) return null;
+  return data as string;
+}
+
+export type ClaimUsernameResult = "ok" | "taken" | "error";
+
+/**
+ * Sets a user's username — deliberately a separate write from
+ * `pushCloudProfile`'s general sync upsert (which never includes
+ * `username` in its payload at all, so the routine background push can
+ * never accidentally touch it). Uses upsert rather than a plain update
+ * since this can run immediately after signup, before the regular sync
+ * push has necessarily created the row yet — an update would silently
+ * affect zero rows in that race, losing the username with no error. RLS
+ * already restricts this to the caller's own row; the table's unique
+ * constraint is what actually enforces sitewide uniqueness, surfaced here
+ * as a friendly "taken" result rather than a raw Postgres error code
+ * leaking to the UI.
+ */
+export async function claimUsername(supabase: SupabaseClient, userId: string, username: string): Promise<ClaimUsernameResult> {
+  const { error } = await supabase.from("profiles").upsert({ id: userId, username });
+  if (!error) return "ok";
+  // Postgres unique_violation
+  if (error.code === "23505") return "taken";
+  return "error";
 }

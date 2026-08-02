@@ -55,7 +55,7 @@ export function AuthChip() {
     );
   }
 
-  const label = card?.nickname || (card?.squadNumber ? `Squad #${card.squadNumber}` : user.email?.split("@")[0] ?? "Player");
+  const label = card?.nickname || user.username || user.email?.split("@")[0] || "Player";
 
   return (
     <div ref={rootRef} className="relative">

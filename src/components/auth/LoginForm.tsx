@@ -2,12 +2,14 @@
 
 import { useState, type FormEvent } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
+import { emailForUsername } from "@/lib/sync/cloudProfile";
 import { useSync } from "@/lib/sync/SyncProvider";
 
 type Status = "idle" | "sending" | "sent" | "error";
+type LoginMethod = "magic" | "password";
 
 function GoogleMark() {
   return (
@@ -34,10 +36,14 @@ function GoogleMark() {
 
 /** The sign-in half of "Join the Club": for anyone who already registered on another device and just needs to get back in, whether they're a player, a manager, or just here for the Academy. Registration itself lives at /join. */
 export function LoginForm() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const linkExpired = searchParams.get("error") === "link-expired";
   const { user } = useSync();
   const [email, setEmail] = useState("");
+  const [method, setMethod] = useState<LoginMethod>("magic");
+  const [identifier, setIdentifier] = useState("");
+  const [password, setPassword] = useState("");
   const [status, setStatus] = useState<Status>("idle");
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -90,6 +96,37 @@ export function LoginForm() {
     });
   }
 
+  async function handlePasswordLogin(event: FormEvent) {
+    event.preventDefault();
+    const supabase = getSupabaseBrowserClient();
+    if (!supabase) return;
+    setStatus("sending");
+    setErrorMessage("");
+
+    let resolvedEmail = identifier.trim();
+    if (!resolvedEmail.includes("@")) {
+      // Not an email — treat it as a username and resolve it server-side
+      // via the security-definer lookup (supabase/schema.sql), which never
+      // exposes anyone else's email to the client beyond this one match.
+      const found = await emailForUsername(supabase, resolvedEmail);
+      if (!found) {
+        setStatus("error");
+        setErrorMessage("No account found for that username.");
+        return;
+      }
+      resolvedEmail = found;
+    }
+
+    const { error } = await supabase.auth.signInWithPassword({ email: resolvedEmail, password });
+    if (error) {
+      setStatus("error");
+      setErrorMessage(error.message);
+      return;
+    }
+    setStatus("idle");
+    router.push("/account");
+  }
+
   if (status === "sent") {
     return (
       <div className="flex flex-col gap-3 rounded-lg border border-attack/40 bg-attack/10 p-6 text-sm leading-relaxed text-pitch-line">
@@ -122,24 +159,69 @@ export function LoginForm() {
         <span className="h-px flex-1 bg-pitch-touchline/20" />
       </div>
 
-      <form onSubmit={handleMagicLink} className="flex flex-col gap-3">
-        <input
-          type="email"
-          required
-          value={email}
-          onChange={(event) => setEmail(event.target.value)}
-          placeholder="you@example.com"
-          className="rounded-full border border-pitch-touchline/40 bg-pitch-card px-5 py-2.5 text-sm text-pitch-line placeholder:text-pitch-touchline/70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
-        />
-        {status === "error" && <p className="text-sm text-press">{errorMessage}</p>}
+      <div className="flex justify-center gap-4 font-mono text-xs uppercase tracking-widest">
         <button
-          type="submit"
-          disabled={status === "sending"}
-          className="inline-flex min-h-11 items-center justify-center rounded-full bg-attack px-8 font-mono text-xs font-semibold uppercase tracking-widest text-night-950 disabled:opacity-60"
+          type="button"
+          onClick={() => setMethod("magic")}
+          className={method === "magic" ? "text-attack" : "text-pitch-touchline hover:text-pitch-line"}
         >
-          {status === "sending" ? "Sending…" : "Send sign-in link"}
+          Email link
         </button>
-      </form>
+        <button
+          type="button"
+          onClick={() => setMethod("password")}
+          className={method === "password" ? "text-attack" : "text-pitch-touchline hover:text-pitch-line"}
+        >
+          Username or email
+        </button>
+      </div>
+
+      {method === "magic" ? (
+        <form onSubmit={handleMagicLink} className="flex flex-col gap-3">
+          <input
+            type="email"
+            required
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+            placeholder="you@example.com"
+            className="rounded-full border border-pitch-touchline/40 bg-pitch-card px-5 py-2.5 text-sm text-pitch-line placeholder:text-pitch-touchline/70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
+          />
+          {status === "error" && <p className="text-sm text-press">{errorMessage}</p>}
+          <button
+            type="submit"
+            disabled={status === "sending"}
+            className="inline-flex min-h-11 items-center justify-center rounded-full bg-attack px-8 font-mono text-xs font-semibold uppercase tracking-widest text-night-950 disabled:opacity-60"
+          >
+            {status === "sending" ? "Sending…" : "Send sign-in link"}
+          </button>
+        </form>
+      ) : (
+        <form onSubmit={handlePasswordLogin} className="flex flex-col gap-3">
+          <input
+            required
+            value={identifier}
+            onChange={(event) => setIdentifier(event.target.value)}
+            placeholder="Username or email"
+            className="rounded-full border border-pitch-touchline/40 bg-pitch-card px-5 py-2.5 text-sm text-pitch-line placeholder:text-pitch-touchline/70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
+          />
+          <input
+            type="password"
+            required
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            placeholder="Password"
+            className="rounded-full border border-pitch-touchline/40 bg-pitch-card px-5 py-2.5 text-sm text-pitch-line placeholder:text-pitch-touchline/70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
+          />
+          {status === "error" && <p className="text-sm text-press">{errorMessage}</p>}
+          <button
+            type="submit"
+            disabled={status === "sending"}
+            className="inline-flex min-h-11 items-center justify-center rounded-full bg-attack px-8 font-mono text-xs font-semibold uppercase tracking-widest text-night-950 disabled:opacity-60"
+          >
+            {status === "sending" ? "Signing in…" : "Log in"}
+          </button>
+        </form>
+      )}
 
       <p className="text-center text-xs text-pitch-touchline/70">
         New here? <Link href="/join" className="text-attack">Join the club</Link> instead.

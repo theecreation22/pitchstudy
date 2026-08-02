@@ -8,14 +8,23 @@ import { useProgress } from "@/lib/progress";
 import { usePlaybook } from "@/lib/scenario-mode/persistence";
 import { useTacticsPlaybook } from "@/lib/tactics-lab/usePlaybook";
 import { mergeProfiles } from "./mergeProfiles";
-import { deleteCloudProfile, fetchCloudProfile, pushCloudProfile } from "./cloudProfile";
+import { claimUsername, deleteCloudProfile, fetchCloudProfile, pushCloudProfile, type ClaimUsernameResult } from "./cloudProfile";
 import type { LocalSnapshot, MergeResult } from "./types";
 
 export type SyncStatus = "disabled" | "guest" | "syncing" | "synced" | "error";
 
-export type CloudUser = { id: string; email: string | null; provider: string | null };
+export type CloudUser = { id: string; email: string | null; username: string | null; provider: string | null };
 
 const PUSH_DEBOUNCE_MS = 1500;
+/**
+ * A username chosen during password signup can't always be claimed
+ * immediately — if the Supabase project requires email confirmation,
+ * signUp() returns with no session yet, and RLS rejects an unauthenticated
+ * write. Stashing it here lets the first real sign-in afterward (whenever
+ * that ends up being — same device or a different one, after confirming)
+ * finish the claim instead of silently losing it.
+ */
+export const PENDING_USERNAME_KEY = "pitchstudy:pending-username";
 
 /**
  * Owns the entire "Join the Club" sync lifecycle for one browser tab: it
@@ -69,6 +78,18 @@ export function useCloudSync() {
       replacePlaybook(merged.playbook);
       replaceTacticsPlaybook(merged.tacticsPlaybook);
       setLastMerge(merged);
+
+      let resolvedUsername = cloud?.username ?? null;
+      if (!resolvedUsername) {
+        const pending = window.localStorage.getItem(PENDING_USERNAME_KEY);
+        if (pending) {
+          const result = await claimUsername(supabase, userId, pending);
+          if (result === "ok") resolvedUsername = pending;
+          if (result !== "error") window.localStorage.removeItem(PENDING_USERNAME_KEY);
+        }
+      }
+      if (resolvedUsername) setUser((prev) => (prev ? { ...prev, username: resolvedUsername } : prev));
+
       await pushCloudProfile(supabase, userId, email, {
         playerCard: merged.playerCard,
         progress: merged.progress,
@@ -89,7 +110,7 @@ export function useCloudSync() {
       authUser: { id: string; email?: string | null; app_metadata?: { provider?: string } } | null,
     ) {
       if (authUser) {
-        setUser({ id: authUser.id, email: authUser.email ?? null, provider: authUser.app_metadata?.provider ?? null });
+        setUser({ id: authUser.id, email: authUser.email ?? null, username: null, provider: authUser.app_metadata?.provider ?? null });
         if (syncedUserRef.current !== authUser.id) {
           syncedUserRef.current = authUser.id;
           void runInitialMerge(authUser.id, authUser.email ?? null);
@@ -143,5 +164,17 @@ export function useCloudSync() {
     await supabase.auth.signOut();
   }, [user]);
 
-  return { status, user, lastMerge, signOut, deleteAccount };
+  /** Sets the caller's own username (registration, or a later change from /account). Updates local state optimistically on success so the nav chip reflects it immediately, without waiting for another cloud fetch. */
+  const setUsername = useCallback(
+    async (username: string): Promise<ClaimUsernameResult> => {
+      const supabase = getSupabaseBrowserClient();
+      if (!supabase || !user) return "error";
+      const result = await claimUsername(supabase, user.id, username);
+      if (result === "ok") setUser((prev) => (prev ? { ...prev, username } : prev));
+      return result;
+    },
+    [user],
+  );
+
+  return { status, user, lastMerge, signOut, deleteAccount, setUsername };
 }

@@ -7,6 +7,7 @@ import type { PlaybookEntry } from "@/lib/tactics-lab/playbookSchema";
 export type CloudProfile = {
   id: string;
   email: string | null;
+  username: string | null;
   squadNumber: number | null;
   playerCard: PlayerCard | null;
   progress: ProgressState | null;

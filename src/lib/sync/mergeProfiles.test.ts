@@ -35,6 +35,7 @@ function cloudProfile(overrides: Partial<CloudProfile> = {}): CloudProfile {
   return {
     id: "user-1",
     email: "player@example.com",
+    username: null,
     squadNumber: null,
     playerCard: null,
     progress: null,

@@ -10,6 +10,10 @@
 create table if not exists public.profiles (
   id uuid primary key references auth.users (id) on delete cascade,
   email text,
+  -- Required at registration, unique sitewide — used for display (nav chip)
+  -- and as an alternate login identifier alongside email (see
+  -- public.email_for_username below for how login resolves it safely).
+  username text unique,
   squad_number smallint check (squad_number between 1 and 99),
   -- Mirrors PlayerCard (playerCard.ts): nickname, position, playstyle,
   -- level, equipment, version, createdAt, updatedAt.
@@ -35,6 +39,15 @@ create table if not exists public.profiles (
 -- feature shipped — `create table if not exists` above is a no-op against
 -- an existing table, so this is what actually applies it to a live project.
 alter table public.profiles add column if not exists tactics_playbook jsonb;
+alter table public.profiles add column if not exists username text;
+do $$
+begin
+  if not exists (
+    select 1 from pg_constraint where conname = 'profiles_username_key'
+  ) then
+    alter table public.profiles add constraint profiles_username_key unique (username);
+  end if;
+end $$;
 
 comment on table public.profiles is
   'One row per registered player. Populated and read entirely by the owning user via row-level security — there is no admin/service-role write path in the app.';
@@ -84,6 +97,29 @@ drop policy if exists "Users can delete own profile" on public.profiles;
 create policy "Users can delete own profile"
   on public.profiles for delete
   using (auth.uid() = id);
+
+-- Username-based login needs to resolve a username to its account's email
+-- BEFORE the caller is authenticated — impossible under the RLS policies
+-- above by design (an anonymous caller can't read anyone's row, let alone
+-- by username). This function is the one narrow, deliberate exception:
+-- `security definer` runs it with the owning role's privileges (bypassing
+-- RLS internally), but it exposes exactly one thing — a username's
+-- matching email, or nothing — never the row itself. The login route calls
+-- this via `supabase.rpc(...)`, then immediately calls signInWithPassword
+-- with the resolved email; the username itself never needs to touch
+-- anything other than this one lookup.
+create or replace function public.email_for_username(lookup_username text)
+returns text
+language sql
+security definer
+set search_path = public
+stable
+as $$
+  select email from public.profiles where username = lookup_username limit 1;
+$$;
+
+revoke all on function public.email_for_username(text) from public;
+grant execute on function public.email_for_username(text) to anon, authenticated;
 
 -- Setup checklist (dashboard, not SQL):
 -- 1. Authentication -> Providers -> Email: enable, confirm "magic link" is on.
