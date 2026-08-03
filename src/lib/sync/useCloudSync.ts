@@ -122,8 +122,11 @@ export function useCloudSync() {
       }
     }
 
-    supabase.auth.getUser().then(({ data }) => handleUser(data.user));
-
+    // onAuthStateChange fires once immediately with the current session on
+    // subscribe (an INITIAL_SESSION event), so a separate getUser() call
+    // here would be a second entry point into handleUser for the same
+    // session — racing its own "reset username to null" against whichever
+    // one's runInitialMerge resolves the real username last.
     const { data: subscription } = supabase.auth.onAuthStateChange((_event, session) => {
       handleUser(session?.user ?? null);
     });
