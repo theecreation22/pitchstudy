@@ -220,7 +220,11 @@ export function JoinFlow() {
     if (!supabase) return;
     setSendStatus("sending");
     setErrorMessage("");
-    const { data, error } = await supabase.auth.signUp({ email, password });
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: { emailRedirectTo: `${window.location.origin}/auth/callback?next=/join` },
+    });
     if (error) {
       setSendStatus("error");
       setErrorMessage(error.message);
