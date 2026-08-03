@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   formations,
   getFormation,
@@ -59,6 +59,40 @@ const MODE_OPTIONS = [
 
 type ActiveEntry = { id: string; type: "formation" | "play"; number: number; name: string };
 
+/** The custom-modal equivalent of window.confirm, matching TrainingGroundHub's EditConfirm styling rather than an unstyled native dialog. */
+function LeaveWithoutSavingConfirm({ number, onConfirm, onCancel }: { number: number; onConfirm: () => void; onCancel: () => void }) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-night-950/85 p-4">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.96 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="flex w-full max-w-sm flex-col gap-4 rounded-lg border border-pitch-touchline/30 bg-pitch-card p-6 text-center"
+      >
+        <p className="font-display text-xl font-bold uppercase tracking-tight text-pitch-line">Leave without saving?</p>
+        <p className="text-sm leading-relaxed text-pitch-touchline">
+          No. {number} has unsaved changes — they&apos;ll be lost if you leave now.
+        </p>
+        <div className="flex justify-center gap-3">
+          <button
+            type="button"
+            onClick={onCancel}
+            className="inline-flex min-h-11 items-center rounded-full border border-pitch-touchline/50 px-5 font-mono text-xs uppercase tracking-widest text-pitch-touchline hover:border-pitch-touchline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
+          >
+            Stay
+          </button>
+          <button
+            type="button"
+            onClick={onConfirm}
+            className="inline-flex min-h-11 items-center rounded-full bg-press px-5 font-mono text-xs font-semibold uppercase tracking-widest text-night-950 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
+          >
+            Leave
+          </button>
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
 function parseDesign(raw: string | null): Design {
   if (raw) {
     try {
@@ -95,6 +129,7 @@ export function TacticsLab({ coachAvailable }: { coachAvailable: boolean }) {
   const [showSaveSheet, setShowSaveSheet] = useState(false);
   const [sharedBoard, setSharedBoard] = useState<SharedBoard | null>(null);
   const [pendingSaveName, setPendingSaveName] = useState<string | null>(null);
+  const [pendingLeaveAction, setPendingLeaveAction] = useState<(() => void) | null>(null);
   const dirtyRef = useRef(dirty);
   useEffect(() => {
     dirtyRef.current = dirty;
@@ -135,11 +170,12 @@ export function TacticsLab({ coachAvailable }: { coachAvailable: boolean }) {
     return () => window.removeEventListener("beforeunload", handleBeforeUnload);
   }, [activeEntry]);
 
-  /** Switching modes never silently discards a loaded, edited page (§3) — only guards leaving the Formation/Play board entirely (toggling between those two tabs keeps the same board, so it's exempt). */
+/** Switching modes never silently discards a loaded, edited page (§3) — only guards leaving the Formation/Play board entirely (toggling between those two tabs keeps the same board, so it's exempt). */
   function setMode(next: LabMode) {
     const leavingBoard = (mode === "formation" || mode === "play") && next !== "formation" && next !== "play";
     if (leavingBoard && dirty && activeEntry) {
-      if (!window.confirm(`Leave without saving No. ${activeEntry.number}?`)) return;
+      setPendingLeaveAction(() => () => setModeRaw(next));
+      return;
     }
     setModeRaw(next);
   }
@@ -170,7 +206,8 @@ export function TacticsLab({ coachAvailable }: { coachAvailable: boolean }) {
   function loadEntryFromPlaybook(entry: PlaybookEntry) {
     if (entry.type === "play" && entry.origin === "scenario") return; // scenario-origin entries open in Scenario Mode instead, not handled here
     if (dirty && activeEntry) {
-      if (!window.confirm(`Leave without saving No. ${activeEntry.number}?`)) return;
+      setPendingLeaveAction(() => () => loadEntryFromPlaybook(entry));
+      return;
     }
     const nextDesign: Design =
       entry.type === "formation"
@@ -321,6 +358,17 @@ export function TacticsLab({ coachAvailable }: { coachAvailable: boolean }) {
       <div className="flex flex-col gap-6">
         <SegmentedTabs id="tactics-lab-mode" ariaLabel="Designer mode" options={MODE_OPTIONS} value={mode} onChange={setMode} />
         <Playbook onLoadEntry={loadEntryFromPlaybook} />
+        {pendingLeaveAction && activeEntry && (
+          <LeaveWithoutSavingConfirm
+            number={activeEntry.number}
+            onConfirm={() => {
+              const action = pendingLeaveAction;
+              setPendingLeaveAction(null);
+              action();
+            }}
+            onCancel={() => setPendingLeaveAction(null)}
+          />
+        )}
       </div>
     );
   }
@@ -351,7 +399,7 @@ export function TacticsLab({ coachAvailable }: { coachAvailable: boolean }) {
               setSharedBoard(null);
               setShowSaveSheet(true);
             }}
-            className="inline-flex min-h-9 items-center rounded-full bg-attack px-5 font-mono text-xs font-semibold uppercase tracking-widest text-night-950"
+            className="inline-flex min-h-11 items-center rounded-full bg-attack px-5 font-mono text-xs font-semibold uppercase tracking-widest text-night-950 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
           >
             Duplicate to my Playbook
           </button>
@@ -371,7 +419,7 @@ export function TacticsLab({ coachAvailable }: { coachAvailable: boolean }) {
           <button
             type="button"
             onClick={() => setShowSaveSheet(true)}
-            className="inline-flex min-h-9 items-center rounded-full border border-attack/60 px-5 font-mono text-xs font-semibold uppercase tracking-widest text-attack transition-colors hover:bg-attack/10"
+            className="inline-flex min-h-11 items-center rounded-full border border-attack/60 px-5 font-mono text-xs font-semibold uppercase tracking-widest text-attack transition-colors hover:bg-attack/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
           >
             Save to Playbook
           </button>
@@ -476,6 +524,18 @@ export function TacticsLab({ coachAvailable }: { coachAvailable: boolean }) {
           <TeamInstructionsPanel instructions={effectiveInstructions} onChange={setInstructions} />
         </aside>
       </div>
+
+      {pendingLeaveAction && activeEntry && (
+        <LeaveWithoutSavingConfirm
+          number={activeEntry.number}
+          onConfirm={() => {
+            const action = pendingLeaveAction;
+            setPendingLeaveAction(null);
+            action();
+          }}
+          onCancel={() => setPendingLeaveAction(null)}
+        />
+      )}
     </div>
   );
 }

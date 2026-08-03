@@ -49,7 +49,7 @@ export function AuthChip() {
     return (
       <Link
         href="/join"
-        className="font-display text-sm font-semibold uppercase tracking-[0.15em] text-pitch-touchline/80 transition-colors hover:text-pitch-marker"
+        className="font-display text-sm font-semibold uppercase tracking-[0.15em] text-pitch-touchline transition-colors hover:text-pitch-marker"
       >
         Join
       </Link>

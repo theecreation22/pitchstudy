@@ -44,14 +44,14 @@ function EditConfirm({ onConfirm, onCancel }: { onConfirm: () => void; onCancel:
           <button
             type="button"
             onClick={onCancel}
-            className="inline-flex min-h-11 items-center rounded-full border border-pitch-touchline/50 px-5 font-mono text-xs uppercase tracking-widest text-pitch-touchline hover:border-pitch-touchline"
+            className="inline-flex min-h-11 items-center rounded-full border border-pitch-touchline/50 px-5 font-mono text-xs uppercase tracking-widest text-pitch-touchline hover:border-pitch-touchline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
           >
             Cancel
           </button>
           <button
             type="button"
             onClick={onConfirm}
-            className="inline-flex min-h-11 items-center rounded-full bg-attack px-5 font-mono text-xs font-semibold uppercase tracking-widest text-night-950"
+            className="inline-flex min-h-11 items-center rounded-full bg-attack px-5 font-mono text-xs font-semibold uppercase tracking-widest text-night-950 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
           >
             Continue
           </button>
@@ -137,7 +137,7 @@ export function TrainingGroundHub({ card: initialCard }: { card: PlayerCard }) {
           <button
             type="button"
             onClick={() => setConfirmingEdit(true)}
-            className="mt-2 inline-flex min-h-11 items-center rounded-full bg-attack px-6 font-mono text-xs font-semibold uppercase tracking-widest text-night-950"
+            className="mt-2 inline-flex min-h-11 items-center rounded-full bg-attack px-6 font-mono text-xs font-semibold uppercase tracking-widest text-night-950 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
           >
             Start Next Block
           </button>

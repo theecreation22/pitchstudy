@@ -54,38 +54,40 @@ export function NumberPicker({ value, onChange, takenNumbers, label }: Props) {
   return (
     <div className="flex flex-col gap-2">
       <span className="font-mono text-xs uppercase tracking-widest text-pitch-touchline">{label}</span>
-      <div
-        ref={gridRef}
-        role="radiogroup"
-        aria-label={label}
-        onKeyDown={handleKeyDown}
-        className="grid w-fit gap-1"
-        style={{ gridTemplateColumns: `repeat(${COLUMNS}, minmax(0, 1fr))` }}
-      >
-        {NUMBERS.map((n) => {
-          const isSelected = n === value;
-          const isTaken = takenNumbers.has(n) && !isSelected;
-          return (
-            <button
-              key={n}
-              type="button"
-              data-number-cell
-              role="radio"
-              aria-checked={isSelected}
-              tabIndex={isSelected ? 0 : -1}
-              onClick={() => onChange(n)}
-              className={`flex h-8 w-8 items-center justify-center rounded-md font-mono text-[11px] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker ${
-                isSelected
-                  ? "bg-attack font-bold text-night-950"
-                  : isTaken
-                    ? "bg-pitch-slate text-pitch-touchline/40"
-                    : "bg-pitch-card text-pitch-touchline hover:bg-pitch-touchline/10 hover:text-pitch-line"
-              }`}
-            >
-              {n}
-            </button>
-          );
-        })}
+      <div className="max-w-full overflow-x-auto">
+        <div
+          ref={gridRef}
+          role="radiogroup"
+          aria-label={label}
+          onKeyDown={handleKeyDown}
+          className="grid w-fit gap-1"
+          style={{ gridTemplateColumns: `repeat(${COLUMNS}, minmax(0, 1fr))` }}
+        >
+          {NUMBERS.map((n) => {
+            const isSelected = n === value;
+            const isTaken = takenNumbers.has(n) && !isSelected;
+            return (
+              <button
+                key={n}
+                type="button"
+                data-number-cell
+                role="radio"
+                aria-checked={isSelected}
+                tabIndex={isSelected ? 0 : -1}
+                onClick={() => onChange(n)}
+                className={`flex h-9 w-9 items-center justify-center rounded-md font-mono text-[11px] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker ${
+                  isSelected
+                    ? "bg-attack font-bold text-night-950"
+                    : isTaken
+                      ? "bg-pitch-slate text-pitch-touchline/40"
+                      : "bg-pitch-card text-pitch-touchline hover:bg-pitch-touchline/10 hover:text-pitch-line"
+                }`}
+              >
+                {n}
+              </button>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

@@ -11,6 +11,7 @@ import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { claimUsername } from "@/lib/sync/cloudProfile";
 import { PENDING_USERNAME_KEY } from "@/lib/sync/useCloudSync";
 import { PlayerCardView } from "@/components/workouts/PlayerCardView";
+import { GoogleMark } from "./GoogleMark";
 
 type Stage = "tunnel" | "register" | "sent";
 type SendStatus = "idle" | "sending" | "error";
@@ -107,7 +108,11 @@ export function JoinFlow() {
             Your account&apos;s created — that username&apos;s just already taken.
           </p>
           <form onSubmit={handleUsernameRetry} className="flex w-full max-w-sm flex-col gap-3">
+            <label htmlFor="username-retry" className="sr-only">
+              Username
+            </label>
             <input
+              id="username-retry"
               value={username}
               onChange={(event) => setUsernameInput(event.target.value)}
               required
@@ -358,8 +363,9 @@ export function JoinFlow() {
             <button
               type="button"
               onClick={handleGoogle}
-              className="inline-flex min-h-11 items-center justify-center rounded-full border border-pitch-touchline/40 bg-pitch-card px-6 font-mono text-xs font-semibold uppercase tracking-widest text-pitch-line transition-colors hover:border-pitch-marker"
+              className="flex min-h-11 items-center justify-center gap-2 rounded-full border border-pitch-touchline/40 bg-pitch-card px-6 font-mono text-xs font-semibold uppercase tracking-widest text-pitch-line transition-colors hover:border-pitch-marker focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
             >
+              <GoogleMark />
               Continue with Google
             </button>
 
@@ -388,7 +394,11 @@ export function JoinFlow() {
 
             {authMethod === "magic" ? (
               <form onSubmit={handleMagicLink} className="flex flex-col gap-3">
+                <label htmlFor="join-email-magic" className="sr-only">
+                  Email
+                </label>
                 <input
+                  id="join-email-magic"
                   type="email"
                   required
                   value={email}
@@ -407,7 +417,11 @@ export function JoinFlow() {
               </form>
             ) : (
               <form onSubmit={handlePasswordSignup} className="flex flex-col gap-3">
+                <label htmlFor="join-email-password" className="sr-only">
+                  Email
+                </label>
                 <input
+                  id="join-email-password"
                   type="email"
                   required
                   value={email}
@@ -415,7 +429,11 @@ export function JoinFlow() {
                   placeholder="you@example.com"
                   className="rounded-full border border-pitch-touchline/40 bg-pitch-card px-5 py-2.5 text-center text-sm text-pitch-line placeholder:text-pitch-touchline/70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
                 />
+                <label htmlFor="join-password" className="sr-only">
+                  Password
+                </label>
                 <input
+                  id="join-password"
                   type="password"
                   required
                   minLength={8}
@@ -424,7 +442,11 @@ export function JoinFlow() {
                   placeholder="Password (8+ characters)"
                   className="rounded-full border border-pitch-touchline/40 bg-pitch-card px-5 py-2.5 text-center text-sm text-pitch-line placeholder:text-pitch-touchline/70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
                 />
+                <label htmlFor="join-confirm-password" className="sr-only">
+                  Confirm password
+                </label>
                 <input
+                  id="join-confirm-password"
                   type="password"
                   required
                   value={confirmPassword}

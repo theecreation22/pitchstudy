@@ -44,11 +44,11 @@ export function ModuleLessonList({ module }: { module: Module }) {
         href={`/academy/${module.slug}/quiz`}
         className="group flex items-center gap-4 rounded-lg border border-dashed border-pitch-touchline/40 bg-pitch-card/50 p-4 transition-colors hover:border-blue-volt focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
       >
-        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 border-blue-volt/60 text-blue-volt">
+        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 border-blue-volt/60 text-defend-bright">
           {allDone ? "✓" : "🔒"}
         </span>
         <span className="flex-1">
-          <span className="block font-display text-base font-bold uppercase tracking-tight text-pitch-line group-hover:text-blue-volt">
+          <span className="block font-display text-base font-bold uppercase tracking-tight text-pitch-line group-hover:text-defend-bright">
             Module quiz
           </span>
           <span className="block font-mono text-xs text-pitch-touchline">

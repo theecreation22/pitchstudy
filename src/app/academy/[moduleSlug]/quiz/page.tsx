@@ -43,7 +43,7 @@ export default async function ModuleQuizPage({
       </Link>
 
       <header className="flex flex-col gap-2">
-        <p className="font-mono text-xs uppercase tracking-widest text-blue-volt">Module quiz</p>
+        <p className="font-mono text-xs uppercase tracking-widest text-defend-bright">Module quiz</p>
         <h1 className="font-display text-4xl font-black uppercase leading-none tracking-tight text-pitch-line sm:text-6xl">
           {mod.title}
         </h1>

@@ -72,7 +72,7 @@ export default async function LessonPage({
       </div>
 
       <div className="rounded-lg border border-blue-volt/40 bg-pitch-card p-5">
-        <p className="font-mono text-xs uppercase tracking-widest text-blue-volt">Try it</p>
+        <p className="font-mono text-xs uppercase tracking-widest text-defend-bright">Try it</p>
         <p className="mt-2 text-sm leading-relaxed text-pitch-line/90">{lesson.tryIt}</p>
       </div>
 

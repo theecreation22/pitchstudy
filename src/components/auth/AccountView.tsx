@@ -91,9 +91,12 @@ export function AccountView() {
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-4 rounded-lg border border-pitch-touchline/30 bg-pitch-card p-6">
         <div className="flex flex-col gap-1">
-          <span className="font-mono text-[10px] uppercase tracking-widest text-pitch-touchline">Username</span>
+          <label htmlFor="account-username" className="font-mono text-[10px] uppercase tracking-widest text-pitch-touchline">
+            Username
+          </label>
           <div className="flex items-center gap-3">
             <input
+              id="account-username"
               value={usernameDraft}
               onChange={(event) => setUsernameDraft(event.target.value)}
               minLength={3}
@@ -107,7 +110,7 @@ export function AccountView() {
                 type="button"
                 onClick={handleSaveUsername}
                 disabled={savingUsername}
-                className="inline-flex min-h-9 items-center rounded-full border border-attack/60 px-4 font-mono text-xs uppercase tracking-widest text-attack hover:bg-attack/10 disabled:opacity-60"
+                className="inline-flex min-h-9 items-center rounded-full border border-attack/60 px-4 font-mono text-xs uppercase tracking-widest text-attack hover:bg-attack/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker disabled:opacity-60"
               >
                 {savingUsername ? "Saving…" : "Save"}
               </button>
@@ -124,9 +127,12 @@ export function AccountView() {
           <span className="text-sm text-pitch-line">{providerLabel}</span>
         </div>
         <div className="flex flex-col gap-1">
-          <span className="font-mono text-[10px] uppercase tracking-widest text-pitch-touchline">Squad number</span>
+          <label htmlFor="account-squad-number" className="font-mono text-[10px] uppercase tracking-widest text-pitch-touchline">
+            Squad number
+          </label>
           <div className="flex items-center gap-3">
             <input
+              id="account-squad-number"
               type="number"
               min={1}
               max={99}

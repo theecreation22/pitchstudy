@@ -27,6 +27,9 @@ function clampPercent(value: number): number {
   return Math.min(100, Math.max(0, value));
 }
 
+/** How far an arrow-key press nudges a marker, in pitch-percent units — the keyboard-only equivalent of a small drag, matching Tactics Lab's FormationBoard. */
+const KEYBOARD_NUDGE = 2;
+
 type Props = {
   formation: Formation;
   /** In/out of possession — same toggle and derived compact shape as the Formations tab. */
@@ -139,6 +142,43 @@ export function SandboxPitch({
     }));
   }
 
+  const NUDGE_DELTAS: Record<string, [number, number]> = {
+    ArrowLeft: [-KEYBOARD_NUDGE, 0],
+    ArrowRight: [KEYBOARD_NUDGE, 0],
+    ArrowUp: [0, -KEYBOARD_NUDGE],
+    ArrowDown: [0, KEYBOARD_NUDGE],
+  };
+
+  function handleMarkerKeyDown(event: React.KeyboardEvent, index: number) {
+    const delta = NUDGE_DELTAS[event.key];
+    if (delta) {
+      event.preventDefault();
+      const current = livePositions[index] ?? basePlayers[index];
+      setLivePositions((prev) => {
+        const next = [...prev];
+        next[index] = { x: clampPercent(current.x + delta[0]), y: clampPercent(current.y + delta[1]) };
+        return next;
+      });
+      return;
+    }
+    if (hasOpponent && (event.key === "Enter" || event.key === " ")) {
+      event.preventDefault();
+      setSelectedIndex((prev) => (prev === index ? null : index));
+    }
+  }
+
+  function handleOpponentMarkerKeyDown(event: React.KeyboardEvent, index: number) {
+    const base = opponentPlayers?.[index];
+    const delta = NUDGE_DELTAS[event.key];
+    if (!base || !delta) return;
+    event.preventDefault();
+    const current = opponentLivePositions[index] ?? base;
+    setOpponentLivePositions((prev) => ({
+      ...prev,
+      [index]: { x: clampPercent(current.x + delta[0]), y: clampPercent(current.y + delta[1]) },
+    }));
+  }
+
   const opponentPhase: Phase = phase === "in-possession" ? "out-of-possession" : "in-possession";
   const selectedBase = selectedIndex !== null ? basePlayers[selectedIndex] : undefined;
   const selectedPlayer: FormationPlayer | undefined =
@@ -192,19 +232,23 @@ export function SandboxPitch({
               return (
                 <motion.div
                   key={`opponent-${opponent.id}`}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`Opponent ${opponent.code}. Arrow keys move.`}
                   drag={!reduceMotion}
                   dragConstraints={containerRef}
                   dragElastic={0.05}
                   dragMomentum={false}
                   whileDrag={{ scale: 1.15, zIndex: 30 }}
                   onDragEnd={() => commitOpponentDragPosition(index)}
+                  onKeyDown={(event) => handleOpponentMarkerKeyDown(event, index)}
                   style={{
                     left: `${opponent.x}%`,
                     top: `${opponent.y}%`,
                     x: opponentMarkerMotion[index].x,
                     y: opponentMarkerMotion[index].y,
                   }}
-                  className="absolute -translate-x-1/2 -translate-y-1/2 cursor-grab touch-none active:cursor-grabbing"
+                  className="absolute -translate-x-1/2 -translate-y-1/2 cursor-grab touch-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker active:cursor-grabbing"
                 >
                   <div
                     className={`flex h-11 w-11 items-center justify-center rounded-full border-2 border-dashed font-mono text-xs font-semibold ${
@@ -248,6 +292,10 @@ export function SandboxPitch({
           return (
             <motion.div
               key={player.id}
+              role="button"
+              tabIndex={0}
+              aria-label={`${player.code}${hasOpponent ? ` — selected: ${isSelected}. Enter to select.` : ""}. Arrow keys move.`}
+              aria-pressed={hasOpponent ? isSelected : undefined}
               drag={!reduceMotion}
               dragConstraints={containerRef}
               dragElastic={0.05}
@@ -255,13 +303,14 @@ export function SandboxPitch({
               whileDrag={{ scale: 1.15, zIndex: 30 }}
               onDragEnd={() => commitDragPosition(index)}
               onTap={hasOpponent ? () => setSelectedIndex((prev) => (prev === index ? null : index)) : undefined}
+              onKeyDown={(event) => handleMarkerKeyDown(event, index)}
               style={{
                 left: `${player.x}%`,
                 top: `${player.y}%`,
                 x: markerMotion[index].x,
                 y: markerMotion[index].y,
               }}
-              className="absolute z-10 -translate-x-1/2 -translate-y-1/2 cursor-grab touch-none active:cursor-grabbing"
+              className="absolute z-10 -translate-x-1/2 -translate-y-1/2 cursor-grab touch-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker active:cursor-grabbing"
             >
               <div
                 className={`flex h-11 w-11 items-center justify-center rounded-full border-2 bg-pitch-card font-mono text-xs font-semibold text-pitch-line shadow-[0_4px_12px_rgba(0,0,0,0.6)] ${
@@ -308,7 +357,7 @@ export function SandboxPitch({
         <button
           type="button"
           onClick={resetToFormation}
-          className="inline-flex min-h-11 w-fit shrink-0 items-center justify-center rounded-md border border-blue-volt px-4 font-display text-xs font-bold uppercase tracking-wide text-blue-volt transition-colors hover:bg-blue-volt/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
+          className="inline-flex min-h-11 w-fit shrink-0 items-center justify-center rounded-md border border-blue-volt px-4 font-display text-xs font-bold uppercase tracking-wide text-defend-bright transition-colors hover:bg-blue-volt/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
         >
           Reset to formation
         </button>

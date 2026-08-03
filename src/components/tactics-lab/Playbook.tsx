@@ -116,28 +116,56 @@ function PlaybookCard({
       {renumbering ? (
         <div className="flex flex-col gap-2">
           <NumberPicker label="New call number" value={entry.number} onChange={onRenumberConfirm} takenNumbers={takenNumbers} />
-          <button type="button" onClick={onRenumberCancel} className="self-start font-mono text-[10px] uppercase tracking-widest text-pitch-touchline hover:text-pitch-marker">
+          <button
+            type="button"
+            onClick={onRenumberCancel}
+            className="-mx-1.5 -my-1 self-start rounded px-1.5 py-1 font-mono text-[10px] uppercase tracking-widest text-pitch-touchline transition-colors hover:text-pitch-marker focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
+          >
             Cancel
           </button>
         </div>
       ) : (
-        <div className="mt-1 flex flex-wrap gap-x-3 gap-y-1.5 font-mono text-[10px] uppercase tracking-widest">
-          <button type="button" onClick={onLoad} className="text-attack hover:text-attack-hi">
+        <div className="-mx-1.5 mt-1 flex flex-wrap gap-x-1 gap-y-1 font-mono text-[10px] uppercase tracking-widest">
+          <button
+            type="button"
+            onClick={onLoad}
+            className="rounded px-1.5 py-1 text-attack transition-colors hover:text-attack-hi focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
+          >
             Load
           </button>
-          <button type="button" onClick={onStartRename} className="text-pitch-touchline hover:text-pitch-marker">
+          <button
+            type="button"
+            onClick={onStartRename}
+            className="rounded px-1.5 py-1 text-pitch-touchline transition-colors hover:text-pitch-marker focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
+          >
             Rename
           </button>
-          <button type="button" onClick={onStartRenumber} className="text-pitch-touchline hover:text-pitch-marker">
+          <button
+            type="button"
+            onClick={onStartRenumber}
+            className="rounded px-1.5 py-1 text-pitch-touchline transition-colors hover:text-pitch-marker focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
+          >
             Renumber
           </button>
-          <button type="button" onClick={onDuplicate} className="text-pitch-touchline hover:text-pitch-marker">
+          <button
+            type="button"
+            onClick={onDuplicate}
+            className="rounded px-1.5 py-1 text-pitch-touchline transition-colors hover:text-pitch-marker focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
+          >
             Duplicate
           </button>
-          <button type="button" onClick={onShare} className="text-pitch-touchline hover:text-pitch-marker">
+          <button
+            type="button"
+            onClick={onShare}
+            className="rounded px-1.5 py-1 text-pitch-touchline transition-colors hover:text-pitch-marker focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
+          >
             {shared ? "Copied!" : "Share"}
           </button>
-          <button type="button" onClick={onDelete} className="text-press hover:text-press">
+          <button
+            type="button"
+            onClick={onDelete}
+            className="rounded px-1.5 py-1 text-press transition-colors hover:text-press-deep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
+          >
             Delete
           </button>
         </div>

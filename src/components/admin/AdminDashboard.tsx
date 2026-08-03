@@ -1,10 +1,20 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import Link from "next/link";
 import { useSync } from "@/lib/sync/SyncProvider";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { fetchAdminStats, fetchAdminUsers, isAdminEmail, type AdminStats, type AdminUser } from "@/lib/admin";
+
+/** The same "not available" card treatment LoginForm/AccountView use, so admin's guard states don't stand out as the one screen that skipped it. */
+function InfoCard({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="flex flex-col gap-3 rounded-lg border border-pitch-touchline/30 bg-pitch-card p-6 text-sm leading-relaxed text-pitch-touchline">
+      {children}
+    </div>
+  );
+}
 
 const PROVIDER_LABELS: Record<string, string> = {
   google: "Google",
@@ -36,9 +46,8 @@ export function AdminDashboard() {
   const [users, setUsers] = useState<AdminUser[] | null>(null);
   const [loadState, setLoadState] = useState<LoadState>("idle");
 
-  useEffect(() => {
+  const load = useCallback(() => {
     if (!user || !isAdminEmail(user.email)) return;
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- kicking off an async fetch in response to `user` becoming available, not deriving state from props during render
     setLoadState("loading");
     const supabase = getSupabaseBrowserClient();
     if (!supabase) {
@@ -56,16 +65,39 @@ export function AdminDashboard() {
     });
   }, [user]);
 
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- kicking off an async fetch in response to `user` becoming available, not deriving state from props during render
+    load();
+  }, [load]);
+
   if (!isSupabaseConfigured || status === "guest" || !user || !isAdminEmail(user.email)) {
-    return <p className="text-sm text-pitch-touchline">Nothing here.</p>;
+    return (
+      <InfoCard>
+        <p>Nothing here.</p>
+        <Link href="/" className="font-display text-xs font-semibold uppercase tracking-widest text-attack">
+          ← Back to the pitch
+        </Link>
+      </InfoCard>
+    );
   }
 
   if (loadState === "loading" || loadState === "idle") {
-    return <p className="text-sm text-pitch-touchline">Loading…</p>;
+    return <InfoCard><p>Loading…</p></InfoCard>;
   }
 
   if (loadState === "error" || !stats) {
-    return <p className="text-sm text-press">Couldn&apos;t load stats — try reloading.</p>;
+    return (
+      <InfoCard>
+        <p className="text-press">Couldn&apos;t load stats.</p>
+        <button
+          type="button"
+          onClick={load}
+          className="w-fit font-display text-xs font-semibold uppercase tracking-widest text-attack hover:text-attack-hi focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
+        >
+          Retry
+        </button>
+      </InfoCard>
+    );
   }
 
   return (

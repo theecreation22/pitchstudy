@@ -87,7 +87,7 @@ export function PlayerCardView({ card, onEdit, compact, coverage }: Props) {
 
       <div className="relative flex flex-col gap-4 sm:flex-row sm:items-start sm:gap-6">
         <div className="flex shrink-0 flex-col items-center gap-2 sm:w-24">
-          <div className="h-28 w-[18.5rem] max-w-full sm:h-32 sm:w-20">
+          <div className="h-28 w-20 sm:h-32">
             <MiniPitchMarker x={marker.x} y={marker.y} />
           </div>
           <span className="font-mono text-xs uppercase tracking-widest text-pitch-marker">{card.positionCode}</span>

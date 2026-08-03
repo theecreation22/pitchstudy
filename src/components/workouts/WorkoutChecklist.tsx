@@ -122,7 +122,7 @@ export function WorkoutChecklist({ plan }: { plan: GeneratedProgram }) {
               role="tab"
               aria-selected={lens === option}
               onClick={() => setLens(option)}
-              className={`relative min-h-9 rounded-full px-4 font-mono text-xs uppercase tracking-widest transition-colors ${
+              className={`relative min-h-9 rounded-full px-4 font-mono text-xs uppercase tracking-widest transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker ${
                 lens === option ? "text-night-950" : "text-pitch-touchline hover:text-pitch-line"
               }`}
             >
@@ -209,7 +209,7 @@ export function WorkoutChecklist({ plan }: { plan: GeneratedProgram }) {
                 <button
                   type="button"
                   onClick={() => setSessionWeek(week)}
-                  className="ml-auto inline-flex min-h-9 items-center rounded-full border border-attack/50 px-4 font-mono text-xs uppercase tracking-widest text-attack hover:border-attack"
+                  className="ml-auto inline-flex min-h-11 items-center rounded-full border border-attack/50 px-4 font-mono text-xs uppercase tracking-widest text-attack hover:border-attack focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
                 >
                   Start Session
                 </button>

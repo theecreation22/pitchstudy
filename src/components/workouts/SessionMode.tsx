@@ -195,11 +195,16 @@ export function SessionMode({ plan, week, onClose }: Props) {
               onClick={() => setSoundEnabled(!soundEnabled)}
               aria-pressed={soundEnabled}
               aria-label="Toggle interval-end sound"
-              className={`font-mono text-xs uppercase tracking-widest ${soundEnabled ? "text-attack" : "text-pitch-touchline"}`}
+              className={`rounded px-1 py-1 font-mono text-xs uppercase tracking-widest focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker ${soundEnabled ? "text-attack" : "text-pitch-touchline"}`}
             >
               {soundEnabled ? "Sound On" : "Sound Off"}
             </button>
-            <button type="button" onClick={onClose} aria-label="Close session" className="text-pitch-touchline hover:text-pitch-line">
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="Close session"
+              className="flex min-h-11 min-w-11 items-center justify-center text-pitch-touchline hover:text-pitch-line focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
+            >
               ✕
             </button>
           </div>
@@ -238,7 +243,7 @@ export function SessionMode({ plan, week, onClose }: Props) {
                     type="button"
                     disabled={isAdvancing}
                     onClick={completeWork}
-                    className="inline-flex min-h-11 items-center rounded-full bg-attack px-6 font-mono text-xs font-semibold uppercase tracking-widest text-night-950 disabled:opacity-50"
+                    className="inline-flex min-h-11 items-center rounded-full bg-attack px-6 font-mono text-xs font-semibold uppercase tracking-widest text-night-950 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker disabled:opacity-50"
                   >
                     Mark Done
                   </button>
@@ -281,7 +286,7 @@ export function SessionMode({ plan, week, onClose }: Props) {
               <button
                 type="button"
                 onClick={onClose}
-                className="mt-2 inline-flex min-h-11 items-center rounded-full bg-attack px-6 font-mono text-xs font-semibold uppercase tracking-widest text-night-950"
+                className="mt-2 inline-flex min-h-11 items-center rounded-full bg-attack px-6 font-mono text-xs font-semibold uppercase tracking-widest text-night-950 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
               >
                 Back to Plan
               </button>
