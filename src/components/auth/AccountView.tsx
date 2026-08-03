@@ -8,7 +8,7 @@ import { usePlayerCard } from "@/lib/playerCard";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 
 const PROVIDER_LABELS: Record<string, string> = {
-  email: "Email link",
+  email: "Email",
   google: "Google",
 };
 
