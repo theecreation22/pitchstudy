@@ -72,3 +72,8 @@ ehthumbs.db
 tmp/
 .tmp/
 CLAUDE.local.md
+
+# Supabase CLI local state — project ref lives here, not a secret itself,
+# but it's machine-local scaffolding, not something to track in git.
+supabase/.temp/
+supabase/.branches/

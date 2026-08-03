@@ -5,6 +5,7 @@ import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useSync } from "@/lib/sync/SyncProvider";
 import { usePlayerCard } from "@/lib/playerCard";
+import { isAdminEmail } from "@/lib/admin";
 
 function initialsFor(label: string): string {
   return label.trim().slice(0, 2).toUpperCase();
@@ -90,6 +91,16 @@ export function AuthChip() {
             >
               Account
             </Link>
+            {isAdminEmail(user.email) && (
+              <Link
+                role="menuitem"
+                href="/admin"
+                onClick={() => setOpen(false)}
+                className="rounded-md px-3 py-2 text-left font-display text-sm font-semibold uppercase tracking-wide text-pitch-touchline transition-colors hover:bg-pitch-touchline/10 hover:text-pitch-marker"
+              >
+                Admin
+              </Link>
+            )}
             <button
               type="button"
               role="menuitem"

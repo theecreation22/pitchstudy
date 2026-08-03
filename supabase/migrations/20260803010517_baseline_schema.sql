@@ -1,12 +1,6 @@
 -- PitchStudy — "Join the Club" accounts schema.
---
--- This file is a full-current-state REFERENCE snapshot, useful for setting
--- up a fresh project by hand (SQL Editor -> New query -> paste -> Run;
--- safe to re-run, every statement is idempotent). It is NOT what actually
--- gets applied going forward — supabase/migrations/*.sql is the source of
--- truth the CLI tracks (`supabase db push`), starting from a baseline
--- migration that mirrors what this file looked like at that point. Future
--- schema changes land as new migration files, not edits to this one.
+-- Run this once in your Supabase project's SQL Editor (or via the Supabase
+-- CLI: `supabase db push`). Safe to re-run — every statement is idempotent.
 --
 -- One row per user, mirroring the localStorage schema exactly (see
 -- src/lib/playerCard.ts and src/lib/progress.ts). Accounts exist for one
