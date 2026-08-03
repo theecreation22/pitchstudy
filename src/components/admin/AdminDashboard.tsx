@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useSync } from "@/lib/sync/SyncProvider";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
-import { fetchAdminStats, isAdminEmail, type AdminStats } from "@/lib/admin";
+import { fetchAdminStats, fetchAdminUsers, isAdminEmail, type AdminStats, type AdminUser } from "@/lib/admin";
 
 const PROVIDER_LABELS: Record<string, string> = {
   google: "Google",
@@ -23,15 +23,17 @@ function StatTile({ label, value, accent }: { label: string; value: string | num
 type LoadState = "idle" | "loading" | "error" | "ready";
 
 /**
- * Aggregate-only site stats — never an individual email, username, or
- * progress record. The actual security boundary is admin_stats() itself
+ * Site stats plus a username/email/signup-date list — nothing beyond
+ * those fields (no progress, no Player Card, no playbook contents). The
+ * actual security boundary is admin_stats()/admin_list_users() themselves
  * (supabase/schema.sql, hard-gated to one email server-side); this
  * component's own email check is just what decides whether to bother
- * calling it, not something the data's safety depends on.
+ * calling them, not something the data's safety depends on.
  */
 export function AdminDashboard() {
   const { status, user } = useSync();
   const [stats, setStats] = useState<AdminStats | null>(null);
+  const [users, setUsers] = useState<AdminUser[] | null>(null);
   const [loadState, setLoadState] = useState<LoadState>("idle");
 
   useEffect(() => {
@@ -43,9 +45,10 @@ export function AdminDashboard() {
       setLoadState("error");
       return;
     }
-    fetchAdminStats(supabase).then((result) => {
-      if (result) {
-        setStats(result);
+    Promise.all([fetchAdminStats(supabase), fetchAdminUsers(supabase)]).then(([statsResult, usersResult]) => {
+      if (statsResult && usersResult) {
+        setStats(statsResult);
+        setUsers(usersResult);
         setLoadState("ready");
       } else {
         setLoadState("error");
@@ -94,6 +97,38 @@ export function AdminDashboard() {
                 <span className="font-display text-sm font-bold text-pitch-line">{count}</span>
               </div>
             ))}
+          </div>
+        )}
+      </div>
+
+      <div className="rounded-lg border border-pitch-touchline/30 bg-pitch-card p-5">
+        <p className="mb-3 font-mono text-[10px] uppercase tracking-widest text-pitch-touchline">
+          Registered users ({users?.length ?? 0})
+        </p>
+        {!users || users.length === 0 ? (
+          <p className="text-sm text-pitch-touchline">No accounts yet.</p>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[420px] border-collapse text-sm">
+              <thead>
+                <tr className="border-b border-pitch-touchline/30 text-left">
+                  <th className="py-2 pr-4 font-mono text-[10px] font-normal uppercase tracking-widest text-pitch-touchline">Username</th>
+                  <th className="py-2 pr-4 font-mono text-[10px] font-normal uppercase tracking-widest text-pitch-touchline">Email</th>
+                  <th className="py-2 font-mono text-[10px] font-normal uppercase tracking-widest text-pitch-touchline">Joined</th>
+                </tr>
+              </thead>
+              <tbody>
+                {users.map((u, i) => (
+                  <tr key={`${u.email}-${i}`} className="border-b border-pitch-touchline/10 last:border-none">
+                    <td className="py-2 pr-4 text-pitch-line">{u.username ?? <span className="text-pitch-touchline/60">—</span>}</td>
+                    <td className="py-2 pr-4 text-pitch-line">{u.email ?? <span className="text-pitch-touchline/60">—</span>}</td>
+                    <td className="py-2 font-mono text-xs text-pitch-touchline">
+                      {new Date(u.created_at).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" })}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         )}
       </div>

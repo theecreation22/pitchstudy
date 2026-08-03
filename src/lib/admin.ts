@@ -34,3 +34,16 @@ export async function fetchAdminStats(supabase: SupabaseClient): Promise<AdminSt
   if (error || !data) return null;
   return data as AdminStats;
 }
+
+export type AdminUser = {
+  username: string | null;
+  email: string | null;
+  created_at: string;
+};
+
+/** Calls admin_list_users() — same not-authorized-reads-as-failure behavior as fetchAdminStats above. */
+export async function fetchAdminUsers(supabase: SupabaseClient): Promise<AdminUser[] | null> {
+  const { data, error } = await supabase.rpc("admin_list_users");
+  if (error || !data) return null;
+  return data as AdminUser[];
+}
