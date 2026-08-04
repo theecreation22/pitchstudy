@@ -47,7 +47,7 @@ export function TacticalRadar({ scores }: Props) {
   const dataFraction = (i: number) => Math.min(100, Math.max(0, AXES[i].value(scores))) / 100;
 
   return (
-    <div className="flex flex-col gap-4 rounded-lg border border-pitch-touchline/30 bg-pitch-card p-4">
+    <div className="flex flex-col gap-4 rounded-sm border border-pitch-touchline/30 bg-pitch-card p-4">
       <div className="flex items-baseline justify-between">
         <p className="font-mono text-xs uppercase tracking-widest text-pitch-marker">Tactical Balance</p>
         <p className="font-display text-3xl font-black text-pitch-line">{Math.round(scores.tacticalBalance)}</p>

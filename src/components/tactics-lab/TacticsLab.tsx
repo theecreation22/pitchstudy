@@ -17,7 +17,7 @@ import {
   type Phase,
 } from "@/lib/formations";
 import { useLocalStorageValue } from "@/lib/useLocalStorageValue";
-import { SegmentedTabs } from "@/components/ui/SegmentedTabs";
+import { DossierTabs } from "@/components/tactics-lab/DossierTabs";
 import { PhaseToggle } from "@/components/pitch/PhaseToggle";
 import { DefensiveStyleToggle } from "@/components/pitch/DefensiveStyleToggle";
 import {
@@ -62,11 +62,11 @@ type ActiveEntry = { id: string; type: "formation" | "play"; number: number; nam
 /** The custom-modal equivalent of window.confirm, matching TrainingGroundHub's EditConfirm styling rather than an unstyled native dialog. */
 function LeaveWithoutSavingConfirm({ number, onConfirm, onCancel }: { number: number; onConfirm: () => void; onCancel: () => void }) {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-night-950/85 p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: "var(--dossier-scrim)" }}>
       <motion.div
         initial={{ opacity: 0, scale: 0.96 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="flex w-full max-w-sm flex-col gap-4 rounded-lg border border-pitch-touchline/30 bg-pitch-card p-6 text-center"
+        className="dossier-paper-shadow flex w-full max-w-sm flex-col gap-4 rounded-sm border-2 border-night-800 bg-pitch-card p-6 text-center"
       >
         <p className="font-display text-xl font-bold uppercase tracking-tight text-pitch-line">Leave without saving?</p>
         <p className="text-sm leading-relaxed text-pitch-touchline">
@@ -76,14 +76,14 @@ function LeaveWithoutSavingConfirm({ number, onConfirm, onCancel }: { number: nu
           <button
             type="button"
             onClick={onCancel}
-            className="inline-flex min-h-11 items-center rounded-full border border-pitch-touchline/50 px-5 font-mono text-xs uppercase tracking-widest text-pitch-touchline hover:border-pitch-touchline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
+            className="dossier-stamp min-h-11 px-5 text-xs text-pitch-touchline hover:text-pitch-line focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
           >
             Stay
           </button>
           <button
             type="button"
             onClick={onConfirm}
-            className="inline-flex min-h-11 items-center rounded-full bg-press px-5 font-mono text-xs font-semibold uppercase tracking-widest text-night-950 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
+            className="dossier-stamp min-h-11 px-5 text-xs text-press focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
           >
             Leave
           </button>
@@ -347,7 +347,7 @@ export function TacticsLab({ coachAvailable }: { coachAvailable: boolean }) {
   if (mode === "scenario") {
     return (
       <div className="flex flex-col gap-6">
-        <SegmentedTabs id="tactics-lab-mode" ariaLabel="Designer mode" options={MODE_OPTIONS} value={mode} onChange={setMode} />
+        <DossierTabs id="tactics-lab-mode" ariaLabel="Designer mode" options={MODE_OPTIONS} value={mode} onChange={setMode} />
         <ScenarioMode />
       </div>
     );
@@ -356,7 +356,7 @@ export function TacticsLab({ coachAvailable }: { coachAvailable: boolean }) {
   if (mode === "playbook") {
     return (
       <div className="flex flex-col gap-6">
-        <SegmentedTabs id="tactics-lab-mode" ariaLabel="Designer mode" options={MODE_OPTIONS} value={mode} onChange={setMode} />
+        <DossierTabs id="tactics-lab-mode" ariaLabel="Designer mode" options={MODE_OPTIONS} value={mode} onChange={setMode} />
         <Playbook onLoadEntry={loadEntryFromPlaybook} />
         {pendingLeaveAction && activeEntry && (
           <LeaveWithoutSavingConfirm
@@ -378,10 +378,10 @@ export function TacticsLab({ coachAvailable }: { coachAvailable: boolean }) {
 
   return (
     <div className="flex flex-col gap-6">
-      <SegmentedTabs id="tactics-lab-mode" ariaLabel="Designer mode" options={MODE_OPTIONS} value={mode} onChange={setMode} />
+      <DossierTabs id="tactics-lab-mode" ariaLabel="Designer mode" options={MODE_OPTIONS} value={mode} onChange={setMode} />
 
       {sharedBoard ? (
-        <div className="flex flex-wrap items-center justify-between gap-3 rounded-md border border-attack/40 bg-attack/10 px-4 py-3">
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded-sm border-2 border-dashed border-attack/60 bg-pitch-card px-4 py-3">
           <p className="text-sm text-pitch-line">
             Viewing a shared design — <span className="font-semibold">{sharedBoard.name}</span>.
           </p>
@@ -399,7 +399,7 @@ export function TacticsLab({ coachAvailable }: { coachAvailable: boolean }) {
               setSharedBoard(null);
               setShowSaveSheet(true);
             }}
-            className="inline-flex min-h-11 items-center rounded-full bg-attack px-5 font-mono text-xs font-semibold uppercase tracking-widest text-night-950 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
+            className="dossier-stamp min-h-11 px-5 text-xs text-attack focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
           >
             Duplicate to my Playbook
           </button>
@@ -419,7 +419,7 @@ export function TacticsLab({ coachAvailable }: { coachAvailable: boolean }) {
           <button
             type="button"
             onClick={() => setShowSaveSheet(true)}
-            className="inline-flex min-h-11 items-center rounded-full border border-attack/60 px-5 font-mono text-xs font-semibold uppercase tracking-widest text-attack transition-colors hover:bg-attack/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
+            className="dossier-stamp min-h-11 px-5 text-xs text-attack focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
           >
             Save to Playbook
           </button>
@@ -433,7 +433,7 @@ export function TacticsLab({ coachAvailable }: { coachAvailable: boolean }) {
             value={design.seededFrom ?? ""}
             onChange={(event) => loadTemplate(event.target.value)}
             disabled={!!sharedBoard}
-            className="min-h-11 rounded-md border border-pitch-touchline/40 bg-pitch-card px-3 font-mono text-xs uppercase tracking-widest text-pitch-line focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker disabled:opacity-50"
+            className="min-h-11 rounded-sm border-2 border-night-800 bg-pitch-card px-3 font-mono text-xs uppercase tracking-widest text-pitch-line focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker disabled:opacity-50"
           >
             {formations.map((formation) => (
               <option key={formation.slug} value={formation.slug}>
@@ -509,8 +509,8 @@ export function TacticsLab({ coachAvailable }: { coachAvailable: boolean }) {
             />
           )}
           <TacticalRadar scores={scores} />
-          <div className="flex flex-col gap-2 rounded-lg border border-pitch-touchline/30 bg-pitch-card p-4">
-            <p className="font-mono text-xs uppercase tracking-widest text-pitch-marker">Coach&apos;s notes</p>
+          <div className="flex flex-col gap-2 rounded-sm border-2 border-night-800 bg-pitch-card p-4">
+            <p className="font-mono text-xs uppercase tracking-widest text-pitch-marker">Analyst&apos;s notes</p>
             <AutoNotes notes={notes} />
           </div>
           <OpponentSim

@@ -275,7 +275,7 @@ export function ScenarioMode() {
         </div>
         <ScenarioPicker scenarios={scenarios} onSelect={selectScenario} />
         {plays.length > 0 && (
-          <div className="flex flex-col gap-2 rounded-lg border border-pitch-touchline/30 bg-pitch-card p-4">
+          <div className="flex flex-col gap-2 rounded-sm border border-pitch-touchline/30 bg-pitch-card p-4">
             <p className="font-mono text-xs uppercase tracking-widest text-pitch-marker">Playbook</p>
             <ul className="flex flex-col gap-1.5">
               {plays.map((play) => (
@@ -328,12 +328,12 @@ export function ScenarioMode() {
       </div>
 
       {isSharedReadOnly && (
-        <div className="flex flex-wrap items-center gap-3 rounded-lg border border-defend/40 bg-defend/10 p-3">
+        <div className="flex flex-wrap items-center gap-3 rounded-sm border border-defend/40 bg-defend/10 p-3">
           <p className="text-xs text-pitch-line/90">Viewing a shared play, read-only.</p>
           <button
             type="button"
             onClick={() => setIsSharedReadOnly(false)}
-            className="min-h-9 rounded-md border border-attack px-3 font-mono text-[10px] uppercase tracking-widest text-attack hover:bg-attack/10"
+            className="min-h-9 rounded-sm border border-attack px-3 font-mono text-[10px] uppercase tracking-widest text-attack hover:bg-attack/10"
           >
             Duplicate to edit
           </button>
@@ -344,7 +344,7 @@ export function ScenarioMode() {
               setResult(null);
               setIsSharedReadOnly(false);
             }}
-            className="min-h-9 rounded-md border border-pitch-touchline/40 px-3 font-mono text-[10px] uppercase tracking-widest text-pitch-touchline hover:text-pitch-line"
+            className="min-h-9 rounded-sm border border-pitch-touchline/40 px-3 font-mono text-[10px] uppercase tracking-widest text-pitch-touchline hover:text-pitch-line"
           >
             Attempt this scenario yourself
           </button>
@@ -384,7 +384,7 @@ export function ScenarioMode() {
                       disabled={disabled}
                       aria-pressed={pendingKind === kind}
                       onClick={() => setPendingKind(kind)}
-                      className={`min-h-9 rounded-md border px-3 font-mono text-xs uppercase tracking-widest transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker ${
+                      className={`min-h-9 rounded-sm border px-3 font-mono text-xs uppercase tracking-widest transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker ${
                         disabled
                           ? "cursor-not-allowed border-pitch-touchline/20 text-pitch-touchline/40"
                           : pendingKind === kind
@@ -444,30 +444,30 @@ export function ScenarioMode() {
           {result && <ScenarioOutcomePanel result={result} />}
 
           {result && (result.outcome === "GOAL" || result.outcome === "CHANCE_CREATED") && !readOnly && (
-            <div className="flex flex-col gap-2 rounded-lg border border-pitch-touchline/30 bg-pitch-card p-4">
+            <div className="flex flex-col gap-2 rounded-sm border border-pitch-touchline/30 bg-pitch-card p-4">
               <p className="font-mono text-xs uppercase tracking-widest text-pitch-marker">Save this play</p>
               <div className="flex gap-2">
                 <input
                   value={saveName}
                   onChange={(event) => setSaveName(event.target.value)}
                   placeholder="Name this play"
-                  className="min-h-9 flex-1 rounded-md border border-pitch-touchline/40 bg-pitch-deep px-2 text-sm text-pitch-line"
+                  className="min-h-9 flex-1 rounded-sm border border-pitch-touchline/40 bg-pitch-deep px-2 text-sm text-pitch-line"
                 />
-                <button type="button" onClick={handleSave} className="min-h-9 shrink-0 rounded-md border border-attack px-3 font-mono text-[10px] uppercase tracking-widest text-attack hover:bg-attack/10">
+                <button type="button" onClick={handleSave} className="min-h-9 shrink-0 rounded-sm border border-attack px-3 font-mono text-[10px] uppercase tracking-widest text-attack hover:bg-attack/10">
                   Save
                 </button>
               </div>
               <button
                 type="button"
                 onClick={handleSaveToPlaybook}
-                className="min-h-9 rounded-md border border-attack/60 px-3 font-mono text-[10px] uppercase tracking-widest text-attack hover:bg-attack/10"
+                className="min-h-9 rounded-sm border border-attack/60 px-3 font-mono text-[10px] uppercase tracking-widest text-attack hover:bg-attack/10"
               >
                 {savedToPlaybook ? "Saved to Playbook!" : "Save this to the Playbook"}
               </button>
               <button
                 type="button"
                 onClick={handleShare}
-                className="min-h-9 rounded-md border border-pitch-touchline/40 px-3 font-mono text-[10px] uppercase tracking-widest text-pitch-touchline hover:text-pitch-line"
+                className="min-h-9 rounded-sm border border-pitch-touchline/40 px-3 font-mono text-[10px] uppercase tracking-widest text-pitch-touchline hover:text-pitch-line"
               >
                 {shareStatus === "copied" ? "Link copied!" : "Copy share link"}
               </button>

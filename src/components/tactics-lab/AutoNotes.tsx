@@ -21,7 +21,7 @@ export function AutoNotes({ notes }: Props) {
       {notes.map((note) => (
         <li
           key={note.text}
-          className={`flex gap-2 rounded-md border px-3 py-2 text-sm leading-relaxed ${SEVERITY_STYLES[note.severity]}`}
+          className={`flex gap-2 rounded-sm border px-3 py-2 text-sm leading-relaxed ${SEVERITY_STYLES[note.severity]}`}
         >
           <span aria-hidden="true" className="font-mono font-bold">
             {SEVERITY_MARK[note.severity]}

@@ -35,13 +35,13 @@ export function ScenarioPicker({ scenarios, onSelect }: Props) {
                   key={scenario.slug}
                   type="button"
                   onClick={() => onSelect(scenario.slug)}
-                  className={`flex flex-col gap-2 rounded-lg border-2 bg-pitch-card p-4 text-left transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker ${FAMILY_ACCENT[family]}`}
+                  className={`flex flex-col gap-2 rounded-sm border-2 bg-pitch-card p-4 text-left transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker ${FAMILY_ACCENT[family]}`}
                 >
-                  <div className="relative aspect-[68/105] w-full max-w-[7rem] rounded-md border border-pitch-touchline/30 bg-pitch-deep">
+                  <div className="relative aspect-[68/105] w-full max-w-[7rem] rounded-sm border border-pitch-touchline/30 bg-pitch-deep">
                     {scenario.stage.players.map((player) => (
                       <div
                         key={player.id}
-                        className="absolute h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-attack"
+                        className="absolute h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-sm bg-attack"
                         style={{ left: `${player.start.x}%`, top: `${player.start.y}%` }}
                       />
                     ))}

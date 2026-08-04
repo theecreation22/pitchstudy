@@ -36,17 +36,17 @@ export function ScenarioTimeline({
   onPlay,
 }: Props) {
   return (
-    <div className="flex flex-col gap-3 rounded-lg border border-pitch-touchline/30 bg-pitch-card p-4">
+    <div className="flex flex-col gap-3 rounded-sm border border-pitch-touchline/30 bg-pitch-card p-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <p className="font-mono text-xs uppercase tracking-widest text-pitch-marker">Move sequence</p>
         <div className="flex items-center gap-2">
-          <button type="button" onClick={onUndo} disabled={steps.length === 0} className="min-h-9 rounded-md border border-pitch-touchline/40 px-3 font-mono text-[10px] uppercase tracking-widest text-pitch-touchline transition-colors hover:border-pitch-touchline hover:text-pitch-line disabled:cursor-not-allowed disabled:opacity-40">
+          <button type="button" onClick={onUndo} disabled={steps.length === 0} className="min-h-9 rounded-sm border border-pitch-touchline/40 px-3 font-mono text-[10px] uppercase tracking-widest text-pitch-touchline transition-colors hover:border-pitch-touchline hover:text-pitch-line disabled:cursor-not-allowed disabled:opacity-40">
             Undo
           </button>
-          <button type="button" onClick={onRedo} disabled={!canRedo} className="min-h-9 rounded-md border border-pitch-touchline/40 px-3 font-mono text-[10px] uppercase tracking-widest text-pitch-touchline transition-colors hover:border-pitch-touchline hover:text-pitch-line disabled:cursor-not-allowed disabled:opacity-40">
+          <button type="button" onClick={onRedo} disabled={!canRedo} className="min-h-9 rounded-sm border border-pitch-touchline/40 px-3 font-mono text-[10px] uppercase tracking-widest text-pitch-touchline transition-colors hover:border-pitch-touchline hover:text-pitch-line disabled:cursor-not-allowed disabled:opacity-40">
             Redo
           </button>
-          <button type="button" onClick={onPlay} disabled={steps.length === 0 || isPlaying} className="min-h-9 rounded-md border border-attack px-4 font-mono text-[10px] uppercase tracking-widest text-attack transition-colors hover:bg-attack/10 disabled:cursor-not-allowed disabled:opacity-40">
+          <button type="button" onClick={onPlay} disabled={steps.length === 0 || isPlaying} className="min-h-9 rounded-sm border border-attack px-4 font-mono text-[10px] uppercase tracking-widest text-attack transition-colors hover:bg-attack/10 disabled:cursor-not-allowed disabled:opacity-40">
             {isPlaying ? "Playing…" : "Play"}
           </button>
         </div>
@@ -62,7 +62,7 @@ export function ScenarioTimeline({
             const isActive = currentIndex === step.startStep;
             return (
               <li key={step.id}>
-                <div className={`flex items-center justify-between gap-2 rounded-md border px-3 py-2 text-sm transition-colors ${isActive ? "border-attack bg-attack/10 text-pitch-line" : "border-pitch-touchline/20 text-pitch-line/80"}`}>
+                <div className={`flex items-center justify-between gap-2 rounded-sm border px-3 py-2 text-sm transition-colors ${isActive ? "border-attack bg-attack/10 text-pitch-line" : "border-pitch-touchline/20 text-pitch-line/80"}`}>
                   <button type="button" onClick={() => onSelectStep(step.startStep)} className="flex-1 text-left">
                     <span className="mr-2 font-mono text-xs text-pitch-touchline">{index + 1}.</span>
                     {describeStep(step, scenario)}

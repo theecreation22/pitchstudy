@@ -69,13 +69,14 @@ export function PlaybookSaveSheet({ entryType, entries, activeEntry, initialName
       animate={{ opacity: 1, y: 0 }}
       exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 12 }}
       transition={{ duration: reduceMotion ? 0 : 0.2 }}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-night-950/70 p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      style={{ backgroundColor: "var(--dossier-scrim)" }}
       onClick={onCancel}
     >
       <form
         onSubmit={handleSubmit}
         onClick={(event) => event.stopPropagation()}
-        className="flex w-full max-w-md flex-col gap-5 rounded-lg border border-pitch-touchline/30 bg-pitch-card p-6"
+        className="dossier-paper-shadow flex w-full max-w-md flex-col gap-5 rounded-sm border-2 border-night-800 bg-pitch-card p-6"
       >
         <div className="flex flex-col gap-1">
           <p className="font-mono text-xs uppercase tracking-widest text-attack">
@@ -95,7 +96,7 @@ export function PlaybookSaveSheet({ entryType, entries, activeEntry, initialName
             value={name}
             onChange={(event) => setName(event.target.value)}
             placeholder="Name it something you'll shout from the touchline"
-            className="rounded-md border border-pitch-touchline/40 bg-pitch-slate px-4 py-2 text-sm text-pitch-line placeholder:text-pitch-touchline/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
+            className="rounded-sm border border-pitch-touchline/40 bg-pitch-slate px-4 py-2 text-sm text-pitch-line placeholder:text-pitch-touchline/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
           />
         </label>
 
@@ -110,7 +111,7 @@ export function PlaybookSaveSheet({ entryType, entries, activeEntry, initialName
         />
 
         {confirmingSwap && (
-          <p className="rounded-md border border-attack/40 bg-attack/10 px-3 py-2 text-sm text-pitch-line">
+          <p className="rounded-sm border border-attack/40 bg-attack/10 px-3 py-2 text-sm text-pitch-line">
             No. {number} is &ldquo;{confirmingSwap.name}&rdquo; — swap numbers?
           </p>
         )}
@@ -132,13 +133,13 @@ export function PlaybookSaveSheet({ entryType, entries, activeEntry, initialName
           <button
             type="button"
             onClick={onCancel}
-            className="inline-flex min-h-11 items-center rounded-full px-5 font-mono text-xs uppercase tracking-widest text-pitch-touchline hover:text-pitch-marker focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
+            className="inline-flex min-h-11 items-center rounded-sm px-5 font-mono text-xs uppercase tracking-widest text-pitch-touchline hover:text-pitch-marker focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
           >
             Cancel
           </button>
           <button
             type="submit"
-            className="inline-flex min-h-11 items-center rounded-full bg-attack px-6 font-mono text-xs font-semibold uppercase tracking-widest text-night-950 shadow-[0_0_32px_-8px_var(--attack)] transition-transform hover:scale-[1.02] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
+            className="dossier-stamp min-h-11 px-6 text-xs text-attack focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
           >
             {confirmingSwap ? "Confirm swap & save" : "Save"}
           </button>

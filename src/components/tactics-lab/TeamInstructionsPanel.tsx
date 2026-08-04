@@ -38,7 +38,7 @@ const LINE_OPTIONS = [
  */
 export function TeamInstructionsPanel({ instructions, onChange }: Props) {
   return (
-    <div className="tactics-panel flex flex-col gap-5 rounded-lg border border-pitch-touchline/30 p-4">
+    <div className="tactics-panel flex flex-col gap-5 rounded-sm border border-pitch-touchline/30 p-4">
       <p className="font-mono text-xs uppercase tracking-widest text-pitch-marker">Team instructions</p>
 
       <div className="flex flex-col gap-2.5 border-b border-pitch-touchline/15 pb-5">

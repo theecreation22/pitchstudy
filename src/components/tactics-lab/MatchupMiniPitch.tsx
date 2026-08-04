@@ -23,7 +23,7 @@ export function MatchupMiniPitch({ zones }: { zones: MatchupZone[] }) {
   return (
     <div
       aria-hidden="true"
-      className="relative flex h-20 overflow-hidden rounded-md border border-pitch-touchline/25 bg-pitch-deep"
+      className="relative flex h-20 overflow-hidden rounded-sm border border-pitch-touchline/25 bg-pitch-deep"
     >
       <svg viewBox="0 0 3 2" preserveAspectRatio="none" className="pointer-events-none absolute inset-0 h-full w-full opacity-40">
         <line x1="1" y1="0" x2="1" y2="2" stroke="var(--pitch-line)" strokeWidth="0.012" />
