@@ -10,12 +10,14 @@ type Props = {
   href: string;
   children: ReactNode;
   className?: string;
+  /** Which gradient-border class lights up the edge on hover — defaults to the sitewide kickoff (press/attack/defend) gradient; callers in a different visual world (e.g. the homepage's futuristic hero cards) can swap it. */
+  glowClassName?: string;
 };
 
 const MAX_TILT_DEGREES = 4;
 
-/** A card that tilts toward the cursor and lights up its edge with the kickoff gradient on hover. */
-export function TiltCard({ href, children, className = "" }: Props) {
+/** A card that tilts toward the cursor and lights up its edge with a gradient on hover. */
+export function TiltCard({ href, children, className = "", glowClassName = "border-grad-kickoff" }: Props) {
   const reduceMotion = useReducedMotion();
   const ref = useRef<HTMLAnchorElement>(null);
   const rotateX = useMotionValue(0);
@@ -58,7 +60,7 @@ export function TiltCard({ href, children, className = "" }: Props) {
         <motion.span
           aria-hidden="true"
           style={{ opacity: glow }}
-          className="border-grad-kickoff pointer-events-none absolute inset-0 rounded-[inherit]"
+          className={`${glowClassName} pointer-events-none absolute inset-0 rounded-[inherit]`}
         />
       )}
       {children}

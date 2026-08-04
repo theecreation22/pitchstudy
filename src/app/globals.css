@@ -28,6 +28,10 @@
   --attack-warm-lean: color-mix(in srgb, var(--attack) 75%, var(--press) 25%);
 
   --grad-kickoff: linear-gradient(120deg, var(--press) 0%, var(--attack) 55%, var(--defend) 100%);
+  /* Grey/white/cyan — the futuristic homepage direction's own hover-border
+     gradient, parallel to --grad-kickoff but never mixed into the sitewide
+     Floodlit Pitch amber/blue/red meaning-system. */
+  --grad-futurist: linear-gradient(120deg, var(--touchline-muted) 0%, #ffffff 50%, #67e8f9 100%);
   --grad-attack: linear-gradient(120deg, var(--press-deep) 0%, var(--press) 45%, var(--attack) 100%);
   --grad-control: linear-gradient(
     120deg,
@@ -92,6 +96,74 @@ body {
   font-family: var(--font-sans);
 }
 
+/* "Scouting Dossier" — Tactics Lab's redesigned world. A manager's private
+   paper trail: manila/carbon-paper ground, typewritten ink, rubber-stamp
+   verdicts. Scoped to `.dossier` (Tactics Lab only) rather than :root, since
+   the rest of the site stays on the Floodlit Pitch identity until it's
+   rolled out further. Every ink value below is WCAG-verified against both
+   paper tones (>=4.5:1) — see the redesign's contract comment for the axes
+   this direction was weighed against before being built. */
+.dossier {
+  --night-950: #ece2c8; /* page/pitch background — manila folder paper */
+  --night-900: #f4ecd8; /* card surface — lighter index-card paper */
+  --night-800: #d9c9a3; /* raised surface / border — aged paper edge */
+  --chalk: #2b2620; /* primary text — sepia typewriter ink (11.6:1+) */
+  --touchline-muted: #6b6048; /* secondary text — faded ink (4.8:1+) */
+
+  --attack: #7a4a15; /* "Priority Stamp" ink — was amber/attack (5.8:1+) */
+  --attack-hi: #b8860b; /* decorative/hover accent only — fails text contrast by design, never used for text */
+  --attack-deep: #5a3610;
+  --defend: #3a5a78; /* "Carbon-Copy Blue" ink — was defend (5.6:1+) */
+  --defend-bright: #2c4459; /* higher-contrast text variant (7.6:1+) */
+  --defend-deep: #1c2c3b;
+  --press: #a33b2e; /* "Risk Stamp" ink — was press (5.0:1+) */
+  --press-deep: #7a2a20;
+
+  --pitch-slate: var(--night-950);
+  --pitch-deep: var(--night-950);
+  --pitch-card: var(--night-900);
+  --pitch-line: var(--chalk);
+  --pitch-touchline: var(--touchline-muted);
+  --pitch-marker: var(--attack);
+
+  /* @theme inline bakes var(--font-big-shoulders) directly into the compiled
+     .font-display utility (Tailwind's "inline" mode resolves theme refs at
+     build time), so overriding --font-display here has no effect — the
+     variable actually inlined into that utility must be overridden instead. */
+  --font-big-shoulders: var(--font-plex-mono);
+  /* Modal/dialog backdrops need a genuinely dark scrim — every neutral token
+     above is a light paper tone in this world, so bg-night-950/70 (etc.)
+     would render as a barely-visible light wash instead of a dimming overlay. */
+  --dossier-scrim: rgba(43, 38, 32, 0.5);
+
+  background-color: var(--night-950);
+  color: var(--chalk);
+}
+
+/* A rubber-stamp impression, not a filled button: colored ink text and a
+   matching border on the paper ground, optionally tilted a degree or two
+   like a real stamp never lands perfectly square. Replaces the Floodlit
+   world's solid-fill-plus-glow CTA, which doesn't translate to paper. */
+.dossier-stamp {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid currentColor;
+  border-radius: 0.125rem;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  background: transparent;
+}
+
+/* The one deliberate elevation device in this world: a sheet lifted slightly
+   off the desk, not a colored glow. Real offset + real blur (see craft
+   floor: a zero-offset colored halo is decoration, not depth). */
+.dossier-paper-shadow {
+  box-shadow: 2px 3px 0 rgba(43, 38, 32, 0.12), 4px 6px 12px -4px rgba(43, 38, 32, 0.18);
+}
+
 .text-grad-kickoff {
   background: var(--grad-kickoff);
   background-clip: text;
@@ -124,6 +196,25 @@ body {
   border-radius: inherit;
   padding: 2px;
   background: var(--grad-kickoff);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.border-grad-futurist {
+  position: relative;
+}
+
+.border-grad-futurist::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 2px;
+  background: var(--grad-futurist);
   -webkit-mask:
     linear-gradient(#000 0 0) content-box,
     linear-gradient(#000 0 0);
@@ -224,6 +315,190 @@ body {
   box-shadow:
     inset 0 1px 0 0 rgba(255, 255, 255, 0.05),
     inset 0 -10px 18px -12px rgba(0, 0, 0, 0.4);
+}
+
+/* Live-steer/generate experiment ("futuristic and swaggy," referencing a
+   glossy glass UI, a dark sci-fi poster, and a blue glitch-art music
+   poster) on the homepage hero only — not yet folded into either DESIGN.md
+   world. Superseded an earlier amber/red glitch-heading pass (dropped,
+   this replaced it) once a second round on the whole hero section landed
+   on "white grey cyan" instead; a third round ("make it a bit more alive")
+   replaced the static accent-bar glow with an animated shimmer sweep and
+   a breathing glow on the CTA. */
+.hero-glass-panel {
+  background-color: rgba(255, 255, 255, 0.04);
+}
+
+@keyframes hero-shimmer-sweep {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes hero-breathe {
+  0%, 100% { box-shadow: 0 0 20px -4px rgba(103, 232, 249, 0.7); }
+  50% { box-shadow: 0 0 32px -2px rgba(103, 232, 249, 1); }
+}
+
+.hero-shimmer-bar {
+  background: linear-gradient(90deg, transparent, rgba(103, 232, 249, 0.9), transparent);
+  background-size: 200% 100%;
+  animation: hero-shimmer-sweep 4s linear infinite;
+}
+
+.hero-breathe-glow {
+  animation: hero-breathe 4s ease-in-out infinite;
+}
+
+/* HUD-style corner brackets framing the hero, evoking the sci-fi poster's
+   technical coordinate-frame marks. Pure border art, no extra markup. */
+.hud-frame {
+  border: 1px solid rgba(56, 189, 248, 0.25);
+}
+
+.hud-frame::before,
+.hud-frame::after {
+  content: "";
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  border: 2px solid rgba(56, 189, 248, 0.8);
+  pointer-events: none;
+}
+
+.hud-frame::before {
+  top: -1px;
+  left: -1px;
+  border-right: none;
+  border-bottom: none;
+}
+
+.hud-frame::after {
+  bottom: -1px;
+  right: -1px;
+  border-left: none;
+  border-top: none;
+}
+
+/* Homepage feature-card live miniatures ("make each card a live miniature
+   of its feature") — every animation here is hover/focus-triggered only,
+   never auto-looping, per the brief's own "alive, not a casino" constraint.
+   .group on the parent card <a> (already in place) drives all of these. */
+.explore-mini-dot {
+  cx: var(--dot-x-from);
+  cy: var(--dot-y-from);
+  transition: cx 1.1s ease, cy 1.1s ease;
+}
+
+.group:hover .explore-mini-dot,
+.group:focus-within .explore-mini-dot {
+  cx: var(--dot-x-to);
+  cy: var(--dot-y-to);
+}
+
+.managers-mini-dot {
+  cx: var(--dot-x-from);
+  cy: var(--dot-y-from);
+  transition: cx 1.1s ease, cy 1.1s ease;
+}
+
+.group:hover .managers-mini-dot,
+.group:focus-within .managers-mini-dot {
+  cx: var(--dot-x-to);
+  cy: var(--dot-y-to);
+}
+
+.managers-mini-label-a {
+  transition: opacity 0.4s ease;
+}
+
+.managers-mini-label-b {
+  opacity: 0.4;
+  transition: opacity 0.4s ease;
+}
+
+.group:hover .managers-mini-label-a,
+.group:focus-within .managers-mini-label-a {
+  opacity: 0.4;
+}
+
+.group:hover .managers-mini-label-b,
+.group:focus-within .managers-mini-label-b {
+  opacity: 1;
+}
+
+.academy-mini-dot {
+  transition: background-color 0.3s ease calc(var(--dot-index, 0) * 0.05s);
+}
+
+/* Homepage feature grid, finalized (live-mode session, "change the
+   gradient color on top of the cards from red yellow blue to grey white
+   cyan" + "make it feel even more alive and animated"). All six accent
+   bars now share one grey/white/cyan gradient instead of each card's old
+   distinct amber/blue/red. Per-card motion stays hover/focus-triggered
+   only, matching the "alive, not a casino" rule for .explore-mini-dot
+   etc. above; only the section-level backdrop loops, same precedent as
+   the hero's existing .hero-breathe-glow. */
+.bento-accent-bar {
+  position: relative;
+  overflow: hidden;
+  background-image: var(--grad-futurist);
+}
+
+.bento-accent-bar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.85), transparent);
+  background-size: 60% 100%;
+  background-repeat: no-repeat;
+  background-position: -60% 0%;
+}
+
+@keyframes bento-accent-shimmer {
+  0% { background-position: -60% 0%; }
+  100% { background-position: 160% 0%; }
+}
+
+.group:hover .bento-accent-bar::after,
+.group:focus-within .bento-accent-bar::after {
+  animation: bento-accent-shimmer 0.9s ease;
+}
+
+@keyframes bento-card-rise {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.bento-card-rise {
+  animation: bento-card-rise 0.6s ease both;
+}
+
+.bento-grid > a:nth-child(1) .bento-card-rise { animation-delay: 0ms; }
+.bento-grid > a:nth-child(2) .bento-card-rise { animation-delay: 70ms; }
+.bento-grid > a:nth-child(3) .bento-card-rise { animation-delay: 140ms; }
+.bento-grid > a:nth-child(4) .bento-card-rise { animation-delay: 210ms; }
+.bento-grid > a:nth-child(5) .bento-card-rise { animation-delay: 280ms; }
+.bento-grid > a:nth-child(6) .bento-card-rise { animation-delay: 350ms; }
+
+.bento-grid {
+  position: relative;
+}
+
+@keyframes bento-backdrop-breathe {
+  0%, 100% { opacity: 0.05; }
+  50% { opacity: 0.11; }
+}
+
+.bento-grid::before {
+  content: "";
+  position: absolute;
+  inset: -2rem;
+  z-index: -1;
+  background: var(--grad-futurist);
+  opacity: 0.05;
+  filter: blur(60px);
+  pointer-events: none;
+  animation: bento-backdrop-breathe 7s ease-in-out infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
