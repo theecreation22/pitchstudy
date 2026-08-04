@@ -78,10 +78,10 @@ export function TacticsSlider({ axis, label, leftLabel, rightLabel, value, onCha
       </div>
 
       <div className="relative flex h-6 items-center">
-        <div className="absolute inset-x-0 h-2 rounded-sm bg-pitch-touchline/15" aria-hidden="true" />
+        <div className="absolute inset-x-0 h-2 rounded-full bg-pitch-touchline/15" aria-hidden="true" />
 
         <div
-          className="absolute left-0 rounded-sm transition-[height] duration-150"
+          className="absolute left-0 rounded-full transition-[height] duration-150"
           style={{ width: `${value}%`, height: fill.height, background: fill.background }}
           aria-hidden="true"
         />
@@ -93,7 +93,7 @@ export function TacticsSlider({ axis, label, leftLabel, rightLabel, value, onCha
         </div>
 
         <motion.div
-          className="pointer-events-none absolute h-3.5 w-3.5 -translate-x-1/2 rounded-sm border-2 border-attack bg-night-950"
+          className="pointer-events-none absolute h-3.5 w-3.5 -translate-x-1/2 rounded-full border-2 border-attack bg-night-950"
           style={{ left: `${value}%` }}
           animate={
             reduceMotion

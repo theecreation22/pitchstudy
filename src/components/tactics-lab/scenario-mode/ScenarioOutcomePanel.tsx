@@ -26,7 +26,7 @@ export function ScenarioOutcomePanel({ result }: { result: ScenarioResult }) {
       initial={{ opacity: 0, y: reduceMotion ? 0 : 8 }}
       animate={{ opacity: 1, y: 0, scale: succeeded && !reduceMotion ? [1, 1.03, 1] : 1 }}
       transition={{ duration: reduceMotion ? 0 : 0.4 }}
-      className={`flex flex-col gap-2 rounded-sm border-2 p-4 ${OUTCOME_STYLE[result.outcome]}`}
+      className={`flex flex-col gap-2 rounded-lg border-2 p-4 ${OUTCOME_STYLE[result.outcome]}`}
     >
       <div className="flex flex-wrap items-center justify-between gap-2">
         <p className="font-display text-2xl font-black uppercase tracking-tight">{OUTCOME_LABEL[result.outcome]}</p>

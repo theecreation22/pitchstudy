@@ -9,7 +9,7 @@ type Props = { shapeName: string };
 export function ShapeReadout({ shapeName }: Props) {
   const reduceMotion = useReducedMotion();
   return (
-    <div className="flex items-center gap-3 rounded-sm border border-pitch-touchline/30 bg-pitch-card px-4 py-3">
+    <div className="flex items-center gap-3 rounded-lg border border-pitch-touchline/30 bg-pitch-card px-4 py-3">
       <p className="font-mono text-[10px] uppercase tracking-widest text-pitch-touchline">Recognized shape</p>
       <motion.p
         key={shapeName}

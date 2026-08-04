@@ -82,14 +82,14 @@ function PlaybookCard({
   return (
     <motion.div
       style={{ rotate: `${rotate}deg` }}
-      className="dossier-paper-shadow flex flex-col gap-3 rounded-sm border-2 border-night-800 bg-pitch-card p-4"
+      className="flex flex-col gap-3 rounded-lg border border-pitch-touchline/30 bg-pitch-card p-4 shadow-[0_8px_20px_-12px_rgba(0,0,0,0.6)]"
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-3">
           <span className="font-display text-3xl font-black leading-none text-attack">{entry.number}</span>
           <PlaybookThumbnail entry={entry} />
         </div>
-        <span className="rounded-sm border border-pitch-touchline/40 px-2 py-0.5 font-mono text-[10px] uppercase tracking-widest text-pitch-touchline">
+        <span className="rounded-full border border-pitch-touchline/40 px-2 py-0.5 font-mono text-[10px] uppercase tracking-widest text-pitch-touchline">
           {entry.type}
         </span>
       </div>
@@ -102,14 +102,14 @@ function PlaybookCard({
           onChange={(event) => onRenameChange(event.target.value)}
           onKeyDown={(event) => event.key === "Enter" && onRenameConfirm()}
           onBlur={onRenameConfirm}
-          className="rounded-sm border border-pitch-touchline/40 bg-pitch-slate px-2 py-1 text-sm text-pitch-line focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
+          className="rounded-md border border-pitch-touchline/40 bg-pitch-slate px-2 py-1 text-sm text-pitch-line focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
         />
       ) : (
         <p className="font-display text-lg font-bold uppercase leading-tight tracking-tight text-pitch-line">{entry.name}</p>
       )}
 
       <div className="flex flex-wrap gap-2 font-mono text-[10px] uppercase tracking-widest text-pitch-touchline">
-        {tag && <span className="rounded-sm border border-pitch-touchline/40 px-2 py-0.5">{tag}</span>}
+        {tag && <span className="rounded-full border border-pitch-touchline/40 px-2 py-0.5">{tag}</span>}
         <span>{formatDate(entry.updatedAt)}</span>
       </div>
 
@@ -226,7 +226,7 @@ export function Playbook({ onLoadEntry }: Props) {
   // it back, right when it matters most.
   if (playbook.entries.length === 0 && !undo) {
     return (
-      <div className="flex flex-col items-center gap-3 rounded-sm border border-pitch-touchline/30 bg-pitch-card p-10 text-center">
+      <div className="flex flex-col items-center gap-3 rounded-lg border border-pitch-touchline/30 bg-pitch-card p-10 text-center">
         <p className="font-display text-xl font-bold uppercase tracking-tight text-pitch-line">Empty book.</p>
         <p className="max-w-sm text-sm leading-relaxed text-pitch-touchline">
           Design something in the Lab and give it a number.
@@ -238,14 +238,14 @@ export function Playbook({ onLoadEntry }: Props) {
   return (
     <div className="flex flex-col gap-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex gap-1 rounded-sm border border-pitch-touchline/30 bg-pitch-card p-1">
+        <div className="flex gap-1 rounded-full border border-pitch-touchline/30 bg-pitch-card p-1">
           {FILTERS.map((filter) => (
             <button
               key={filter.value}
               type="button"
               onClick={() => setFilterType(filter.value)}
               aria-pressed={filterType === filter.value}
-              className={`rounded-sm px-3 py-1 font-mono text-[11px] uppercase tracking-widest transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker ${
+              className={`rounded-full px-3 py-1 font-mono text-[11px] uppercase tracking-widest transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker ${
                 filterType === filter.value ? "bg-attack text-night-950" : "text-pitch-touchline hover:text-pitch-line"
               }`}
             >
@@ -258,7 +258,7 @@ export function Playbook({ onLoadEntry }: Props) {
           <select
             value={sortBy}
             onChange={(event) => setSortBy(event.target.value as SortBy)}
-            className="min-h-9 rounded-sm border border-pitch-touchline/40 bg-pitch-card px-2 font-mono text-xs uppercase tracking-widest text-pitch-line focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
+            className="min-h-9 rounded-md border border-pitch-touchline/40 bg-pitch-card px-2 font-mono text-xs uppercase tracking-widest text-pitch-line focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
           >
             <option value="number">Number</option>
             <option value="recent">Recent</option>
@@ -273,7 +273,7 @@ export function Playbook({ onLoadEntry }: Props) {
             initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
-            className="flex items-center justify-between rounded-sm border border-attack/40 bg-attack/10 px-4 py-2 text-sm text-pitch-line"
+            className="flex items-center justify-between rounded-md border border-attack/40 bg-attack/10 px-4 py-2 text-sm text-pitch-line"
           >
             <span>
               Deleted &ldquo;{undo.name}&rdquo;.

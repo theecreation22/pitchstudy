@@ -142,12 +142,12 @@ export function CoachVerdictPanel({ design, coachAvailable }: Props) {
 
   if (!coachAvailable) {
     return (
-      <div className="tactics-panel flex flex-col gap-2 rounded-sm border border-pitch-touchline/20 p-4">
+      <div className="tactics-panel flex flex-col gap-2 rounded-lg border border-pitch-touchline/20 p-4">
         <p className="font-mono text-xs uppercase tracking-widest text-pitch-touchline">Coaching staff</p>
         <button
           type="button"
           disabled
-          className="inline-flex min-h-11 cursor-not-allowed items-center gap-2 rounded-sm border border-pitch-touchline/30 px-5 text-left font-mono text-xs uppercase tracking-widest text-pitch-touchline"
+          className="inline-flex min-h-11 cursor-not-allowed items-center gap-2 rounded-full border border-pitch-touchline/30 px-5 text-left font-mono text-xs uppercase tracking-widest text-pitch-touchline"
         >
           <ClipboardIcon className="h-4 w-4 shrink-0" />
           {UNAVAILABLE_MESSAGE}
@@ -159,7 +159,7 @@ export function CoachVerdictPanel({ design, coachAvailable }: Props) {
   const isBusy = status === "loading" || status === "streaming";
 
   return (
-    <div className="tactics-panel flex flex-col gap-3 rounded-sm border border-pitch-touchline/30 p-4">
+    <div className="tactics-panel flex flex-col gap-3 rounded-lg border border-pitch-touchline/30 p-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <p className="font-mono text-xs uppercase tracking-widest text-pitch-marker">Coaching staff</p>
         <motion.button
@@ -168,7 +168,7 @@ export function CoachVerdictPanel({ design, coachAvailable }: Props) {
           disabled={isBusy}
           whileHover={reduceMotion || isBusy ? undefined : { y: -1 }}
           whileTap={reduceMotion || isBusy ? undefined : { scale: 0.97 }}
-          className="dossier-stamp min-h-11 gap-2 px-5 text-xs text-attack transition-colors hover:bg-attack/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker disabled:cursor-not-allowed disabled:opacity-60"
+          className="inline-flex min-h-11 items-center gap-2 rounded-full bg-attack px-5 font-mono text-xs font-bold uppercase tracking-widest text-night-950 shadow-[0_2px_10px_-2px_color-mix(in_srgb,var(--attack)_55%,transparent)] transition-colors hover:bg-attack-hi focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker disabled:cursor-not-allowed disabled:opacity-60 disabled:shadow-none"
         >
           <motion.span
             className="flex"
@@ -206,7 +206,7 @@ export function CoachVerdictPanel({ design, coachAvailable }: Props) {
               <p className="font-mono text-[10px] uppercase tracking-widest text-attack">Strengths</p>
               <ul className="flex flex-col gap-1.5">
                 {verdict.strengths.map((strength) => (
-                  <li key={strength} className="rounded-sm border border-attack/30 bg-attack/10 px-3 py-2 text-sm text-pitch-line/90">
+                  <li key={strength} className="rounded-md border border-attack/30 bg-attack/10 px-3 py-2 text-sm text-pitch-line/90">
                     {strength}
                   </li>
                 ))}
@@ -219,7 +219,7 @@ export function CoachVerdictPanel({ design, coachAvailable }: Props) {
               <p className="font-mono text-[10px] uppercase tracking-widest text-press">Vulnerabilities</p>
               <ul className="flex flex-col gap-1.5">
                 {verdict.vulnerabilities.map((vulnerability) => (
-                  <li key={vulnerability} className="rounded-sm border border-press/30 bg-press/10 px-3 py-2 text-sm text-pitch-line/90">
+                  <li key={vulnerability} className="rounded-md border border-press/30 bg-press/10 px-3 py-2 text-sm text-pitch-line/90">
                     {vulnerability}
                   </li>
                 ))}
@@ -230,14 +230,14 @@ export function CoachVerdictPanel({ design, coachAvailable }: Props) {
           {verdict.opponentPlan && (
             <div className="flex flex-col gap-1.5">
               <p className="font-mono text-[10px] uppercase tracking-widest text-defend-bright">How a smart opponent attacks this</p>
-              <p className="rounded-sm border border-defend/30 bg-defend/10 px-3 py-2 text-sm text-pitch-line/90">{verdict.opponentPlan}</p>
+              <p className="rounded-md border border-defend/30 bg-defend/10 px-3 py-2 text-sm text-pitch-line/90">{verdict.opponentPlan}</p>
             </div>
           )}
 
           {verdict.oneTweak && (
             <div className="flex flex-col gap-1.5">
               <p className="font-mono text-[10px] uppercase tracking-widest text-pitch-marker">The one tweak</p>
-              <p className="rounded-sm border border-pitch-marker/40 bg-pitch-marker/10 px-3 py-2 text-sm font-semibold text-pitch-line">
+              <p className="rounded-md border border-pitch-marker/40 bg-pitch-marker/10 px-3 py-2 text-sm font-semibold text-pitch-line">
                 {verdict.oneTweak}
               </p>
             </div>

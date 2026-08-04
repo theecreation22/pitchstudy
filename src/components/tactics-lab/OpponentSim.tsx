@@ -67,14 +67,14 @@ export function OpponentSim({ myPlayers, opponentSlug, opponentPlayers, onOppone
   const verdict = opponentPlayers ? buildVerdict(zones) : null;
 
   return (
-    <div className="tactics-panel flex flex-col gap-3 rounded-sm border border-pitch-touchline/30 p-4">
+    <div className="tactics-panel flex flex-col gap-3 rounded-lg border border-pitch-touchline/30 p-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <p className="font-mono text-xs uppercase tracking-widest text-pitch-marker">Opponent Sim</p>
         <div className="relative">
           <select
             value={opponentSlug ?? ""}
             onChange={(event) => onOpponentSlugChange(event.target.value === "" ? undefined : event.target.value)}
-            className="min-h-9 appearance-none rounded-sm border border-pitch-touchline/40 bg-pitch-card py-1 pl-3 pr-8 font-mono text-xs uppercase tracking-widest text-pitch-line transition-colors hover:border-attack/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
+            className="min-h-9 appearance-none rounded-full border border-pitch-touchline/40 bg-pitch-card py-1 pl-3 pr-8 font-mono text-xs uppercase tracking-widest text-pitch-line transition-colors hover:border-attack/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
           >
             <option value="">None</option>
             <optgroup label="Presets">

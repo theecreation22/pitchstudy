@@ -175,8 +175,23 @@ export function PlayDesigner({
       <div
         ref={containerRef}
         onClick={readOnly ? undefined : handlePitchClick}
-        className="dossier-paper-shadow relative w-full touch-none select-none aspect-[68/105] rounded-sm border-2 border-night-800 bg-pitch-deep p-2 sm:p-3"
+        className="relative w-full touch-none select-none aspect-[68/105] rounded-xl border-2 border-pitch-touchline/25 bg-pitch-deep p-2 shadow-[0_12px_32px_-12px_rgba(0,0,0,0.7)] sm:p-3"
       >
+        <motion.div
+          aria-hidden="true"
+          className="pointer-events-none absolute -inset-8 -z-10 rounded-[2.5rem] blur-2xl"
+          style={{ background: "radial-gradient(circle, var(--attack) 0%, transparent 70%)" }}
+          animate={{ opacity: phase === "in-possession" ? 0.28 : 0 }}
+          transition={{ duration: reduceMotion ? 0 : 0.6 }}
+        />
+        <motion.div
+          aria-hidden="true"
+          className="pointer-events-none absolute -inset-8 -z-10 rounded-[2.5rem] blur-2xl"
+          style={{ background: "radial-gradient(circle, var(--defend) 0%, transparent 70%)" }}
+          animate={{ opacity: phase === "out-of-possession" ? 0.28 : 0 }}
+          transition={{ duration: reduceMotion ? 0 : 0.6 }}
+        />
+
         <PitchMarkings />
 
         {opponentPlayers && opponentPlayers.length > 0 && (
@@ -189,7 +204,7 @@ export function PlayDesigner({
                 style={{ left: `${opponent.x}%`, top: `${opponent.y}%` }}
                 transition={reduceMotion ? { duration: 0 } : { type: "spring", stiffness: 120, damping: 16, mass: 0.7 }}
               >
-                <div className="flex h-11 w-11 items-center justify-center rounded-sm border-2 border-dashed border-defend/70 bg-pitch-card font-mono text-xs font-semibold text-defend-bright">
+                <div className="flex h-11 w-11 items-center justify-center rounded-full border-2 border-dashed border-defend/70 bg-defend/10 font-mono text-xs font-semibold text-defend-bright">
                   {opponent.code}
                 </div>
               </motion.div>
@@ -264,7 +279,7 @@ export function PlayDesigner({
               className={`absolute z-10 -translate-x-1/2 -translate-y-1/2 ${readOnly ? "" : "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"}`}
             >
               <div
-                className={`dossier-paper-shadow flex h-11 w-11 items-center justify-center rounded-sm border-2 bg-pitch-card font-mono text-xs font-semibold text-pitch-line transition-colors ${
+                className={`flex h-11 w-11 items-center justify-center rounded-full border-2 bg-pitch-card font-mono text-xs font-semibold text-pitch-line shadow-[0_4px_12px_rgba(0,0,0,0.6)] transition-colors ${
                   isSelected
                     ? "border-press ring-2 ring-press ring-offset-2 ring-offset-pitch-deep"
                     : hasOpponent
@@ -288,7 +303,7 @@ export function PlayDesigner({
             scale: justShot && displayIndex === frames.length - 1 ? [1, 1.8, 1] : 1,
           }}
           transition={{ duration: reduceMotion ? 0 : STEP_ANIMATION_SECONDS, ease: "easeInOut" }}
-          className="pointer-events-none absolute z-20 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-pitch-line shadow-[1px_1px_0_rgba(43,38,32,0.3)]"
+          className="pointer-events-none absolute z-20 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-pitch-line shadow-[0_0_6px_rgba(237,234,216,0.8)]"
         />
       </div>
 
@@ -311,7 +326,7 @@ export function PlayDesigner({
                       disabled={disabled}
                       aria-pressed={pendingKind === kind}
                       onClick={() => setPendingKind(kind)}
-                      className={`min-h-9 rounded-sm border px-3 font-mono text-xs uppercase tracking-widest transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker ${
+                      className={`min-h-9 rounded-md border px-3 font-mono text-xs uppercase tracking-widest transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker ${
                         disabled
                           ? "cursor-not-allowed border-pitch-touchline/20 text-pitch-touchline/40"
                           : pendingKind === kind

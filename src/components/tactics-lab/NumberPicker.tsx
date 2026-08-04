@@ -75,7 +75,7 @@ export function NumberPicker({ value, onChange, takenNumbers, label }: Props) {
                 aria-checked={isSelected}
                 tabIndex={isSelected ? 0 : -1}
                 onClick={() => onChange(n)}
-                className={`flex h-9 w-9 items-center justify-center rounded-sm font-mono text-[11px] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker ${
+                className={`flex h-9 w-9 items-center justify-center rounded-md font-mono text-[11px] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker ${
                   isSelected
                     ? "bg-attack font-bold text-night-950"
                     : isTaken

@@ -19,7 +19,7 @@ type Props = {
 /** Docked role picker for the currently-selected player — a dropdown-equivalent menu grouped by line, using the site's own position dataset for names so hybrid roles (Inverted Full-Back, False 9, etc.) read the same way they do everywhere else on PitchStudy. */
 export function PlayerRoleMenu({ currentRole, onSelectRole, onClose }: Props) {
   return (
-    <div className="flex flex-col gap-3 rounded-sm border border-pitch-touchline/30 bg-pitch-card p-4">
+    <div className="flex flex-col gap-3 rounded-lg border border-pitch-touchline/30 bg-pitch-card p-4">
       <div className="flex items-center justify-between">
         <p className="font-mono text-xs uppercase tracking-widest text-pitch-marker">
           Assign role — currently {positions[currentRole].name}
@@ -45,7 +45,7 @@ export function PlayerRoleMenu({ currentRole, onSelectRole, onClose }: Props) {
                     type="button"
                     aria-pressed={isActive}
                     onClick={() => onSelectRole(code)}
-                    className={`min-h-9 rounded-sm border px-2.5 font-mono text-xs uppercase tracking-wide transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker ${
+                    className={`min-h-9 rounded-md border px-2.5 font-mono text-xs uppercase tracking-wide transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker ${
                       isActive
                         ? "border-attack bg-attack/15 text-attack"
                         : "border-pitch-touchline/40 text-pitch-touchline hover:border-pitch-touchline hover:text-pitch-line"
