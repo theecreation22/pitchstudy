@@ -14,7 +14,7 @@ export default function ExplorePage() {
   return (
     <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-10 px-4 py-10 sm:px-8 sm:py-16">
       <header className="flex flex-col gap-3">
-        <h1 className="font-display text-4xl font-black uppercase leading-none tracking-tight text-pitch-line sm:text-6xl">
+        <h1 className="font-telemetry-display text-4xl font-black leading-none tracking-tight text-pitch-line sm:text-6xl">
           Every shape tells you something.
         </h1>
         <p className="max-w-2xl text-base leading-relaxed text-pitch-touchline sm:text-lg">

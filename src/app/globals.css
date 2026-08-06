@@ -1,26 +1,31 @@
 @import "tailwindcss";
 
 :root {
-  /* "Floodlit Rebuild" — v3 palette. Violet-tinted charcoal base (never pure
-     black) with three colors that each carry a fixed meaning: amber for
-     attack/progress/XP, blue for defense/structure, red for pressing/danger/
-     mistakes, used sparingly like a red card. v1/v2 names (pitch-*,
-     gold-flood, blue-volt, red-flare, night-*) are kept as aliases so
-     existing utility classes across the app don't need to change. */
-  --night-950: #15121b; /* page background */
-  --night-900: #1e1a29; /* card/panel surface */
-  --night-800: #282235; /* raised surfaces, borders */
-  --chalk: #e9edf2; /* primary text, chalk-line pitch art */
-  --touchline-muted: #8b93a3; /* neutral secondary text — deliberately not one of the 3 brand hues */
+  /* "Pitch Telemetry" — sitewide palette, replacing Floodlit Rebuild (dark
+     stadium), Scouting Dossier (warm paper), and Broadcast Overlay (dark
+     glass) as the one visual world across the whole site. A bright
+     overcast-sky surface with instrument chrome (corner marks, tick
+     rulers, spec-sheet readouts — see the .telemetry-* utilities below).
+     Same variable NAMES as before on purpose, so every existing
+     bg-pitch-card / text-pitch-line / bg-attack utility across the app
+     picks up the new world with no class-name churn. */
+  --night-950: #0f1f2e; /* page background — deep night-blue sky */
+  --night-900: #16283a; /* card/panel surface */
+  --night-800: #22384a; /* raised surfaces, borders */
+  --chalk: #eef4fa; /* primary text — pale sky, was the old light-theme background */
+  --touchline-muted: #7f9db4; /* secondary text — muted slate-blue */
 
-  --attack: #ffb627;
-  --attack-hi: #ffd166;
-  --attack-deep: #d98d0f;
-  --defend: #3d7bff;
-  --defend-bright: #6c9cff; /* AA-safe on --night-900 for blue *text*; --defend itself is for borders/fills/icons (3:1 is enough there) */
-  --defend-deep: #1b3a8f;
-  --press: #ff3b3b;
-  --press-deep: #c11212;
+  /* Back to bright, dark-bg-safe fills now that the ground is dark blue
+     again — attack stays cyan (was brown-gold amber) rather than reverting
+     to the original Floodlit Pitch hue. */
+  --attack: #67e8f9;
+  --attack-hi: #a5f3fc;
+  --attack-deep: #0e7490;
+  --defend: #5b8fd6;
+  --defend-bright: #8fb8f0;
+  --defend-deep: #1f3a52;
+  --press: #ff5c52;
+  --press-deep: #c23f36;
 
   /* A subtle warm lean for choices that tilt aggressive without being a full
      risk takeover (that's reserved for --press alone, e.g. High Press) —
@@ -28,10 +33,11 @@
   --attack-warm-lean: color-mix(in srgb, var(--attack) 75%, var(--press) 25%);
 
   --grad-kickoff: linear-gradient(120deg, var(--press) 0%, var(--attack) 55%, var(--defend) 100%);
-  /* Grey/white/cyan — the futuristic homepage direction's own hover-border
-     gradient, parallel to --grad-kickoff but never mixed into the sitewide
-     Floodlit Pitch amber/blue/red meaning-system. */
-  --grad-futurist: linear-gradient(120deg, var(--touchline-muted) 0%, #ffffff 50%, #67e8f9 100%);
+  /* Telemetry ink gradient — the shared grey/white/blue accent that runs
+     across every card's top edge and every gradient-bordered hover glow
+     sitewide (was --grad-futurist's cyan/white take for the old Broadcast
+     Overlay homepage only; same token, now the sitewide accent). */
+  --grad-futurist: linear-gradient(120deg, var(--telemetry-parchment) 0%, #ffffff 50%, var(--telemetry-olive) 100%);
   --grad-attack: linear-gradient(120deg, var(--press-deep) 0%, var(--press) 45%, var(--attack) 100%);
   --grad-control: linear-gradient(
     120deg,
@@ -54,6 +60,9 @@
   --pitch-line: var(--chalk);
   --pitch-touchline: var(--touchline-muted);
   --pitch-marker: var(--attack);
+
+  --telemetry-parchment: #c7e0f4; /* chrome-line color — needs to read light again against the dark pitch surface */
+  --telemetry-olive: #67e8f9;
 }
 
 @theme inline {
@@ -88,80 +97,33 @@
   --font-display: var(--font-big-shoulders);
   --font-sans: var(--font-public-sans);
   --font-mono: var(--font-plex-mono);
+
+  --color-telemetry-parchment: var(--telemetry-parchment);
+  --color-telemetry-olive: var(--telemetry-olive);
 }
 
 body {
+  /* Even night ground, falling slightly deeper toward the bottom — the
+     top-lit zenith glow was tried and removed by request. */
   background-color: var(--pitch-slate);
+  background-image: linear-gradient(180deg, var(--pitch-slate) 0%, #0a1622 100%);
+  background-attachment: fixed;
   color: var(--pitch-line);
   font-family: var(--font-sans);
 }
 
-/* "Scouting Dossier" — Tactics Lab's redesigned world. A manager's private
-   paper trail: manila/carbon-paper ground, typewritten ink, rubber-stamp
-   verdicts. Scoped to `.dossier` (Tactics Lab only) rather than :root, since
-   the rest of the site stays on the Floodlit Pitch identity until it's
-   rolled out further. Every ink value below is WCAG-verified against both
-   paper tones (>=4.5:1) — see the redesign's contract comment for the axes
-   this direction was weighed against before being built. */
-.dossier {
-  --night-950: #ece2c8; /* page/pitch background — manila folder paper */
-  --night-900: #f4ecd8; /* card surface — lighter index-card paper */
-  --night-800: #d9c9a3; /* raised surface / border — aged paper edge */
-  --chalk: #2b2620; /* primary text — sepia typewriter ink (11.6:1+) */
-  --touchline-muted: #6b6048; /* secondary text — faded ink (4.8:1+) */
+/* Retired: Scouting Dossier's .dossier/.dossier-stamp/.dossier-paper-shadow
+   world (paper ground, rubber-stamp buttons) — no component references it
+   any more now that Pitch Telemetry is the sitewide identity. Its one
+   still-useful idea, a light-surface-appropriate lift shadow, continues
+   below as .telemetry-panel-lift. */
 
-  --attack: #7a4a15; /* "Priority Stamp" ink — was amber/attack (5.8:1+) */
-  --attack-hi: #b8860b; /* decorative/hover accent only — fails text contrast by design, never used for text */
-  --attack-deep: #5a3610;
-  --defend: #3a5a78; /* "Carbon-Copy Blue" ink — was defend (5.6:1+) */
-  --defend-bright: #2c4459; /* higher-contrast text variant (7.6:1+) */
-  --defend-deep: #1c2c3b;
-  --press: #a33b2e; /* "Risk Stamp" ink — was press (5.0:1+) */
-  --press-deep: #7a2a20;
-
-  --pitch-slate: var(--night-950);
-  --pitch-deep: var(--night-950);
-  --pitch-card: var(--night-900);
-  --pitch-line: var(--chalk);
-  --pitch-touchline: var(--touchline-muted);
-  --pitch-marker: var(--attack);
-
-  /* @theme inline bakes var(--font-big-shoulders) directly into the compiled
-     .font-display utility (Tailwind's "inline" mode resolves theme refs at
-     build time), so overriding --font-display here has no effect — the
-     variable actually inlined into that utility must be overridden instead. */
-  --font-big-shoulders: var(--font-plex-mono);
-  /* Modal/dialog backdrops need a genuinely dark scrim — every neutral token
-     above is a light paper tone in this world, so bg-night-950/70 (etc.)
-     would render as a barely-visible light wash instead of a dimming overlay. */
-  --dossier-scrim: rgba(43, 38, 32, 0.5);
-
-  background-color: var(--night-950);
-  color: var(--chalk);
-}
-
-/* A rubber-stamp impression, not a filled button: colored ink text and a
-   matching border on the paper ground, optionally tilted a degree or two
-   like a real stamp never lands perfectly square. Replaces the Floodlit
-   world's solid-fill-plus-glow CTA, which doesn't translate to paper. */
-.dossier-stamp {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid currentColor;
-  border-radius: 0.125rem;
-  font-family: var(--font-mono);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  background: transparent;
-}
-
-/* The one deliberate elevation device in this world: a sheet lifted slightly
-   off the desk, not a colored glow. Real offset + real blur (see craft
-   floor: a zero-offset colored halo is decoration, not depth). */
-.dossier-paper-shadow {
-  box-shadow: 2px 3px 0 rgba(43, 38, 32, 0.12), 4px 6px 12px -4px rgba(43, 38, 32, 0.18);
+/* Elevation for an attack-filled control: back to a colored glow now that
+   the page is dark again and --attack is a bright cyan fill — the offset
+   shadow this held during the light-background phase read as invisible
+   (dark-on-dark) once the surfaces flipped back. */
+.telemetry-panel-lift {
+  box-shadow: 0 0 28px -8px var(--attack);
 }
 
 .text-grad-kickoff {
@@ -317,66 +279,48 @@ body {
     inset 0 -10px 18px -12px rgba(0, 0, 0, 0.4);
 }
 
-/* Live-steer/generate experiment ("futuristic and swaggy," referencing a
-   glossy glass UI, a dark sci-fi poster, and a blue glitch-art music
-   poster) on the homepage hero only — not yet folded into either DESIGN.md
-   world. Superseded an earlier amber/red glitch-heading pass (dropped,
-   this replaced it) once a second round on the whole hero section landed
-   on "white grey cyan" instead; a third round ("make it a bit more alive")
-   replaced the static accent-bar glow with an animated shimmer sweep and
-   a breathing glow on the CTA. */
-.hero-glass-panel {
-  background-color: rgba(255, 255, 255, 0.04);
+/* Glass panel (the glossy-blue-UI reference): translucent card over the
+   drifting atmosphere behind it, luminous hairline edge, faint inner top
+   highlight. Used on the biggest reading surfaces — hero, Explore's notes
+   sidebar, the mobile nav sheet — where the sky showing through is what
+   makes the page feel lit instead of painted. */
+.telemetry-glass {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0.02) 100%);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-color: color-mix(in srgb, var(--telemetry-parchment) 18%, transparent);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.1),
+    0 12px 32px -16px rgba(0, 0, 0, 0.6);
 }
 
+/* Slow ambient drift for the atmosphere's light fields — deliberately
+   glacial (90s+) so the page reads as weather, not animation. Frozen by
+   the global prefers-reduced-motion override below. */
+@keyframes cloud-drift-a {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(6vw, 4vh) scale(1.12); }
+}
+
+@keyframes cloud-drift-b {
+  0%, 100% { transform: translate(0, 0) scale(1.08); }
+  50% { transform: translate(-5vw, -3vh) scale(1); }
+}
+
+/* Retired with the old Broadcast Overlay homepage: .hero-glass-panel (dark
+   translucent glass) and .hud-frame (cyan sci-fi corner brackets) — the
+   hero now uses the sitewide telemetry-frame/telemetry-corner chrome
+   instead, and a bright card doesn't need a glass material. The shimmer
+   sweep survives, recolored to the ink-safe telemetry gradient. */
 @keyframes hero-shimmer-sweep {
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
 }
 
-@keyframes hero-breathe {
-  0%, 100% { box-shadow: 0 0 20px -4px rgba(103, 232, 249, 0.7); }
-  50% { box-shadow: 0 0 32px -2px rgba(103, 232, 249, 1); }
-}
-
 .hero-shimmer-bar {
-  background: linear-gradient(90deg, transparent, rgba(103, 232, 249, 0.9), transparent);
+  background: linear-gradient(90deg, transparent, var(--telemetry-olive), transparent);
   background-size: 200% 100%;
   animation: hero-shimmer-sweep 4s linear infinite;
-}
-
-.hero-breathe-glow {
-  animation: hero-breathe 4s ease-in-out infinite;
-}
-
-/* HUD-style corner brackets framing the hero, evoking the sci-fi poster's
-   technical coordinate-frame marks. Pure border art, no extra markup. */
-.hud-frame {
-  border: 1px solid rgba(56, 189, 248, 0.25);
-}
-
-.hud-frame::before,
-.hud-frame::after {
-  content: "";
-  position: absolute;
-  width: 28px;
-  height: 28px;
-  border: 2px solid rgba(56, 189, 248, 0.8);
-  pointer-events: none;
-}
-
-.hud-frame::before {
-  top: -1px;
-  left: -1px;
-  border-right: none;
-  border-bottom: none;
-}
-
-.hud-frame::after {
-  bottom: -1px;
-  right: -1px;
-  border-left: none;
-  border-top: none;
 }
 
 /* Homepage feature-card live miniatures ("make each card a live miniature
@@ -499,6 +443,72 @@ body {
   filter: blur(60px);
   pointer-events: none;
   animation: bento-backdrop-breathe 7s ease-in-out infinite;
+}
+
+/* "Pitch Telemetry" proof-of-concept (Explore's pitch only, for now) — a
+   fourth candidate world built from two new references (a vintage
+   technical/product-schematic poster and a moody sci-fi/fashion HUD ad):
+   telemetry chrome (corner marks, tick rulers, spec-sheet readouts) laid
+   over the existing Floodlit Pitch night surface, so the stadium-at-night
+   DNA carries over even though the chrome is new. Not yet in DESIGN.md —
+   this is a single-surface preview, same status Tactics Lab and the
+   homepage each had before their own worlds were proven out. */
+.font-telemetry-display {
+  font-family: var(--font-frank-ruhl);
+}
+
+.telemetry-frame {
+  position: relative;
+}
+
+.telemetry-corner {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border: 1px solid color-mix(in srgb, var(--telemetry-parchment) 55%, transparent);
+  pointer-events: none;
+}
+
+.telemetry-corner-tl { top: 8px; left: 8px; border-right: none; border-bottom: none; }
+.telemetry-corner-tr { top: 8px; right: 8px; border-left: none; border-bottom: none; }
+.telemetry-corner-bl { bottom: 8px; left: 8px; border-right: none; border-top: none; }
+.telemetry-corner-br { bottom: 8px; right: 8px; border-left: none; border-top: none; }
+
+.telemetry-ruler {
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  left: -22px;
+  width: 1px;
+  background: color-mix(in srgb, var(--telemetry-parchment) 30%, transparent);
+}
+
+.telemetry-ruler::before,
+.telemetry-ruler::after {
+  content: "";
+  position: absolute;
+  left: -3px;
+  width: 7px;
+  height: 1px;
+  background: color-mix(in srgb, var(--telemetry-parchment) 55%, transparent);
+}
+
+.telemetry-ruler::before { top: 0; }
+.telemetry-ruler::after { top: 50%; }
+
+.telemetry-readout {
+  border: 1px solid color-mix(in srgb, var(--telemetry-parchment) 20%, transparent);
+  background: color-mix(in srgb, var(--telemetry-olive) 8%, transparent);
+}
+
+/* Pitch Telemetry is now the sitewide default (see :root above), so this
+   no longer needs its own scope — every page gets it for free. */
+.telemetry-cloud {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(207, 227, 243, 0.05) 55%, rgba(143, 186, 224, 0.04) 100%);
+  pointer-events: none;
 }
 
 @media (prefers-reduced-motion: reduce) {

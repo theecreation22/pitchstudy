@@ -81,18 +81,26 @@ export function SiteNav() {
   }, [open]);
 
   return (
-    <nav className="relative mx-auto w-full max-w-5xl px-4 pt-6 sm:px-8 sm:pt-8">
-      <div className="flex items-center justify-between">
-        <Link href="/" className={LINK_CLASS}>
+    <nav className="telemetry-glass sticky top-0 z-40 w-full border-b">
+      <div className="relative mx-auto flex w-full max-w-5xl items-center justify-between px-4 py-4 sm:px-8">
+        <Link href="/" className={`${LINK_CLASS} text-pitch-line`}>
           PitchStudy
         </Link>
 
         <div className="hidden items-center gap-x-6 sm:flex">
-          {NAV_LINKS.map((link) => (
-            <Link key={link.href} href={link.href} className={LINK_CLASS}>
-              {link.label}
-            </Link>
-          ))}
+          {NAV_LINKS.map((link) => {
+            const isActive = pathname === link.href || pathname.startsWith(`${link.href}/`);
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                aria-current={isActive ? "page" : undefined}
+                className={isActive ? `${LINK_CLASS} text-pitch-marker` : LINK_CLASS}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
           <AuthChip />
         </div>
 
@@ -124,7 +132,7 @@ export function SiteNav() {
             <motion.div
               key="panel"
               id={menuId}
-              className="absolute left-4 right-4 top-full z-50 mt-2 flex flex-col gap-1 rounded-lg border border-pitch-touchline/30 bg-pitch-card p-2 shadow-xl sm:hidden"
+              className="telemetry-glass absolute left-4 right-4 top-full z-50 mt-2 flex flex-col gap-1 rounded-lg border p-2 sm:hidden"
               initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -8 }}
               animate={{ opacity: 1, y: 0 }}
               exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -8 }}

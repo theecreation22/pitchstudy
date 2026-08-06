@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Big_Shoulders, Public_Sans, IBM_Plex_Mono } from "next/font/google";
+import { Big_Shoulders, Public_Sans, IBM_Plex_Mono, Frank_Ruhl_Libre } from "next/font/google";
 import { FloodlitAtmosphere } from "@/components/effects/FloodlitAtmosphere";
 import { SiteNav } from "@/components/nav/SiteNav";
 import { SyncProvider } from "@/lib/sync/SyncProvider";
@@ -23,6 +23,12 @@ const plexMono = IBM_Plex_Mono({
   subsets: ["latin"],
 });
 
+const frankRuhlLibre = Frank_Ruhl_Libre({
+  variable: "--font-frank-ruhl",
+  weight: ["500", "700", "900"],
+  subsets: ["latin"],
+});
+
 export const metadata: Metadata = {
   title: "PitchStudy: Learn football tactics, interactively",
   description:
@@ -37,7 +43,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${bigShoulders.variable} ${publicSans.variable} ${plexMono.variable} h-full`}
+      className={`${bigShoulders.variable} ${publicSans.variable} ${plexMono.variable} ${frankRuhlLibre.variable} h-full`}
     >
       <body className="min-h-full flex flex-col bg-pitch-slate text-pitch-line antialiased">
         <SyncProvider>

@@ -1,50 +1,53 @@
 import { PitchMarkings } from "@/components/pitch/PitchMarkings";
 
 /**
- * Shared atmospheric layer mounted once in the root layout: two fixed
- * corner floodlight cones, an oversized rotated "ghost" pitch texture
- * (reuses the real chalk-line art, not a separate diagram), and a faint
- * animated grain so dark areas never read as flat, empty voids.
+ * Shared atmospheric layer mounted once in the root layout. Pitch Telemetry's
+ * night sky: an overhead light beam (the page's single light source, matching
+ * body's top-lit gradient), two slow-drifting colored light fields — cyan and
+ * kit-blue clouds moving on ~90s loops — and the rotated ghost-pitch
+ * technical underlay with film grain on top.
  *
- * Static (server-renderable) by design — no motion values, so it costs
- * nothing extra under prefers-reduced-motion. The grain's flicker is a
- * plain CSS animation and is already frozen by the global
- * prefers-reduced-motion override in globals.css.
+ * Server-renderable by design: all motion is plain CSS keyframes
+ * (cloud-drift-a/b in globals.css), so the global prefers-reduced-motion
+ * override freezes everything with no JS involved.
  */
 export function FloodlitAtmosphere() {
   return (
     <div aria-hidden="true" className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+      {/* Drifting light fields — the "weather." */}
       <div
-        className="absolute -top-1/4 -left-1/4 h-[70vmax] w-[70vmax] rounded-full blur-3xl"
+        className="absolute -left-1/4 top-[10%] h-[60vmax] w-[60vmax] rounded-full blur-3xl"
         style={{
-          background: "radial-gradient(circle, var(--attack) 0%, transparent 70%)",
-          opacity: 0.06,
+          background: "radial-gradient(circle closest-side, var(--attack) 0%, transparent 100%)",
+          opacity: 0.07,
+          animation: "cloud-drift-a 96s ease-in-out infinite",
         }}
       />
       <div
-        className="absolute -top-1/4 -right-1/4 h-[70vmax] w-[70vmax] rounded-full blur-3xl"
+        className="absolute -right-1/4 top-[35%] h-[55vmax] w-[55vmax] rounded-full blur-3xl"
         style={{
-          background: "radial-gradient(circle, var(--attack) 0%, transparent 70%)",
-          opacity: 0.06,
+          background: "radial-gradient(circle closest-side, var(--defend) 0%, transparent 100%)",
+          opacity: 0.08,
+          animation: "cloud-drift-b 118s ease-in-out infinite",
         }}
       />
 
       <div
-        className="absolute top-1/2 left-1/2 h-[150vh] w-[150vh] opacity-[0.09]"
+        className="absolute top-1/2 left-1/2 h-[150vh] w-[150vh] opacity-[0.035]"
         style={{ transform: "translate(-50%, -50%) rotate(-9deg)" }}
       >
         <PitchMarkings />
       </div>
 
       <div
-        className="absolute top-[15%] -left-1/3 h-[85vh] w-[85vh] opacity-[0.05]"
+        className="absolute top-[15%] -left-1/3 h-[85vh] w-[85vh] opacity-[0.025]"
         style={{ transform: "rotate(14deg)" }}
       >
         <PitchMarkings />
       </div>
 
       <div
-        className="absolute -right-1/4 bottom-[5%] h-[70vh] w-[70vh] opacity-[0.045]"
+        className="absolute -right-1/4 bottom-[5%] h-[70vh] w-[70vh] opacity-[0.02]"
         style={{ transform: "rotate(-22deg)" }}
       >
         <PitchMarkings />

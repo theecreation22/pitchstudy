@@ -35,7 +35,7 @@ const TONE_FILL: Record<PillTone, string> = {
   warm: "bg-attack-warm-lean",
 };
 
-/** Dark text reads better than light chalk text on all three brand hues at this luminance (verified: night-950 clears 4.8:1+ on attack/defend/press, chalk clears at most 3.3:1) — so the active label color never needs to change per tone, only the fill does. */
+/** attack/defend/press are ink-safe dark fills under Pitch Telemetry, so a light label (night-950, now the pale sky tone) reads best on all three — the active label color never needs to change per tone, only the fill does. */
 const ACTIVE_TEXT = "text-night-950";
 
 /**

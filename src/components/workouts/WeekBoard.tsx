@@ -143,7 +143,7 @@ export function WeekBoard({ program, isDrillComplete, onStartSession }: Props) {
         <button
           type="button"
           onClick={() => onStartSession(viewedWeek.weekNumber)}
-          className="inline-flex min-h-14 w-fit items-center gap-2 self-center rounded-full bg-attack px-10 font-mono text-sm font-bold uppercase tracking-widest text-night-950 shadow-[0_0_32px_-8px_var(--attack)] transition-transform hover:scale-[1.02] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-pitch-marker"
+          className="inline-flex min-h-14 w-fit items-center gap-2 self-center rounded-full bg-attack px-10 font-mono text-sm font-bold uppercase tracking-widest text-night-950 telemetry-panel-lift transition-transform hover:scale-[1.02] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-pitch-marker"
         >
           Start This Week&apos;s Session →
         </button>

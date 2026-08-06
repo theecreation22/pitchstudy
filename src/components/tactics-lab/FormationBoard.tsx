@@ -86,20 +86,20 @@ export function FormationBoard({
   return (
     <div
       ref={containerRef}
-      className="relative w-full touch-none select-none aspect-[68/105] rounded-xl border-2 border-pitch-touchline/25 bg-pitch-deep p-2 shadow-[0_12px_32px_-12px_rgba(0,0,0,0.7)] sm:p-3"
+      className="telemetry-panel-lift relative w-full touch-none select-none aspect-[68/105] rounded-xl border-2 border-pitch-touchline/25 bg-pitch-deep p-2 sm:p-3"
     >
       <motion.div
         aria-hidden="true"
         className="pointer-events-none absolute -inset-8 -z-10 rounded-[2.5rem] blur-2xl"
-        style={{ background: "radial-gradient(circle, var(--attack) 0%, transparent 70%)" }}
-        animate={{ opacity: phase === "in-possession" ? 0.28 : 0 }}
+        style={{ background: "radial-gradient(circle closest-side, var(--attack) 0%, transparent 100%)" }}
+        animate={{ opacity: phase === "in-possession" ? 0.08 : 0 }}
         transition={{ duration: reduceMotion ? 0 : 0.6 }}
       />
       <motion.div
         aria-hidden="true"
         className="pointer-events-none absolute -inset-8 -z-10 rounded-[2.5rem] blur-2xl"
-        style={{ background: "radial-gradient(circle, var(--defend) 0%, transparent 70%)" }}
-        animate={{ opacity: phase === "out-of-possession" ? 0.28 : 0 }}
+        style={{ background: "radial-gradient(circle closest-side, var(--defend) 0%, transparent 100%)" }}
+        animate={{ opacity: phase === "out-of-possession" ? 0.08 : 0 }}
         transition={{ duration: reduceMotion ? 0 : 0.6 }}
       />
 
@@ -131,7 +131,7 @@ export function FormationBoard({
         const hasOpponent = Boolean(opponentPlayers && opponentPlayers.length > 0);
         const circle = (
           <div
-            className={`flex h-11 w-11 items-center justify-center rounded-full border-2 bg-pitch-card font-mono text-xs font-semibold text-pitch-line shadow-[0_4px_12px_rgba(0,0,0,0.6)] transition-colors ${
+            className={`flex h-11 w-11 items-center justify-center rounded-full border-2 bg-pitch-card font-mono text-xs font-semibold text-pitch-line shadow-[0_2px_8px_rgba(34,56,74,0.35)] transition-colors ${
               isSelected
                 ? "border-press ring-2 ring-press ring-offset-2 ring-offset-pitch-deep"
                 : hasOpponent

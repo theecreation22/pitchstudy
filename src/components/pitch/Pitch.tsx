@@ -38,6 +38,13 @@ export function Pitch({
     [players, ghostPlayers],
   );
 
+  // Real telemetry, not decoration: the shape's actual horizontal/vertical
+  // spread from the players' own coordinates, for the readout strip below.
+  const xs = players.map((player) => player.x);
+  const ys = players.map((player) => player.y);
+  const shapeWidth = Math.round(Math.max(...xs) - Math.min(...xs));
+  const shapeDepth = Math.round(Math.max(...ys) - Math.min(...ys));
+
   const hasOpponent = Boolean(opponentPlayers && opponentPlayers.length > 0);
   const selectedPlayer = hasOpponent
     ? players.find((player) => player.id === selectedPlayerId)
@@ -49,27 +56,33 @@ export function Pitch({
   const matchupIds = useMemo(() => new Set(matchups.map((opponent) => opponent.id)), [matchups]);
 
   return (
-    <div className="relative rounded-xl border-2 border-pitch-touchline/25 bg-pitch-deep p-2 shadow-[0_12px_32px_-12px_rgba(0,0,0,0.7)] sm:p-3">
+    <div className="telemetry-frame telemetry-panel-lift ml-6 rounded-xl border-2 border-pitch-touchline/25 bg-pitch-deep p-2 sm:p-3">
+      <span aria-hidden="true" className="telemetry-corner telemetry-corner-tl" />
+      <span aria-hidden="true" className="telemetry-corner telemetry-corner-tr" />
+      <span aria-hidden="true" className="telemetry-corner telemetry-corner-bl" />
+      <span aria-hidden="true" className="telemetry-corner telemetry-corner-br" />
+      <span aria-hidden="true" className="telemetry-ruler" />
       {phase && (
         <>
           <motion.div
             aria-hidden="true"
             className="pointer-events-none absolute -inset-8 -z-10 rounded-[2.5rem] blur-2xl"
-            style={{ background: "radial-gradient(circle, var(--attack) 0%, transparent 70%)" }}
-            animate={{ opacity: phase === "in-possession" ? 0.28 : 0 }}
+            style={{ background: "radial-gradient(circle closest-side, var(--attack) 0%, transparent 100%)" }}
+            animate={{ opacity: phase === "in-possession" ? 0.08 : 0 }}
             transition={{ duration: reduceMotion ? 0 : 0.6 }}
           />
           <motion.div
             aria-hidden="true"
             className="pointer-events-none absolute -inset-8 -z-10 rounded-[2.5rem] blur-2xl"
-            style={{ background: "radial-gradient(circle, var(--defend) 0%, transparent 70%)" }}
-            animate={{ opacity: phase === "out-of-possession" ? 0.28 : 0 }}
+            style={{ background: "radial-gradient(circle closest-side, var(--defend) 0%, transparent 100%)" }}
+            animate={{ opacity: phase === "out-of-possession" ? 0.08 : 0 }}
             transition={{ duration: reduceMotion ? 0 : 0.6 }}
           />
         </>
       )}
       <div className="relative w-full aspect-[68/105] select-none">
         <PitchMarkings />
+        <span aria-hidden="true" className="telemetry-cloud" />
 
         {ghostPairs.length > 0 && (
           <svg
@@ -172,7 +185,7 @@ export function Pitch({
             // consistent amber regardless of phase — otherwise "out of
             // possession" tints them blue, the same hue as every opponent
             // dot, and the two teams become hard to tell apart at a glance.
-            const markerClassName = `group flex h-11 w-11 items-center justify-center rounded-full border-2 bg-pitch-card font-mono text-xs font-semibold text-pitch-line shadow-[0_2px_6px_rgba(0,0,0,0.5)] transition-colors hover:border-pitch-marker hover:bg-pitch-marker hover:text-pitch-deep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker ${
+            const markerClassName = `group flex h-11 w-11 items-center justify-center rounded-full border-2 bg-pitch-card font-mono text-xs font-semibold text-pitch-line shadow-[0_2px_6px_rgba(34,56,74,0.3)] transition-colors hover:border-pitch-marker hover:bg-pitch-marker hover:text-pitch-deep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker ${
               isSelected
                 ? "border-press ring-2 ring-press ring-offset-2 ring-offset-pitch-deep"
                 : hasOpponent
@@ -232,6 +245,14 @@ export function Pitch({
             );
           })}
         </ul>
+      </div>
+
+      <div className="telemetry-readout mt-2 flex items-center justify-between gap-2 rounded-md px-2.5 py-1.5 font-mono text-[10px] uppercase tracking-widest text-telemetry-parchment/80">
+        <span>{formationName}</span>
+        <span>
+          W {shapeWidth.toString().padStart(2, "0")} · D {shapeDepth.toString().padStart(2, "0")}
+        </span>
+        <span>{players.length}/11</span>
       </div>
     </div>
   );

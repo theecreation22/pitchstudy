@@ -73,7 +73,7 @@ export function ScenarioStage({
     <div
       ref={containerRef}
       onClick={handlePitchClick}
-      className="relative w-full touch-none select-none aspect-[68/105] rounded-xl border-2 border-pitch-touchline/25 bg-pitch-deep p-2 shadow-[0_12px_32px_-12px_rgba(0,0,0,0.7)] sm:p-3"
+      className="telemetry-panel-lift relative w-full touch-none select-none aspect-[68/105] rounded-xl border-2 border-pitch-touchline/25 bg-pitch-deep p-2 sm:p-3"
     >
       <PitchMarkings />
 
@@ -148,7 +148,7 @@ export function ScenarioStage({
         aria-hidden="true"
         animate={{ left: `${frame.ballPosition.x}%`, top: `${frame.ballPosition.y}%` }}
         transition={reduceMotion ? { duration: 0 } : { duration: STEP_ANIMATION_SECONDS, ease: "easeInOut" }}
-        className="pointer-events-none absolute z-20 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-pitch-line shadow-[0_0_6px_rgba(237,234,216,0.8)]"
+        className="pointer-events-none absolute z-20 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-pitch-line shadow-[0_0_6px_rgba(34,56,74,0.45)]"
       />
 
       {scenario.stage.players.map((player) => {
@@ -176,7 +176,7 @@ export function ScenarioStage({
             className={`absolute z-10 -translate-x-1/2 -translate-y-1/2 ${readOnly ? "" : "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"}`}
           >
             <div
-              className={`flex h-11 w-11 items-center justify-center rounded-full border-2 bg-pitch-card font-mono text-xs font-semibold text-pitch-line shadow-[0_4px_12px_rgba(0,0,0,0.6)] transition-colors ${
+              className={`flex h-11 w-11 items-center justify-center rounded-full border-2 bg-pitch-card font-mono text-xs font-semibold text-pitch-line shadow-[0_2px_8px_rgba(34,56,74,0.35)] transition-colors ${
                 isSelected
                   ? "border-press ring-2 ring-press ring-offset-2 ring-offset-pitch-deep"
                   : hasBall

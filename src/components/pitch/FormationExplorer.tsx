@@ -284,7 +284,7 @@ export function FormationExplorer({ initialSlug }: { initialSlug?: string }) {
                 ghostPlayers={showGhost ? compareFormation.players : undefined}
               />
             </div>
-            <div className="rounded-lg border border-pitch-touchline/30 bg-pitch-card p-6">
+            <div className="telemetry-glass rounded-lg border p-6">
               <FormationNotes formation={formation} variant="condensed" />
             </div>
           </div>
@@ -292,7 +292,7 @@ export function FormationExplorer({ initialSlug }: { initialSlug?: string }) {
             <div className="mx-auto w-full max-w-md">
               <Pitch players={compareFormation.players} formationName={compareFormation.name} />
             </div>
-            <div className="rounded-lg border border-pitch-touchline/30 bg-pitch-card p-6">
+            <div className="telemetry-glass rounded-lg border p-6">
               <FormationNotes formation={compareFormation} variant="condensed" />
             </div>
           </div>
@@ -310,7 +310,7 @@ export function FormationExplorer({ initialSlug }: { initialSlug?: string }) {
             />
           </div>
           <aside
-            className="w-full rounded-lg border border-pitch-touchline/30 bg-pitch-card p-6 lg:w-80"
+            className="w-full telemetry-glass rounded-lg border p-6 lg:w-80"
             aria-live="polite"
           >
             {showOpponent && selectedPlayer && selectedPosition && matchupText ? (

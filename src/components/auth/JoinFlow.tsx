@@ -126,7 +126,7 @@ export function JoinFlow() {
             <button
               type="submit"
               disabled={sendStatus === "sending"}
-              className="inline-flex min-h-11 items-center justify-center rounded-full bg-attack px-8 font-mono text-xs font-semibold uppercase tracking-widest text-night-950 shadow-[0_0_32px_-8px_var(--attack)] transition-transform hover:scale-[1.02] disabled:opacity-60"
+              className="inline-flex min-h-11 items-center justify-center rounded-full bg-attack px-8 font-mono text-xs font-semibold uppercase tracking-widest text-night-950 telemetry-panel-lift transition-transform hover:scale-[1.02] disabled:opacity-60"
             >
               {sendStatus === "sending" ? "Saving…" : "Save username"}
             </button>
@@ -158,7 +158,7 @@ export function JoinFlow() {
           <div className="flex flex-wrap items-center justify-center gap-3">
             <Link
               href="/workouts"
-              className="inline-flex min-h-11 items-center rounded-full bg-attack px-8 font-mono text-xs font-semibold uppercase tracking-widest text-night-950 shadow-[0_0_32px_-8px_var(--attack)] transition-transform hover:scale-[1.02]"
+              className="inline-flex min-h-11 items-center rounded-full bg-attack px-8 font-mono text-xs font-semibold uppercase tracking-widest text-night-950 telemetry-panel-lift transition-transform hover:scale-[1.02]"
             >
               Get to training →
             </Link>
@@ -277,7 +277,7 @@ export function JoinFlow() {
             <button
               type="button"
               onClick={() => router.push("/workouts")}
-              className="inline-flex min-h-11 items-center justify-center rounded-full bg-attack px-8 font-mono text-xs font-semibold uppercase tracking-widest text-night-950 shadow-[0_0_32px_-8px_var(--attack)] transition-transform hover:scale-[1.02]"
+              className="inline-flex min-h-11 items-center justify-center rounded-full bg-attack px-8 font-mono text-xs font-semibold uppercase tracking-widest text-night-950 telemetry-panel-lift transition-transform hover:scale-[1.02]"
             >
               Start Training (stay a guest)
             </button>
@@ -410,7 +410,7 @@ export function JoinFlow() {
                 <button
                   type="submit"
                   disabled={sendStatus === "sending"}
-                  className="inline-flex min-h-11 items-center justify-center rounded-full bg-attack px-8 font-mono text-xs font-semibold uppercase tracking-widest text-night-950 shadow-[0_0_32px_-8px_var(--attack)] transition-transform hover:scale-[1.02] disabled:opacity-60 disabled:shadow-none disabled:hover:scale-100"
+                  className="inline-flex min-h-11 items-center justify-center rounded-full bg-attack px-8 font-mono text-xs font-semibold uppercase tracking-widest text-night-950 telemetry-panel-lift transition-transform hover:scale-[1.02] disabled:opacity-60 disabled:shadow-none disabled:hover:scale-100"
                 >
                   {sendStatus === "sending" ? "Sending…" : "Confirm & Send Link"}
                 </button>
@@ -458,7 +458,7 @@ export function JoinFlow() {
                 <button
                   type="submit"
                   disabled={sendStatus === "sending"}
-                  className="inline-flex min-h-11 items-center justify-center rounded-full bg-attack px-8 font-mono text-xs font-semibold uppercase tracking-widest text-night-950 shadow-[0_0_32px_-8px_var(--attack)] transition-transform hover:scale-[1.02] disabled:opacity-60 disabled:shadow-none disabled:hover:scale-100"
+                  className="inline-flex min-h-11 items-center justify-center rounded-full bg-attack px-8 font-mono text-xs font-semibold uppercase tracking-widest text-night-950 telemetry-panel-lift transition-transform hover:scale-[1.02] disabled:opacity-60 disabled:shadow-none disabled:hover:scale-100"
                 >
                   {sendStatus === "sending" ? "Creating…" : "Create Account"}
                 </button>

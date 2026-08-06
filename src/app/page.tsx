@@ -67,41 +67,26 @@ const CARD_CONTENT: CardMeta[] = [
   },
 ];
 
-type CardTheme = "classic" | "glass" | "hud" | "glow";
-
-// "classic" is the already-accepted Floodlit Pitch card look, unchanged —
-// the other three extend the hero's established futuristic materials
-// (glass panel, HUD corner brackets, cyan ambient glow) down into the grid.
-const THEME_CLASSNAMES: Record<CardTheme, string> = {
-  classic: "border-pitch-touchline/30 bg-pitch-card hover:border-transparent",
-  glass: "border-white/15 bg-white/[0.04] backdrop-blur-xl hover:border-cyan-200/50 hover:bg-white/[0.07]",
-  hud: "hud-frame border-cyan-300/20 bg-pitch-card hover:border-cyan-300/60",
-  glow: "border-pitch-touchline/30 bg-pitch-card hover:border-cyan-300/50 hover:shadow-[0_0_32px_-8px_rgba(103,232,249,0.5)]",
-};
-
-function BentoCard({ meta, span, theme = "classic" }: { meta: CardMeta; span: string; theme?: CardTheme }) {
+function BentoCard({ meta, span }: { meta: CardMeta; span: string }) {
   const Demo = meta.Demo;
-  const isFuturistic = theme !== "classic";
   return (
     <TiltCard
       href={meta.href}
-      glowClassName={isFuturistic ? "border-grad-futurist" : "border-grad-kickoff"}
-      className={`relative flex min-h-64 flex-col overflow-hidden rounded-lg border p-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker ${THEME_CLASSNAMES[theme]} ${span}`}
+      glowClassName="border-grad-futurist"
+      className={`telemetry-frame telemetry-panel-lift relative flex min-h-64 flex-col overflow-hidden rounded-lg border border-pitch-touchline/30 bg-pitch-card p-6 hover:border-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker ${span}`}
     >
+      <span aria-hidden="true" className="telemetry-corner telemetry-corner-tl" />
+      <span aria-hidden="true" className="telemetry-corner telemetry-corner-tr" />
       {/* Inner wrapper (not TiltCard's own root) owns the rise-in and
           hover-lift transforms so they never fight the root's Framer-driven
           tilt transform. */}
       <div className="bento-card-rise flex h-full flex-col gap-3 transition-transform duration-300 group-hover:-translate-y-1 group-focus-within:-translate-y-1">
         <span aria-hidden="true" className="bento-accent-bar absolute inset-x-0 top-0 h-1" />
-        <p className="font-display text-xs font-semibold uppercase tracking-[0.12em] text-gold-flood">{meta.eyebrow}</p>
-        <h2
-          className={`font-display text-2xl font-bold uppercase leading-tight tracking-tight ${
-            isFuturistic ? "text-white group-hover:text-cyan-200" : "text-pitch-line group-hover:text-gold-flood"
-          }`}
-        >
+        <p className="font-display text-xs font-semibold uppercase tracking-[0.12em] text-telemetry-olive">{meta.eyebrow}</p>
+        <h2 className="font-display text-2xl font-bold uppercase leading-tight tracking-tight text-pitch-line group-hover:text-pitch-marker">
           {meta.title}
         </h2>
-        <p className={`text-sm leading-relaxed ${isFuturistic ? "text-white/60" : "text-pitch-touchline"}`}>{meta.copy}</p>
+        <p className="text-sm leading-relaxed text-pitch-touchline">{meta.copy}</p>
         <div className="mt-auto pt-2">
           <Demo />
         </div>
@@ -113,31 +98,35 @@ function BentoCard({ meta, span, theme = "classic" }: { meta: CardMeta; span: st
 export default function Home() {
   return (
     <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-16 px-4 py-10 sm:px-8 sm:py-16">
-      <section className="hero-glass-panel relative flex flex-col gap-8 overflow-hidden rounded-2xl border border-white/15 p-6 backdrop-blur-xl sm:p-10 lg:flex-row lg:items-center lg:gap-12">
+      <section className="telemetry-frame telemetry-glass relative flex flex-col gap-8 overflow-hidden rounded-2xl border p-6 sm:p-10 lg:flex-row lg:items-center lg:gap-12">
+        <span aria-hidden="true" className="telemetry-corner telemetry-corner-tl" />
+        <span aria-hidden="true" className="telemetry-corner telemetry-corner-tr" />
+        <span aria-hidden="true" className="telemetry-corner telemetry-corner-bl" />
+        <span aria-hidden="true" className="telemetry-corner telemetry-corner-br" />
         <div aria-hidden="true" className="hero-shimmer-bar absolute inset-x-0 top-0 h-0.5" />
         <div className="flex flex-col gap-4 lg:flex-1">
-          <p className="font-mono text-xs font-semibold uppercase tracking-[0.3em] text-cyan-200">
+          <p className="font-mono text-xs font-semibold uppercase tracking-[0.18em] text-telemetry-olive sm:tracking-[0.3em]">
             [ Interactive football OS ]
           </p>
-          <h1 className="font-display text-4xl font-black uppercase leading-none tracking-tight text-white sm:text-7xl">
+          <h1 className="font-telemetry-display text-4xl font-black leading-none tracking-tight text-pitch-line sm:text-7xl">
             Know the shape.
             <br />
             Know your role.
           </h1>
-          <p className="max-w-xl text-base leading-relaxed text-white/60 sm:text-lg">
+          <p className="max-w-xl text-base leading-relaxed text-pitch-touchline sm:text-lg">
             Explore live formations, learn what every position does, train for your role, and
             study the managers who shaped how the game is played.
           </p>
           <MagneticButton
             href="/explore"
-            className="hero-breathe-glow mt-2 inline-flex min-h-11 w-fit items-center justify-center gap-2 rounded-full border border-cyan-200/50 bg-white/5 px-6 font-display text-lg font-bold text-cyan-100 backdrop-blur-md transition-all hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-200"
+            className="telemetry-panel-lift mt-2 inline-flex min-h-11 w-fit items-center justify-center gap-2 rounded-full bg-attack px-6 font-display text-lg font-bold text-night-950 transition-transform hover:scale-[1.02] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
           >
             Explore the pitch →
           </MagneticButton>
         </div>
 
         <div className="relative mx-auto w-full max-w-xs sm:max-w-sm lg:mx-0 lg:max-w-sm">
-          <div aria-hidden="true" className="pointer-events-none absolute -inset-6 -z-10 rounded-[2rem] bg-cyan-300/10 blur-2xl" />
+          <div aria-hidden="true" className="pointer-events-none absolute -inset-6 -z-10 rounded-[2rem] bg-telemetry-olive/10 blur-2xl" />
           <HeroPitch />
         </div>
       </section>
@@ -149,7 +138,6 @@ export default function Home() {
           <BentoCard
             key={meta.href}
             meta={meta}
-            theme="glow"
             span={
               meta.href === "/explore"
                 ? "lg:col-span-2 lg:row-span-2"

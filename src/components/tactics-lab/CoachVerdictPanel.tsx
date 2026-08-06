@@ -168,7 +168,7 @@ export function CoachVerdictPanel({ design, coachAvailable }: Props) {
           disabled={isBusy}
           whileHover={reduceMotion || isBusy ? undefined : { y: -1 }}
           whileTap={reduceMotion || isBusy ? undefined : { scale: 0.97 }}
-          className="inline-flex min-h-11 items-center gap-2 rounded-full bg-attack px-5 font-mono text-xs font-bold uppercase tracking-widest text-night-950 shadow-[0_2px_10px_-2px_color-mix(in_srgb,var(--attack)_55%,transparent)] transition-colors hover:bg-attack-hi focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker disabled:cursor-not-allowed disabled:opacity-60 disabled:shadow-none"
+          className="inline-flex min-h-11 items-center gap-2 rounded-full bg-attack px-5 font-mono text-xs font-bold uppercase tracking-widest text-night-950 telemetry-panel-lift transition-transform hover:scale-[1.02] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker disabled:cursor-not-allowed disabled:opacity-60 disabled:shadow-none disabled:hover:scale-100"
         >
           <motion.span
             className="flex"
