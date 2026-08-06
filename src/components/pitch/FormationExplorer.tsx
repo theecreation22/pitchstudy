@@ -258,7 +258,11 @@ export function FormationExplorer({ initialSlug }: { initialSlug?: string }) {
             />
           )}
           <PhaseToggle phase={phase} onChange={setPhase} />
-          <DefensiveStyleToggle style={defensiveStyle} onChange={setDefensiveStyleRaw} />
+          <DefensiveStyleToggle
+            style={defensiveStyle}
+            onChange={setDefensiveStyleRaw}
+            visible={phase === "out-of-possession"}
+          />
         </div>
       )}
 
@@ -299,7 +303,7 @@ export function FormationExplorer({ initialSlug }: { initialSlug?: string }) {
         </div>
       ) : viewMode === "formation" ? (
         <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-10">
-          <div className="mx-auto flex w-full max-w-md flex-col gap-3 lg:mx-0 lg:max-w-lg lg:flex-1">
+          <div className="mx-auto flex w-full max-w-lg flex-col gap-3 lg:mx-0 lg:max-w-2xl lg:flex-1">
             <Pitch
               players={displayedPlayers}
               formationName={formation.name}

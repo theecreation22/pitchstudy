@@ -7,13 +7,77 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { AuthChip } from "./AuthChip";
 import { useSync } from "@/lib/sync/SyncProvider";
 
+type IconProps = { className?: string };
+
+/* Hand-drawn stroke icons in the codebase's shared convention (24-box,
+   currentColor stroke) — monochrome on purpose: they take the link's own
+   color, muted at rest and cyan when active, instead of importing the
+   reference app's multicolor icon language into the telemetry world. */
+
+function AcademyIcon({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
+      <path d="M12 4 2.5 8.5 12 13l9.5-4.5L12 4Z" />
+      <path d="M6 10.5V16c0 1.2 2.7 2.7 6 2.7s6-1.5 6-2.7v-5.5" />
+      <path d="M21.5 8.5V14" />
+    </svg>
+  );
+}
+
+function ExploreIcon({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
+      <circle cx="12" cy="12" r="9" />
+      <path d="m15.5 8.5-2 5-5 2 2-5 5-2Z" />
+    </svg>
+  );
+}
+
+function ManagersIcon({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
+      <rect x="5" y="4" width="14" height="17" rx="1.5" />
+      <path d="M9 4V2.8h6V4" />
+      <path d="M8.5 9.5h7M8.5 13h7M8.5 16.5h4" />
+    </svg>
+  );
+}
+
+function TrainingIcon({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
+      <path d="M7.5 12h9" />
+      <rect x="3.5" y="8.5" width="3" height="7" rx="0.8" />
+      <rect x="17.5" y="8.5" width="3" height="7" rx="0.8" />
+      <path d="M1.8 10.5v3M22.2 10.5v3" />
+    </svg>
+  );
+}
+
+function ChallengeIcon({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
+      <path d="M12 2.5c1.5 3-1 4.5-1 7 0 1.2 1 2 2 2s2-.8 2-2c2 1.5 3 3.5 3 6a6 6 0 0 1-12 0c0-4.5 3.5-6.5 6-13Z" />
+    </svg>
+  );
+}
+
+function TacticsLabIcon({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
+      <path d="M10 2.5h4M11 2.5v6l-5.5 9a2 2 0 0 0 1.7 3h9.6a2 2 0 0 0 1.7-3L13 8.5v-6" />
+      <path d="M8 14.5h8" />
+    </svg>
+  );
+}
+
 const NAV_LINKS = [
-  { href: "/academy", label: "Academy" },
-  { href: "/explore", label: "Explore" },
-  { href: "/managers", label: "Managers" },
-  { href: "/workouts", label: "Training" },
-  { href: "/challenge", label: "Challenge" },
-  { href: "/tactics-lab", label: "Tactics Lab" },
+  { href: "/academy", label: "Academy", Icon: AcademyIcon },
+  { href: "/explore", label: "Explore", Icon: ExploreIcon },
+  { href: "/managers", label: "Managers", Icon: ManagersIcon },
+  { href: "/workouts", label: "Training", Icon: TrainingIcon },
+  { href: "/challenge", label: "Challenge", Icon: ChallengeIcon },
+  { href: "/tactics-lab", label: "Tactics Lab", Icon: TacticsLabIcon },
 ] as const;
 
 const LINK_CLASS =
@@ -39,10 +103,11 @@ function MenuIcon({ open }: { open: boolean }) {
 }
 
 /**
- * Site-wide nav. Desktop shows all 6 links inline, unchanged from before.
- * Below `sm`, the links collapse behind a hamburger toggle instead of
- * wrapping onto a second line — six items wrapping next to a single-line
- * logo has no clean way to align both without one overlapping the other.
+ * Site-wide nav, split by viewport. Desktop (lg+): a fixed left rail —
+ * logo, stacked icon links with the active page in an outlined cyan tile,
+ * account chip pinned to the bottom. The root layout offsets page content
+ * with lg:pl-60 to make room. Below lg: the sticky glass top bar with a
+ * hamburger sheet, unchanged behavior.
  */
 export function SiteNav() {
   const [open, setOpen] = useState(false);
@@ -80,82 +145,107 @@ export function SiteNav() {
     };
   }, [open]);
 
+  const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
+
   return (
-    <nav className="telemetry-glass sticky top-0 z-40 w-full border-b">
-      <div className="relative mx-auto flex w-full max-w-5xl items-center justify-between px-4 py-4 sm:px-8">
-        <Link href="/" className={`${LINK_CLASS} text-pitch-line`}>
+    <>
+      {/* Desktop left rail */}
+      <nav className="telemetry-glass fixed inset-y-0 left-0 z-40 hidden w-60 flex-col border-r p-4 lg:flex" aria-label="Site">
+        <Link href="/" className={`${LINK_CLASS} px-3 py-3 text-base text-pitch-line`}>
           PitchStudy
         </Link>
 
-        <div className="hidden items-center gap-x-6 sm:flex">
-          {NAV_LINKS.map((link) => {
-            const isActive = pathname === link.href || pathname.startsWith(`${link.href}/`);
+        <div className="mt-4 flex flex-col gap-1">
+          {NAV_LINKS.map(({ href, label, Icon }) => {
+            const active = isActive(href);
             return (
               <Link
-                key={link.href}
-                href={link.href}
-                aria-current={isActive ? "page" : undefined}
-                className={isActive ? `${LINK_CLASS} text-pitch-marker` : LINK_CLASS}
+                key={href}
+                href={href}
+                aria-current={active ? "page" : undefined}
+                className={`flex min-h-11 items-center gap-3 rounded-lg border px-3 font-display text-sm font-semibold uppercase tracking-[0.15em] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker ${
+                  active
+                    ? "border-attack/60 bg-attack/10 text-attack"
+                    : "border-transparent text-pitch-touchline hover:bg-pitch-touchline/10 hover:text-pitch-line"
+                }`}
               >
-                {link.label}
+                <Icon className="h-5 w-5 shrink-0" />
+                {label}
               </Link>
             );
           })}
-          <AuthChip />
         </div>
 
-        <button
-          type="button"
-          onClick={() => setOpen((prev) => !prev)}
-          aria-expanded={open}
-          aria-controls={menuId}
-          aria-label={open ? "Close menu" : "Open menu"}
-          className="flex h-11 w-11 items-center justify-center rounded-md text-pitch-touchline transition-colors hover:text-pitch-marker focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker sm:hidden"
-        >
-          <MenuIcon open={open} />
-        </button>
-      </div>
+        <div className="mt-auto border-t border-pitch-touchline/20 pt-4">
+          <AuthChip menuPlacement="up" />
+        </div>
+      </nav>
 
-      <AnimatePresence>
-        {open && (
-          <>
-            <motion.div
-              key="backdrop"
-              aria-hidden="true"
-              onClick={() => setOpen(false)}
-              className="fixed inset-0 z-40 bg-night-950/70 sm:hidden"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: reduceMotion ? 0 : 0.2 }}
-            />
-            <motion.div
-              key="panel"
-              id={menuId}
-              className="telemetry-glass absolute left-4 right-4 top-full z-50 mt-2 flex flex-col gap-1 rounded-lg border p-2 sm:hidden"
-              initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -8 }}
-              transition={{ duration: reduceMotion ? 0 : 0.18, ease: "easeOut" }}
-            >
-              {NAV_LINKS.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="rounded-md px-3 py-3 font-display text-sm font-semibold uppercase tracking-[0.15em] text-pitch-touchline transition-colors hover:bg-pitch-touchline/10 hover:text-pitch-marker"
-                >
-                  {link.label}
-                </Link>
-              ))}
-              {status !== "disabled" && (
-                <div className="mt-1 border-t border-pitch-touchline/20 px-3 pt-3">
-                  <AuthChip />
-                </div>
-              )}
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
-    </nav>
+      {/* Mobile / tablet top bar */}
+      <nav className="telemetry-glass sticky top-0 z-40 w-full border-b lg:hidden" aria-label="Site">
+        <div className="relative mx-auto flex w-full max-w-5xl items-center justify-between px-4 py-4 sm:px-8">
+          <Link href="/" className={`${LINK_CLASS} text-pitch-line`}>
+            PitchStudy
+          </Link>
+
+          <button
+            type="button"
+            onClick={() => setOpen((prev) => !prev)}
+            aria-expanded={open}
+            aria-controls={menuId}
+            aria-label={open ? "Close menu" : "Open menu"}
+            className="flex h-11 w-11 items-center justify-center rounded-md text-pitch-touchline transition-colors hover:text-pitch-marker focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
+          >
+            <MenuIcon open={open} />
+          </button>
+        </div>
+
+        <AnimatePresence>
+          {open && (
+            <>
+              <motion.div
+                key="backdrop"
+                aria-hidden="true"
+                onClick={() => setOpen(false)}
+                className="fixed inset-0 z-40 bg-night-950/70"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: reduceMotion ? 0 : 0.2 }}
+              />
+              <motion.div
+                key="panel"
+                id={menuId}
+                className="telemetry-glass absolute left-4 right-4 top-full z-50 mt-2 flex flex-col gap-1 rounded-lg border p-2"
+                initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -8 }}
+                transition={{ duration: reduceMotion ? 0 : 0.18, ease: "easeOut" }}
+              >
+                {NAV_LINKS.map(({ href, label, Icon }) => (
+                  <Link
+                    key={href}
+                    href={href}
+                    className={`flex items-center gap-3 rounded-md px-3 py-3 font-display text-sm font-semibold uppercase tracking-[0.15em] transition-colors ${
+                      isActive(href)
+                        ? "text-attack"
+                        : "text-pitch-touchline hover:bg-pitch-touchline/10 hover:text-pitch-marker"
+                    }`}
+                  >
+                    <Icon className="h-5 w-5 shrink-0" />
+                    {label}
+                  </Link>
+                ))}
+                {status !== "disabled" && (
+                  <div className="mt-1 border-t border-pitch-touchline/20 px-3 pt-3">
+                    <AuthChip />
+                  </div>
+                )}
+              </motion.div>
+            </>
+          )}
+        </AnimatePresence>
+      </nav>
+    </>
   );
 }

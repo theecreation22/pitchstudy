@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { FormationExplorer } from "@/components/pitch/FormationExplorer";
 import { FormationExplorerFromSearchParams } from "@/components/pitch/FormationExplorerFromSearchParams";
-import { ChalkDivider } from "@/components/effects/ChalkDivider";
 
 export const metadata: Metadata = {
   title: "Explore Formations · PitchStudy",
@@ -12,18 +11,12 @@ export const metadata: Metadata = {
 
 export default function ExplorePage() {
   return (
-    <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-10 px-4 py-10 sm:px-8 sm:py-16">
-      <header className="flex flex-col gap-3">
-        <h1 className="font-telemetry-display text-4xl font-black leading-none tracking-tight text-pitch-line sm:text-6xl">
-          Every shape tells you something.
-        </h1>
-        <p className="max-w-2xl text-base leading-relaxed text-pitch-touchline sm:text-lg">
-          Pick a formation, watch it take shape on the pitch, and click any position to learn
-          what it actually does out there.
-        </p>
-      </header>
-
-      <ChalkDivider />
+    <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-10 px-4 py-6 sm:px-8 sm:py-10">
+      {/* The visible headline and intro copy were removed by request so the
+          tool itself leads the page. The heading stays in the document for
+          screen readers and document structure — a page with no h1 is a real
+          accessibility gap, not just a style choice. */}
+      <h1 className="sr-only">Explore formations</h1>
 
       <Suspense fallback={<FormationExplorer />}>
         <FormationExplorerFromSearchParams />

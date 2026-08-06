@@ -38,13 +38,6 @@ export function Pitch({
     [players, ghostPlayers],
   );
 
-  // Real telemetry, not decoration: the shape's actual horizontal/vertical
-  // spread from the players' own coordinates, for the readout strip below.
-  const xs = players.map((player) => player.x);
-  const ys = players.map((player) => player.y);
-  const shapeWidth = Math.round(Math.max(...xs) - Math.min(...xs));
-  const shapeDepth = Math.round(Math.max(...ys) - Math.min(...ys));
-
   const hasOpponent = Boolean(opponentPlayers && opponentPlayers.length > 0);
   const selectedPlayer = hasOpponent
     ? players.find((player) => player.id === selectedPlayerId)
@@ -249,9 +242,6 @@ export function Pitch({
 
       <div className="telemetry-readout mt-2 flex items-center justify-between gap-2 rounded-md px-2.5 py-1.5 font-mono text-[10px] uppercase tracking-widest text-telemetry-parchment/80">
         <span>{formationName}</span>
-        <span>
-          W {shapeWidth.toString().padStart(2, "0")} · D {shapeDepth.toString().padStart(2, "0")}
-        </span>
         <span>{players.length}/11</span>
       </div>
     </div>

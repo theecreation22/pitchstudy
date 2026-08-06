@@ -19,7 +19,7 @@ export default function AcademyPage() {
             Academy
           </p>
           <h1 className="text-grad-kickoff font-display text-4xl font-black uppercase leading-none tracking-tight sm:text-6xl">
-            {modules.length} modules. Your pace.
+            Learn the game.
           </h1>
           <p className="max-w-2xl text-base leading-relaxed text-pitch-touchline sm:text-lg">
             Short, interactive lessons with a knowledge check built in, followed by a module quiz

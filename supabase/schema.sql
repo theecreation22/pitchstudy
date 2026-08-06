@@ -159,13 +159,25 @@ begin
     'totalBadgesEarned', (select coalesce(sum(jsonb_array_length(progress->'earnedBadges')), 0) from public.profiles where progress is not null),
     'totalScenarioSaves', (select coalesce(sum(jsonb_array_length(playbook)), 0) from public.profiles where playbook is not null),
     'totalPlaybookEntries', (select coalesce(sum(jsonb_array_length(tactics_playbook)), 0) from public.profiles where tactics_playbook is not null),
+    -- Scoped to auth accounts that HAVE a profile row, so these chips
+    -- describe the same population as totalUsers and the registered-users
+    -- table. Accounts that authenticated but never finished the in-app
+    -- flow (profiles are created client-side after login) are surfaced
+    -- separately as authAccountsWithoutProfile instead of silently
+    -- inflating the provider counts.
     'providerBreakdown', (
       select coalesce(json_object_agg(provider, provider_count), '{}'::json)
       from (
-        select coalesce(raw_app_meta_data->>'provider', 'unknown') as provider, count(*) as provider_count
-        from auth.users
+        select coalesce(u.raw_app_meta_data->>'provider', 'unknown') as provider, count(*) as provider_count
+        from auth.users u
+        where exists (select 1 from public.profiles pr where pr.id = u.id)
         group by 1
       ) as p
+    ),
+    'authAccountsWithoutProfile', (
+      select count(*)
+      from auth.users u
+      where not exists (select 1 from public.profiles pr where pr.id = u.id)
     )
   ) into result;
 

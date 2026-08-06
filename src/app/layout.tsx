@@ -39,7 +39,7 @@ export default function RootLayout({
       lang="en"
       className={`${barlowCondensed.variable} ${publicSans.variable} ${plexMono.variable} h-full`}
     >
-      <body className="min-h-full flex flex-col bg-pitch-slate text-pitch-line antialiased">
+      <body className="min-h-full flex flex-col bg-pitch-slate text-pitch-line antialiased lg:pl-60">
         <SyncProvider>
           <FloodlitAtmosphere />
           <SiteNav />

@@ -19,7 +19,12 @@ function initialsFor(label: string): string {
  * with Account + Sign out. Renders nothing at all when Supabase isn't
  * configured, since guest mode has no auth UI to speak of until that's set up.
  */
-export function AuthChip() {
+export function AuthChip({
+  menuPlacement = "down",
+}: {
+  /** Which way the account menu opens — "up" for callers that sit at the bottom of the viewport (the desktop nav rail), "down" everywhere else. */
+  menuPlacement?: "down" | "up";
+}) {
   const { status, user, signOut } = useSync();
   const { card } = usePlayerCard();
   const [open, setOpen] = useState(false);
@@ -77,11 +82,13 @@ export function AuthChip() {
         {open && (
           <motion.div
             role="menu"
-            initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -6 }}
+            initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: menuPlacement === "up" ? 6 : -6 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -6 }}
+            exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: menuPlacement === "up" ? 6 : -6 }}
             transition={{ duration: reduceMotion ? 0 : 0.15, ease: "easeOut" }}
-            className="absolute right-0 top-full z-50 mt-2 flex w-44 flex-col gap-1 rounded-lg border border-pitch-touchline/30 bg-pitch-card p-2 shadow-xl"
+            className={`absolute right-0 z-50 flex w-44 flex-col gap-1 rounded-lg border border-pitch-touchline/30 bg-pitch-card p-2 shadow-xl ${
+              menuPlacement === "up" ? "bottom-full mb-2" : "top-full mt-2"
+            }`}
           >
             <Link
               role="menuitem"

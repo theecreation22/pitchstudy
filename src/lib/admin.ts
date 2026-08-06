@@ -26,6 +26,8 @@ export type AdminStats = {
   totalScenarioSaves: number;
   totalPlaybookEntries: number;
   providerBreakdown: Record<string, number>;
+  /** auth.users rows with no matching profiles row — people who authenticated but dropped off before the app created their profile. Absent until the updated admin_stats() SQL is applied. */
+  authAccountsWithoutProfile?: number;
 };
 
 /** Calls admin_stats() (supabase/schema.sql) — returns null on any failure, including the expected "not authorized" case for every non-admin caller, so a rejected call reads the same as a network error rather than leaking *why* it failed. */

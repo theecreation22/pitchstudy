@@ -444,7 +444,11 @@ export function TacticsLab({ coachAvailable }: { coachAvailable: boolean }) {
         </label>
         <ShapeReadout shapeName={shapeName} />
         <PhaseToggle phase={phase} onChange={changePhase} />
-        <DefensiveStyleToggle style={defensiveStyle} onChange={changeDefensiveStyle} />
+        <DefensiveStyleToggle
+          style={defensiveStyle}
+          onChange={changeDefensiveStyle}
+          visible={phase === "out-of-possession"}
+        />
       </div>
 
       <AnimatePresence>

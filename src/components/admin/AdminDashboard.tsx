@@ -113,6 +113,9 @@ export function AdminDashboard() {
         <StatTile label="Badges earned" value={stats.totalBadgesEarned} />
         <StatTile label="Scenario plays saved" value={stats.totalScenarioSaves} />
         <StatTile label="Playbook entries saved" value={stats.totalPlaybookEntries} />
+        {typeof stats.authAccountsWithoutProfile === "number" && (
+          <StatTile label="Signed in, never finished setup" value={stats.authAccountsWithoutProfile} />
+        )}
       </div>
 
       <div className="rounded-lg border border-pitch-touchline/30 bg-pitch-card p-5">

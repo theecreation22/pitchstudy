@@ -62,17 +62,20 @@ export const formations: Formation[] = [
     bestSuited:
       "Teams that want directness over central control, and have strikers who thrive on service into the box rather than dropping deep to build play.",
     players: [
+      // Genuinely flat banks — the formation's defining trait and what its
+      // own copy promises. Center-backs sit as a tight pair (x38/x62) with
+      // the full-backs holding the touchlines, which is the real spacing.
       { id: "gk", code: "GK", x: 50, y: 95 },
-      { id: "lb", code: "LB", x: 15, y: 75 },
-      { id: "cb1", code: "CB", x: 35, y: 78 },
-      { id: "cb2", code: "CB", x: 65, y: 78 },
-      { id: "rb", code: "RB", x: 85, y: 75 },
-      { id: "lm", code: "LM", x: 15, y: 45 },
-      { id: "cm1", code: "CM", x: 38, y: 50 },
-      { id: "cm2", code: "CM", x: 62, y: 50 },
-      { id: "rm", code: "RM", x: 85, y: 45 },
-      { id: "st1", code: "ST", x: 38, y: 18 },
-      { id: "st2", code: "ST", x: 62, y: 18 },
+      { id: "lb", code: "LB", x: 14, y: 76 },
+      { id: "cb1", code: "CB", x: 38, y: 76 },
+      { id: "cb2", code: "CB", x: 62, y: 76 },
+      { id: "rb", code: "RB", x: 86, y: 76 },
+      { id: "lm", code: "LM", x: 14, y: 48 },
+      { id: "cm1", code: "CM", x: 38, y: 48 },
+      { id: "cm2", code: "CM", x: 62, y: 48 },
+      { id: "rm", code: "RM", x: 86, y: 48 },
+      { id: "st1", code: "ST", x: 40, y: 18 },
+      { id: "st2", code: "ST", x: 60, y: 18 },
     ],
   },
   {
@@ -93,17 +96,19 @@ export const formations: Formation[] = [
     bestSuited:
       "Teams built around ball retention, with technical wide forwards and a single striker comfortable holding up play alone.",
     players: [
+      // Full-backs push ahead of the center-backs — this shape's whole point
+      // is that they provide the width once the wingers tuck inside.
       { id: "gk", code: "GK", x: 50, y: 95 },
-      { id: "lb", code: "LB", x: 15, y: 75 },
-      { id: "cb1", code: "CB", x: 35, y: 78 },
-      { id: "cb2", code: "CB", x: 65, y: 78 },
-      { id: "rb", code: "RB", x: 85, y: 75 },
+      { id: "lb", code: "LB", x: 12, y: 72 },
+      { id: "cb1", code: "CB", x: 38, y: 78 },
+      { id: "cb2", code: "CB", x: 62, y: 78 },
+      { id: "rb", code: "RB", x: 88, y: 72 },
       { id: "cdm", code: "CDM", x: 50, y: 58 },
-      { id: "cm1", code: "CM", x: 32, y: 42 },
-      { id: "cm2", code: "CM", x: 68, y: 42 },
-      { id: "lw", code: "LW", x: 18, y: 18 },
+      { id: "cm1", code: "CM", x: 34, y: 44 },
+      { id: "cm2", code: "CM", x: 66, y: 44 },
+      { id: "lw", code: "LW", x: 14, y: 20 },
       { id: "st", code: "ST", x: 50, y: 12 },
-      { id: "rw", code: "RW", x: 82, y: 18 },
+      { id: "rw", code: "RW", x: 86, y: 20 },
     ],
   },
   {
@@ -124,17 +129,20 @@ export const formations: Formation[] = [
     bestSuited:
       "Teams with a genuine playmaker who wants the ball in the pocket between the lines, protected by two disciplined holding midfielders.",
     players: [
+      // The band of three sits closer to the pivot than it did — a 26-unit
+      // gap between them left a hole no real 4-2-3-1 concedes, since the
+      // three are meant to receive between the lines, not detach.
       { id: "gk", code: "GK", x: 50, y: 95 },
-      { id: "lb", code: "LB", x: 15, y: 75 },
-      { id: "cb1", code: "CB", x: 35, y: 78 },
-      { id: "cb2", code: "CB", x: 65, y: 78 },
-      { id: "rb", code: "RB", x: 85, y: 75 },
+      { id: "lb", code: "LB", x: 14, y: 74 },
+      { id: "cb1", code: "CB", x: 38, y: 78 },
+      { id: "cb2", code: "CB", x: 62, y: 78 },
+      { id: "rb", code: "RB", x: 86, y: 74 },
       { id: "cdm1", code: "CDM", x: 38, y: 58 },
       { id: "cdm2", code: "CDM", x: 62, y: 58 },
-      { id: "lw", code: "LW", x: 18, y: 32 },
-      { id: "cam", code: "CAM", x: 50, y: 28 },
-      { id: "rw", code: "RW", x: 82, y: 32 },
-      { id: "st", code: "ST", x: 50, y: 12 },
+      { id: "lw", code: "LW", x: 16, y: 38 },
+      { id: "cam", code: "CAM", x: 50, y: 38 },
+      { id: "rw", code: "RW", x: 84, y: 38 },
+      { id: "st", code: "ST", x: 50, y: 14 },
     ],
   },
   {
@@ -155,15 +163,18 @@ export const formations: Formation[] = [
     bestSuited:
       "Teams with tireless, athletic wing-backs and center-backs comfortable defending in wide areas without full-back cover.",
     players: [
+      // Wing-backs pulled off the touchline (x8/x92 read as standing out of
+      // play) and pushed ahead of the CDM: in a 3-5-2 they are the width and
+      // advance past the midfield, they don't sit level with the holder.
       { id: "gk", code: "GK", x: 50, y: 95 },
-      { id: "cb1", code: "CB", x: 25, y: 80 },
+      { id: "cb1", code: "CB", x: 28, y: 80 },
       { id: "cb2", code: "CB", x: 50, y: 82 },
-      { id: "cb3", code: "CB", x: 75, y: 80 },
-      { id: "lwb", code: "LWB", x: 8, y: 55 },
-      { id: "rwb", code: "RWB", x: 92, y: 55 },
-      { id: "cm1", code: "CM", x: 32, y: 48 },
-      { id: "cdm", code: "CDM", x: 50, y: 55 },
-      { id: "cm2", code: "CM", x: 68, y: 48 },
+      { id: "cb3", code: "CB", x: 72, y: 80 },
+      { id: "lwb", code: "LWB", x: 10, y: 48 },
+      { id: "rwb", code: "RWB", x: 90, y: 48 },
+      { id: "cm1", code: "CM", x: 34, y: 48 },
+      { id: "cdm", code: "CDM", x: 50, y: 58 },
+      { id: "cm2", code: "CM", x: 66, y: 48 },
       { id: "st1", code: "ST", x: 40, y: 18 },
       { id: "st2", code: "ST", x: 60, y: 18 },
     ],
@@ -186,17 +197,19 @@ export const formations: Formation[] = [
     bestSuited:
       "Teams built to dominate the ball with pace up front, willing to accept some defensive risk in wide areas for attacking numbers.",
     players: [
+      // The "4" is a genuine flat band here (wing-backs level with the two
+      // central midfielders), which is what separates 3-4-3 from 3-5-2.
       { id: "gk", code: "GK", x: 50, y: 95 },
-      { id: "cb1", code: "CB", x: 25, y: 80 },
+      { id: "cb1", code: "CB", x: 28, y: 80 },
       { id: "cb2", code: "CB", x: 50, y: 82 },
-      { id: "cb3", code: "CB", x: 75, y: 80 },
-      { id: "lwb", code: "LWB", x: 8, y: 50 },
-      { id: "cm1", code: "CM", x: 38, y: 48 },
-      { id: "cm2", code: "CM", x: 62, y: 48 },
-      { id: "rwb", code: "RWB", x: 92, y: 50 },
-      { id: "lw", code: "LW", x: 18, y: 18 },
+      { id: "cb3", code: "CB", x: 72, y: 80 },
+      { id: "lwb", code: "LWB", x: 10, y: 50 },
+      { id: "cm1", code: "CM", x: 38, y: 50 },
+      { id: "cm2", code: "CM", x: 62, y: 50 },
+      { id: "rwb", code: "RWB", x: 90, y: 50 },
+      { id: "lw", code: "LW", x: 16, y: 20 },
       { id: "st", code: "ST", x: 50, y: 12 },
-      { id: "rw", code: "RW", x: 82, y: 18 },
+      { id: "rw", code: "RW", x: 84, y: 20 },
     ],
   },
   {
@@ -217,15 +230,17 @@ export const formations: Formation[] = [
     bestSuited:
       "Teams facing a stronger opponent who want to stay compact, absorb pressure, and hit on the counter.",
     players: [
+      // Wing-backs tuck into the back five rather than pushing on — that
+      // restraint is exactly what makes this a 5-3-2 and not a 3-5-2.
       { id: "gk", code: "GK", x: 50, y: 95 },
       { id: "lwb", code: "LWB", x: 12, y: 72 },
-      { id: "cb1", code: "CB", x: 32, y: 78 },
+      { id: "cb1", code: "CB", x: 30, y: 78 },
       { id: "cb2", code: "CB", x: 50, y: 80 },
-      { id: "cb3", code: "CB", x: 68, y: 78 },
+      { id: "cb3", code: "CB", x: 70, y: 78 },
       { id: "rwb", code: "RWB", x: 88, y: 72 },
-      { id: "cm1", code: "CM", x: 35, y: 50 },
-      { id: "cdm", code: "CDM", x: 50, y: 56 },
-      { id: "cm2", code: "CM", x: 65, y: 50 },
+      { id: "cm1", code: "CM", x: 34, y: 50 },
+      { id: "cdm", code: "CDM", x: 50, y: 58 },
+      { id: "cm2", code: "CM", x: 66, y: 50 },
       { id: "st1", code: "ST", x: 40, y: 18 },
       { id: "st2", code: "ST", x: 60, y: 18 },
     ],
@@ -248,17 +263,19 @@ export const formations: Formation[] = [
     bestSuited:
       "Teams that prioritize defensive balance and midfield control over out-and-out attacking numbers.",
     players: [
+      // Flat band of four ahead of the single holder, which is the shape's
+      // signature; the striker stays high and deliberately isolated.
       { id: "gk", code: "GK", x: 50, y: 95 },
-      { id: "lb", code: "LB", x: 15, y: 75 },
-      { id: "cb1", code: "CB", x: 35, y: 78 },
-      { id: "cb2", code: "CB", x: 65, y: 78 },
-      { id: "rb", code: "RB", x: 85, y: 75 },
+      { id: "lb", code: "LB", x: 14, y: 74 },
+      { id: "cb1", code: "CB", x: 38, y: 78 },
+      { id: "cb2", code: "CB", x: 62, y: 78 },
+      { id: "rb", code: "RB", x: 86, y: 74 },
       { id: "cdm", code: "CDM", x: 50, y: 62 },
-      { id: "lm", code: "LM", x: 15, y: 40 },
-      { id: "cm1", code: "CM", x: 38, y: 42 },
-      { id: "cm2", code: "CM", x: 62, y: 42 },
-      { id: "rm", code: "RM", x: 85, y: 40 },
-      { id: "st", code: "ST", x: 50, y: 15 },
+      { id: "lm", code: "LM", x: 14, y: 44 },
+      { id: "cm1", code: "CM", x: 38, y: 44 },
+      { id: "cm2", code: "CM", x: 62, y: 44 },
+      { id: "rm", code: "RM", x: 86, y: 44 },
+      { id: "st", code: "ST", x: 50, y: 16 },
     ],
   },
   {
@@ -279,17 +296,20 @@ export const formations: Formation[] = [
     bestSuited:
       "Teams with dominant central midfielders and full-backs comfortable providing width on their own.",
     players: [
+      // The four midfielders form a real diamond: holder at the base, two
+      // shuttlers at the widest points, playmaker at the tip. They stay
+      // narrow on purpose — the full-backs supply all of this shape's width.
       { id: "gk", code: "GK", x: 50, y: 95 },
-      { id: "lb", code: "LB", x: 15, y: 75 },
-      { id: "cb1", code: "CB", x: 35, y: 78 },
-      { id: "cb2", code: "CB", x: 65, y: 78 },
-      { id: "rb", code: "RB", x: 85, y: 75 },
+      { id: "lb", code: "LB", x: 14, y: 72 },
+      { id: "cb1", code: "CB", x: 38, y: 78 },
+      { id: "cb2", code: "CB", x: 62, y: 78 },
+      { id: "rb", code: "RB", x: 86, y: 72 },
       { id: "cdm", code: "CDM", x: 50, y: 62 },
-      { id: "cm1", code: "CM", x: 28, y: 48 },
-      { id: "cm2", code: "CM", x: 72, y: 48 },
-      { id: "cam", code: "CAM", x: 50, y: 32 },
-      { id: "st1", code: "ST", x: 40, y: 15 },
-      { id: "st2", code: "ST", x: 60, y: 15 },
+      { id: "cm1", code: "CM", x: 30, y: 48 },
+      { id: "cm2", code: "CM", x: 70, y: 48 },
+      { id: "cam", code: "CAM", x: 50, y: 34 },
+      { id: "st1", code: "ST", x: 40, y: 16 },
+      { id: "st2", code: "ST", x: 60, y: 16 },
     ],
   },
 ];

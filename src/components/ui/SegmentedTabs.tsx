@@ -88,7 +88,12 @@ export function SegmentedTabs<T extends string>({
       role="tablist"
       aria-label={ariaLabel}
       onKeyDown={handleKeyDown}
-      className={`${fullWidth ? "flex w-full" : "inline-flex"} gap-1 rounded-full border border-pitch-touchline/30 bg-pitch-card p-1`}
+      // `self-start` matters: inline-flex alone does NOT shrink-wrap when the
+      // track is a direct child of a flex-column (align-items: stretch wins),
+      // which stretched the pill track to full width and stranded the options
+      // against a wide empty right side. The inset shadow recesses the track
+      // so the active pill reads as raised out of it.
+      className={`${fullWidth ? "flex w-full" : "inline-flex self-start"} gap-1 rounded-full border border-pitch-touchline/30 bg-pitch-card p-1 shadow-[inset_0_1px_3px_rgba(0,0,0,0.35)]`}
     >
       {options.map((option) => {
         const isActive = option.value === value;
@@ -106,7 +111,7 @@ export function SegmentedTabs<T extends string>({
             {isActive && (
               <motion.span
                 layoutId={`segmented-${id}-indicator`}
-                className={`absolute inset-0 rounded-full ${TONE_FILL[tone]} ${tone === "press" ? "animate-risk-pulse" : ""}`}
+                className={`absolute inset-0 rounded-full shadow-[0_1px_2px_rgba(0,0,0,0.3)] ${TONE_FILL[tone]} ${tone === "press" ? "animate-risk-pulse" : ""}`}
                 transition={reduceMotion ? { duration: 0 } : { type: "spring", stiffness: 300, damping: 30 }}
               />
             )}
