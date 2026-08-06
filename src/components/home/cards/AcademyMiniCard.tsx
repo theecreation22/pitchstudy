@@ -18,7 +18,7 @@ export function AcademyMiniCard() {
   if (!hasProgress || !nextModule) {
     return (
       <p className="font-mono text-[10px] uppercase tracking-widest text-pitch-touchline/70">
-        9 modules, start anywhere →
+        {orderedModules.length} modules, start anywhere →
       </p>
     );
   }

@@ -90,8 +90,371 @@ export type Module = {
 
 export const modules: Module[] = [
   {
-    slug: "foundations",
+    slug: "the-basics",
     order: 1,
+    title: "How the Game Works",
+    accent: "kickoff",
+    description:
+      "The laws every match runs on: how a game is structured, why the ball coming back is sometimes a corner and sometimes a goal kick, fouls and penalties, cards, and offside in plain English.",
+    lessons: [
+      {
+        slug: "the-object-of-the-game",
+        title: "The Object of the Game",
+        estimatedMinutes: 3,
+        hook: "Eleven against eleven, ninety minutes, one rule that outranks all the others: put the ball in the other team's goal more times than they put it in yours.",
+        blocks: [
+          {
+            kind: "text",
+            id: "eleven-v-eleven",
+            heading: "Eleven Players, One of Them Different",
+            body: "Each team puts eleven players on the pitch, and exactly one of them — the goalkeeper — is allowed to handle the ball, and only inside their own penalty area. Every other player on the pitch may use any part of their body except their hands and arms. That single exception is what shapes almost everything else about how football is played.",
+          },
+          {
+            kind: "text",
+            id: "ninety-minutes",
+            heading: "Two Halves, Forty-Five Minutes Each",
+            body: "A match runs for two halves of forty-five minutes, with the teams swapping ends at half-time so neither side gets the same wind or slope for the whole game. The clock never stops for injuries or substitutions. Instead the referee adds that lost time on at the end of each half as stoppage time, which is why a half almost always runs past forty-five.",
+          },
+          {
+            kind: "zone",
+            id: "kick-off-spot",
+            heading: "Kick-Off",
+            body: "Each half starts with a kick-off from the centre spot, and so does play after every goal. Until the ball is kicked, every player has to be in their own half and the defending team has to stay outside the centre circle.",
+            zones: [{ x: 35, y: 42, width: 30, height: 16 }],
+          },
+          {
+            kind: "text",
+            id: "what-counts-as-a-goal",
+            heading: "What Actually Counts as a Goal",
+            body: "A goal is scored when the whole of the ball crosses the whole of the goal line between the posts and under the crossbar. Whole is the operative word in both places: a ball resting on the line, or hanging over it, has not gone in. The same all-or-nothing test decides every other boundary decision in the game, which is the subject of the next lesson.",
+          },
+        ],
+        tryIt:
+          "Open the Explore page and count the players in any formation. You will always find eleven, and one of them will always be the GK sitting alone in front of goal.",
+        inlineCheck: {
+          question: "Where is a goalkeeper allowed to handle the ball?",
+          options: [
+            "Anywhere in their own half",
+            "Anywhere on the pitch",
+            "Only inside their own penalty area",
+            "Only inside the centre circle",
+          ],
+          correctIndex: 2,
+        },
+        takeaways: [
+          "Eleven a side, and only the goalkeeper may handle the ball, only in their own penalty area.",
+          "Two forty-five minute halves, plus stoppage time added for what the clock kept running through.",
+          "A goal counts only when the whole ball crosses the whole line.",
+        ],
+      },
+      {
+        slug: "throw-in-corner-or-goal-kick",
+        title: "Throw-In, Corner, or Goal Kick?",
+        estimatedMinutes: 5,
+        hook: "The ball goes out and the game restarts three different ways. Which one you get is decided by two things only: which line it crossed, and who touched it last.",
+        blocks: [
+          {
+            kind: "zone",
+            id: "the-touchlines",
+            heading: "The Touchlines: the Long Sides",
+            body: "The two long edges of the pitch are the touchlines. When the whole ball crosses one of them, play restarts with a throw-in, taken by the team that did not touch it last. Throw-ins are by far the most common restart in football, which is why the next module treats them as a real tactical opportunity rather than a formality.",
+            zones: [
+              { x: 0, y: 0, width: 4, height: 100 },
+              { x: 96, y: 0, width: 4, height: 100 },
+            ],
+          },
+          {
+            kind: "zone",
+            id: "the-goal-lines",
+            heading: "The Goal Lines: the Two Ends",
+            body: "The two short edges are the goal lines. When the ball crosses one of these without going into the net, the restart is either a corner kick or a goal kick — and everything depends on who touched it last.",
+            zones: [
+              { x: 0, y: 0, width: 100, height: 4 },
+              { x: 0, y: 96, width: 100, height: 4 },
+            ],
+          },
+          {
+            kind: "toggle",
+            id: "corner-or-goal-kick",
+            heading: "Corner or Goal Kick? Who Touched It Last",
+            body: "This is the distinction that confuses new watchers more than any other, and the rule behind it is short. If an attacker put the ball out over the defending team's goal line — an overhit cross, a shot dragged wide — the defending team restarts with a goal kick. If a defender put it out — a clearance, a deflection, a save pushed round the post — the attacking team gets a corner kick from the nearest corner arc. Attackers cause goal kicks; defenders cause corners.",
+            optionA: { label: "Attacker touched it last → goal kick", zones: [{ x: 30, y: 0, width: 40, height: 9 }] },
+            optionB: {
+              label: "Defender touched it last → corner",
+              zones: [
+                { x: 0, y: 0, width: 9, height: 9 },
+                { x: 91, y: 0, width: 9, height: 9 },
+              ],
+            },
+          },
+          {
+            kind: "text",
+            id: "the-whole-ball",
+            heading: "The Whole Ball, the Whole Line",
+            body: "For every one of these decisions the ball has to have completely crossed the line, in the air or on the ground. A ball touching the line is still in play, and a ball curling out and back in never left at all if no part of it fully cleared the line. This is why a defender sprinting to hook a ball back from the byline is so often a genuinely legal recovery rather than a lucky escape.",
+          },
+        ],
+        tryIt:
+          "Next match you watch, call the restart out loud before the referee signals: touchline or goal line, then attacker or defender. You will be right almost every time within a few minutes.",
+        inlineCheck: {
+          question: "A defender slices a clearance over their own goal line. What is the restart?",
+          options: [
+            "A goal kick to the defending team",
+            "A corner kick to the attacking team",
+            "A throw-in to the attacking team",
+            "A penalty kick",
+          ],
+          correctIndex: 1,
+        },
+        takeaways: [
+          "Over a touchline is a throw-in, to whichever team did not touch it last.",
+          "Over a goal line: an attacker's touch gives a goal kick, a defender's touch gives a corner.",
+          "The whole ball must cross the whole line — on the line is still in play.",
+        ],
+      },
+      {
+        slug: "fouls-free-kicks-and-penalties",
+        title: "Fouls, Free-Kicks, and Penalties",
+        estimatedMinutes: 4,
+        hook: "Almost every foul is punished the same way: a free-kick from where it happened. The penalty exists because one patch of grass makes that punishment far too small.",
+        blocks: [
+          {
+            kind: "text",
+            id: "what-is-a-foul",
+            heading: "What Counts as a Foul",
+            body: "Football is a contact sport, so contact alone is not a foul. A foul is contact the referee judges to be careless, reckless, or excessive: tripping, pushing, holding, charging into an opponent, or playing the ball with a hand or arm. The restart is a free-kick to the other team from the spot where the offence happened.",
+          },
+          {
+            kind: "text",
+            id: "direct-and-indirect",
+            heading: "Direct and Indirect Free-Kicks",
+            body: "Most fouls give a direct free-kick, which can be struck straight at goal and counts if it goes in untouched. A smaller set of offences gives an indirect free-kick, where the ball must touch another player before a goal can count. In practice this is why a free-kick thirty yards out is sometimes a shooting chance and sometimes only ever a delivery into the box.",
+          },
+          {
+            kind: "zone",
+            id: "the-penalty-area",
+            heading: "The Box Changes the Punishment",
+            body: "When a defending player commits a direct-free-kick offence inside their own penalty area, the restart is not a free-kick from that spot — it is a penalty kick. The offence is identical; only the location changes. This is what makes the edge of the box one of the most consequential lines on the pitch, and why defenders are coached to stay on their feet inside it.",
+            zones: [{ x: 20, y: 84, width: 60, height: 16 }],
+          },
+          {
+            kind: "zone",
+            id: "the-penalty-kick",
+            heading: "The Penalty Kick",
+            body: "A penalty is taken from the penalty spot with only the goalkeeper to beat. The keeper must stay on their goal line until the ball is struck, and every other player has to be outside the penalty area and behind the ball. It is the single highest-probability chance in football, which is exactly why conceding one is treated as a disaster.",
+            zones: [{ x: 44, y: 86, width: 12, height: 7 }],
+          },
+          {
+            kind: "text",
+            id: "advantage",
+            heading: "Advantage: the Foul the Referee Waves Off",
+            body: "If stopping play for a foul would actually help the team that committed it, the referee can wave play on and let the move continue. That is advantage, and it is why you will see a clear trip go unpunished when the attacking team still has the ball and a better chance in front of them. The referee can still return to caution the offender at the next stoppage.",
+          },
+        ],
+        tryIt:
+          "Watch where defenders put their hands when an attacker runs at them inside the box. The care they take is a direct response to how much more a foul costs there.",
+        inlineCheck: {
+          question: "What turns an ordinary foul into a penalty kick?",
+          options: [
+            "The foul being committed in the second half",
+            "The attacking team asking the referee for one",
+            "The foul being especially violent, wherever it happens",
+            "A defender committing it inside their own penalty area",
+          ],
+          correctIndex: 3,
+        },
+        takeaways: [
+          "A foul restarts play with a free-kick from where it happened.",
+          "Direct free-kicks can be scored straight from the kick; indirect ones must touch another player first.",
+          "The same offence inside a defender's own penalty area becomes a penalty kick.",
+        ],
+      },
+      {
+        slug: "yellow-cards-and-red-cards",
+        title: "Yellow Cards and Red Cards",
+        estimatedMinutes: 3,
+        hook: "A yellow card is a warning that follows you for the rest of the match. A red card changes the match itself.",
+        blocks: [
+          {
+            kind: "text",
+            id: "the-yellow-card",
+            heading: "Yellow: a Caution That Stays With You",
+            body: "A yellow card is a formal caution for offences like a reckless challenge, deliberately stopping a promising attack, persistent fouling, or dissent. The player stays on. What changes is their margin: a second yellow in the same match becomes a red, so a cautioned player has to defend more carefully for the rest of the game, and the opposition know it.",
+          },
+          {
+            kind: "text",
+            id: "the-red-card",
+            heading: "Red: Sent Off, and Not Replaced",
+            body: "A red card, for serious foul play, violent conduct, or denying an obvious goalscoring opportunity, removes the player from the match entirely. Crucially, the team cannot bring a substitute on in their place. They finish the game with ten players, which is what makes a sending-off a tactical event and not only a disciplinary one.",
+          },
+          {
+            kind: "zone",
+            id: "playing-with-ten",
+            heading: "What Ten Players Actually Does to a Team",
+            body: "A team down to ten almost always sacrifices a forward rather than a defender, drops deeper, and defends in a more compact block, accepting less of the ball in exchange for keeping their shape intact. You will meet the same trade-off again in the defending and game-management modules, where holding a compact block is a deliberate choice rather than something forced on you.",
+            zones: [{ x: 0, y: 60, width: 100, height: 40 }],
+          },
+        ],
+        tryIt:
+          "When a team goes down to ten, watch which player comes off at the next substitution. It is almost never a defender.",
+        inlineCheck: {
+          question: "What happens to a team that has a player sent off?",
+          options: [
+            "They may bring on a substitute to replace them",
+            "They finish the match with ten players and no replacement",
+            "They must remove a second player as well",
+            "Play is abandoned",
+          ],
+          correctIndex: 1,
+        },
+        takeaways: [
+          "A yellow card is a caution; a second in the same match becomes a red.",
+          "A red card means the player leaves and is not replaced.",
+          "Ten-player teams usually drop a forward, defend deeper, and prioritise shape.",
+        ],
+      },
+      {
+        slug: "offside-in-plain-english",
+        title: "Offside, in Plain English",
+        estimatedMinutes: 5,
+        hook: "The most argued-about law in the game is really one sentence, plus one detail about timing that almost everyone gets wrong.",
+        blocks: [
+          {
+            kind: "text",
+            id: "the-rule-itself",
+            heading: "The Rule in One Sentence",
+            body: "You are in an offside position if you are in the opponent's half and closer to their goal line than both the ball and the second-last opponent. The second-last opponent is usually the last outfield defender, because the goalkeeper is normally the last one of all. That is the whole geometry of it.",
+          },
+          {
+            kind: "toggle",
+            id: "onside-vs-offside",
+            heading: "Level Is Onside",
+            body: "An attacker level with the last defender is onside — the law says closer, not level, and any doubt goes to the attacker. A stride beyond that line at the moment the pass is played is offside. This is why defensive lines step up together: they are moving the line that decides this, all at once.",
+            optionA: { label: "Level with the last defender: onside", zones: [{ x: 20, y: 30, width: 60, height: 8 }] },
+            optionB: { label: "Beyond the last defender: offside", zones: [{ x: 20, y: 16, width: 60, height: 8 }] },
+          },
+          {
+            kind: "text",
+            id: "when-it-is-judged",
+            heading: "Judged When the Ball Is Played, Not When It Arrives",
+            body: "This is the detail that causes the arguments. Offside is measured at the exact moment a teammate plays the ball, not at the moment the runner receives it. An attacker can be ten yards clear of every defender when the ball reaches them and still be perfectly onside, because they were level when it was struck. Timing the run late is a skill built entirely around this one word.",
+          },
+          {
+            kind: "text",
+            id: "not-an-offence-by-itself",
+            heading: "Being Offside Is Not, by Itself, an Offence",
+            body: "Standing in an offside position is not punished. It becomes an offence only when the player gets involved: playing the ball, interfering with an opponent, or gaining an advantage from being there. This is why you will see a player in an offside position deliberately step away from the ball and let a teammate run onto it instead.",
+          },
+          {
+            kind: "zone",
+            id: "where-offside-applies",
+            heading: "Where the Law Does and Does Not Apply",
+            body: "Offside only exists in the opponent's half — you can never be offside in your own. It also does not apply at all from a throw-in, a corner kick, or a goal kick, which is part of why those restarts create such crowded penalty areas.",
+            zones: [{ x: 0, y: 0, width: 100, height: 50 }],
+          },
+        ],
+        tryIt:
+          "Open Explore, turn on the opponent overlay, and switch to In possession. The opponent's deepest outfield player is the line every one of your attackers is being measured against.",
+        inlineCheck: {
+          question: "At what moment is offside judged?",
+          options: [
+            "When the attacker receives the ball",
+            "When the attacker enters the penalty area",
+            "When a teammate plays the ball",
+            "When the referee blows the whistle",
+          ],
+          correctIndex: 2,
+        },
+        takeaways: [
+          "Offside means being beyond both the ball and the second-last opponent, in the opponent's half.",
+          "It is judged when the ball is played, not when it is received.",
+          "Level is onside, and there is no offside from a throw-in, corner, or goal kick.",
+        ],
+      },
+    ],
+    quiz: [
+      {
+        question: "An attacker's cross sails over the defending team's goal line without touching anyone. What is the restart?",
+        options: [
+          "A corner kick to the attacking team",
+          "A goal kick to the defending team",
+          "A throw-in to the defending team",
+          "A drop ball on the goal line",
+        ],
+        correctIndex: 1,
+        explanation: "An attacker put it out over the goal line, so the defending team restarts with a goal kick.",
+      },
+      {
+        question: "A goalkeeper tips a shot round the post. What has the defending team just conceded?",
+        options: [
+          "A goal kick",
+          "A penalty",
+          "A corner kick",
+          "Nothing — play continues",
+        ],
+        correctIndex: 2,
+        explanation: "A defender, including the goalkeeper, was the last to touch it over their own goal line, so it is a corner.",
+      },
+      {
+        question: "A ball rolls along the touchline with part of it still overhanging the line. Is it out?",
+        options: [
+          "No — the whole ball must cross the whole line",
+          "Yes — any part of the ball touching the line is out",
+          "Only if a player touches it there",
+          "Only in the second half",
+        ],
+        correctIndex: 0,
+        explanation: "Every boundary decision uses the same all-or-nothing test: the entire ball must fully clear the line.",
+      },
+      {
+        question: "A defender trips an attacker just inside their own penalty area. What is the correct restart?",
+        options: [
+          "A direct free-kick from the edge of the area",
+          "An indirect free-kick from the penalty spot",
+          "A throw-in to the attacking team",
+          "A penalty kick",
+        ],
+        correctIndex: 3,
+        explanation: "A direct-free-kick offence by a defender inside their own penalty area is punished with a penalty kick.",
+      },
+      {
+        question: "A player already on a yellow card commits a second cautionable offence. What follows?",
+        options: [
+          "A second yellow, which becomes a red, and the team plays on with ten",
+          "A second yellow with no further consequence",
+          "A red card, but the team may bring on a substitute",
+          "A penalty kick to the opposition",
+        ],
+        correctIndex: 0,
+        explanation: "Two yellows in one match make a red, and a sent-off player is never replaced.",
+      },
+      {
+        question: "An attacker is level with the last defender when the pass is played, then runs clear to receive it. What is the decision?",
+        options: [
+          "Offside, because they were ahead of the defender when they received it",
+          "Onside, because level counts as onside and offside is judged when the ball is played",
+          "Offside, because they entered the penalty area alone",
+          "Onside, but only if the pass came from inside their own half",
+        ],
+        correctIndex: 1,
+        explanation: "Offside is measured at the moment the ball is played, and being level with the last defender is onside.",
+      },
+      {
+        question: "From which of these restarts can a player never be offside?",
+        options: [
+          "A free-kick in the attacking half",
+          "A pass from the goalkeeper in open play",
+          "A throw-in",
+          "A kick-off",
+        ],
+        correctIndex: 2,
+        explanation: "The offside law does not apply from a throw-in, a corner kick, or a goal kick.",
+      },
+    ],
+  },
+  {
+    slug: "foundations",
+    order: 2,
     title: "Foundations of the Pitch",
     accent: "gold",
     description: "Pitch thirds, formation numbers, the goalkeeper's two jobs, and why center-backs work in pairs.",
@@ -410,7 +773,7 @@ export const modules: Module[] = [
   },
   {
     slug: "defending",
-    order: 2,
+    order: 3,
     title: "The Art of Defending",
     accent: "blue",
     description: "Marking systems, defensive lines, tackling, and set pieces.",
@@ -486,7 +849,7 @@ export const modules: Module[] = [
             id: "space-behind-high-line",
             heading: "The Space Behind a High Line",
             body: "This is exactly the space a high defensive line is gambling with: empty until an attacker's run threatens to reach it before a defender can recover.",
-            zones: [{ x: 10, y: 15, width: 80, height: 20 }],
+            zones: [{ x: 10, y: 52, width: 80, height: 22 }],
           },
           {
             kind: "text",
@@ -570,7 +933,7 @@ export const modules: Module[] = [
             id: "six-yard-box",
             heading: "The Six-Yard Box on a Corner",
             body: "The most dangerous area on any corner: the zone a defense organizes around first, whether they mark zonally, man-to-man, or with a mix of both.",
-            zones: [{ x: 24, y: 1, width: 20, height: 14 }],
+            zones: [{ x: 24, y: 85, width: 20, height: 14 }],
           },
           {
             kind: "toggle",
@@ -580,17 +943,17 @@ export const modules: Module[] = [
             optionA: {
               label: "Zonal corner defending",
               zones: [
-                { x: 10, y: 1, width: 16, height: 16 },
-                { x: 26, y: 1, width: 16, height: 16 },
-                { x: 42, y: 1, width: 16, height: 16 },
+                { x: 10, y: 83, width: 16, height: 16 },
+                { x: 26, y: 83, width: 16, height: 16 },
+                { x: 42, y: 83, width: 16, height: 16 },
               ],
             },
             optionB: {
               label: "Man-marking at the corner",
               zones: [
-                { x: 15, y: 3, width: 8, height: 10 },
-                { x: 35, y: 5, width: 8, height: 10 },
-                { x: 50, y: 8, width: 8, height: 10 },
+                { x: 15, y: 87, width: 8, height: 10 },
+                { x: 35, y: 85, width: 8, height: 10 },
+                { x: 50, y: 82, width: 8, height: 10 },
               ],
             },
           },
@@ -762,7 +1125,7 @@ export const modules: Module[] = [
   },
   {
     slug: "midfield",
-    order: 3,
+    order: 4,
     title: "Controlling the Midfield",
     accent: "kickoff",
     description: "Double pivots, box-to-box coverage, pressing triggers, and central overloads.",
@@ -1099,7 +1462,7 @@ export const modules: Module[] = [
   },
   {
     slug: "attacking",
-    order: 4,
+    order: 5,
     title: "Attacking Principles",
     accent: "attack",
     description: "Width and depth, overlaps and underlaps, the False 9, and movement in the box.",
@@ -1428,7 +1791,7 @@ export const modules: Module[] = [
   },
   {
     slug: "systems",
-    order: 5,
+    order: 6,
     title: "Formations & Systems",
     accent: "control",
     description: "Back four vs. back three, the 4-4-2 diamond, wing-backs, and choosing a system for your players.",
@@ -1739,7 +2102,7 @@ export const modules: Module[] = [
   },
   {
     slug: "managers-minds",
-    order: 6,
+    order: 7,
     title: "The Managers' Minds",
     accent: "gold",
     description: "How real managers apply pressing, possession, pragmatism, and back-three systems.",
@@ -2045,7 +2408,7 @@ export const modules: Module[] = [
   },
   {
     slug: "transitions",
-    order: 7,
+    order: 8,
     title: "Transitions",
     accent: "kickoff",
     description:
@@ -2368,7 +2731,7 @@ export const modules: Module[] = [
   },
   {
     slug: "set-pieces",
-    order: 8,
+    order: 9,
     title: "Set Pieces",
     accent: "attack",
     description:
@@ -2391,7 +2754,7 @@ export const modules: Module[] = [
             id: "where-set-pieces-are-won",
             heading: "The Six-Yard Box and the Near-Post Zone",
             body: "Most set-piece goals are scored from remarkably close to goal: contested, crowded areas where timing a run and winning a first contact matters more than raw technique.",
-            zones: [{ x: 20, y: 82, width: 60, height: 18 }],
+            zones: [{ x: 20, y: 0, width: 60, height: 18 }],
           },
         ],
         tryIt:
@@ -2423,15 +2786,15 @@ export const modules: Module[] = [
             id: "near-post-vs-far-post",
             heading: "Near-Post Flick vs. Far-Post Delivery",
             body: "A near-post delivery arrives fast and asks an attacker to glance it goalward on the move, gambling on speed over control. A far-post delivery gives an attacking header more time and space to attack the ball, at the cost of a longer, more defensible flight.",
-            optionA: { label: "Near post", zones: [{ x: 30, y: 85, width: 15, height: 15 }] },
-            optionB: { label: "Far post", zones: [{ x: 60, y: 85, width: 20, height: 15 }] },
+            optionA: { label: "Near post", zones: [{ x: 30, y: 0, width: 15, height: 15 }] },
+            optionB: { label: "Far post", zones: [{ x: 60, y: 0, width: 20, height: 15 }] },
           },
           {
             kind: "zone",
             id: "the-penalty-spot-cluster",
             heading: "Attacking the Penalty Spot",
             body: "Many modern corner routines target this central area directly: the point where a flicked-on header or a direct delivery is most likely to arrive with real power behind it.",
-            zones: [{ x: 35, y: 78, width: 30, height: 15 }],
+            zones: [{ x: 35, y: 7, width: 30, height: 15 }],
           },
           {
             kind: "text",
@@ -2475,15 +2838,15 @@ export const modules: Module[] = [
             id: "the-wall-and-the-keeper",
             heading: "The Wall's Job",
             body: "A defensive wall exists to cover one specific portion of the goal so the goalkeeper only has to account for the rest, not to block the whole goal by itself. Where the wall stands changes exactly which angle a direct free-taker is being invited to attempt.",
-            zones: [{ x: 40, y: 75, width: 20, height: 20 }],
+            zones: [{ x: 40, y: 5, width: 20, height: 20 }],
           },
           {
             kind: "toggle",
             id: "disguised-run-vs-direct-shot",
             heading: "Disguised Run vs. Direct Shot",
             body: "Some routines send a decoy player over the ball as if preparing to shoot, then release a real run into the box behind that disguise instead, trading a low-probability direct effort for a higher-probability chance created by surprise.",
-            optionA: { label: "Direct shot", zones: [{ x: 42, y: 60, width: 16, height: 15 }] },
-            optionB: { label: "Disguised run into the box", zones: [{ x: 20, y: 78, width: 60, height: 18 }] },
+            optionA: { label: "Direct shot", zones: [{ x: 42, y: 25, width: 16, height: 15 }] },
+            optionB: { label: "Disguised run into the box", zones: [{ x: 20, y: 4, width: 60, height: 18 }] },
           },
         ],
         tryIt:
@@ -2521,7 +2884,7 @@ export const modules: Module[] = [
             id: "long-throw-target-zone",
             heading: "The Long Throw as a Set Piece",
             body: "A long throw deep in the attacking third can be delivered into the box with almost the same effect as a corner kick, which is why some teams specifically develop a player capable of throwing that far and drill runs to meet it.",
-            zones: [{ x: 20, y: 80, width: 60, height: 20 }],
+            zones: [{ x: 20, y: 0, width: 60, height: 20 }],
           },
         ],
         tryIt:
@@ -2559,7 +2922,7 @@ export const modules: Module[] = [
             id: "the-six-yard-battleground",
             heading: "The Shared Battleground",
             body: "This tightly contested zone is where nearly every set-piece routine in this module, attacking or defending, is ultimately decided, no matter which specific pattern a team runs to get there.",
-            zones: [{ x: 20, y: 82, width: 60, height: 18 }],
+            zones: [{ x: 20, y: 0, width: 60, height: 18 }],
           },
         ],
         tryIt:
@@ -2674,7 +3037,7 @@ export const modules: Module[] = [
   },
   {
     slug: "game-management",
-    order: 9,
+    order: 10,
     title: "Game Management",
     accent: "control",
     description:

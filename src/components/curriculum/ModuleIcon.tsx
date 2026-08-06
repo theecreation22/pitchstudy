@@ -1,5 +1,18 @@
 type IconProps = { color: string };
 
+/* A ball, for the module that covers the game itself rather than a phase of
+   it — deliberately unlike FoundationsIcon's concentric rings, which sit
+   directly beneath it in the module list. */
+function TheBasicsIcon({ color }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke={color} strokeWidth="1.6" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="8.5" />
+      <path d="M12 7.5 L15.7 10.2 L14.3 14.6 H9.7 L8.3 10.2 Z" />
+      <path d="M12 7.5 V3.7 M15.7 10.2 L19.6 9 M14.3 14.6 L16.7 17.9 M9.7 14.6 L7.3 17.9 M8.3 10.2 L4.4 9" />
+    </svg>
+  );
+}
+
 function FoundationsIcon({ color }: IconProps) {
   return (
     <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke={color} strokeWidth="1.6">
@@ -86,6 +99,7 @@ function GameManagementIcon({ color }: IconProps) {
 }
 
 const icons: Record<string, (props: IconProps) => React.JSX.Element> = {
+  "the-basics": TheBasicsIcon,
   foundations: FoundationsIcon,
   defending: DefendingIcon,
   midfield: MidfieldIcon,
