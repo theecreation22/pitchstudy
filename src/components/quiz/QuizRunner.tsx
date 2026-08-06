@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import type { Quiz } from "@/lib/quizzes";
 import { useLocalStorageValue } from "@/lib/useLocalStorageValue";
+import { shuffleOptions } from "@/lib/shuffleOptions";
 import { ScoreboardHeader } from "./ScoreboardHeader";
 
 function scoreMessage(score: number, total: number): string {
@@ -20,6 +21,8 @@ export function QuizRunner({ quiz }: { quiz: Quiz }) {
   const [score, setScore] = useState(0);
   const [finished, setFinished] = useState(false);
   const [isNewBest, setIsNewBest] = useState(false);
+  // See ModuleQuizRunner: bumping this on retry re-deals the answer order.
+  const [attempt, setAttempt] = useState(0);
 
   const bestScoreKey = `pitchstudy:quiz:${quiz.slug}:best`;
   const [bestScoreRaw, setBestScoreRaw] = useLocalStorageValue(bestScoreKey);
@@ -28,11 +31,15 @@ export function QuizRunner({ quiz }: { quiz: Quiz }) {
   const question = quiz.questions[currentIndex];
   const isLast = currentIndex === quiz.questions.length - 1;
   const hasAnswered = selectedIndex !== null;
+  const shuffled = useMemo(
+    () => shuffleOptions(question.options, question.correctIndex, `${question.question}#${attempt}`),
+    [question, attempt],
+  );
 
   function selectOption(index: number) {
     if (hasAnswered) return;
     setSelectedIndex(index);
-    if (index === question.correctIndex) {
+    if (index === shuffled.correctIndex) {
       setScore((current) => current + 1);
     }
   }
@@ -57,6 +64,7 @@ export function QuizRunner({ quiz }: { quiz: Quiz }) {
     setScore(0);
     setFinished(false);
     setIsNewBest(false);
+    setAttempt((current) => current + 1);
   }
 
   if (finished) {
@@ -110,8 +118,8 @@ export function QuizRunner({ quiz }: { quiz: Quiz }) {
       </p>
 
       <div className="flex flex-col gap-3" role="group" aria-label="Answer options">
-        {question.options.map((option, index) => {
-          const isCorrect = index === question.correctIndex;
+        {shuffled.options.map((option, index) => {
+          const isCorrect = index === shuffled.correctIndex;
           const isSelected = index === selectedIndex;
 
           let stateClasses = "border-pitch-touchline/40 text-pitch-line hover:border-pitch-touchline";

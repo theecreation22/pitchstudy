@@ -1,19 +1,24 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import type { ChallengeQuestion } from "@/lib/managers";
+import { shuffleOptions } from "@/lib/shuffleOptions";
 
 /** A single self-contained quiz question, answerable from the manager's own page content. Deliberately has no XP/streak/localStorage state of its own — that's what the full Challenge Mode at /challenge is for; this is just a quick, reusable check reusing that mode's visual language. */
 export function ManagerChallengeQuestion({ question }: { question: ChallengeQuestion }) {
   const [selected, setSelected] = useState<number | null>(null);
   const hasAnswered = selected !== null;
+  const shuffled = useMemo(
+    () => shuffleOptions(question.options, question.correctIndex, question.question),
+    [question],
+  );
 
   return (
     <div className="flex flex-col gap-3">
       <p className="text-sm font-medium leading-relaxed text-pitch-line">{question.question}</p>
       <div className="flex flex-col gap-2" role="group" aria-label="Answer options">
-        {question.options.map((option, optionIndex) => {
-          const isCorrect = optionIndex === question.correctIndex;
+        {shuffled.options.map((option, optionIndex) => {
+          const isCorrect = optionIndex === shuffled.correctIndex;
           const isSelected = optionIndex === selected;
           let stateClasses = "border-pitch-touchline/40 text-pitch-line hover:border-pitch-touchline";
           if (hasAnswered) {

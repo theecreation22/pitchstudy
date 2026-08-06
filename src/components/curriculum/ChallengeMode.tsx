@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useProgress } from "@/lib/progress";
 import { modules, type ModuleQuizQuestion } from "@/lib/curriculum";
+import { shuffleOptions } from "@/lib/shuffleOptions";
 
 function shuffle<T>(items: T[]): T[] {
   const copy = [...items];
@@ -37,6 +38,17 @@ export function ChallengeMode() {
     setStreak(0);
   }, [completedKey]);
 
+  // Resolved before the early returns below, because hooks cannot be called
+  // conditionally — hence the nullable question rather than indexing into a
+  // pool that may still be empty.
+  const question = pool.length > 0 ? pool[index % pool.length] : null;
+  // `index` is in the seed so a question drawn again later in a long streak
+  // comes back with its answers in a different order.
+  const shuffled = useMemo(
+    () => (question ? shuffleOptions(question.options, question.correctIndex, `${question.question}#${index}`) : null),
+    [question, index],
+  );
+
   if (completedModuleSlugs.length === 0) {
     return (
       <div className="rounded-lg border border-defend/30 bg-pitch-card p-8 text-center">
@@ -56,17 +68,19 @@ export function ChallengeMode() {
     );
   }
 
-  if (pool.length === 0) {
+  if (!question || !shuffled) {
     return <p className="text-sm text-pitch-touchline">Loading challenge questions…</p>;
   }
 
-  const question = pool[index % pool.length];
   const hasAnswered = selected !== null;
+  // Aliased post-guard: `selectOption` below is a hoisted function
+  // declaration, so TypeScript won't carry the null-narrowing into it.
+  const answers = shuffled;
 
   function selectOption(optionIndex: number) {
     if (hasAnswered) return;
     setSelected(optionIndex);
-    if (optionIndex === question.correctIndex) {
+    if (optionIndex === answers.correctIndex) {
       const nextStreak = streak + 1;
       setStreak(nextStreak);
       recordChallengeStreak(nextStreak);
@@ -100,8 +114,8 @@ export function ChallengeMode() {
       </p>
 
       <div className="flex flex-col gap-3" role="group" aria-label="Answer options">
-        {question.options.map((option, optionIndex) => {
-          const isCorrect = optionIndex === question.correctIndex;
+        {answers.options.map((option, optionIndex) => {
+          const isCorrect = optionIndex === answers.correctIndex;
           const isSelected = optionIndex === selected;
           let stateClasses = "border-pitch-touchline/40 text-pitch-line hover:border-pitch-touchline";
           if (hasAnswered) {

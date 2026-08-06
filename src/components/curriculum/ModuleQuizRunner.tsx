@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useProgress } from "@/lib/progress";
 import type { Module } from "@/lib/curriculum";
+import { shuffleOptions } from "@/lib/shuffleOptions";
 import { ScoreboardHeader } from "@/components/quiz/ScoreboardHeader";
 
 function scoreMessage(score: number, total: number): string {
@@ -19,16 +20,24 @@ export function ModuleQuizRunner({ module }: { module: Module }) {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [score, setScore] = useState(0);
   const [finished, setFinished] = useState(false);
+  // Folded into the shuffle seed so "Try again" deals the answers in a new
+  // order rather than replaying the exact board the user just memorised.
+  // Starts at 0 so the first render matches on server and client.
+  const [attempt, setAttempt] = useState(0);
 
   const question = module.quiz[currentIndex];
   const isLast = currentIndex === module.quiz.length - 1;
   const hasAnswered = selectedIndex !== null;
   const best = state.quizBestScores[module.slug];
+  const shuffled = useMemo(
+    () => shuffleOptions(question.options, question.correctIndex, `${question.question}#${attempt}`),
+    [question, attempt],
+  );
 
   function selectOption(index: number) {
     if (hasAnswered) return;
     setSelectedIndex(index);
-    if (index === question.correctIndex) setScore((current) => current + 1);
+    if (index === shuffled.correctIndex) setScore((current) => current + 1);
   }
 
   function goNext() {
@@ -46,6 +55,7 @@ export function ModuleQuizRunner({ module }: { module: Module }) {
     setSelectedIndex(null);
     setScore(0);
     setFinished(false);
+    setAttempt((current) => current + 1);
   }
 
   if (finished) {
@@ -96,8 +106,8 @@ export function ModuleQuizRunner({ module }: { module: Module }) {
       </p>
 
       <div className="flex flex-col gap-3" role="group" aria-label="Answer options">
-        {question.options.map((option, index) => {
-          const isCorrect = index === question.correctIndex;
+        {shuffled.options.map((option, index) => {
+          const isCorrect = index === shuffled.correctIndex;
           const isSelected = index === selectedIndex;
 
           let stateClasses = "border-pitch-touchline/40 text-pitch-line hover:border-pitch-touchline";

@@ -1,18 +1,25 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import type { InlineCheck } from "@/lib/curriculum";
+import { shuffleOptions } from "@/lib/shuffleOptions";
 
 export function InlineCheckView({ check }: { check: InlineCheck }) {
   const [selected, setSelected] = useState<number | null>(null);
+  // A quick check is answered once and never retried, so the question text
+  // alone is seed enough.
+  const shuffled = useMemo(
+    () => shuffleOptions(check.options, check.correctIndex, check.question),
+    [check],
+  );
 
   return (
     <div className="rounded-lg border border-pitch-touchline/30 bg-pitch-card p-5">
       <p className="font-mono text-xs uppercase tracking-widest text-attack">Quick check</p>
       <p className="mt-2 text-base font-medium text-pitch-line">{check.question}</p>
       <div className="mt-3 flex flex-col gap-2">
-        {check.options.map((option, index) => {
-          const isCorrect = index === check.correctIndex;
+        {shuffled.options.map((option, index) => {
+          const isCorrect = index === shuffled.correctIndex;
           const isSelected = index === selected;
           let stateClasses = "border-pitch-touchline/40 text-pitch-line hover:border-pitch-touchline";
           if (selected !== null) {
