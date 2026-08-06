@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { AuthChip } from "./AuthChip";
+import { PitchStudyMark } from "@/components/brand/PitchStudyMark";
 import { useSync } from "@/lib/sync/SyncProvider";
 
 type IconProps = { className?: string };
@@ -151,7 +152,8 @@ export function SiteNav() {
     <>
       {/* Desktop left rail */}
       <nav className="telemetry-glass fixed inset-y-0 left-0 z-40 hidden w-60 flex-col border-r p-4 lg:flex" aria-label="Site">
-        <Link href="/" className={`${LINK_CLASS} px-3 py-3 text-base text-pitch-line`}>
+        <Link href="/" className={`${LINK_CLASS} flex items-center gap-2.5 px-3 py-3 text-base text-pitch-line`}>
+          <PitchStudyMark id="ps-mark-rail" className="h-8 w-8 shrink-0" strokeWidth={3} detail="compact" />
           PitchStudy
         </Link>
 
@@ -184,7 +186,8 @@ export function SiteNav() {
       {/* Mobile / tablet top bar */}
       <nav className="telemetry-glass sticky top-0 z-40 w-full border-b lg:hidden" aria-label="Site">
         <div className="relative mx-auto flex w-full max-w-5xl items-center justify-between px-4 py-4 sm:px-8">
-          <Link href="/" className={`${LINK_CLASS} text-pitch-line`}>
+          <Link href="/" className={`${LINK_CLASS} flex items-center gap-2 text-pitch-line`}>
+            <PitchStudyMark id="ps-mark-bar" className="h-7 w-7 shrink-0" strokeWidth={3.4} detail="compact" />
             PitchStudy
           </Link>
 
