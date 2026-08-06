@@ -94,7 +94,7 @@
   --color-background: var(--pitch-slate);
   --color-foreground: var(--pitch-line);
 
-  --font-display: var(--font-big-shoulders);
+  --font-display: var(--font-barlow-condensed);
   --font-sans: var(--font-public-sans);
   --font-mono: var(--font-plex-mono);
 
@@ -453,8 +453,14 @@ body {
    DNA carries over even though the chrome is new. Not yet in DESIGN.md —
    this is a single-surface preview, same status Tactics Lab and the
    homepage each had before their own worlds were proven out. */
+/* Page-headline face — same Barlow Condensed as font-display since the
+   serif experiment was replaced by request; kept as its own class so the
+   headline slot can diverge from UI chrome again without touching every
+   h1. Headlines want the condensed face's uppercase voice. */
 .font-telemetry-display {
-  font-family: var(--font-frank-ruhl);
+  font-family: var(--font-barlow-condensed);
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
 }
 
 .telemetry-frame {

@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
-import { Big_Shoulders, Public_Sans, IBM_Plex_Mono, Frank_Ruhl_Libre } from "next/font/google";
+import { Barlow_Condensed, Public_Sans, IBM_Plex_Mono } from "next/font/google";
 import { FloodlitAtmosphere } from "@/components/effects/FloodlitAtmosphere";
 import { SiteNav } from "@/components/nav/SiteNav";
 import { SyncProvider } from "@/lib/sync/SyncProvider";
 import { SyncInvitation } from "@/components/auth/SyncInvitation";
 import "./globals.css";
 
-const bigShoulders = Big_Shoulders({
-  variable: "--font-big-shoulders",
-  weight: ["500", "700", "900"],
+const barlowCondensed = Barlow_Condensed({
+  variable: "--font-barlow-condensed",
+  weight: ["500", "600", "700", "900"],
   subsets: ["latin"],
 });
 
@@ -20,12 +20,6 @@ const publicSans = Public_Sans({
 const plexMono = IBM_Plex_Mono({
   variable: "--font-plex-mono",
   weight: ["400", "500", "600"],
-  subsets: ["latin"],
-});
-
-const frankRuhlLibre = Frank_Ruhl_Libre({
-  variable: "--font-frank-ruhl",
-  weight: ["500", "700", "900"],
   subsets: ["latin"],
 });
 
@@ -43,7 +37,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${bigShoulders.variable} ${publicSans.variable} ${plexMono.variable} ${frankRuhlLibre.variable} h-full`}
+      className={`${barlowCondensed.variable} ${publicSans.variable} ${plexMono.variable} h-full`}
     >
       <body className="min-h-full flex flex-col bg-pitch-slate text-pitch-line antialiased">
         <SyncProvider>
