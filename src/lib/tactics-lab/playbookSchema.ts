@@ -46,6 +46,8 @@ export type PlaybookPlayEntry = PlaybookEntryBase &
         instructions: Instructions;
         steps: PlayStep[];
         seededFrom?: string;
+        /** The kick-off spot this play replays from; absent means the neutral default, so entries saved before ball placement existed still replay exactly as they were authored. */
+        ballStart?: { x: number; y: number };
       }
     | {
         type: "play";

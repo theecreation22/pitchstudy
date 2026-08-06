@@ -39,7 +39,7 @@ export function PlaybookThumbnail({ entry, size = 56 }: { entry: PlaybookEntry; 
   if (entry.type === "formation") {
     dots = entry.players.map((p) => ({ id: p.id, x: p.x, y: p.y }));
   } else if (entry.origin === "designer") {
-    const frames = computePlayFrames(entry.players, entry.steps);
+    const frames = computePlayFrames(entry.players, entry.steps, entry.ballStart);
     const finalFrame = frames[frames.length - 1];
     dots = entry.players.map((p) => ({ id: p.id, x: finalFrame.positions[p.id]?.x ?? p.x, y: finalFrame.positions[p.id]?.y ?? p.y }));
     ballPath = frames.map((f) => f.ballPosition);

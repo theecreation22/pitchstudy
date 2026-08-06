@@ -37,6 +37,8 @@ export type Design = {
   seededFrom?: string;
   /** A choreographed move built on top of this formation's starting positions, in Play Designer mode. Absent until the user adds a first step. */
   play?: PlayStep[];
+  /** Where the ball sits before step one — placed by the user in Play Designer. Absent means the neutral default (see DEFAULT_BALL_START), which is what plays authored before ball placement existed replay from. */
+  ballStart?: { x: number; y: number };
   /** The opponent formation slug selected in Opponent Sim, if any — absent means no opponent overlay is shown. */
   opponentFormationSlug?: string;
 };

@@ -26,7 +26,7 @@ function shareUrlFor(entry: PlaybookEntry): string {
   if (entry.type === "formation") {
     return `${origin}/tactics-lab?board=${encodeSharedBoard({ kind: "formation", name: entry.name, players: entry.players, instructions: entry.instructions })}`;
   }
-  return `${origin}/tactics-lab?board=${encodeSharedBoard({ kind: "play", name: entry.name, players: entry.players, instructions: entry.instructions, steps: entry.steps })}`;
+  return `${origin}/tactics-lab?board=${encodeSharedBoard({ kind: "play", name: entry.name, players: entry.players, instructions: entry.instructions, steps: entry.steps, ballStart: entry.ballStart })}`;
 }
 
 function formatDate(iso: string): string {

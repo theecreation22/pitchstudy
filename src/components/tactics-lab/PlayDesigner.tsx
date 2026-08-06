@@ -5,7 +5,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { PitchMarkings } from "@/components/pitch/PitchMarkings";
 import type { DefensiveStyle, FormationPlayer, Phase } from "@/lib/formations";
 import type { LabPlayer } from "@/lib/tactics-lab/designSchema";
-import { computePlayFrames, getCarrierId, type PlayActionKind, type PlayStep } from "@/lib/tactics-lab/playSchema";
+import { computePlayFrames, describeStep, getCarrierId, type PlayActionKind, type PlayStep } from "@/lib/tactics-lab/playSchema";
 import { StepTimeline } from "./StepTimeline";
 
 /** How long each step's movement animates for, and the gap before the next step starts — the gap is what makes playback read as a sequence rather than everything arriving at once. */
@@ -43,6 +43,10 @@ type Props = {
   phase?: Phase;
   /** High press or low block — only used for the preview hint text below. */
   defensiveStyle?: DefensiveStyle;
+  /** Where the play kicks off from. Undefined falls back to the neutral default inside `computePlayFrames`. */
+  ballStart?: { x: number; y: number };
+  /** Records a new kick-off spot. Omitted in read-only contexts, which hides the placement control entirely. */
+  onBallStartChange?: (point: { x: number; y: number }) => void;
   /** True while `players` is a derived out-of-possession preview rather than the design's real, editable positions — disables choreographing so there's nothing recorded against a shape that isn't the authored one. */
   readOnly?: boolean;
 };
@@ -54,6 +58,8 @@ export function PlayDesigner({
   opponentPlayers,
   phase = "in-possession",
   defensiveStyle = "low-block",
+  ballStart,
+  onBallStartChange,
   readOnly = false,
 }: Props) {
   const reduceMotion = useReducedMotion();
@@ -66,15 +72,18 @@ export function PlayDesigner({
   const [isPlaying, setIsPlaying] = useState(false);
   const [playbackIndex, setPlaybackIndex] = useState(0);
   const [justShot, setJustShot] = useState(false);
+  const [isPlacingBall, setIsPlacingBall] = useState(false);
 
   useEffect(() => {
     if (!readOnly) return;
     // eslint-disable-next-line react-hooks/set-state-in-effect -- clearing an in-progress step selection that no longer applies once the pitch switches to a read-only preview, not derivable during render
     setPendingActorId(null);
     setPendingKind(null);
+    setIsPlacingBall(false);
   }, [readOnly]);
 
-  const frames = computePlayFrames(players, steps);
+  const canPlaceBall = !readOnly && Boolean(onBallStartChange);
+  const frames = computePlayFrames(players, steps, ballStart);
   const displayIndex = isPlaying ? playbackIndex : (previewIndex ?? frames.length - 1);
   const frame = frames[displayIndex];
 
@@ -88,6 +97,16 @@ export function PlayDesigner({
   // frame is currently displayed (including a scrubbed preview), not always
   // the latest — distinct from `carrierId` above, which gates new actions.
   const displayedCarrierId = getCarrierId(frame);
+
+  // Moving the kick-off spot re-runs the whole sequence from somewhere new,
+  // which can strand a pass or shot that was recorded when someone else was
+  // on the ball. Rather than silently replaying a play where the ball leaves
+  // a player who never had it, find the first such step and say so — the
+  // same check also catches a shape edited in Formation Designer after the
+  // play was choreographed.
+  const strandedIndex = steps.findIndex(
+    (step, index) => step.kind !== "run" && getCarrierId(frames[index]) !== step.playerId,
+  );
 
   useEffect(() => {
     if (!isPlaying) return;
@@ -121,6 +140,25 @@ export function PlayDesigner({
     setPendingKind(null);
   }
 
+  /** Arming ball placement jumps the board to frame 0 — the spot being set is only visible there, so without this the click appears to do nothing on a play that's already several steps long. */
+  function toggleBallPlacement() {
+    if (isPlacingBall) {
+      setIsPlacingBall(false);
+      return;
+    }
+    setIsPlaying(false);
+    setPreviewIndex(0);
+    resetPending();
+    setIsPlacingBall(true);
+  }
+
+  function placeBallAt(point: { x: number; y: number }) {
+    onBallStartChange?.(point);
+    setIsPlacingBall(false);
+    // Stay on frame 0 so the result of the placement is what's on screen.
+    setPreviewIndex(0);
+  }
+
   function commitStep(step: PlayStep) {
     onStepsChange([...steps, step]);
     setRedoStack([]);
@@ -129,6 +167,14 @@ export function PlayDesigner({
   }
 
   function handleSelectPlayer(playerId: string) {
+    // Clicking a player while placing starts the play at their feet, which is
+    // the common case — "the CM begins on the ball" — and puts the ball close
+    // enough to make them the carrier under getCarrierId's proximity test.
+    if (isPlacingBall) {
+      const player = players.find((p) => p.id === playerId);
+      if (player) placeBallAt({ x: player.x, y: player.y });
+      return;
+    }
     // Re-checked here (not just at the Pass button itself) so a pass can
     // never commit for a player who isn't actually on the ball, regardless
     // of how `pendingKind` got set to "pass".
@@ -141,7 +187,12 @@ export function PlayDesigner({
   }
 
   function handlePitchClick(event: React.MouseEvent<HTMLDivElement>) {
-    if (!containerRef.current || !pendingActorId || !pendingKind) return;
+    if (!containerRef.current) return;
+    if (isPlacingBall) {
+      placeBallAt(pointFromClick(event, containerRef.current));
+      return;
+    }
+    if (!pendingActorId || !pendingKind) return;
     if (pendingKind !== "run" && pendingActorId !== carrierId) return;
     const point = pointFromClick(event, containerRef.current);
     commitStep({ id: crypto.randomUUID(), kind: pendingKind, playerId: pendingActorId, toPoint: point });
@@ -175,7 +226,9 @@ export function PlayDesigner({
       <div
         ref={containerRef}
         onClick={readOnly ? undefined : handlePitchClick}
-        className="telemetry-panel-lift relative w-full touch-none select-none aspect-[68/105] rounded-xl border-2 border-pitch-touchline/25 bg-pitch-deep p-2 sm:p-3"
+        className={`telemetry-panel-lift relative w-full touch-none select-none aspect-[68/105] rounded-xl border-2 bg-pitch-deep p-2 transition-colors sm:p-3 ${
+          isPlacingBall ? "cursor-crosshair border-pitch-marker/60" : "border-pitch-touchline/25"
+        }`}
       >
         <motion.div
           aria-hidden="true"
@@ -264,8 +317,12 @@ export function PlayDesigner({
               type="button"
               disabled={readOnly}
               tabIndex={readOnly ? -1 : 0}
-              aria-label={`${player.role}${hasBall ? " (has the ball)" : ""}${isSelected ? " (selected)" : ""}`}
-              aria-pressed={readOnly ? undefined : isSelected}
+              aria-label={
+                isPlacingBall
+                  ? `Start the play with ${player.role} on the ball`
+                  : `${player.role}${hasBall ? " (has the ball)" : ""}${isSelected ? " (selected)" : ""}`
+              }
+              aria-pressed={readOnly || isPlacingBall ? undefined : isSelected}
               onClick={
                 readOnly
                   ? undefined
@@ -287,7 +344,7 @@ export function PlayDesigner({
                       : phase === "out-of-possession"
                         ? "border-defend/40"
                         : "border-attack/40"
-                } ${hasBall && !isSelected ? "ring-2 ring-pitch-marker/60 ring-offset-2 ring-offset-pitch-deep" : ""}`}
+                } ${hasBall && !isSelected ? "ring-2 ring-pitch-marker ring-offset-2 ring-offset-pitch-deep" : ""}`}
               >
                 {player.role}
               </div>
@@ -303,7 +360,13 @@ export function PlayDesigner({
             scale: justShot && displayIndex === frames.length - 1 ? [1, 1.8, 1] : 1,
           }}
           transition={{ duration: reduceMotion ? 0 : STEP_ANIMATION_SECONDS, ease: "easeInOut" }}
-          className="pointer-events-none absolute z-20 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-pitch-line shadow-[0_0_6px_rgba(34,56,74,0.45)]"
+          // Once the ball is at someone's feet it drops behind the markers so
+          // it can't sit on top of their role label — the carrier's own ring
+          // (below) is what says who's on it at that point. In open space it
+          // rides above everything, where it's the only thing to look at.
+          className={`pointer-events-none absolute h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-pitch-line shadow-[0_0_6px_rgba(34,56,74,0.45)] ${
+            displayedCarrierId ? "z-[5]" : "z-20"
+          } ${isPlacingBall ? "ring-2 ring-pitch-marker ring-offset-2 ring-offset-pitch-deep" : ""}`}
         />
       </div>
 
@@ -314,7 +377,27 @@ export function PlayDesigner({
       ) : (
         <>
           <div className="flex flex-wrap items-center gap-2">
-            {pendingActor ? (
+            {canPlaceBall && (
+              <button
+                type="button"
+                aria-pressed={isPlacingBall}
+                onClick={toggleBallPlacement}
+                className={`inline-flex min-h-9 items-center gap-2 rounded-md border px-3 font-mono text-xs uppercase tracking-widest transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker ${
+                  isPlacingBall
+                    ? "border-pitch-marker bg-pitch-marker/15 text-pitch-marker"
+                    : "border-pitch-touchline/40 text-pitch-touchline hover:border-pitch-touchline hover:text-pitch-line"
+                }`}
+              >
+                <span aria-hidden="true" className="h-2 w-2 rounded-full bg-current" />
+                Ball start
+              </button>
+            )}
+
+            {isPlacingBall ? (
+              <span className="text-xs text-pitch-touchline">
+                Click a player to start the play at their feet, or anywhere on the pitch for a loose ball.
+              </span>
+            ) : pendingActor ? (
               <>
                 <span className="font-mono text-xs uppercase tracking-widest text-pitch-marker">{pendingActor.role}:</span>
                 {(["pass", "run", "shot"] as PlayActionKind[]).map((kind) => {
@@ -352,9 +435,18 @@ export function PlayDesigner({
                 </button>
               </>
             ) : (
-              <p className="text-xs leading-relaxed text-pitch-touchline">Select a player to start choreographing a move.</p>
+              <p className="text-xs leading-relaxed text-pitch-touchline">
+                Set where the ball starts, then select a player to choreograph a move.
+              </p>
             )}
           </div>
+
+          {strandedIndex >= 0 && (
+            <p className="rounded-md border border-press/40 bg-press/10 px-3 py-2 text-xs leading-relaxed text-pitch-line">
+              Step {strandedIndex + 1}: {describeStep(steps[strandedIndex], players)} — but they aren&apos;t on the ball when it
+              happens. Move the ball start onto them, or delete that step.
+            </p>
+          )}
 
           <StepTimeline
             steps={steps}

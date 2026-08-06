@@ -31,7 +31,7 @@ import type { PlayStep } from "@/lib/tactics-lab/playSchema";
 import { computeScores, generateNotes } from "@/lib/tactics-lab/engine";
 import { recognizeShape } from "@/lib/tactics-lab/shapeRecognition";
 import { useTacticsPlaybook } from "@/lib/tactics-lab/usePlaybook";
-import { decodeSharedBoard, type SharedBoard } from "@/lib/tactics-lab/playbookShare";
+import { decodeSharedBoard, parseBallStart, type SharedBoard } from "@/lib/tactics-lab/playbookShare";
 import { formationEntryToFormation, PLAYBOOK_OPPONENT_PREFIX, type PlaybookEntry } from "@/lib/tactics-lab/playbookSchema";
 import { useProgress } from "@/lib/progress";
 import { FormationBoard } from "./FormationBoard";
@@ -103,6 +103,7 @@ function parseDesign(raw: string | null): Design {
           instructions: parsed.instructions,
           seededFrom: parsed.seededFrom,
           play: Array.isArray(parsed.play) ? parsed.play : undefined,
+          ballStart: parseBallStart(parsed.ballStart),
           opponentFormationSlug: parsed.opponentFormationSlug,
         };
       }
@@ -212,7 +213,13 @@ export function TacticsLab({ coachAvailable }: { coachAvailable: boolean }) {
     const nextDesign: Design =
       entry.type === "formation"
         ? { players: entry.players, instructions: entry.instructions }
-        : { players: entry.players, instructions: entry.instructions, play: entry.steps, seededFrom: entry.seededFrom };
+        : {
+            players: entry.players,
+            instructions: entry.instructions,
+            play: entry.steps,
+            seededFrom: entry.seededFrom,
+            ballStart: entry.ballStart,
+          };
     setRaw(JSON.stringify(nextDesign));
     setDirty(false);
     setActiveEntry({ id: entry.id, type: entry.type, number: entry.number, name: entry.name });
@@ -246,7 +253,7 @@ export function TacticsLab({ coachAvailable }: { coachAvailable: boolean }) {
     const entry: PlaybookEntry =
       entryType === "formation"
         ? { ...base, type: "formation", players: design.players, instructions: design.instructions, shapeName: recognizeShape(design.players) }
-        : { ...base, type: "play", origin: "designer", players: design.players, instructions: design.instructions, steps: design.play ?? [], seededFrom: design.seededFrom };
+        : { ...base, type: "play", origin: "designer", players: design.players, instructions: design.instructions, steps: design.play ?? [], seededFrom: design.seededFrom, ballStart: design.ballStart };
 
     playbook.upsert(entry);
     progress.recordPlaybookSave(playbook.entries.length + (result.asNew || !activeEntry ? 1 : 0));
@@ -257,6 +264,10 @@ export function TacticsLab({ coachAvailable }: { coachAvailable: boolean }) {
 
   function setPlaySteps(play: PlayStep[]) {
     persist({ ...design, play });
+  }
+
+  function setBallStart(ballStart: { x: number; y: number }) {
+    persist({ ...design, ballStart });
   }
 
   function setOpponentSlug(opponentFormationSlug: string | undefined) {
@@ -290,6 +301,7 @@ export function TacticsLab({ coachAvailable }: { coachAvailable: boolean }) {
   const effectivePlayers = sharedBoard ? sharedBoard.players : design.players;
   const effectiveInstructions = sharedBoard ? sharedBoard.instructions : design.instructions;
   const effectiveSteps = sharedBoard ? (sharedBoard.kind === "play" ? sharedBoard.steps : []) : (design.play ?? []);
+  const effectiveBallStart = sharedBoard ? (sharedBoard.kind === "play" ? sharedBoard.ballStart : undefined) : design.ballStart;
 
   // A direct port of FormationExplorer.tsx's own derivation — same shape in,
   // same steps, same functions, in the same order — so every combination of
@@ -391,7 +403,12 @@ export function TacticsLab({ coachAvailable }: { coachAvailable: boolean }) {
               const nextDesign: Design =
                 sharedBoard.kind === "formation"
                   ? { players: sharedBoard.players, instructions: sharedBoard.instructions }
-                  : { players: sharedBoard.players, instructions: sharedBoard.instructions, play: sharedBoard.steps };
+                  : {
+                      players: sharedBoard.players,
+                      instructions: sharedBoard.instructions,
+                      play: sharedBoard.steps,
+                      ballStart: sharedBoard.ballStart,
+                    };
               setRaw(JSON.stringify(nextDesign));
               setActiveEntry(null);
               setDirty(false);
@@ -496,6 +513,8 @@ export function TacticsLab({ coachAvailable }: { coachAvailable: boolean }) {
               players={boardPlayers}
               steps={effectiveSteps}
               onStepsChange={setPlaySteps}
+              ballStart={effectiveBallStart}
+              onBallStartChange={setBallStart}
               opponentPlayers={opponentPlayers}
               phase={phase}
               defensiveStyle={defensiveStyle}

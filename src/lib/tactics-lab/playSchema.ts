@@ -24,18 +24,24 @@ export type StepFrame = {
   ballPosition: { x: number; y: number };
 };
 
-/** Where the ball sits before any step has been recorded — a neutral, roughly central starting point rather than tied to any one player. */
-const DEFAULT_BALL_POSITION = { x: 50, y: 60 };
+/** Where the ball sits before any step has been recorded, for a design that hasn't placed it itself — a neutral, roughly central starting point rather than tied to any one player. */
+export const DEFAULT_BALL_START = { x: 50, y: 60 };
 
 /** How close a player must be to the ball to count as its carrier — small enough to require an actual, specific owner, generous enough to tolerate the ball sitting slightly off a player's exact marker. */
 const CARRIER_PROXIMITY = 3;
 
-/** Whoever is within `CARRIER_PROXIMITY` of the ball in this frame, if anyone — null means the ball currently belongs to no one, so nobody can pass or shoot it yet. Purely positional (not a tracked "who last touched it" label), so a player who's since run away from a reception point correctly stops counting as the carrier. */
+/** Whoever is nearest the ball in this frame, within `CARRIER_PROXIMITY` — null means the ball currently belongs to no one, so nobody can pass or shoot it yet. Purely positional (not a tracked "who last touched it" label), so a player who's since run away from a reception point correctly stops counting as the carrier. Nearest rather than first-found matters once the ball can be placed by hand: dropping it exactly on a player must name that player, never a neighbour who merely happens to be listed earlier. */
 export function getCarrierId(frame: StepFrame): string | null {
+  let carrierId: string | null = null;
+  let bestDistance = CARRIER_PROXIMITY;
   for (const [id, position] of Object.entries(frame.positions)) {
-    if (Math.hypot(position.x - frame.ballPosition.x, position.y - frame.ballPosition.y) <= CARRIER_PROXIMITY) return id;
+    const distance = Math.hypot(position.x - frame.ballPosition.x, position.y - frame.ballPosition.y);
+    if (distance <= bestDistance) {
+      bestDistance = distance;
+      carrierId = id;
+    }
   }
-  return null;
+  return carrierId;
 }
 
 /**
@@ -44,12 +50,20 @@ export function getCarrierId(frame: StepFrame): string | null {
  * `frames[i]` is always "the state after step i has happened" for i > 0.
  * This lets the UI jump to or animate toward any point in the sequence
  * without re-deriving anything — every frame is a complete snapshot.
+ *
+ * `ballStart` is where the design says the play kicks off from; omitting it
+ * falls back to the neutral default, which is what every play authored
+ * before ball placement existed relies on.
  */
-export function computePlayFrames(initialPlayers: LabPlayer[], steps: PlayStep[]): StepFrame[] {
+export function computePlayFrames(
+  initialPlayers: LabPlayer[],
+  steps: PlayStep[],
+  ballStart: { x: number; y: number } = DEFAULT_BALL_START,
+): StepFrame[] {
   let positions: Record<string, { x: number; y: number }> = Object.fromEntries(
     initialPlayers.map((p) => [p.id, { x: p.x, y: p.y }]),
   );
-  let ballPosition = { ...DEFAULT_BALL_POSITION };
+  let ballPosition = { ...ballStart };
 
   const frames: StepFrame[] = [{ positions: { ...positions }, ballPosition: { ...ballPosition } }];
 
