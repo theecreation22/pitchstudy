@@ -43,7 +43,12 @@ export function DefensiveStyleToggle({ style, onChange, visible = true }: Props)
             aria-label="Toggle high press / low block"
             onClick={() => onChange(isLowBlock ? "high-press" : "low-block")}
             className="relative h-7 w-14 shrink-0 rounded-full transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-line"
-            style={{ background: isLowBlock ? "var(--defend)" : "var(--press)" }}
+            // Same --grad-pill-* ramps the SegmentedTabs pills use, so the two
+            // high-press/low-block controls in the app read as one language.
+            style={{
+              backgroundColor: isLowBlock ? "var(--defend)" : "var(--press)",
+              backgroundImage: isLowBlock ? "var(--grad-pill-defend)" : "var(--grad-pill-press)",
+            }}
           >
             <motion.span
               className="absolute top-1 left-1 h-5 w-5 rounded-full bg-pitch-line shadow-[0_2px_4px_rgba(0,0,0,0.5)]"

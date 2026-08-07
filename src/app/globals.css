@@ -46,6 +46,42 @@
     color-mix(in srgb, var(--defend) 60%, var(--press) 40%) 100%
   );
 
+  /* Active-pill fills for SegmentedTabs. Each tone gets a lit-from-above
+     ramp (135deg: bright top-left, base hue bottom-right) inside its OWN
+     hue family, so the gradient adds depth without touching what the hue
+     means — High Press still reads red, Deep still reads blue.
+     Deliberately NOT --grad-attack / --grad-control: those bottom out at
+     --press-deep / --defend-deep, which drop the dark ink label below
+     4.5:1. Every stop here is verified >= 4.9:1 against --night-950. */
+  --grad-pill-attack: linear-gradient(
+    135deg,
+    var(--attack-hi) 0%,
+    var(--attack) 58%,
+    color-mix(in srgb, var(--attack) 78%, var(--attack-deep) 22%) 100%
+  );
+  --grad-pill-defend: linear-gradient(
+    135deg,
+    var(--defend-bright) 0%,
+    color-mix(in srgb, var(--defend) 70%, var(--defend-bright) 30%) 58%,
+    var(--defend) 100%
+  );
+  --grad-pill-press: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--press) 68%, var(--chalk) 32%) 0%,
+    var(--press) 58%,
+    color-mix(in srgb, var(--press) 82%, var(--press-deep) 18%) 100%
+  );
+  /* Warm skips the chalk light-stop the other three use: --attack-warm-lean
+     is already a cyan/red mix sitting near grey, and lightening it further
+     just washed the pill out. Running bright cyan INTO the warm lean makes
+     the same "attack, tilting aggressive" read with saturation intact. */
+  --grad-pill-warm: linear-gradient(
+    135deg,
+    var(--attack-hi) 0%,
+    var(--attack-warm-lean) 62%,
+    color-mix(in srgb, var(--attack-warm-lean) 70%, var(--press) 30%) 100%
+  );
+
   /* v1/v2 aliases */
   --red-flare: var(--press);
   --red-deep: var(--press-deep);

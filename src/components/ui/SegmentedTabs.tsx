@@ -28,11 +28,20 @@ const SIZE_STYLES: Record<"md" | "lg", string> = {
   lg: "min-h-11 px-5 text-xs font-bold",
 };
 
+/** Flat base color — stays as the background-COLOR layer beneath the gradient, so a pill never renders unfilled if the gradient token is missing. */
 const TONE_FILL: Record<PillTone, string> = {
   attack: "bg-attack",
   defend: "bg-defend",
   press: "bg-press",
   warm: "bg-attack-warm-lean",
+};
+
+/** The gradient painted over that base. Each ramp lives inside its own hue family (see --grad-pill-* in globals.css) so the fill still teaches posture by hue — the gradient only adds the lit-from-above depth. */
+const TONE_GRADIENT: Record<PillTone, string> = {
+  attack: "var(--grad-pill-attack)",
+  defend: "var(--grad-pill-defend)",
+  press: "var(--grad-pill-press)",
+  warm: "var(--grad-pill-warm)",
 };
 
 /** attack/defend/press are ink-safe dark fills under Pitch Telemetry, so a light label (night-950, now the pale sky tone) reads best on all three — the active label color never needs to change per tone, only the fill does. */
@@ -112,6 +121,7 @@ export function SegmentedTabs<T extends string>({
               <motion.span
                 layoutId={`segmented-${id}-indicator`}
                 className={`absolute inset-0 rounded-full shadow-[0_1px_2px_rgba(0,0,0,0.3)] ${TONE_FILL[tone]} ${tone === "press" ? "animate-risk-pulse" : ""}`}
+                style={{ backgroundImage: TONE_GRADIENT[tone] }}
                 transition={reduceMotion ? { duration: 0 } : { type: "spring", stiffness: 300, damping: 30 }}
               />
             )}
