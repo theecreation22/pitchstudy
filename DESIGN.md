@@ -1,69 +1,107 @@
 ---
 name: PitchStudy
-description: Interactive football tactics education, styled as a bright instrument reading a cloudy sky.
+description: Interactive football tactics education, drawn as a floodlit tactics board read through an instrument panel.
 colors:
-  attack: "#8a5c12"
-  attack-hi: "#ffb627"
-  attack-deep: "#6b460d"
-  defend: "#2f5f95"
-  defend-bright: "#6c9cff"
-  defend-deep: "#16324f"
-  press: "#b8362a"
-  press-deep: "#8a2920"
-  night-950: "#eef4fa"
-  night-900: "#ffffff"
-  night-800: "#d7e6f2"
-  chalk: "#22384a"
-  touchline-muted: "#52738c"
-  telemetry-parchment: "#22384a"
-  telemetry-olive: "#4f86b8"
+  night-950: "#0f1f2e"
+  night-900: "#16283a"
+  night-800: "#22384a"
+  chalk: "#eef4fa"
+  touchline-muted: "#7f9db4"
+  attack: "#67e8f9"
+  attack-hi: "#a5f3fc"
+  attack-deep: "#0e7490"
+  defend: "#5b8fd6"
+  defend-bright: "#8fb8f0"
+  defend-deep: "#1f3a52"
+  press: "#ff5c52"
+  press-deep: "#c23f36"
+  telemetry-parchment: "#c7e0f4"
+  telemetry-olive: "#67e8f9"
 typography:
   display:
-    fontFamily: "Big Shoulders, system-ui, sans-serif"
+    fontFamily: "Barlow Condensed, system-ui, sans-serif"
+    fontSize: "clamp(2.25rem, 1.5rem + 3vw, 3.75rem)"
     fontWeight: 900
-    letterSpacing: "-0.02em"
     lineHeight: 1
+    letterSpacing: "-0.025em"
+  headline:
+    fontFamily: "Barlow Condensed, system-ui, sans-serif"
+    fontSize: "1.5rem"
+    fontWeight: 700
+    lineHeight: 1.1
+    letterSpacing: "-0.02em"
+  title:
+    fontFamily: "Barlow Condensed, system-ui, sans-serif"
+    fontSize: "1.125rem"
+    fontWeight: 700
+    lineHeight: 1.2
+    letterSpacing: "-0.01em"
   body:
     fontFamily: "Public Sans, system-ui, sans-serif"
+    fontSize: "1rem"
     fontWeight: 400
-    lineHeight: 1.5
+    lineHeight: 1.625
   label:
     fontFamily: "IBM Plex Mono, ui-monospace, monospace"
+    fontSize: "0.75rem"
     fontWeight: 600
-  telemetry-display:
-    fontFamily: "Frank Ruhl Libre, Georgia, serif"
-    fontWeight: 900
-    letterSpacing: "-0.01em"
-    lineHeight: 1
+    letterSpacing: "0.1em"
+  label-micro:
+    fontFamily: "IBM Plex Mono, ui-monospace, monospace"
+    fontSize: "0.625rem"
+    fontWeight: 600
+    letterSpacing: "0.15em"
 rounded:
   full: "9999px"
-  md: "0.5rem"
-  sm: "0.125rem"
+  xl: "0.75rem"
+  lg: "0.5rem"
+  md: "0.375rem"
+spacing:
+  xs: "0.5rem"
+  sm: "0.75rem"
+  md: "1rem"
+  lg: "1.5rem"
+  xl: "2.5rem"
 components:
   button-primary:
     backgroundColor: "{colors.attack}"
-    textColor: "#ffffff"
+    textColor: "{colors.night-950}"
     rounded: "{rounded.full}"
     typography: "{typography.label}"
-    padding: "0 2rem"
+    padding: "0 1.5rem"
     height: "2.75rem"
   button-ghost:
     backgroundColor: "transparent"
     textColor: "{colors.touchline-muted}"
     rounded: "{rounded.full}"
     typography: "{typography.label}"
-    padding: "0 1.5rem"
+    padding: "0 1.25rem"
     height: "2.75rem"
+  button-action:
+    backgroundColor: "transparent"
+    textColor: "{colors.touchline-muted}"
+    rounded: "{rounded.md}"
+    typography: "{typography.label}"
+    padding: "0 0.75rem"
+    height: "2.25rem"
   card:
     backgroundColor: "{colors.night-900}"
     textColor: "{colors.chalk}"
-    rounded: "{rounded.md}"
+    rounded: "{rounded.lg}"
     padding: "1.5rem"
   input:
     backgroundColor: "{colors.night-900}"
     textColor: "{colors.chalk}"
+    rounded: "{rounded.md}"
+    padding: "0 0.75rem"
+    height: "2.75rem"
+  chip-selected:
+    backgroundColor: "{colors.attack}"
+    textColor: "{colors.night-950}"
     rounded: "{rounded.full}"
-    padding: "0.625rem 1.25rem"
+    typography: "{typography.label}"
+    padding: "0 1rem"
+    height: "2.25rem"
 ---
 
 # Design System: PitchStudy
@@ -72,181 +110,246 @@ components:
 
 **Creative North Star: "Pitch Telemetry"**
 
-PitchStudy's sitewide identity, replacing three earlier worlds — "The Floodlit Pitch" (a dark
-stadium base), "The Scouting Dossier" (Tactics Lab's warm-paper redesign), and "The Broadcast
-Overlay" (the homepage's dark-glass redesign). Built from two mood-board references (a vintage
-technical/product-schematic poster — measurement calipers, gauge sliders, serials, halftone
-line art on olive paper — and a moody "Solaris Eclipse" ad blending an elegant serif wordmark
-with sci-fi HUD chrome: corner brackets, timestamps, a waveform toggle) toward the brief "the
-website is good as in structure, but the look and feel is a bit soulless — make it more complex
-and rich."
+A floodlit tactics board read through an instrument panel. The ground is deep night blue, the
+kind of blue a pitch takes on under lights rather than the flat charcoal of a dark UI theme.
+Over it sits measurement chrome: corner brackets, tick rulers, spec-sheet readouts that print
+real data and never decorative numbers. Behind everything, a hand-drawn chalk play draws itself
+in coaching order and fades, so the page reads as a board someone works on rather than a screen.
 
-The result: a bright overcast-sky surface — pale blue-white, never true white, never the old
-violet-charcoal dark — read through the lens of a measurement instrument. Every page carries the
-same instrument-panel chrome: corner marks, tick rulers, spec-sheet readouts of real data (never
-decorative numbers). It keeps the Floodlit Pitch's stadium-at-night DNA in spirit — the "sky" is
-what a floodlit pitch looks like from the other side, dusk rather than midnight — while adding
-the density and material richness the old flat-dark and flat-paper worlds didn't have.
+The system replaced three earlier worlds: "The Floodlit Pitch" (a violet-charcoal stadium base),
+"The Scouting Dossier" (a manila-paper Tactics Lab, reverted the day it landed), and "The
+Broadcast Overlay" (a dark-glass homepage). Pitch Telemetry itself passed through a light phase,
+a pale overcast sky with ink-safe amber, before returning to a dark ground with cyan as the
+accent. That light phase is retired. Anything describing a near-white background, a deep gold
+`#8a5c12`, Big Shoulders, or a Frank Ruhl Libre serif hero face is out of date, not a variant.
+
+Instrument language is the through-line. Where another product would decorate, this one measures:
+a formation panel gets corner marks and a ruler, a play gets a step timeline, a shape gets a
+radar and a readout strip. The three brand hues carry fixed tactical meaning and are never
+reassigned, because on a tactics board colour is information.
 
 **Key Characteristics:**
-- Pale overcast-sky base (`#eef4fa`), white cards, never true dark and never true white
-- Exactly three brand hues (amber/blue/red) still carry fixed attack/defend/press meaning, now
-  redefined as ink-safe deep tones for AA text contrast on a light ground
-- Instrument chrome sitewide: corner brackets (`.telemetry-corner`), tick rulers
-  (`.telemetry-ruler`), spec-sheet readouts (`.telemetry-readout`) — see Components
-- A cool-toned lift shadow (`.telemetry-panel-lift`) replaces both the old dark stadium's
-  black drop-shadows and the old paper world's offset shadow
-- Condensed, heavy, uppercase Big Shoulders remains the sitewide display workhorse; an elegant
-  serif (Frank Ruhl Libre, `.font-telemetry-display`) is reserved for the one or two hero-level
-  headline moments per page (homepage, Explore) — not a sitewide typeface swap
+- Deep night-blue ground (`#0f1f2e`) falling to `#0a1622` at the bottom of a fixed-attachment
+  page gradient; never pure black, never a light surface
+- Exactly three brand hues carrying fixed meaning: cyan attacks, blue defends, red presses
+- Instrument chrome sitewide: corner brackets, tick rulers, spec-sheet readouts
+- Translucent glass on the largest reading surfaces, so the drifting atmosphere shows through
+- Elevation is a coloured glow, not a drop shadow
+- Condensed uppercase Barlow Condensed for every display moment; no second display face
 
 ## Colors
 
+Three saturated signal hues over a five-step blue neutral ramp. Nothing is grey: even the muted
+text carries a slate-blue cast, so the palette reads as one lit environment rather than a colour
+scheme applied to a neutral shell.
+
 ### Primary
-- **Telemetry Gold** (`#8a5c12`): attack, progress, XP, reward, the primary CTA fill. Redefined
-  from the old bright Floodlight Amber (`#ffb627`, kept as `attack-hi`, decorative-only — hover
-  washes and non-text accents, since it fails text contrast on this light ground) to a deep,
-  ink-safe gold so amber-on-fill and amber-as-text both clear AA on the pale sky background.
+- **Floodlight Cyan** (`#67e8f9`): attack, progress, XP, reward, the primary CTA fill, the active
+  state on every nav link and pill. The brightest thing on any screen and the page's only true
+  focal colour. `attack-hi` (`#a5f3fc`) is its hover wash; `attack-deep` (`#0e7490`) is for fills
+  behind light text.
 
 ### Secondary
-- **Telemetry Blue** (`#2f5f95`): defense and structure — the "Defend" side of every
-  attack/defend toggle, informational chips, the tactics-board reading of a shape. `#6c9cff`
-  (`defend-bright`) survives from the old palette as the brighter, non-text accent variant.
+- **Tactics Blue** (`#5b8fd6`): defence and structure. The "out of possession" side of every phase
+  toggle, opponent markers, informational chips, the reading of a shape at rest. `defend-bright`
+  (`#8fb8f0`) is the text-safe variant; `defend-deep` (`#1f3a52`) is a surface tone.
 
 ### Tertiary
-- **Telemetry Red** (`#b8362a`): pressing, danger, destructive actions, mistakes — spent
-  deliberately rarely, same as before. A risky selection still gets a one-shot red pulse ring.
+- **Press Red** (`#ff5c52`): pressing, danger, destructive actions, mistakes, a wrong answer.
+  Spent deliberately rarely. A risky selection gets a single red pulse ring rather than a
+  permanent red state.
 
 ### Neutral
-- **Sky** (`#eef4fa` / `#ffffff` / `#d7e6f2`): a three-step ramp from page background (950) to
-  card surface (900, pure white) to raised surface/border (800, soft cloud-blue) — never
-  neutral gray, never true white, never the old violet-charcoal dark.
-- **Ink** (`#22384a`): primary text — deep navy, the same tone that drives every
-  `.telemetry-*` chrome element (`--telemetry-parchment`).
-- **Slate** (`#52738c`): secondary/muted text.
+- **Night Sky** (`#0f1f2e` / `#16283a` / `#22384a`): a three-step ramp from page ground to card
+  surface to raised surface and border. Blue-biased at every step.
+- **Chalk** (`#eef4fa`): primary text and chalk-line pitch art. Pale sky, not white.
+- **Touchline** (`#7f9db4`): secondary and muted text. Deliberately outside the three brand hues
+  so muted text never reads as a tactical signal.
+- **Telemetry Parchment** (`#c7e0f4`): the chrome-line colour. Every corner bracket, ruler tick,
+  and readout border is this hue at low alpha.
 
 ### Named Rules
-**The Ink-Safe Rule.** Amber/blue/red each have a deep "ink" value (`attack`/`defend`/`press`)
-used for text, borders, and fills, and a brighter "hi" value (`attack-hi`, `defend-bright`)
-reserved for decorative, non-text uses only — inherited from Scouting Dossier's identical rule
-for its own paper background, now applied sitewide since Pitch Telemetry's ground is light too.
+**The One-Job-Per-Hue Rule.** Cyan means attack and progress, blue means defence and structure,
+red means pressing and danger. Never reassign a hue to a fourth, unrelated meaning. If a new
+concept needs colour, it takes an existing hue's meaning or it takes none.
 
-**The One-Job-Per-Hue Rule.** Amber means attack/progress, blue means defense/structure, red
-means pressing/danger — never reassign a hue to a fourth, unrelated meaning.
+**The Dark-Ink-On-Fill Rule.** Any brand-hue fill takes `night-950` text, never white. All three
+hues are bright enough that white-on-fill fails contrast. This is the single most common mistake
+in this system: a cyan button with white text is unreadable and has shipped before.
+
+**The Stable-Name Rule.** Token names (`--attack`, `--pitch-card`, `--chalk`) have survived three
+complete world changes unchanged, which is why a repaint never touches component classes. When
+the palette moves, change the value, never the name.
 
 ## Typography
 
-**Display Font:** Big Shoulders (condensed, weights 500/700/900) — the sitewide workhorse,
-unchanged from the old Floodlit Pitch system.
-**Hero Display Font:** Frank Ruhl Libre (serif, weight 900), via `.font-telemetry-display` —
-reserved for the homepage and Explore's H1s, the "one committed display moment" per page rather
-than a full typeface swap. Most headings sitewide (Tactics Lab, Academy, Managers, Training,
-Challenge) still use Big Shoulders.
-**Body Font:** Public Sans, unchanged.
-**Label/Mono Font:** IBM Plex Mono, unchanged — already fit the new instrument-chrome language
-perfectly (measurement labels, readouts, serials all read naturally in mono).
+**Display Font:** Barlow Condensed (weights 500/600/700/900)
+**Body Font:** Public Sans
+**Label/Mono Font:** IBM Plex Mono
+
+**Character:** A condensed, heavy, uppercase display face against a plain humanist body face and a
+mono used strictly for chrome. The condensed display does the shouting; the body text stays
+completely quiet so long lesson prose is comfortable to read. There is no second display face:
+`.font-telemetry-display` exists as a hook for the headline slot but currently resolves to Barlow
+Condensed, uppercase, with `-0.01em` tracking.
+
+### Hierarchy
+- **Display** (900, `clamp(2.25rem, 1.5rem + 3vw, 3.75rem)`, line-height 1): page H1s. Uppercase,
+  tight tracking, set to break across two or three lines rather than shrink.
+- **Headline** (700, 1.5rem, 1.1): section and card titles.
+- **Title** (700, 1.125rem, 1.2): panel headings inside sidebars and dialogs.
+- **Body** (400, 1rem, 1.625): lesson prose and descriptions. Keep to roughly 65 characters.
+- **Label** (600, 0.75rem, `0.1em`–`0.2em`, uppercase): interface chrome at normal density.
+  Buttons, tabs, nav labels, form labels.
+- **Micro label** (600, 0.625rem, `0.15em`–`0.2em`, uppercase): the densest chrome, and the most
+  heavily used step in the system (roughly 77 occurrences across 33 files). Card eyebrows,
+  readout strips, timeline steps, panel section headers, legends. Reach for this before inventing
+  a smaller size; 9px and 11px appear a handful of times each and are not part of the ramp.
 
 ### Named Rules
-**The Mono-Chrome Rule.** Interface chrome (buttons, tabs, eyebrows, nav labels) is always
-uppercase tracking-widest mono; body prose is never set in the mono face.
+**The Mono-Chrome Rule.** Interface chrome is always uppercase, letter-spaced mono. Body prose is
+never set in the mono face, and the mono face never runs longer than a few words.
+
+**The One Display Voice Rule.** Barlow Condensed uppercase is the only display treatment. The
+retired serif-hero pattern is not a variant to reach for; a page that wants more presence gets a
+larger size, not a different face.
 
 ## Layout
 
-Unchanged from the previous system: single-column, generous vertical rhythm on content pages;
-Tactics Lab and the admin dashboard use a wider two-column layout. Fully responsive.
+Single column with generous vertical rhythm on content pages; a two-column split (board plus
+sidebar) on Tactics Lab, Explore, and the admin dashboard, collapsing to stacked below `lg`.
+Content containers cap at `max-width: 72rem` for tool pages and `48rem` for reading pages, with
+`1rem` gutters rising to `2rem` at `sm`.
+
+Navigation is a fixed 15rem left rail from `lg` up, with the body offset by the same amount to
+clear it. Below `lg` the rail is replaced by a sticky glass top bar and a hamburger sheet.
+Vertical rhythm between major sections is `1.5rem` to `2.5rem`; card interiors are `1.5rem`.
 
 ## Elevation & Depth
 
-Every card that used to carry a heavy dark drop-shadow (`rgba(0,0,0,0.6-0.7)`, designed for a
-dark page) now uses `.telemetry-panel-lift` — a cool navy-tinted offset shadow (`rgba(34,56,74,
-0.08-0.22)`) reading as a bright panel lifted a couple of inches off a light table, not a glow
-and not a heavy black shadow.
+Depth is light, not shadow. The page is a lit environment, so surfaces separate by translucency
+and glow rather than by cast shadows. Three materials cover everything: flat tonal cards, a
+translucent glass for the largest reading surfaces, and a coloured glow for anything filled with
+an accent.
+
+### Shadow Vocabulary
+- **Panel lift** (`box-shadow: 0 0 28px -8px var(--attack)`): a cyan glow under accent-filled
+  controls and the pitch board. Not a drop shadow; an offset shadow reads as invisible on this
+  ground and was tried and removed.
+- **Glass** (`inset 0 1px 0 0 rgba(255,255,255,0.1)`, `0 12px 32px -16px rgba(0,0,0,0.6)`): a
+  luminous top hairline plus a soft ambient drop, with `backdrop-filter: blur(14px)`.
+- **Tactile panel** (`inset 0 1px 0 0 rgba(255,255,255,0.05)`, `inset 0 -10px 18px -12px
+  rgba(0,0,0,0.4)`): inset only, for cards that should feel physical rather than printed.
+- **Recessed track** (`inset 0 1px 3px rgba(0,0,0,0.35)`): pill tab tracks, so the active pill
+  reads as raised out of the group.
+
+### Light Films
+Separate from the palette and deliberately so: these are translucent white overlays that model
+light falling on a surface, not colours with meaning. They are the only place raw white belongs
+in this system.
+
+- **Glass film** (`linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02))`): the
+  sheen on the glass material, paired with the blur and the inset hairline.
+- **Cloud film** (`rgba(255,255,255,0.1)` fading to a blue tint): the faint atmospheric wash over
+  the pitch board. Held very low; at higher alpha it washes out opponent markers, which has
+  happened and been corrected.
+- **Shimmer** (`rgba(255,255,255,0.85)`): the travelling highlight that sweeps a card's accent bar
+  on hover. Momentary and always in motion, never a resting state.
 
 ### Named Rules
-**The Ink-Shadow Rule.** Elevation shadows are always tinted with the ink color
-(`rgba(34,56,74,…)`), never neutral black and never the old per-hue colored glow — a black
-shadow reads as dirt on a bright surface, and a colored glow doesn't survive a bright,
-overcast-sky ground any better than it survived Scouting Dossier's paper.
+**The Glow-Not-Drop Rule.** Elevation on this ground is emitted light. Reach for a coloured glow
+or an inset highlight before a cast shadow, and never use a black drop shadow to lift something
+off a dark surface.
 
 ## Shapes
 
-Unchanged: two radii, used systemically and never mixed — **full** (`9999px`) on every
-interactive control, **md**/`rounded-lg` (8px) on everything you sit inside or read from.
+Two shape languages, split by function. Anything you press is a pill (`9999px`): CTAs, ghost
+buttons, tab tracks, chips, pill selectors. Anything that holds content is softly rectangular:
+cards at `0.5rem`, the pitch board at `0.75rem`, inputs and small action buttons at `0.375rem`.
 
-### Named Rules
-**The Pill-vs-Rectangle Rule.** If it's clickable, it's fully rounded. If it's a container, it's
-`rounded-lg` and nothing rounder.
+Cutting across both is the instrument chrome, which is deliberately hard-edged: 14px L-shaped
+corner brackets inset 8px from a panel's edges, and a 1px vertical tick ruler sitting 22px
+outside the left edge with marks at its top and midpoint. These are never rounded. The tension
+between soft containers and sharp measurement marks is the signature of the system.
 
 ## Components
 
-### Telemetry Chrome (signature components, sitewide)
-- **Corner marks** (`.telemetry-frame` + `.telemetry-corner-{tl,tr,bl,br}`): small open-cornered
-  brackets at a panel's corners — the hero, every bento card, every pitch board.
-- **Tick ruler** (`.telemetry-ruler`): a faint vertical rule with two cross-ticks, sitting just
-  outside a pitch board's left edge — evokes the mood-board cassette poster's gauge sliders.
-  Currently on Explore's pitch only.
-- **Spec-sheet readout** (`.telemetry-readout`): a bordered strip below a pitch board showing
-  real computed data — formation name, shape width/depth (genuinely computed from player
-  coordinates), player count — never decorative or fabricated numbers.
-- **Accent bar** (`.bento-accent-bar`): every card's top edge renders one shared gradient
-  (`--grad-futurist`, ink navy → white → telemetry blue) instead of a per-card hue — this
-  surface doesn't carry per-feature color meaning the way a tactics toggle does.
-- **Ambient cloud wash** (`.telemetry-cloud`, `.bento-grid::before`): soft diagonal
-  white-to-blue gradients layered behind the pitch board and the homepage feature grid.
-- **Motion, "alive, not a casino":** per-card motion (mini-widget hover-tweens, the accent-bar
-  shimmer, a card's rise-in on load) is hover/focus-triggered or plays once on mount; only
-  page-level ambient elements (the hero's shimmer bar, the bento grid's backdrop breathe) loop
-  continuously.
-
 ### Buttons
-- **Shape:** full pill (`rounded-full`), `min-h-11` (44px) minimum tap target.
-- **Primary:** Telemetry Gold fill, white text (inverted from the old amber-fill/dark-text
-  pairing, since the ink-safe gold is now a dark fill), mono uppercase label.
-- **Ghost/Outline:** transparent fill, `touchline-muted/40` border, hover shifts border to
-  `pitch-marker`.
-- **Focus:** every interactive control gets `outline-2 outline-offset-2` in the marker color on
-  `:focus-visible` — unchanged, still a hard sitewide standard.
+- **Shape:** Fully rounded pill (`9999px`), minimum height `2.75rem` for touch.
+- **Primary:** Cyan fill (`{colors.attack}`) with night-blue text (`{colors.night-950}`), mono
+  uppercase at `0.1em` tracking, carrying the panel-lift glow.
+- **Ghost:** Transparent with a `1px` touchline border at 50% alpha and touchline text, brightening
+  to chalk on hover.
+- **Action:** The compact `2.25rem` variant used inside tool panels (Play Designer, timelines).
+  Rounded `0.375rem`, bordered, filling to `attack/15` with cyan text when armed.
+- **Hover / Focus:** Buttons lift `1px` on hover. Focus is always a `2px` outline in
+  `{colors.attack}` at `2px` offset, never a removed outline or a colour-only change.
+- **Disabled:** 30% opacity with `cursor: not-allowed`; hover effects suppressed.
+
+### Chips
+- **Style:** Pill, `1px` border in the hue that carries the chip's meaning, transparent fill,
+  hue-coloured mono label.
+- **Selected:** The hue fills the pill and the label flips to `night-950`. A `press`-toned
+  selection additionally fires one red pulse ring.
 
 ### Cards / Containers
-- **Corner Style:** `rounded-lg` (8px), never full.
-- **Background:** white (`night-900`).
-- **Shadow Strategy:** `.telemetry-panel-lift` where elevation is needed (pitch boards, the
-  hero, bento cards); flat/bordered-only elsewhere.
-- **Border:** 1px, `touchline-muted` at 30% opacity.
+- **Corner Style:** `0.5rem`.
+- **Background:** `{colors.night-900}`, or the glass material on the largest reading surfaces.
+- **Border:** `1px` touchline at 30% alpha.
+- **Shadow Strategy:** Flat at rest. Cards that carry instrument chrome add corner brackets;
+  cards that are pressable add a gradient hover border.
+- **Internal Padding:** `1.5rem`, dropping to `1rem` in dense sidebars.
 
-### Modals / Confirm Dialogs
-- **Backdrop:** `night-950` at high opacity, full-viewport, centered content.
-- **Panel:** the standard card treatment, entrance via a scale+fade.
-- **Never** a native `window.confirm()`.
+### Inputs / Fields
+- **Style:** `{colors.night-900}` fill, `1px` touchline border at 40% alpha, `0.375rem` radius,
+  `2.75rem` tall, mono uppercase text.
+- **Focus:** The standard `2px` cyan outline at `2px` offset.
+- **Disabled:** 50% opacity.
 
 ### Navigation
-- Signed-in identity renders as a small rounded-full chip: a 2-letter initials avatar in a
-  solid-gold circle (white text) plus the display name.
+- **Style:** A fixed left rail on the glass material, 15rem wide, with the wordmark and pitch
+  mark at the top and the account chip pinned to the bottom.
+- **Links:** Mono uppercase at `0.15em` tracking with a 20px monochrome stroke icon. Default is
+  touchline on a transparent border; hover raises to chalk on a faint touchline wash.
+- **Active:** Cyan text on an `attack/10` fill inside an `attack/60` border, `0.5rem` radius.
+- **Mobile:** Below `lg`, a sticky glass top bar with a hamburger opening an animated sheet
+  carrying the same links.
 
-### Segmented Tabs (signature component)
-A pill-track control holding pill-shaped options; the active option's fill is a sliding,
-spring-animated highlight (Framer Motion `layoutId`). Each option can carry its own fill tone
-(amber/blue/red) so the choice itself communicates posture. Full keyboard support.
+### Instrument Chrome (signature)
+The set that defines the world, applied to panels that present measured information:
+`.telemetry-frame` establishes positioning, `.telemetry-corner` places 14px L-brackets at the
+four corners, `.telemetry-ruler` hangs a ticked rule outside the left edge, and
+`.telemetry-readout` prints a bordered strip of real values (formation name, player count) in
+mono. Readouts carry data that exists. A decorative serial number is a violation.
+
+### Chalk Atmosphere (signature)
+A fixed, tilted ghost pitch behind every page with a hand-drawn chalk play that draws itself in
+coaching order (defence, midfield, attack, connecting lines, opposition marks, passing lane,
+runs) over a 22 second cycle before fading. Rendered with an SVG turbulence displacement filter
+so the strokes wobble like chalk. Two slow light fields drift across it on 90 second-plus cycles.
+Held at very low opacity: it must never compete with content, and it is frozen entirely under
+`prefers-reduced-motion`.
 
 ## Do's and Don'ts
 
 ### Do:
-- **Do** use Telemetry Gold, Blue, and Red for exactly their assigned meaning (attack/defend/
-  press) every time — never as a fourth generic "accent."
-- **Do** use the `attack`/`defend`/`press` ink values for text and the `-hi`/`-bright` values
-  only for decorative, non-text accents.
-- **Do** give every interactive element a visible `:focus-visible` ring in the marker color.
-- **Do** use `.telemetry-panel-lift` for elevation, never a neutral black or per-hue colored
-  glow shadow.
-- **Do** respect `prefers-reduced-motion` — the project already zeroes all animation/transition
-  durations globally when it's set.
+- **Do** put `night-950` text on any cyan, blue, or red fill.
+- **Do** reuse the existing token names when the palette changes, so component classes never churn.
+- **Do** give every interactive element the standard `2px` cyan focus outline at `2px` offset.
+- **Do** put real data in a `.telemetry-readout`; a readout is a measurement, not an ornament.
+- **Do** keep the three hues to their fixed tactical meanings, including in new features.
+- **Do** freeze ambient motion under `prefers-reduced-motion`; the atmosphere is already wired for
+  it and new motion must be too.
+- **Do** use a pill for anything pressable and a soft rectangle for anything that holds content.
 
 ### Don't:
-- **Don't** use the bright `attack-hi`/`defend-bright` values for body text — they fail AA on
-  this light ground; that's exactly why the ink-safe variants exist.
-- **Don't** give a card, panel, or modal a plain black drop shadow — use the ink-tinted
-  `.telemetry-panel-lift` shadow instead.
-- **Don't** round a container past `rounded-lg` (8px) or leave an interactive control anything
-  less than fully pill-shaped.
-- **Don't** promote Frank Ruhl Libre beyond the one hero-level headline per page — it's a
-  signature moment, not a sitewide typeface swap.
+- **Don't** use white text on a brand-hue fill. It fails contrast on all three.
+- **Don't** reach for a black drop shadow to lift an element. Use the cyan glow or an inset
+  highlight.
+- **Don't** introduce a second display typeface. The retired serif hero is not a variant.
+- **Don't** describe or rebuild this system as light-grounded. The pale-sky phase with amber
+  `#8a5c12` is retired.
+- **Don't** round the instrument chrome. Corner brackets and rulers are hard-edged on purpose.
+- **Don't** add a fourth accent hue. A new concept borrows an existing meaning or stays neutral.
+- **Don't** let the chalk atmosphere rise in opacity until it competes with the content in front
+  of it; it has been dialled back twice already for exactly that reason.
