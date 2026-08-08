@@ -268,8 +268,20 @@ export function useProgress() {
   // has already combined local and cloud progress and just needs it stored.
   const replace = useCallback((next: ProgressState) => persist(next), [persist]);
 
+  /**
+   * Clears local progress back to zero: lessons, XP, badges, streaks, saved
+   * scores. Only touches this device — the synced cloud copy is deleted from
+   * the account page instead, and a signed-in device will pull that copy back
+   * down on the next sync.
+   */
+  const reset = useCallback(() => {
+    sessionCompletions.current = 0;
+    persist(DEFAULT_STATE);
+  }, [persist]);
+
   return {
     state,
+    reset,
     trainingStreak,
     completeLesson,
     recordQuizScore,

@@ -4,6 +4,7 @@ import { FloodlitAtmosphere } from "@/components/effects/FloodlitAtmosphere";
 import { SiteNav } from "@/components/nav/SiteNav";
 import { SyncProvider } from "@/lib/sync/SyncProvider";
 import { SyncInvitation } from "@/components/auth/SyncInvitation";
+import { MotionPreferenceProvider } from "@/components/motion/MotionPreferenceProvider";
 import { SITE_URL } from "@/lib/siteUrl";
 import "./globals.css";
 
@@ -69,12 +70,14 @@ export default function RootLayout({
       className={`${barlowCondensed.variable} ${publicSans.variable} ${plexMono.variable} h-full`}
     >
       <body className="min-h-full flex flex-col bg-pitch-slate text-pitch-line antialiased lg:pl-60">
-        <SyncProvider>
-          <FloodlitAtmosphere />
-          <SiteNav />
-          {children}
-          <SyncInvitation />
-        </SyncProvider>
+        <MotionPreferenceProvider>
+          <SyncProvider>
+            <FloodlitAtmosphere />
+            <SiteNav />
+            {children}
+            <SyncInvitation />
+          </SyncProvider>
+        </MotionPreferenceProvider>
       </body>
     </html>
   );

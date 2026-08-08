@@ -98,6 +98,14 @@ export function AuthChip({
             >
               Account
             </Link>
+            <Link
+              role="menuitem"
+              href="/settings"
+              onClick={() => setOpen(false)}
+              className="rounded-md px-3 py-2 text-left font-display text-sm font-semibold uppercase tracking-wide text-pitch-touchline transition-colors hover:bg-pitch-touchline/10 hover:text-pitch-marker"
+            >
+              Settings
+            </Link>
             {isAdminEmail(user.email) && (
               <Link
                 role="menuitem"
