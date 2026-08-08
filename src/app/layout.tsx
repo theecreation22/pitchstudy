@@ -35,13 +35,11 @@ export const metadata: Metadata = {
   // link renders as a bare URL. This is also what makes per-route
   // opengraph-image.tsx files resolve to absolute URLs automatically.
   metadataBase: new URL(SITE_URL),
-  title: {
-    default: TITLE,
-    // Pages set a plain `title` and inherit the suffix, so a shared lesson
-    // link reads "Throw-in, corner, or goal kick? · PitchStudy" rather than
-    // an unattributed fragment.
-    template: `%s · ${SITE_NAME}`,
-  },
+  // Deliberately no `template`. All 18 pages already write their own suffix,
+  // and the Academy ones use "· PitchStudy Academy" rather than the plain
+  // brand, which one template cannot express. Adding one produced
+  // "Defensive Midfielder (CDM) · PitchStudy · PitchStudy".
+  title: TITLE,
   description: DESCRIPTION,
   applicationName: SITE_NAME,
   alternates: { canonical: "/" },
