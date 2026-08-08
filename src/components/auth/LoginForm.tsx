@@ -167,21 +167,10 @@ export function LoginForm() {
         </p>
       )}
 
-      <button
-        type="button"
-        onClick={handleGoogle}
-        className="flex min-h-11 items-center justify-center gap-2 rounded-full border border-pitch-touchline/40 bg-pitch-card px-6 font-mono text-xs font-semibold uppercase tracking-widest text-pitch-line transition-colors hover:border-pitch-marker focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
-      >
-        <GoogleMark />
-        Continue with Google
-      </button>
-
-      <div className="flex items-center gap-3 text-xs uppercase tracking-widest text-pitch-touchline/60">
-        <span className="h-px flex-1 bg-pitch-touchline/20" />
-        or
-        <span className="h-px flex-1 bg-pitch-touchline/20" />
-      </div>
-
+      {/* Google sits below the email options here for the same reason it does
+          in JoinFlow — see the note there. Returning users are the more
+          forgiving audience, but the ordering is kept consistent so the two
+          screens don't teach different habits. */}
       <div className="flex justify-center gap-4 font-mono text-xs uppercase tracking-widest">
         <button
           type="button"
@@ -269,6 +258,21 @@ export function LoginForm() {
           </button>
         </form>
       )}
+
+      <div className="flex items-center gap-3 text-xs uppercase tracking-widest text-pitch-touchline/60">
+        <span className="h-px flex-1 bg-pitch-touchline/20" />
+        or
+        <span className="h-px flex-1 bg-pitch-touchline/20" />
+      </div>
+
+      <button
+        type="button"
+        onClick={handleGoogle}
+        className="flex min-h-11 items-center justify-center gap-2 rounded-full border border-pitch-touchline/40 bg-pitch-card px-6 font-mono text-xs font-semibold uppercase tracking-widest text-pitch-line transition-colors hover:border-pitch-marker focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
+      >
+        <GoogleMark />
+        Continue with Google
+      </button>
 
       <p className="text-center text-xs text-pitch-touchline/70">
         New here? <Link href="/join" className="text-attack">Join the club</Link> instead.
