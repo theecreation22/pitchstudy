@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getPosition, positions } from "@/lib/positions";
 import { ZoneDiagram } from "@/components/pitch/ZoneDiagram";
+import { GlossaryProse } from "@/components/curriculum/GlossaryProse";
 
 export function generateStaticParams() {
   return Object.keys(positions).map((code) => ({ slug: code.toLowerCase() }));
@@ -56,7 +57,7 @@ export default async function PositionPage({
           {position.name}
         </h1>
         <p className="max-w-2xl text-lg leading-relaxed text-pitch-touchline">
-          {position.summary}
+          <GlossaryProse>{position.summary}</GlossaryProse>
         </p>
         <Link
           href="/workouts"
@@ -74,7 +75,7 @@ export default async function PositionPage({
                 In possession
               </h3>
               <p className="mt-2 text-sm leading-relaxed text-pitch-line/90">
-                {position.inPossession}
+                <GlossaryProse>{position.inPossession}</GlossaryProse>
               </p>
             </div>
             <div>
@@ -82,7 +83,7 @@ export default async function PositionPage({
                 Out of possession
               </h3>
               <p className="mt-2 text-sm leading-relaxed text-pitch-line/90">
-                {position.outOfPossession}
+                <GlossaryProse>{position.outOfPossession}</GlossaryProse>
               </p>
             </div>
           </section>
@@ -97,7 +98,9 @@ export default async function PositionPage({
                   <span aria-hidden="true" className="text-pitch-marker">
                     ›
                   </span>
-                  {step}
+                  <span>
+                    <GlossaryProse>{step}</GlossaryProse>
+                  </span>
                 </li>
               ))}
             </ul>
@@ -113,7 +116,9 @@ export default async function PositionPage({
                   <span aria-hidden="true" className="text-pitch-touchline">
                     −
                   </span>
-                  {mistake}
+                  <span>
+                    <GlossaryProse>{mistake}</GlossaryProse>
+                  </span>
                 </li>
               ))}
             </ul>

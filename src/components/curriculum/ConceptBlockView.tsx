@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { GlossaryProse } from "@/components/curriculum/GlossaryProse";
 import { ZoneDiagram } from "@/components/pitch/ZoneDiagram";
 import { Pitch } from "@/components/pitch/Pitch";
 import { getFormation, getFormationPlayers } from "@/lib/formations";
@@ -13,7 +14,9 @@ function ZoneConceptBlock({ block }: { block: ZoneBlock }) {
         <h3 className="font-display text-lg font-bold uppercase tracking-tight text-pitch-line">
           {block.heading}
         </h3>
-        <p className="mt-1 text-sm leading-relaxed text-pitch-touchline">{block.body}</p>
+        <p className="mt-1 text-sm leading-relaxed text-pitch-touchline">
+          <GlossaryProse>{block.body}</GlossaryProse>
+        </p>
       </div>
       <div className="mx-auto w-full max-w-[140px]">
         <ZoneDiagram zones={block.zones} />
@@ -32,7 +35,9 @@ function ToggleConceptBlock({ block }: { block: ToggleBlock }) {
         <h3 className="font-display text-lg font-bold uppercase tracking-tight text-pitch-line">
           {block.heading}
         </h3>
-        <p className="mt-1 text-sm leading-relaxed text-pitch-touchline">{block.body}</p>
+        <p className="mt-1 text-sm leading-relaxed text-pitch-touchline">
+          <GlossaryProse>{block.body}</GlossaryProse>
+        </p>
         <div role="group" aria-label={block.heading} className="mt-3 flex flex-wrap gap-2">
           {(["A", "B"] as const).map((key) => {
             const option = key === "A" ? block.optionA : block.optionB;
@@ -73,7 +78,9 @@ function FormationConceptBlock({ block }: { block: FormationBlock }) {
         <h3 className="font-display text-lg font-bold uppercase tracking-tight text-pitch-line">
           {block.heading}
         </h3>
-        <p className="mt-1 text-sm leading-relaxed text-pitch-touchline">{block.body}</p>
+        <p className="mt-1 text-sm leading-relaxed text-pitch-touchline">
+          <GlossaryProse>{block.body}</GlossaryProse>
+        </p>
       </div>
       <div className="mx-auto w-full max-w-[180px]">
         <Pitch players={players} formationName={formation.name} />

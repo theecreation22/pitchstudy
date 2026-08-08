@@ -10,6 +10,7 @@ import { CoachingTree } from "@/components/managers/CoachingTree";
 import { ManagerChallengeQuestion } from "@/components/managers/ManagerChallengeQuestion";
 import { AnimatedSection } from "@/components/motion/AnimatedSection";
 import { ChalkDivider } from "@/components/effects/ChalkDivider";
+import { GlossaryProse } from "@/components/curriculum/GlossaryProse";
 
 export function generateStaticParams() {
   return managers.map((manager) => ({ slug: manager.slug }));
@@ -88,7 +89,7 @@ export default async function ManagerPage({
           Philosophy
         </h2>
         <p className="mt-3 max-w-2xl text-sm leading-relaxed text-pitch-line/90">
-          {manager.philosophy}
+          <GlossaryProse>{manager.philosophy}</GlossaryProse>
         </p>
       </AnimatedSection>
 
@@ -134,7 +135,9 @@ export default async function ManagerPage({
                   <span aria-hidden="true" className="text-pitch-marker">
                     ›
                   </span>
-                  {point}
+                  <span>
+                    <GlossaryProse>{point}</GlossaryProse>
+                  </span>
                 </li>
               ))}
             </ul>
@@ -154,7 +157,9 @@ export default async function ManagerPage({
               <span aria-hidden="true" className="text-defend-bright">
                 ›
               </span>
-              {point}
+              <span>
+                <GlossaryProse>{point}</GlossaryProse>
+              </span>
             </li>
           ))}
         </ul>
@@ -181,7 +186,9 @@ export default async function ManagerPage({
         <h2 className="font-display text-xl font-bold uppercase tracking-tight text-pitch-line">
           Legacy
         </h2>
-        <p className="mt-3 max-w-2xl text-sm leading-relaxed text-pitch-line/90">{manager.legacy}</p>
+        <p className="mt-3 max-w-2xl text-sm leading-relaxed text-pitch-line/90">
+          <GlossaryProse>{manager.legacy}</GlossaryProse>
+        </p>
       </AnimatedSection>
 
       <ChalkDivider />
