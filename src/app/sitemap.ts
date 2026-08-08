@@ -36,6 +36,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       { url: `${SITE_URL}/quiz`, changeFrequency: "monthly", priority: 0.6 },
       { url: `${SITE_URL}/tactics-lab`, changeFrequency: "monthly", priority: 0.6 },
       { url: `${SITE_URL}/challenge`, changeFrequency: "monthly", priority: 0.5 },
+      // Low priority but deliberately indexed, unlike /settings and /account:
+      // an OAuth consent-screen review expects to reach these, and a policy
+      // nobody can find is not much of a policy.
+      { url: `${SITE_URL}/privacy`, changeFrequency: "yearly", priority: 0.3 },
+      { url: `${SITE_URL}/terms`, changeFrequency: "yearly", priority: 0.3 },
     ] satisfies MetadataRoute.Sitemap
   ).map((route) => ({ ...route, lastModified }));
 

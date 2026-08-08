@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Barlow_Condensed, Public_Sans, IBM_Plex_Mono } from "next/font/google";
 import { FloodlitAtmosphere } from "@/components/effects/FloodlitAtmosphere";
 import { SiteNav } from "@/components/nav/SiteNav";
+import { SiteFooter } from "@/components/nav/SiteFooter";
 import { SyncProvider } from "@/lib/sync/SyncProvider";
 import { SyncInvitation } from "@/components/auth/SyncInvitation";
 import { MotionPreferenceProvider } from "@/components/motion/MotionPreferenceProvider";
@@ -75,6 +76,7 @@ export default function RootLayout({
             <FloodlitAtmosphere />
             <SiteNav />
             {children}
+            <SiteFooter />
             <SyncInvitation />
           </SyncProvider>
         </MotionPreferenceProvider>
