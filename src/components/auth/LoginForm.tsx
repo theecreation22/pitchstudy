@@ -22,6 +22,7 @@ export function LoginForm() {
   const [method, setMethod] = useState<LoginMethod>("magic");
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
+  const [resetSent, setResetSent] = useState(false);
   const [status, setStatus] = useState<Status>("idle");
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -72,6 +73,50 @@ export function LoginForm() {
       provider: "google",
       options: { redirectTo: `${window.location.origin}/auth/callback?next=/account` },
     });
+  }
+
+  /**
+   * Sends a recovery email. The link lands on /auth/callback, which exchanges
+   * the code for a session and forwards to /reset-password.
+   *
+   * Accepts a username as well as an email, resolving it the same way sign-in
+   * does — someone who has forgotten their password may well not remember
+   * which address they signed up with.
+   *
+   * The confirmation is deliberately the same whether or not the account
+   * exists: a reset form that says "no account found" is an account
+   * enumeration oracle.
+   */
+  async function handleForgotPassword() {
+    const supabase = getSupabaseBrowserClient();
+    if (!supabase) return;
+
+    let resolvedEmail = identifier.trim();
+    if (!resolvedEmail) {
+      setStatus("error");
+      setErrorMessage("Enter your username or email first, then tap this again.");
+      return;
+    }
+
+    setStatus("sending");
+    setErrorMessage("");
+
+    if (!resolvedEmail.includes("@")) {
+      const found = await emailForUsername(supabase, resolvedEmail);
+      if (!found) {
+        // Still reports success below — see the enumeration note above.
+        setStatus("idle");
+        setResetSent(true);
+        return;
+      }
+      resolvedEmail = found;
+    }
+
+    await supabase.auth.resetPasswordForEmail(resolvedEmail, {
+      redirectTo: `${window.location.origin}/auth/callback?next=/reset-password`,
+    });
+    setStatus("idle");
+    setResetSent(true);
   }
 
   async function handlePasswordLogin(event: FormEvent) {
@@ -203,12 +248,24 @@ export function LoginForm() {
             className="rounded-full border border-pitch-touchline/40 bg-pitch-card px-5 py-2.5 text-sm text-pitch-line placeholder:text-pitch-touchline/70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
           />
           {status === "error" && <p className="text-sm text-press">{errorMessage}</p>}
+          {resetSent && (
+            <p className="text-sm text-attack">
+              If that account exists, a reset link is on its way. It expires in an hour.
+            </p>
+          )}
           <button
             type="submit"
             disabled={status === "sending"}
             className="inline-flex min-h-11 items-center justify-center rounded-full bg-attack px-8 font-mono text-xs font-semibold uppercase tracking-widest text-night-950 disabled:opacity-60"
           >
             {status === "sending" ? "Signing in…" : "Log in"}
+          </button>
+          <button
+            type="button"
+            onClick={handleForgotPassword}
+            className="self-center rounded px-2 py-1 text-xs text-pitch-touchline/70 underline decoration-dotted underline-offset-4 transition-colors hover:text-attack focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
+          >
+            Forgot your password?
           </button>
         </form>
       )}

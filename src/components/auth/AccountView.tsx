@@ -168,12 +168,14 @@ export function AccountView() {
             onClick={() => setConfirmingDelete(true)}
             className="inline-flex min-h-11 items-center rounded-full border border-press/50 px-6 font-mono text-xs uppercase tracking-widest text-press hover:bg-press/10"
           >
-            Delete account
+            Delete cloud data
           </button>
         ) : (
           <div className="flex flex-col gap-2 rounded-lg border border-press/40 bg-press/10 p-4">
-            <p className="text-sm text-pitch-line">
-              This deletes your synced copy in the cloud. Everything on this device stays exactly as it is.
+            <p className="text-sm leading-relaxed text-pitch-line">
+              This deletes your synced copy in the cloud and signs you out. Everything on this device stays exactly
+              as it is. Your sign-in itself is not removed, so the same email can sign back in and start a fresh
+              cloud copy.
             </p>
             <div className="flex gap-3">
               <button

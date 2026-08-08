@@ -206,6 +206,30 @@ export function SettingsView() {
         </div>
       </Section>
 
+      {user && (
+        <Section
+          title="Sign-in & security"
+          description={
+            user.provider === "google"
+              ? "You sign in with Google, so there's no PitchStudy password to manage. Setting one lets you sign in either way."
+              : "Your password is used with your email or username to sign in."
+          }
+        >
+          <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-2">
+              <Row label="Email" value={user.email ?? "-"} />
+              <Row label="Sign-in method" value={user.provider === "google" ? "Google" : "Email and password"} />
+            </div>
+            <Link
+              href="/reset-password"
+              className="inline-flex min-h-11 w-fit items-center rounded-full border border-pitch-touchline/40 px-5 font-mono text-xs uppercase tracking-widest text-pitch-touchline transition-colors hover:border-pitch-marker hover:text-pitch-marker focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pitch-marker"
+            >
+              {user.provider === "google" ? "Set a password →" : "Change password →"}
+            </Link>
+          </div>
+        </Section>
+      )}
+
       <Section
         title="Saved work"
         description="Formations and plays you've built in the Tactics Lab, and attempts saved from Scenario Mode."
